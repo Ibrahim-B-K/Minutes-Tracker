@@ -1,0 +1,80 @@
+// AssignIssues.jsx
+import React, { useState, useEffect } from "react";
+import "./AssignIssues.css";
+import { Link } from "react-router-dom";
+import IssueAssignCard from "./IssueAssignCard";
+
+export default function AssignIssues() {
+  const [issues, setIssues] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // 🔹 Fetch issues from backend on load
+  useEffect(() => {
+    const fetchIssues = async () => {
+      try {
+        const res = await fetch("http://127.0.0.1:8000/assign-issues");
+        const data = await res.json();
+        setIssues(data);
+      } catch (err) {
+        console.error("Failed to load issues:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchIssues();
+  }, []);
+
+  // 🔹 Handle editing issue fields (department, deadline, priority etc.)
+  const handleChange = (index, field, value) => {
+    setIssues(prev => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], [field]: value };
+      return updated;
+    });
+  };
+
+  // 🔹 Allocate all issues
+  const handleAllocateAll = () => {
+    fetch("http://127.0.0.1:8000/assign-issues/allocate-all", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ issues })
+    })
+      .then(res => res.json())
+      .then(() => alert("All issues allocated!"))
+      .catch(err => console.error(err));
+  };
+
+  return (
+    <div className="assign-issues-container">
+      <div className="assign-header">
+        <h2>Assign Issues</h2>
+
+        <Link to="/dpo">
+          <button className="allocate-btn" onClick={handleAllocateAll}>
+            Allocate All
+          </button>
+        </Link>
+      </div>
+
+      {/* Loading State */}
+      {loading && <p>Loading issues...</p>}
+
+      {/* No issues */}
+      {!loading && issues.length === 0 && <p>No pending issues found</p>}
+
+      {/* Issue Cards */}
+      <div className="issue-cards">
+        {issues.map((issue, index) => (
+          <IssueAssignCard
+            key={issue.issue_id}
+            issue={issue}
+            index={index}
+            onChange={handleChange}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}

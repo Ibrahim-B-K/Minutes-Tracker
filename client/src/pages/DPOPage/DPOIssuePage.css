@@ -1,0 +1,100 @@
+.dpo-container {
+  width: 100%;
+}
+
+.content {
+  padding: 10px 70px;
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #111;
+}
+
+.filters {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+}
+
+.filters input,
+.filters select {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.generate-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.generate-btn:hover {
+  background: #1d4ed8;
+}
+.page-title {
+  display: flex;
+justify-content: space-between;
+
+}
+
+.upload-icon {
+  color: black;
+  border-radius: 8px; /* keep it slightly rounded, not circular */
+  padding: 2px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+  background: transparent;
+  margin-top: 40px;
+  margin-right: 5px;
+}
+
+.upload-icon:hover {
+  color: #1d4ed8;
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+}
+.upload-icon {
+  font-size: 35px !important;
+  width: 35px !important;
+  height: 35px !important;
+}
+.no-issues {
+  font-size: 1.6rem;        /* Bigger text */
+  font-weight: 600;         /* Slightly bold */
+  text-align: center;       /* Center text */
+  color: #6b7280;           /* Soft gray (Tailwind gray-500) */
+  margin-top: 40px;         /* Add spacing from top */
+  padding: 20px;            /* Smooth breathing room */
+  background: #f3f4f6;      /* Light gray background */
+  border-radius: 12px;      /* Rounded corners */
+  width: 80%;               /* Not too wide */
+  margin-left: auto;
+  margin-right: auto;       /* Center block */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08); /* Soft shadow */
+}
+.loading-text {
+  font-size: 18px;
+  opacity: 0.7;
+}
+.tab-scroll-area {
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0.3; transform: translateY(3px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
