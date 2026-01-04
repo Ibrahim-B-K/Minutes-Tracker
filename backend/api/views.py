@@ -2,7 +2,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.utils import timezone
 from django.db.models import Q # <--- Added Q for better queries
-from .models import User, Department, Issue, IssueDepartment, Minute, Response as ResponseModel, Notification
+from .models import User, Department, Issue, IssueDepartment, Minutes, Response as ResponseModel, Notification
 from .serializers import IssueDepartmentSerializer, NotificationSerializer
 from .gemini_utils import analyze_document_with_gemini
 import os
@@ -59,7 +59,7 @@ def allocate_all(request):
     if not issues_data: issues_data = TEMP_DATA_CACHE 
     
     u_by = User.objects.filter(role='DPO').first() or User.objects.first()
-    minute = Minute.objects.create(title="Uploaded Minutes", meeting_date=timezone.now(), uploaded_by=u_by, file_path="dummy")
+    minute = Minutes.objects.create(title="Uploaded Minutes", meeting_date=timezone.now(), uploaded_by=u_by, file_path="dummy")
     
     dept_counts = {} # Track count for batch notification
 
