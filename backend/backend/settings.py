@@ -54,11 +54,14 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'dpo_minutes',
-        'USER': 'postgres',
-        'PASSWORD': '112233',
-        'HOST': 'localhost',
+        'NAME': 'postgres',
+        'USER': 'postgres.oiscsacsglwideokczhm',
+        'PASSWORD': 'agnayarjunibrukeerthi',
+        'HOST': 'aws-1-ap-south-1.pooler.supabase.com',
         'PORT': '5432',
+        'OPTIONS': {
+            'sslmode': 'require',
+        }
     }
 }
 
@@ -73,3 +76,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Point to our custom user model
 AUTH_USER_MODEL = 'api.User'
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
