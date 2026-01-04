@@ -4,7 +4,7 @@ import os
 import json
 import time
 
-GOOGLE_API_KEY = "your key here"
+GOOGLE_API_KEY = "AIzaSyD2qKy6BiqbXaqkZlGeM6v9ge7WijYCUnE"
 
 def get_best_model():
     try:
