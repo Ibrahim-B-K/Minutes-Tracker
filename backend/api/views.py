@@ -1,13 +1,19 @@
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 
 from django.contrib.auth import authenticate, login, logout
+from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from django.db.models import Q
 
 from datetime import datetime, date
 import os
+
+
+from rest_framework.authtoken.models import Token
+
+
 
 from .models import (
     User,
@@ -21,29 +27,33 @@ from .models import (
 from .serializers import IssueDepartmentSerializer, NotificationSerializer
 from .gemini_utils import analyze_document_with_gemini
 
-# Temporary in-memory cache
+
+# ================= TEMP CACHE (ONLY FOR NOW) ================= #
 TEMP_DATA_CACHE = []
 
 
-# ---------------- AUTH ---------------- #
+# ================= AUTH ================= #
+
 
 @api_view(['POST'])
+@permission_classes([AllowAny]) 
 def login_view(request):
     username = request.data.get('username')
     password = request.data.get('password')
 
     if not username or not password:
-        return Response({"error": "Username and password required"}, status=400)
+        return Response({"success": False, "message": "Missing credentials"}, status=400)
 
     user = authenticate(username=username, password=password)
 
-    if not user:
-        return Response({"error": "Invalid credentials"}, status=401)
+    if user is None:
+        return Response({"success": False, "message": "Invalid username or password"}, status=401)
 
-    login(request, user)
+    token, _ = Token.objects.get_or_create(user=user)
 
     return Response({
         "success": True,
+        "token": token.key,
         "username": user.username,
         "role": user.role,
         "department": user.department.dept_name if user.department else None
@@ -55,14 +65,20 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return Response({"success": True})
+# @api_view(['POST'])
+# @permission_classes([IsAuthenticated])
+# def logout_view(request):
+#     request.auth.delete()   # delete token
+#     return Response({"success": True}) #keerthi added this js for verification-didnt check
 
 
-# ---------------- MINUTES UPLOAD ---------------- #
+
+# ================= MINUTES UPLOAD ================= #
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def upload_minutes(request):
-    if request.user.role != 'DPO':
+    if request.user.role != 'dpo':
         return Response({"error": "Only DPO can upload minutes"}, status=403)
 
     global TEMP_DATA_CACHE
@@ -82,12 +98,11 @@ def upload_minutes(request):
 
     clean_data = []
     for item in raw_data:
-        depts = item.get('departments', [])
+        depts = item.get('departments') or []
         if not depts:
-            single = item.get('department')
-            depts = [single] if single else ["GENERAL"]
+            depts = [item.get('department', 'GENERAL')]
 
-        item['department'] = ", ".join([str(d).upper() for d in depts if d])
+        item['department'] = ", ".join(d.upper() for d in depts if d)
         clean_data.append(item)
 
     TEMP_DATA_CACHE = clean_data
@@ -97,19 +112,21 @@ def upload_minutes(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_assign_issues(request):
+    if request.user.role != 'dpo':
+        return Response({"error": "Unauthorized"}, status=403)
     return Response(TEMP_DATA_CACHE)
 
 
-# ---------------- ALLOCATION ---------------- #
+# ================= ISSUE ALLOCATION ================= #
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def allocate_all(request):
-    if request.user.role != 'DPO':
-        return Response({"error": "Only DPO can allocate issues"}, status=403)
+    if request.user.role != 'dpo':
+        return Response({"error": "Only DPO can allocate"}, status=403)
 
     global TEMP_DATA_CACHE
-    issues_data = request.data.get('issues', []) or TEMP_DATA_CACHE
+    issues_data = request.data.get('issues') or TEMP_DATA_CACHE
 
     minute = Minutes.objects.create(
         title="Uploaded Minutes",
@@ -122,16 +139,16 @@ def allocate_all(request):
 
     for item in issues_data:
         issue = Issue.objects.create(
-            minute=minute,
-            issue_no=item.get('issue_no', '0'),
-            issue_title=item.get('issue', 'No Title'),
+            minutes=minute,
+            issue_title=item.get('issue', ''),
+            issue_description=item.get('description', ''),
             location=item.get('location', ''),
-            priority=item.get('priority', 'Medium')
+            priority=item.get('priority', 'MEDIUM')
         )
 
         dept_list = [
             d.strip().upper()
-            for d in str(item.get('department', 'GENERAL')).split(",")
+            for d in str(item.get('department', 'GENERAL')).split(',')
             if d.strip()
         ]
 
@@ -139,48 +156,49 @@ def allocate_all(request):
             dept, _ = Department.objects.get_or_create(dept_name=dept_name)
             dept_counts[dept] = dept_counts.get(dept, 0) + 1
 
-            d_date = None
+            deadline = None
             if item.get('deadline'):
                 try:
-                    d_date = datetime.strptime(
-                        item['deadline'], '%d-%m-%Y'
-                    ).date()
+                    deadline = datetime.strptime(item['deadline'], '%d-%m-%Y').date()
                 except:
                     pass
 
             IssueDepartment.objects.create(
                 issue=issue,
                 department=dept,
-                deadline_date=d_date
+                deadline_date=deadline,
+                status='PENDING'
             )
 
     for dept, count in dept_counts.items():
-        users = User.objects.filter(department=dept).exclude(role__in=['DPO', 'COLLECTOR'])
+        users = User.objects.filter(role='department', department=dept)
         for u in users:
             Notification.objects.create(
                 user=u,
-                type='assign',
-                message=f"ACTION REQUIRED: {count} new issues assigned."
+                issue_department=None,
+                message=f"{count} new issues assigned."
             )
 
     TEMP_DATA_CACHE = []
     return Response({"success": True})
 
 
-# ---------------- ISSUES ---------------- #
+# ================= ISSUES ================= #
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_all_issues(request):
-    if request.user.role not in ['DPO', 'COLLECTOR']:
+    if request.user.role not in ['dpo', 'collector']:
         return Response({"error": "Unauthorized"}, status=403)
 
     today = date.today()
-    issues = IssueDepartment.objects.all().order_by('-issue__issue_id')
+    issues = IssueDepartment.objects.select_related(
+        'issue', 'department'
+    ).order_by('-issue__id')
 
     for i in issues:
-        if i.status == 'pending' and i.deadline_date and i.deadline_date < today:
-            i.status = 'overdue'
+        if i.status == 'PENDING' and i.deadline_date and i.deadline_date < today:
+            i.status = 'OVERDUE'
             i.save()
 
     return Response(IssueDepartmentSerializer(issues, many=True).data)
@@ -188,60 +206,59 @@ def get_all_issues(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def get_dept_issues(request, dept_name):
-    if request.user.role != 'DEPT':
+def get_dept_issues(request):
+    if request.user.role != 'department':
         return Response({"error": "Unauthorized"}, status=403)
 
     today = date.today()
     issues = IssueDepartment.objects.filter(
-        department__dept_name__iexact=dept_name.strip()
-    ).order_by('-issue__issue_id')
+        department=request.user.department
+    ).order_by('-issue__id')
 
     for i in issues:
-        if i.status == 'pending' and i.deadline_date and i.deadline_date < today:
-            i.status = 'overdue'
+        if i.status == 'PENDING' and i.deadline_date and i.deadline_date < today:
+            i.status = 'OVERDUE'
             i.save()
 
     return Response(IssueDepartmentSerializer(issues, many=True).data)
 
 
-# ---------------- RESPONSES ---------------- #
+# ================= RESPONSES ================= #
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def submit_response(request):
-    if request.user.role != 'DEPT':
+    if request.user.role != 'department':
         return Response({"error": "Only departments can submit"}, status=403)
 
-    issue_id = request.data.get('issue_id')
+    issue_dept_id = request.data.get('issue_id')
     response_text = request.data.get('response')
 
-    if not issue_id:
+    if not issue_dept_id:
         return Response({"error": "Issue ID required"}, status=400)
 
-    issue_link = IssueDepartment.objects.get(issue_dept_id=issue_id)
+    issue_link = IssueDepartment.objects.get(id=issue_dept_id)
 
     ResponseModel.objects.update_or_create(
-        issue_dept=issue_link,
+        issue_department=issue_link,
         defaults={'response_text': response_text}
     )
 
-    issue_link.status = 'submitted'
+    issue_link.status = 'COMPLETED'
     issue_link.save()
 
-    dpos = User.objects.filter(Q(role='DPO') | Q(username__iexact='dpo'))
+    dpos = User.objects.filter(role='dpo')
     for d in dpos:
         Notification.objects.create(
             user=d,
-            issue_link=issue_link,
-            type='response',
-            message=f"{issue_link.department.dept_name} responded to Issue #{issue_link.issue.issue_no}"
+            issue_department=issue_link,
+            message=f"{issue_link.department.dept_name} submitted a response."
         )
 
     return Response({"success": True})
 
 
-# ---------------- NOTIFICATIONS ---------------- #
+# ================= NOTIFICATIONS ================= #
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -251,3 +268,17 @@ def get_notifications(request):
     ).order_by('-created_at')[:20]
 
     return Response(NotificationSerializer(notifs, many=True).data)
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def me(request):
+    return Response({
+        "authenticated": True,
+        "username": request.user.username,
+        "role": request.user.role,
+    })
+# core/views.py
+from django.http import JsonResponse
+
+def test_view(request):
+    print("🔥 TEST VIEW HIT:", request.method)
+    return JsonResponse({"ok": True})

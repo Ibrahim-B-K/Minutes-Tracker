@@ -3,9 +3,9 @@ from django.db import models
 
 class User(AbstractUser):
     ROLE_CHOICES = [
-        ('DPO', 'DPO'),
-        ('COLLECTOR', 'Collector'),
-        ('DEPT', 'Department'),
+        ('dpo', 'dpo'),
+        ('collector', 'collector'),
+        ('department', 'department'),
     ]
 
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)

@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 from .models import (
     User,
     Department,
@@ -9,7 +10,26 @@ from .models import (
     Notification
 )
 
-admin.site.register(User)
+
+@admin.register(User)
+class CustomUserAdmin(UserAdmin):
+    model = User
+
+    list_display = ("username", "role", "department", "is_staff")
+    list_filter = ("role", "is_staff")
+
+    fieldsets = UserAdmin.fieldsets + (
+        ("Extra Info", {"fields": ("role", "department")}),
+    )
+
+    add_fieldsets = UserAdmin.add_fieldsets + (
+        ("Extra Info", {"fields": ("role", "department")}),
+    )
+
+    search_fields = ("username",)
+    ordering = ("username",)
+
+
 admin.site.register(Department)
 admin.site.register(Minutes)
 admin.site.register(Issue)
