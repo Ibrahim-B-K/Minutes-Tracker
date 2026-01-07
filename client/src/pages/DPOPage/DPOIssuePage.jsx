@@ -7,6 +7,7 @@ import IssueCard from "../../components/DPO/IssuePage/IssueCard";
 import { Link } from "react-router-dom";
 import DriveFolderUploadSharpIcon from "@mui/icons-material/DriveFolderUploadSharp";
 import "./DPOIssuePage.css";
+import api from "../../api/axios";
 
 function DPOIssuePage() {
   const [activeTab, setActiveTab] = useState("Pending");
@@ -17,8 +18,8 @@ function DPOIssuePage() {
   // Fetch ALL issues from backend
   useEffect(() => {
     setLoading(true);
-    axios
-      .get("http://127.0.0.1:8000/issues")
+    api
+      .get("/issues")
       .then((res) => {
         setIssues(res.data);
       })

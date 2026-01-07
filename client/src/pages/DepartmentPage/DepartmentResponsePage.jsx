@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
 import { useParams } from "react-router-dom";
 import Header from "../../components/Department/Header";
 import Tabs from "../../components/Department/Tabs";
 import IssueCard from "../../components/Department/IssueCard";
 import "./DepartmentResponsePage.css";
+import api from "../../api/axios";
 
 function DepartmentResponsePage() {
   const { dept } = useParams();
@@ -16,7 +17,7 @@ function DepartmentResponsePage() {
     if (!dept) return;
     setLoading(true);
     // Fetch issues specifically for this department from Django
-    axios.get(`http://127.0.0.1:8000/issues/${dept}`)
+    api.get(`/issues/${dept}`)
       .then((res) => {
         setIssues(res.data);
       })

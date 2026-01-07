@@ -2,6 +2,7 @@
 import React, { useRef, useState } from "react";
 import axios from "axios";
 import "./UploadForm.css";
+import api from "../../../api/axios";
 
 export default function UploadForm({ onProcessed }) {
   const datePickerRef = useRef(null);
@@ -43,8 +44,8 @@ export default function UploadForm({ onProcessed }) {
       formData.append("meeting_date", date);
       formData.append("file", selectedFile);
 
-      await axios.post(
-        "http://127.0.0.1:8000/upload-minutes",
+      await api.post(
+        "/upload-minutes",
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );

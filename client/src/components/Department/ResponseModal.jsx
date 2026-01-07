@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import axios from "axios"; // THIS WAS MISSING
 import "./ResponseModal.css";
+import api from "../../api/axios";
 
 function ResponseModal({ isOpen, onClose, issue }) {
   const fileInputRef = useRef(null);
@@ -45,7 +46,7 @@ function ResponseModal({ isOpen, onClose, issue }) {
         response: responseText
       };
 
-      const res = await axios.post("http://127.0.0.1:8000/submit-response", payload);
+      const res = await api.post("/submit-response", payload);
 
       if (res.data.success) {
         alert("Submitted successfully!");
