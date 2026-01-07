@@ -42,6 +42,7 @@ class DPOIssueSerializer(serializers.ModelSerializer):
     issue_no = serializers.IntegerField(source='id', read_only=True)
     
     issue = serializers.CharField(source='issue_title')
+    issue_description = serializers.CharField()
     location = serializers.CharField()
     priority = serializers.CharField()
     
@@ -57,6 +58,7 @@ class DPOIssueSerializer(serializers.ModelSerializer):
             'id', 
             'issue_no', 
             'issue', 
+            'issue_description',
             'location', 
             'priority', 
             'department', 
@@ -64,7 +66,7 @@ class DPOIssueSerializer(serializers.ModelSerializer):
             'deadline', 
             'response'
         ]
-
+    
     def get_department(self, obj):
         # Combines multiple departments: "POLICE, PWD"
         assignments = obj.issuedepartment_set.all()

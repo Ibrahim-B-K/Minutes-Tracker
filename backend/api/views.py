@@ -155,9 +155,9 @@ def allocate_all(request):
         safe_location = str(raw_location).strip()[:200]
 
         issue = Issue.objects.create(
-            minute=minute_obj, 
-            issue_no=item.get('issue_no', '0'), 
-            issue_title=item.get('issue', 'No Title'), 
+            minutes=minute_obj, 
+            issue_title=item.get('issue', 'No Title'),
+            issue_description=item.get('issue_description', ''),
             location=item.get('location', ''), 
             priority=item.get('priority', 'Medium')
         )
@@ -282,6 +282,7 @@ def submit_response(request):
 
     try:
         # FIX 1: Use 'id' (the database primary key), not 'issue_dept_id'
+
         issue_link = IssueDepartment.objects.get(id=issue_id)
         
         # FIX 2: Create Response (Using 'issue_department' which matches your model)
