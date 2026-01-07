@@ -24,9 +24,10 @@ from .models import (
     Response as ResponseModel,
     Notification
 )
-from .serializers import IssueDepartmentSerializer, NotificationSerializer
+from .serializers import IssueDepartmentSerializer, NotificationSerializer, DPOIssueSerializer
 from .gemini_utils import analyze_document_with_gemini
-
+import os
+from datetime import datetime, date, timedelta
 
 # ================= TEMP CACHE (ONLY FOR NOW) ================= #
 TEMP_DATA_CACHE = []
@@ -126,24 +127,39 @@ def allocate_all(request):
         return Response({"error": "Only DPO can allocate"}, status=403)
 
     global TEMP_DATA_CACHE
-    issues_data = request.data.get('issues') or TEMP_DATA_CACHE
+    issues_data = request.data.get('issues', [])
+    if not issues_data: issues_data = TEMP_DATA_CACHE 
+    
+    # 1. User Safety Check
+    u_by = User.objects.filter(role='DPO').first()
+    if not u_by:
+        u_by = User.objects.first()
+    if not u_by:
+        u_by = User.objects.create_user(username='dpo', password='dpo', role='DPO')
 
-    minute = Minutes.objects.create(
-        title="Uploaded Minutes",
-        meeting_date=timezone.now(),
-        uploaded_by=request.user,
+    # 2. Create Minutes
+    minute_obj = Minutes.objects.create(
+        title="Uploaded Minutes", 
+        meeting_date=timezone.now(), 
+        uploaded_by=u_by, 
         file_path="dummy"
     )
-
+    
     dept_counts = {}
 
     for item in issues_data:
+        raw_title = item.get('issue', 'No Title') or ""
+        safe_title = str(raw_title).strip()[:200]
+
+        raw_location = item.get('location', '') or ""
+        safe_location = str(raw_location).strip()[:200]
+
         issue = Issue.objects.create(
-            minutes=minute,
-            issue_title=item.get('issue', ''),
-            issue_description=item.get('description', ''),
-            location=item.get('location', ''),
-            priority=item.get('priority', 'MEDIUM')
+            minute=minute_obj, 
+            issue_no=item.get('issue_no', '0'), 
+            issue_title=item.get('issue', 'No Title'), 
+            location=item.get('location', ''), 
+            priority=item.get('priority', 'Medium')
         )
 
         dept_list = [
@@ -153,30 +169,37 @@ def allocate_all(request):
         ]
 
         for dept_name in dept_list:
-            dept, _ = Department.objects.get_or_create(dept_name=dept_name)
+            safe_dept_name = dept_name[:100]
+            dept, _ = Department.objects.get_or_create(dept_name=safe_dept_name)
+            
             dept_counts[dept] = dept_counts.get(dept, 0) + 1
-
-            deadline = None
-            if item.get('deadline'):
-                try:
-                    deadline = datetime.strptime(item['deadline'], '%d-%m-%Y').date()
-                except:
-                    pass
+            
+            d_str = item.get('deadline')
+            d_date = None
+            if d_str:
+                try: 
+                    d_date = datetime.strptime(str(d_str), '%d-%m-%Y').date()
+                except: 
+                    d_date = None
+            
+            # Default to 7 days if date missing
+            if d_date is None:
+                d_date = date.today() + timedelta(days=7) 
 
             IssueDepartment.objects.create(
-                issue=issue,
-                department=dept,
-                deadline_date=deadline,
-                status='PENDING'
+                issue=issue, 
+                department=dept, 
+                deadline_date=d_date,
+                status='pending'  # <--- FIX: MUST BE LOWERCASE 'pending'
             )
 
     for dept, count in dept_counts.items():
-        users = User.objects.filter(role='department', department=dept)
+        users = User.objects.filter(department=dept).exclude(role__in=['DPO', 'COLLECTOR'])
         for u in users:
             Notification.objects.create(
-                user=u,
-                issue_department=None,
-                message=f"{count} new issues assigned."
+                user=u, 
+                issue_department=None, 
+                message=f"ACTION REQUIRED: {count} new issues have been assigned to your department."
             )
 
     TEMP_DATA_CACHE = []
@@ -192,73 +215,113 @@ def get_all_issues(request):
         return Response({"error": "Unauthorized"}, status=403)
 
     today = date.today()
-    issues = IssueDepartment.objects.select_related(
-        'issue', 'department'
-    ).order_by('-issue__id')
+    
+    # 1. Update Overdue Status (Optimized)
+    overdue_assignments = IssueDepartment.objects.filter(
+        status__iexact='pending', 
+        deadline_date__lt=today
+    )
+    for i in overdue_assignments:
+        i.status = 'overdue'
+        i.save()
 
-    for i in issues:
-        if i.status == 'PENDING' and i.deadline_date and i.deadline_date < today:
-            i.status = 'OVERDUE'
-            i.save()
+    # 2. Get the date filter
+    filter_date = request.query_params.get('date')
 
-    return Response(IssueDepartmentSerializer(issues, many=True).data)
+    # 3. Start Query (FIXED for Speed AND Accuracy)
+    # We kept 'department' (Major Speed Boost) but REMOVED 'responses'.
+    # This ensures the serializer finds the latest response text correctly.
+    issues_query = Issue.objects.prefetch_related(
+        'issuedepartment_set',
+        'issuedepartment_set__department'
+        # REMOVED: 'issuedepartment_set__responses' (This was causing the bug)
+    ).all().order_by('-id')
 
+    # 4. Apply Date Filter
+    if filter_date:
+        issues_query = issues_query.filter(minutes__meeting_date__date=filter_date)
+
+    serializer = DPOIssueSerializer(issues_query, many=True)
+    return Response(serializer.data)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def get_dept_issues(request):
+def get_dept_issues(request, dept_name):
     if request.user.role != 'department':
         return Response({"error": "Unauthorized"}, status=403)
 
     today = date.today()
-    issues = IssueDepartment.objects.filter(
-        department=request.user.department
-    ).order_by('-issue__id')
-
-    for i in issues:
-        if i.status == 'PENDING' and i.deadline_date and i.deadline_date < today:
-            i.status = 'OVERDUE'
+    
+    # 1. OPTIMIZATION: 'select_related' fetches the parent Issue and Dept info in the SAME query.
+    # 'prefetch_related' fetches all the responses in the SAME query.
+    issues_query = IssueDepartment.objects.select_related('issue', 'department').prefetch_related('responses').filter(
+        department__dept_name__iexact=dept_name.strip()
+    ).order_by('-issue__id') 
+    
+    # 2. Update Overdue Status (Only for pending items to save time)
+    # We iterate through the already fetched list to avoid a second DB hit
+    for i in issues_query:
+        if i.status.lower() == 'pending' and i.deadline_date and i.deadline_date < today:
+            i.status = 'overdue'
             i.save()
-
-    return Response(IssueDepartmentSerializer(issues, many=True).data)
-
-
-# ================= RESPONSES ================= #
+            
+    serializer = IssueDepartmentSerializer(issues_query, many=True)
+    return Response(serializer.data)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def submit_response(request):
-    if request.user.role != 'department':
-        return Response({"error": "Only departments can submit"}, status=403)
-
-    issue_dept_id = request.data.get('issue_id')
+    # 1. Get the ID safely
+    issue_id = request.data.get('issue_id') or request.data.get('id')
     response_text = request.data.get('response')
 
-    if not issue_dept_id:
-        return Response({"error": "Issue ID required"}, status=400)
+    print(f"📝 Submitting response for ID: {issue_id}") # Debug Log
 
-    issue_link = IssueDepartment.objects.get(id=issue_dept_id)
+    if not issue_id or str(issue_id) == "undefined":
+        return Response({"error": "Invalid ID provided"}, status=400)
 
-    ResponseModel.objects.update_or_create(
-        issue_department=issue_link,
-        defaults={'response_text': response_text}
-    )
-
-    issue_link.status = 'COMPLETED'
-    issue_link.save()
-
-    dpos = User.objects.filter(role='dpo')
-    for d in dpos:
-        Notification.objects.create(
-            user=d,
-            issue_department=issue_link,
-            message=f"{issue_link.department.dept_name} submitted a response."
+    try:
+        # FIX 1: Use 'id' (the database primary key), not 'issue_dept_id'
+        issue_link = IssueDepartment.objects.get(id=issue_id)
+        
+        # FIX 2: Create Response (Using 'issue_department' which matches your model)
+        # We use 'create' instead of update_or_create to allow history of responses
+        ResponseModel.objects.create(
+            issue_department=issue_link, 
+            response_text=response_text
         )
+        
+        # FIX 3: Status must be lowercase 'submitted' to match your frontend logic
+        issue_link.status = 'submitted'
+        issue_link.save()
+        
+        # --- NOTIFY DPO ---
+        dpos = User.objects.filter(Q(role__iexact='DPO') | Q(username__iexact='dpo'))
+        
+        # FIX 4: Use 'issue.id' because 'issue_no' column might not exist
+        issue_number = issue_link.issue.id 
+        dept_name = issue_link.department.dept_name
 
-    return Response({"success": True})
+        for d in dpos:
+            Notification.objects.create(
+                user=d, 
+                issue_department=issue_link,  # FIX 5: Field name is 'issue_department'
+                # type='response', # Uncomment only if your Notification model has this field
+                message=f"Response Received: {dept_name} responded to Issue #{issue_number}"
+            )
+            
+        print(f"✅ Response success for Issue #{issue_number}")
+        return Response({"success": True})
 
-
-# ================= NOTIFICATIONS ================= #
+    except IssueDepartment.DoesNotExist:
+        print(f"❌ Error: IssueDepartment with ID {issue_id} not found.")
+        return Response({"error": "Issue not found"}, status=404)
+        
+    except Exception as e:
+        print(f"🔥 CRITICAL SUBMIT ERROR: {str(e)}") # Prints exact error to terminal
+        import traceback
+        traceback.print_exc()
+        return Response({"error": str(e)}, status=500)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])

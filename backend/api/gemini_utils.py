@@ -3,8 +3,8 @@ from google.generativeai.types import HarmCategory, HarmBlockThreshold
 import os
 import json
 import time
-# AIzaSyBazFAHb2TTtwH4jIKt5iee1s-YaCZ5I4M
-GOOGLE_API_KEY = "api key"
+
+GOOGLE_API_KEY = "your api key"
 
 def get_best_model():
     try:
