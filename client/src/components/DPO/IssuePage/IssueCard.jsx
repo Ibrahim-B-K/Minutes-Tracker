@@ -39,6 +39,11 @@ function IssueCard({ issue }) {
         </div>
 
         <div className="issue-row">
+          <div className="label">Description</div>
+          <div className="value">{issue.issue_description}</div>
+        </div>
+
+        <div className="issue-row">
           <div className="label">Priority</div>
           <div className="value">{issue.priority}</div>
         </div>

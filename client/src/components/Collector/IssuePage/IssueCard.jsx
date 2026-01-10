@@ -32,7 +32,10 @@ function IssueCard({ issue }) {
           <div className="label">Issue</div>
           <div className="value">{issue.issue}</div>
         </div>
-
+        <div className="issue-row">
+          <div className="label">Description</div>
+          <div className="value">{issue.issue_description}</div>
+        </div>
         <div className="issue-row">
           <div className="label">Priority</div>
           <div className="value">{issue.priority}</div>
