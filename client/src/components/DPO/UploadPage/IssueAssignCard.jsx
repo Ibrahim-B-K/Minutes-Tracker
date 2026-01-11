@@ -44,11 +44,19 @@ export default function IssueAssignCard({ issue, onChange, index }) {
         </div>
 
         <div className="form-field">
-          <label>Issue:</label>
+          <label>Issue title:</label>
           <textarea
             rows="2"
             value={issue.issue}
             onChange={(e) => handleChange("issue", e.target.value)}
+          />
+        </div>
+        <div className="form-field">
+          <label>Description:</label>
+          <textarea
+            rows="2"
+            value={issue.issue_description}
+            onChange={(e) => handleChange("issue_description", e.target.value)}
           />
         </div>
 

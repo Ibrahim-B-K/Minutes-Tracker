@@ -33,6 +33,14 @@ const GenerateReportCard = React.memo(function GenerateReportCard({
             rows="3"
           />
         </div>
+        <div className="form-field">
+          <label>Description:</label>
+          <textarea
+            rows="2"
+            value={report.issue_description}
+            onChange={(e) => handleChange("issue_description", e.target.value)}
+          />
+        </div>
 
         <div className="form-field">
           <label>Response:</label>

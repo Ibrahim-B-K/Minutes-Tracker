@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import "./AssignIssues.css";
 import { Link } from "react-router-dom";
 import IssueAssignCard from "./IssueAssignCard";
-
+import api from "../../../api/axios";
 export default function AssignIssues() {
   const [issues, setIssues] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -12,9 +12,8 @@ export default function AssignIssues() {
   useEffect(() => {
     const fetchIssues = async () => {
       try {
-        const res = await fetch("http://127.0.0.1:8000/assign-issues");
-        const data = await res.json();
-        setIssues(data);
+        const res = await api.get("/assign-issues");
+        setIssues(res.data);
       } catch (err) {
         console.error("Failed to load issues:", err);
       } finally {
@@ -36,12 +35,8 @@ export default function AssignIssues() {
 
   // 🔹 Allocate all issues
   const handleAllocateAll = () => {
-    fetch("http://127.0.0.1:8000/assign-issues/allocate-all", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ issues })
-    })
-      .then(res => res.json())
+        api
+      .post("/assign-issues/allocate-all", { issues })
       .then(() => alert("All issues allocated!"))
       .catch(err => console.error(err));
   };

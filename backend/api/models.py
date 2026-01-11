@@ -1,60 +1,76 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.utils import timezone
-
-class Department(models.Model):
-    dept_id = models.AutoField(primary_key=True)
-    dept_name = models.CharField(max_length=100, unique=True)
-    email = models.EmailField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    def __str__(self): return self.dept_name
+from django.db import models
 
 class User(AbstractUser):
-    ROLE_CHOICES = [('DPO', 'DPO'), ('COLLECTOR', 'COLLECTOR'), ('DEPT', 'DEPT')]
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='DEPT')
-    department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True)
+    ROLE_CHOICES = [
+        ('dpo', 'dpo'),
+        ('collector', 'collector'),
+        ('department', 'department'),
+    ]
 
-class Minute(models.Model):
-    minutes_id = models.AutoField(primary_key=True)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+    department = models.ForeignKey(
+        'Department',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+class Department(models.Model):
+    dept_name = models.CharField(max_length=100, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.dept_name
+class Minutes(models.Model):
     title = models.CharField(max_length=200)
     meeting_date = models.DateField()
-    # ADDED THIS BACK TO MATCH VIEWS
-    uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    uploaded_by = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='uploaded_minutes'
+    )
     file_path = models.FileField(upload_to='minutes/')
     created_at = models.DateTimeField(auto_now_add=True)
-
 class Issue(models.Model):
-    PRIORITY_CHOICES = [('High', 'High'), ('Medium', 'Medium'), ('Low', 'Low')]
-    issue_id = models.AutoField(primary_key=True)
-    minute = models.ForeignKey(Minute, on_delete=models.CASCADE, related_name='issues', null=True)
-    issue_no = models.CharField(max_length=50)
-    issue_title = models.TextField()
-    description = models.TextField(blank=True, null=True)
-    location = models.CharField(max_length=200, blank=True, null=True)
-    priority = models.CharField(max_length=20, choices=PRIORITY_CHOICES, default='Medium')
+    PRIORITY_CHOICES = [
+        ('LOW', 'Low'),
+        ('MEDIUM', 'Medium'),
+        ('HIGH', 'High'),
+    ]
+
+    minutes = models.ForeignKey(
+        Minutes,
+        on_delete=models.CASCADE,
+        related_name='issues'
+    )
+    issue_title = models.CharField(max_length=300)
+    issue_description = models.TextField(default="")
+    location = models.CharField(max_length=200)
+    priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True)
-
 class IssueDepartment(models.Model):
-    STATUS_CHOICES = [('pending', 'Pending'), ('submitted', 'Submitted'), ('overdue', 'Overdue'), ('completed', 'Completed')]
-    issue_dept_id = models.AutoField(primary_key=True)
-    issue = models.ForeignKey(Issue, on_delete=models.CASCADE, related_name='assigned_depts')
+    STATUS_CHOICES = [
+        ('PENDING', 'Pending'),
+        ('COMPLETED', 'Completed'),
+        ('OVERDUE', 'Overdue'),
+    ]
+
+    issue = models.ForeignKey(Issue, on_delete=models.CASCADE)
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
-    deadline_date = models.DateField(null=True, blank=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
-
+    deadline_date = models.DateField()
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
 class Response(models.Model):
-    response_id = models.AutoField(primary_key=True)
-    issue_dept = models.OneToOneField(IssueDepartment, on_delete=models.CASCADE, related_name='response')
+    issue_department = models.ForeignKey(
+        IssueDepartment,
+        on_delete=models.CASCADE,
+        related_name='responses'
+    )
     response_text = models.TextField()
-    attachment = models.FileField(upload_to='responses/', blank=True, null=True)
+    attachment_path = models.FileField(upload_to='responses/', null=True, blank=True)
     submitted_at = models.DateTimeField(auto_now_add=True)
-
 class Notification(models.Model):
-    TYPE_CHOICES = [('assign', 'Assignment'), ('response', 'Response'), ('deadline', 'Deadline')]
-    notification_id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    issue_link = models.ForeignKey(IssueDepartment, on_delete=models.CASCADE, null=True, blank=True)
+    issue_department = models.ForeignKey(IssueDepartment, on_delete=models.CASCADE)
     message = models.TextField()
-    type = models.CharField(max_length=20, choices=TYPE_CHOICES, default='assign')
     is_read = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)

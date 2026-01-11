@@ -54,10 +54,11 @@ def analyze_document_with_gemini(file_path):
     
     Return a JSON ARRAY of objects:
     - issue_no: string
-    - departments: ARRAY of strings (e.g. ["PWD_ROADS", "LSGD"])
-    - issue: Malayalam summary
-    - location: Malayalam place
-    - priority: High/Medium/Low
+    - departments: ARRAY of strings (e.g. ["PWD_ROADS", "LSGD"]) should be extracted from text after നടപടി:- only give the dept, not the officer position, and also convert to the english names of the  departments as above.
+    - issue: ONE-LINE Malayalam summary (max 20 words)
+    - issue_description: FULL detailed Malayalam issue description (multiple sentences),dont assume anything not in the document.
+    - location: Malayalam place name (if mentioned) or "".
+    - priority: High/Medium/Low (based on urgency in text, urgency can be inferred from words and high priority for issues that involve MLA/MP/Minister requests)
     - deadline (DD-MM-YYYY or "")
     
     Output ONLY PURE JSON. Do not include any other text.

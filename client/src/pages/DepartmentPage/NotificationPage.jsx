@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
 import Header from "../../components/Department/Header";
 import "./NotificationPage.css";
+import api from "../../api/axios";
 
 function DepartmentNotificationPage() {
   const [notifications, setNotifications] = useState([]);
@@ -11,7 +12,7 @@ function DepartmentNotificationPage() {
     const fetchNotifications = async () => {
       const username = localStorage.getItem("username");
       try {
-        const res = await axios.get("http://127.0.0.1:8000/notifications", {
+        const res = await api.get("/notifications", {
           params: { username }
         });
         setNotifications(res.data);
