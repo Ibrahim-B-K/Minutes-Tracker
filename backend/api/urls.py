@@ -12,5 +12,6 @@ urlpatterns = [
     path('notifications', views.get_notifications),
     path('me', views.me),
     path("test/", views.test_view),
+    path('generate-report', views.generate_report),
 
 ]

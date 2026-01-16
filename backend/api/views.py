@@ -9,7 +9,9 @@ from django.db.models import Q
 
 from datetime import datetime, date
 import os
-
+import openpyxl
+from openpyxl.styles import Font, Alignment, Border, Side
+from django.http import HttpResponse
 
 from rest_framework.authtoken.models import Token
 
@@ -346,3 +348,97 @@ from django.http import JsonResponse
 def test_view(request):
     print("🔥 TEST VIEW HIT:", request.method)
     return JsonResponse({"ok": True})
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def generate_report(request):
+    # 1. Fetch only issues that have a response (Submitted/Received)
+    # We filter for 'submitted' because that is the status used in  DB when a dept replies
+    issues = IssueDepartment.objects.filter(
+        status__in=['submitted', 'received', 'completed']
+    ).select_related('issue', 'issue__minutes', 'department').prefetch_related('responses')
+
+    # 2. Create the Excel Workbook
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Action Taken Report"
+
+    # 3. Define Styles (to match the official look)
+    header_font = Font(bold=True, size=11, name='Calibri')
+    # Center align for headers
+    center_align = Alignment(horizontal='center', vertical='center', wrap_text=True)
+    # Top-Left align for content so it looks like the document
+    content_align = Alignment(horizontal='left', vertical='top', wrap_text=True)
+    
+    thin_border = Border(
+        left=Side(style='thin'), right=Side(style='thin'), 
+        top=Side(style='thin'), bottom=Side(style='thin')
+    )
+
+    # 4. Set Column Widths (Adjusted for the 4-column layout)
+    ws.column_dimensions['A'].width = 8   # Sl No
+    ws.column_dimensions['B'].width = 25  # Date & Subject
+    ws.column_dimensions['C'].width = 20  # Department
+    ws.column_dimensions['D'].width = 40  # Instruction (Issue)
+    ws.column_dimensions['E'].width = 40  # Current Status (Response)
+
+    # 5. Create the Header Row
+    headers = [
+        "Sl No.", 
+        "Date & Subject\n(തിയതി & വിഷയം)", 
+        "Responsible Dept\n(ഉദ്യോഗസ്ഥൻ)", 
+        "Decision/Instruction\n(നിർദ്ദേശം)", 
+        "Current Status\n(നിലവിലെ സ്റ്റാറ്റസ്)"
+    ]
+    
+    ws.append(headers)
+
+    # Apply style to header row
+    for cell in ws[1]:
+        cell.font = header_font
+        cell.alignment = center_align
+        cell.border = thin_border
+        # Make header row a bit taller
+        ws.row_dimensions[1].height = 40
+
+    # 6. Loop through data and fill rows
+    for index, item in enumerate(issues, start=1):
+        # A. Get the latest response text
+        last_response = item.responses.last()
+        response_text = last_response.response_text if last_response else "No status update provided."
+        
+        # B. Get Meeting Date safely
+        meeting_date = "N/A"
+        if item.issue.minutes and item.issue.minutes.meeting_date:
+            meeting_date = item.issue.minutes.meeting_date.strftime("%d-%m-%Y")
+        
+        # C. Format Column 1: Date + Issue Title
+        # Mimicking the doc: "Date: ... \n (Minutes No...)\n Subject..."
+        col_1_text = f"Date: {meeting_date}\n\nSubject:\n{item.issue.issue_title}"
+
+        # D. Construct the row
+        row_data = [
+            index,                          # Sl No
+            col_1_text,                     # Col 1: Date & Subject
+            item.department.dept_name,      # Col 2: Dept
+            item.issue.issue_description,   # Col 3: The Instruction
+            response_text                   # Col 4: The Response
+        ]
+        
+        ws.append(row_data)
+
+        # Apply Styling to the new row
+        current_row = ws.max_row
+        for cell in ws[current_row]:
+            cell.alignment = content_align
+            cell.border = thin_border
+
+    # 7. Return the file as a response
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = 'attachment; filename="Action_Taken_Report.xlsx"'
+    
+    wb.save(response)
+    return response
