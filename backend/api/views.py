@@ -324,7 +324,7 @@ def submit_response(request):
         print(f"🔥 CRITICAL SUBMIT ERROR: {str(e)}") # Prints exact error to terminal
         import traceback
         traceback.print_exc()
-        return Response({"error": str(e)}, status=500)
+        return Response({"error": str(e)}, status=500) 
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
