@@ -322,7 +322,7 @@ def submit_response(request):
         print(f"🔥 CRITICAL SUBMIT ERROR: {str(e)}") # Prints exact error to terminal
         import traceback
         traceback.print_exc()
-        return Response({"error": str(e)}, status=500)
+        return Response({"error": str(e)}, status=500) 
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -332,17 +332,3 @@ def get_notifications(request):
     ).order_by('-created_at')[:20]
 
     return Response(NotificationSerializer(notifs, many=True).data)
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def me(request):
-    return Response({
-        "authenticated": True,
-        "username": request.user.username,
-        "role": request.user.role,
-    })
-# core/views.py
-from django.http import JsonResponse
-
-def test_view(request):
-    print("🔥 TEST VIEW HIT:", request.method)
-    return JsonResponse({"ok": True})
