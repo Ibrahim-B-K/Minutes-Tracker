@@ -9,10 +9,12 @@ from django.db.models import Q
 
 from datetime import datetime, date
 import os
-
+import openpyxl
+from openpyxl.styles import Font, Alignment, Border, Side
+from django.http import HttpResponse
 
 from rest_framework.authtoken.models import Token
-
+from collections import defaultdict
 
 
 from .models import (
@@ -322,7 +324,7 @@ def submit_response(request):
         print(f"🔥 CRITICAL SUBMIT ERROR: {str(e)}") # Prints exact error to terminal
         import traceback
         traceback.print_exc()
-        return Response({"error": str(e)}, status=500)
+        return Response({"error": str(e)}, status=500) 
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -346,3 +348,106 @@ from django.http import JsonResponse
 def test_view(request):
     print("🔥 TEST VIEW HIT:", request.method)
     return JsonResponse({"ok": True})
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def generate_report(request):
+    # 1. Fetch only 'Submitted'/'Received' issues
+    items = IssueDepartment.objects.filter(
+        status__in=['submitted', 'received', 'completed']
+    ).select_related('issue', 'issue__minutes', 'department').prefetch_related('responses')
+
+    # 2. Group by Issue ID
+    # Structure: { issue_id: { 'issue_obj': issue, 'depts': [], 'responses': [] } }
+    grouped_data = defaultdict(lambda: {'issue': None, 'depts': [], 'responses': []})
+
+    for item in items:
+        # Initialize the issue object if not set
+        if grouped_data[item.issue.id]['issue'] is None:
+            grouped_data[item.issue.id]['issue'] = item.issue
+        
+        # Add Department Name
+        grouped_data[item.issue.id]['depts'].append(item.department.dept_name)
+        
+        # Add Response with Dept Prefix
+        last_response = item.responses.last()
+        resp_text = last_response.response_text if last_response else "No status update."
+        formatted_response = f"[{item.department.dept_name}]: {resp_text}"
+        grouped_data[item.issue.id]['responses'].append(formatted_response)
+
+    # 3. Create Workbook
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Action Taken Report"
+
+    # Define Styles
+    header_font = Font(bold=True, size=11, name='Calibri')
+    center_align = Alignment(horizontal='center', vertical='center', wrap_text=True)
+    content_align = Alignment(horizontal='left', vertical='top', wrap_text=True)
+    thin_border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
+
+    # Set Column Widths
+    ws.column_dimensions['A'].width = 8   # Sl No
+    ws.column_dimensions['B'].width = 25  # Date & Subject
+    ws.column_dimensions['C'].width = 40  # Description
+    ws.column_dimensions['D'].width = 25  # Depts
+    ws.column_dimensions['E'].width = 45  # Responses
+
+    # Headers
+    headers = [
+        "ക്രമ നമ്പർ", 
+        "ഉന്നയിച്ച തീയതി & വകുപ്പ്/വിഷയം", 
+        "മുൻ യോഗത്തിൽ ചർച്ച ചെയ്തതും യോഗ നിർദ്ദേശവും", 
+        "നടപടി സ്വീകരിക്കേണ്ട ഉദ്യോഗസ്ഥൻ", 
+        "നിലവിലെ സ്റ്റാറ്റസ്"
+    ]
+    ws.append(headers)
+
+    # Apply Header Style
+    for cell in ws[1]:
+        cell.font = header_font
+        cell.alignment = center_align
+        cell.border = thin_border
+        ws.row_dimensions[1].height = 45
+
+    # 4. Write Grouped Data to Excel
+    for index, (issue_id, data) in enumerate(grouped_data.items(), start=1):
+        issue = data['issue']
+        
+        # Join Departments with newlines
+        dept_str = "\n".join(data['depts'])
+        
+        # Join Responses with double newlines for readability
+        response_str = "\n\n".join(data['responses'])
+
+        # Format Date
+        meeting_date = ""
+        if issue.minutes and issue.minutes.meeting_date:
+            meeting_date = issue.minutes.meeting_date.strftime("%d-%m-%Y")
+
+        subject_col_text = f"തീയതി: {meeting_date}\n\n{issue.issue_title}"
+
+        row_data = [
+            index,                  # Sl No
+            subject_col_text,       # Date & Subject
+            issue.issue_description,# Description
+            dept_str,               # Departments (Combined)
+            response_str            # Responses (Combined)
+        ]
+        
+        ws.append(row_data)
+
+        # Apply Styling
+        current_row = ws.max_row
+        for cell in ws[current_row]:
+            cell.alignment = content_align
+            cell.border = thin_border
+
+    # 5. Return File
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = 'attachment; filename="Action_Taken_Report.xlsx"'
+    wb.save(response)
+    return response
