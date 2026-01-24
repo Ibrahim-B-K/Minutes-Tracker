@@ -394,7 +394,7 @@ def generate_report(request):
     ws.column_dimensions['D'].width = 25  # Depts
     ws.column_dimensions['E'].width = 45  # Responses
 
-    # Headers
+    # Create headers
     headers = [
         "ക്രമ നമ്പർ", 
         "ഉന്നയിച്ച തീയതി & വകുപ്പ്/വിഷയം", 
@@ -402,14 +402,32 @@ def generate_report(request):
         "നടപടി സ്വീകരിക്കേണ്ട ഉദ്യോഗസ്ഥൻ", 
         "നിലവിലെ സ്റ്റാറ്റസ്"
     ]
+    
+    # 3.5. Determine Meeting Date for Header
+    meeting_date_str = timezone.now().strftime("%d-%m-%Y")
+    for item in items:
+        if item.issue and item.issue.minutes and item.issue.minutes.meeting_date:
+            meeting_date_str = item.issue.minutes.meeting_date.strftime("%d-%m-%Y")
+            break
+
+    # Main Header Row
+    ws.merge_cells('A1:E1')
+    main_header = ws['A1']
+    main_header.value = f"{meeting_date_str} -ന് ചേർന്ന ജില്ലാ വികസന സമിതി യോഗത്തിന്റെ തുടർ നടപടി റിപ്പോർട്ട്"
+    main_header.font = Font(bold=True, size=12, name='Calibri')
+    main_header.alignment = Alignment(horizontal='center', vertical='center')
+    main_header.border = thin_border
+    ws.row_dimensions[1].height = 30
+
+    # Table Headers (now on row 2)
     ws.append(headers)
 
-    # Apply Header Style
-    for cell in ws[1]:
+    # Apply Table Header Style
+    for cell in ws[2]:
         cell.font = header_font
         cell.alignment = center_align
         cell.border = thin_border
-        ws.row_dimensions[1].height = 45
+        ws.row_dimensions[2].height = 45
 
     # 4. Write Grouped Data to Excel
     for index, (issue_id, data) in enumerate(grouped_data.items(), start=1):

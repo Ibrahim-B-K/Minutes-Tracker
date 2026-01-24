@@ -8,7 +8,7 @@ function Header() {
       <div className="logo">
         {/* Placeholder for logo icon */}
         <div className="logo-icon"></div>
-        <span>Minutes Tracker System</span>
+        <span>DISTRICT DEVELOPMENT COUNCIL MINUTES MANAGEMENT SYSTEM</span>
       </div>
 
       <div className="header-icons">
