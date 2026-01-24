@@ -6,7 +6,7 @@ import DriveFolderUploadSharpIcon from "@mui/icons-material/DriveFolderUploadSha
 // Import your existing components (Old Paths)
 import Header from "../../components/DPO/Header";
 import Tabs from "../../components/DPO/IssuePage/Tabs";
-import FilterBar from "../../components/DPO/IssuePage/FilterBar";
+import DPOFilterBar from "../../components/DPO/IssuePage/DPOFilterBar";
 import IssueCard from "../../components/DPO/IssuePage/IssueCard";
 
 // Import your existing CSS
@@ -94,7 +94,7 @@ function DPOIssuePage() {
         </div>
 
         {/* Reuse your existing FilterBar */}
-        <FilterBar
+        <DPOFilterBar
           activeTab={activeTab}
           onFilterChange={(newFilters) => setFilters(prev => ({...prev, ...newFilters}))}
         />
