@@ -67,7 +67,7 @@ function IssueCard({ issue }) {
         <div className="footer-line"></div>
 
         {/* LOGIC FOR DISPLAYING RESPONSES */}
-        
+
         {/* If there are NO responses yet */}
         {(!issue.response || issue.response.length === 0) && status === "pending" && (
           <p className="no-response">No response received yet</p>
@@ -81,21 +81,30 @@ function IssueCard({ issue }) {
         {/* If there ARE responses (Show list) */}
         {issue.response && issue.response.length > 0 && (
           <div className="response-container" style={{ marginTop: "10px" }}>
-            {issue.response.map((resText, index) => (
-              <div 
-                key={index} 
-                className="response-received" 
+            {issue.response.map((resObj, index) => (
+              <div
+                key={index}
+                className="response-received"
                 style={{ marginBottom: "8px", height: "auto", padding: "10px" }}
               >
                 <p className="res" style={{ marginLeft: "0" }}>
-                  <strong>Response:</strong> {resText}
+                  <strong>{resObj.department}:</strong> {resObj.text}
                 </p>
+                {resObj.attachment && (
+                  <button
+                    className="res-button"
+                    style={{ position: 'static', marginTop: '10px' }}
+                    onClick={() => {
+                      const baseUrl = "http://127.0.0.1:8000";
+                      const fullUrl = resObj.attachment.startsWith("http") ? resObj.attachment : `${baseUrl}${resObj.attachment}`;
+                      window.open(fullUrl, "_blank");
+                    }}
+                  >
+                    Download Attachment
+                  </button>
+                )}
               </div>
             ))}
-            {/* Optional: Add button only if needed */}
-             {/* <button className="res-button" style={{position:'static', marginTop:'5px'}}>
-               Download Attachment
-             </button> */}
           </div>
         )}
       </div>

@@ -34,9 +34,15 @@ class IssueDepartmentSerializer(serializers.ModelSerializer):
         ]
 
     def get_response(self, obj):
-        # Fetch the latest response text if available
+        # Fetch the latest response text and attachment if available
         last_response = obj.responses.last()
-        return last_response.response_text if last_response else None
+        if not last_response:
+            return None
+            
+        return {
+            "text": last_response.response_text,
+            "attachment": last_response.attachment_path.url if last_response.attachment_path else None
+        }
 
 class DPOIssueSerializer(serializers.ModelSerializer):
     # FIX: Use 'id' as issue_no
@@ -87,12 +93,16 @@ class DPOIssueSerializer(serializers.ModelSerializer):
         return min(deadlines).strftime("%d-%m-%Y")
 
     def get_response(self, obj):
-        # Collects responses: ["Police: Action Taken", "PWD: Work Started"]
+        # Collects responses: [{"dept": "Police", "text": "...", "attachment": "..."}]
         response_list = []
         for assign in obj.issuedepartment_set.all():
             latest_resp = assign.responses.last()
-            if latest_resp and latest_resp.response_text:
-                response_list.append(f"{assign.department.dept_name}: {latest_resp.response_text}")
+            if latest_resp:
+                response_list.append({
+                    "department": assign.department.dept_name,
+                    "text": latest_resp.response_text or "",
+                    "attachment": latest_resp.attachment_path.url if latest_resp.attachment_path else None
+                })
         return response_list if response_list else None
 
 class NotificationSerializer(serializers.ModelSerializer):
