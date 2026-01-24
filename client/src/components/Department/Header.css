@@ -23,24 +23,80 @@
   margin-right: 10px;
 }
 
-.header-icons {
-  display: flex;
-  align-items: center;
-  gap: 15px;
+
+/* standard icon container */
+
+
+.icon.bell {
+  background: white; /* make the circular background white */
+  color: #2563eb; /* bell color */
+  font-size: 32px;
+  margin-right: 15px;
 }
 
-.icon {
-  width: 30px;
-  height: 30px;
-  background: #e5e7eb;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Profile dropdown */
+.profile-dropdown {
+  position: absolute;
+  top: 55px;
+  right: 0;
+  background: #fff;
+  border-radius: 10px;
+  width: 140px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  padding: 8px 0;
+  animation: dropdownFade 0.2s ease;
+  z-index: 1000;
 }
 
-.profile {
-  background: #2563eb;
-  color: white;
-  font-weight: 600;
+.profile-dropdown button {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+  color: #111827;
 }
+
+.profile-dropdown button:hover {
+  background: #f3f4f6;
+}
+
+/* Smooth appearance */
+@keyframes dropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.icon.profile {
+  cursor: pointer;
+}
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+  color: #111827;
+}
+
+.logout-btn:hover {
+  background: #f3f4f6;
+}
+
+.logout-icon {
+  font-size: 18px;
+  color: #ef4444; /* subtle red for logout */
+}
+

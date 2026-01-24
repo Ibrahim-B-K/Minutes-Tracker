@@ -4,9 +4,9 @@ import "./AssignIssues.css";
 import { Link } from "react-router-dom";
 import IssueAssignCard from "./IssueAssignCard";
 import api from "../../../api/axios";
+
 export default function AssignIssues() {
   const [issues, setIssues] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   // 🔹 Fetch issues from backend on load
   useEffect(() => {
@@ -35,11 +35,12 @@ export default function AssignIssues() {
 
   // 🔹 Allocate all issues
   const handleAllocateAll = () => {
-        api
+    api
       .post("/assign-issues/allocate-all", { issues })
       .then(() => alert("All issues allocated!"))
       .catch(err => console.error(err));
   };
+
 
   return (
     <div className="assign-issues-container">
@@ -53,11 +54,8 @@ export default function AssignIssues() {
         </Link>
       </div>
 
-      {/* Loading State */}
-      {loading && <p>Loading issues...</p>}
-
       {/* No issues */}
-      {!loading && issues.length === 0 && <p>No pending issues found</p>}
+      {issues.length === 0 && <p>No pending issues found</p>}
 
       {/* Issue Cards */}
       <div className="issue-cards">
