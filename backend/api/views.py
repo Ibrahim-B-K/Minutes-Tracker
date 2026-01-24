@@ -379,27 +379,27 @@ def generate_report(request):
     # 3. Create Workbook
     wb = openpyxl.Workbook()
     ws = wb.active
-    ws.title = "Action Taken Report"
+    ws.title = "Follow Up Report"
 
     # Define Styles
     header_font = Font(bold=True, size=11, name='Calibri')
     center_align = Alignment(horizontal='center', vertical='center', wrap_text=True)
-    content_align = Alignment(horizontal='left', vertical='top', wrap_text=True)
+    content_align = Alignment(horizontal='left', vertical='center', wrap_text=True, indent=1)
     thin_border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
 
-    # Set Column Widths
-    ws.column_dimensions['A'].width = 8   # Sl No
-    ws.column_dimensions['B'].width = 25  # Date & Subject
-    ws.column_dimensions['C'].width = 40  # Description
-    ws.column_dimensions['D'].width = 25  # Depts
-    ws.column_dimensions['E'].width = 45  # Responses
+    # Set Column Widths (Adjusted for better readability and padding)
+    ws.column_dimensions['A'].width = 10  # Sl No
+    ws.column_dimensions['B'].width = 40  # Date & Subject
+    ws.column_dimensions['C'].width = 30  # Depts
+    ws.column_dimensions['D'].width = 80  # Description
+    ws.column_dimensions['E'].width = 60  # Responses
 
     # Create headers
     headers = [
         "ക്രമ നമ്പർ", 
         "ഉന്നയിച്ച തീയതി & വകുപ്പ്/വിഷയം", 
+        "നടപടി സ്വീകരിക്കേണ്ട ഉദ്യോഗസ്ഥൻ",
         "മുൻ യോഗത്തിൽ ചർച്ച ചെയ്തതും യോഗ നിർദ്ദേശവും", 
-        "നടപടി സ്വീകരിക്കേണ്ട ഉദ്യോഗസ്ഥൻ", 
         "നിലവിലെ സ്റ്റാറ്റസ്"
     ]
     
@@ -449,8 +449,8 @@ def generate_report(request):
         row_data = [
             index,                  # Sl No
             subject_col_text,       # Date & Subject
-            issue.issue_description,# Description
             dept_str,               # Departments (Combined)
+            issue.issue_description,# Description
             response_str            # Responses (Combined)
         ]
         
@@ -466,6 +466,6 @@ def generate_report(request):
     response = HttpResponse(
         content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     )
-    response['Content-Disposition'] = 'attachment; filename="Action_Taken_Report.xlsx"'
+    response['Content-Disposition'] = 'attachment; filename="Follow_Up_Report.xlsx"'
     wb.save(response)
     return response
