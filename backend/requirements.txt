@@ -4,3 +4,4 @@ django-cors-headers
 google-generativeai
 python-dotenv
 psycopg2-binary
+openpyxl

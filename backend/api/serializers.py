@@ -7,7 +7,7 @@ class IssueDepartmentSerializer(serializers.ModelSerializer):
     
     # FIX: Use 'issue.id' because we didn't add the 'issue_no' column to the DB
     issue_no = serializers.CharField(source='issue.id', read_only=True)
-    
+    issue_description = serializers.CharField(source='issue.issue_description', read_only=True)
     issue = serializers.CharField(source='issue.issue_title', read_only=True)
     department = serializers.CharField(source='department.dept_name', read_only=True)
     deadline = serializers.DateField(source='deadline_date', read_only=True, format="%d-%m-%Y")
@@ -23,7 +23,8 @@ class IssueDepartmentSerializer(serializers.ModelSerializer):
             'id',             
             # 'issue_dept_id',  <-- REMOVED THIS CAUSE OF ERROR
             'issue_no', 
-            'issue', 
+            'issue',
+            'issue_description',
             'department', 
             'location', 
             'priority', 
