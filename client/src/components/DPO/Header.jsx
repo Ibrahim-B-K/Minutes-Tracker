@@ -14,7 +14,7 @@ function Header() {
       <div className="header-icons">
         {/* Notification Bell Placeholder */}
         <Link to="/dpo/notifications">
-        <NotificationsIcon className="icon bell" />
+          <NotificationsIcon className="icon bell" />
         </Link>
         {/* Profile Circle Placeholder */}
         <div className="icon profile">D</div>
