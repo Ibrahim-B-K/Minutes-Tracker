@@ -273,58 +273,50 @@ def get_dept_issues(request, dept_name):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def submit_response(request):
-    # 1. Get the ID safely
+    # 1. Get data safely (handle both JSON and FormData)
     issue_id = request.data.get('issue_id') or request.data.get('id')
     response_text = request.data.get('response')
+    attachment = request.FILES.get('attachment')
 
-    print(f"📝 Submitting response for ID: {issue_id}") # Debug Log
+    print(f"📝 Submitting response for ID: {issue_id}")
 
     if not issue_id or str(issue_id) == "undefined":
         return Response({"error": "Invalid ID provided"}, status=400)
 
     try:
-        # FIX 1: Use 'id' (the database primary key), not 'issue_dept_id'
-
         issue_link = IssueDepartment.objects.get(id=issue_id)
         
-        # FIX 2: Create Response (Using 'issue_department' which matches your model)
-        # We use 'create' instead of update_or_create to allow history of responses
+        # FIX: Create Response with attachment
         ResponseModel.objects.create(
             issue_department=issue_link, 
-            response_text=response_text
+            response_text=response_text or "",
+            attachment_path=attachment
         )
         
-        # FIX 3: Status must be lowercase 'submitted' to match your frontend logic
         issue_link.status = 'submitted'
         issue_link.save()
         
         # --- NOTIFY DPO ---
         dpos = User.objects.filter(Q(role__iexact='DPO') | Q(username__iexact='dpo'))
-        
-        # FIX 4: Use 'issue.id' because 'issue_no' column might not exist
         issue_number = issue_link.issue.id 
         dept_name = issue_link.department.dept_name
 
         for d in dpos:
             Notification.objects.create(
                 user=d, 
-                issue_department=issue_link,  # FIX 5: Field name is 'issue_department'
-                # type='response', # Uncomment only if your Notification model has this field
+                issue_department=issue_link,
                 message=f"Response Received: {dept_name} responded to Issue #{issue_number}"
             )
             
-        print(f"✅ Response success for Issue #{issue_number}")
         return Response({"success": True})
 
     except IssueDepartment.DoesNotExist:
-        print(f"❌ Error: IssueDepartment with ID {issue_id} not found.")
         return Response({"error": "Issue not found"}, status=404)
-        
     except Exception as e:
-        print(f"🔥 CRITICAL SUBMIT ERROR: {str(e)}") # Prints exact error to terminal
+        print(f"🔥 CRITICAL SUBMIT ERROR: {str(e)}")
         import traceback
         traceback.print_exc()
-        return Response({"error": str(e)}, status=500) 
+        return Response({"error": str(e)}, status=500)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
