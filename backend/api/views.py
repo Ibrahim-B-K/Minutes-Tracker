@@ -273,58 +273,50 @@ def get_dept_issues(request, dept_name):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def submit_response(request):
-    # 1. Get the ID safely
+    # 1. Get data safely (handle both JSON and FormData)
     issue_id = request.data.get('issue_id') or request.data.get('id')
     response_text = request.data.get('response')
+    attachment = request.FILES.get('attachment')
 
-    print(f"📝 Submitting response for ID: {issue_id}") # Debug Log
+    print(f"📝 Submitting response for ID: {issue_id}")
 
     if not issue_id or str(issue_id) == "undefined":
         return Response({"error": "Invalid ID provided"}, status=400)
 
     try:
-        # FIX 1: Use 'id' (the database primary key), not 'issue_dept_id'
-
         issue_link = IssueDepartment.objects.get(id=issue_id)
         
-        # FIX 2: Create Response (Using 'issue_department' which matches your model)
-        # We use 'create' instead of update_or_create to allow history of responses
+        # FIX: Create Response with attachment
         ResponseModel.objects.create(
             issue_department=issue_link, 
-            response_text=response_text
+            response_text=response_text or "",
+            attachment_path=attachment
         )
         
-        # FIX 3: Status must be lowercase 'submitted' to match your frontend logic
         issue_link.status = 'submitted'
         issue_link.save()
         
         # --- NOTIFY DPO ---
         dpos = User.objects.filter(Q(role__iexact='DPO') | Q(username__iexact='dpo'))
-        
-        # FIX 4: Use 'issue.id' because 'issue_no' column might not exist
         issue_number = issue_link.issue.id 
         dept_name = issue_link.department.dept_name
 
         for d in dpos:
             Notification.objects.create(
                 user=d, 
-                issue_department=issue_link,  # FIX 5: Field name is 'issue_department'
-                # type='response', # Uncomment only if your Notification model has this field
+                issue_department=issue_link,
                 message=f"Response Received: {dept_name} responded to Issue #{issue_number}"
             )
             
-        print(f"✅ Response success for Issue #{issue_number}")
         return Response({"success": True})
 
     except IssueDepartment.DoesNotExist:
-        print(f"❌ Error: IssueDepartment with ID {issue_id} not found.")
         return Response({"error": "Issue not found"}, status=404)
-        
     except Exception as e:
-        print(f"🔥 CRITICAL SUBMIT ERROR: {str(e)}") # Prints exact error to terminal
+        print(f"🔥 CRITICAL SUBMIT ERROR: {str(e)}")
         import traceback
         traceback.print_exc()
-        return Response({"error": str(e)}, status=500) 
+        return Response({"error": str(e)}, status=500)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -379,37 +371,55 @@ def generate_report(request):
     # 3. Create Workbook
     wb = openpyxl.Workbook()
     ws = wb.active
-    ws.title = "Action Taken Report"
+    ws.title = "Follow Up Report"
 
     # Define Styles
     header_font = Font(bold=True, size=11, name='Calibri')
     center_align = Alignment(horizontal='center', vertical='center', wrap_text=True)
-    content_align = Alignment(horizontal='left', vertical='top', wrap_text=True)
+    content_align = Alignment(horizontal='left', vertical='center', wrap_text=True, indent=1)
     thin_border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
 
-    # Set Column Widths
-    ws.column_dimensions['A'].width = 8   # Sl No
-    ws.column_dimensions['B'].width = 25  # Date & Subject
-    ws.column_dimensions['C'].width = 40  # Description
-    ws.column_dimensions['D'].width = 25  # Depts
-    ws.column_dimensions['E'].width = 45  # Responses
+    # Set Column Widths (Adjusted for better readability and padding)
+    ws.column_dimensions['A'].width = 10  # Sl No
+    ws.column_dimensions['B'].width = 40  # Date & Subject
+    ws.column_dimensions['C'].width = 30  # Depts
+    ws.column_dimensions['D'].width = 80  # Description
+    ws.column_dimensions['E'].width = 60  # Responses
 
-    # Headers
+    # Create headers
     headers = [
         "ക്രമ നമ്പർ", 
         "ഉന്നയിച്ച തീയതി & വകുപ്പ്/വിഷയം", 
+        "നടപടി സ്വീകരിക്കേണ്ട ഉദ്യോഗസ്ഥൻ",
         "മുൻ യോഗത്തിൽ ചർച്ച ചെയ്തതും യോഗ നിർദ്ദേശവും", 
-        "നടപടി സ്വീകരിക്കേണ്ട ഉദ്യോഗസ്ഥൻ", 
         "നിലവിലെ സ്റ്റാറ്റസ്"
     ]
+    
+    # 3.5. Determine Meeting Date for Header
+    meeting_date_str = timezone.now().strftime("%d-%m-%Y")
+    for item in items:
+        if item.issue and item.issue.minutes and item.issue.minutes.meeting_date:
+            meeting_date_str = item.issue.minutes.meeting_date.strftime("%d-%m-%Y")
+            break
+
+    # Main Header Row
+    ws.merge_cells('A1:E1')
+    main_header = ws['A1']
+    main_header.value = f"{meeting_date_str} -ന് ചേർന്ന ജില്ലാ വികസന സമിതി യോഗത്തിന്റെ തുടർ നടപടി റിപ്പോർട്ട്"
+    main_header.font = Font(bold=True, size=12, name='Calibri')
+    main_header.alignment = Alignment(horizontal='center', vertical='center')
+    main_header.border = thin_border
+    ws.row_dimensions[1].height = 30
+
+    # Table Headers (now on row 2)
     ws.append(headers)
 
-    # Apply Header Style
-    for cell in ws[1]:
+    # Apply Table Header Style
+    for cell in ws[2]:
         cell.font = header_font
         cell.alignment = center_align
         cell.border = thin_border
-        ws.row_dimensions[1].height = 45
+        ws.row_dimensions[2].height = 45
 
     # 4. Write Grouped Data to Excel
     for index, (issue_id, data) in enumerate(grouped_data.items(), start=1):
@@ -431,8 +441,8 @@ def generate_report(request):
         row_data = [
             index,                  # Sl No
             subject_col_text,       # Date & Subject
-            issue.issue_description,# Description
             dept_str,               # Departments (Combined)
+            issue.issue_description,# Description
             response_str            # Responses (Combined)
         ]
         
@@ -448,6 +458,6 @@ def generate_report(request):
     response = HttpResponse(
         content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     )
-    response['Content-Disposition'] = 'attachment; filename="Action_Taken_Report.xlsx"'
+    response['Content-Disposition'] = 'attachment; filename="Follow_Up_Report.xlsx"'
     wb.save(response)
     return response

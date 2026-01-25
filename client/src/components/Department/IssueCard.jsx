@@ -34,8 +34,8 @@ function IssueCard({ issue }) {
             {status === "pending"
               ? "Response Required"
               : status === "overdue"
-              ? "Overdue"
-              : "Response Submitted"}
+                ? "Overdue"
+                : "Response Submitted"}
           </span>
         </div>
 
@@ -73,16 +73,29 @@ function IssueCard({ issue }) {
             <>
               <div className="footer-line"></div>
               <div className="response-received">
-                <p className="res">Your Response  :  {issue.response}</p>
+                <p className="res">
+                  <strong>Your Response:</strong> {issue.response?.text}
+                </p>
+                {issue.response?.attachment && (
+                  <button
+                    className="res-button"
+                    onClick={() => {
+                      const baseUrl = "http://127.0.0.1:8000";
+                      const fullUrl = issue.response.attachment.startsWith("http") ? issue.response.attachment : `${baseUrl}${issue.response.attachment}`;
+                      window.open(fullUrl, "_blank");
+                    }}
+                  >
+                    View Attachment
+                  </button>
+                )}
               </div>
             </>
           )}
 
           {(status === "pending" || status === "overdue") && (
             <button
-              className={`submit-btn ${
-                status === "pending" ? "pending-btn" : "overdue-btn"
-              }`}
+              className={`submit-btn ${status === "pending" ? "pending-btn" : "overdue-btn"
+                }`}
               onClick={() => setIsModalOpen(true)}
             >
               Submit Response

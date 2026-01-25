@@ -30,7 +30,7 @@ function Header() {
     <header className="header">
       <div className="logo">
         <div className="logo-icon"></div>
-        <span>Minutes Tracker System</span>
+        <span>DISTRICT DEVELOPMENT COUNCIL MINUTES MANAGEMENT SYSTEM</span>
       </div>
 
       <div className="header-icons" ref={dropdownRef}>

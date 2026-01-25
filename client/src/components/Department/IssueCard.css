@@ -1,5 +1,6 @@
 .issue-card {
-  position: relative; /* Needed for absolute positioning */
+  position: relative;
+  /* Needed for absolute positioning */
   background: white;
   border-radius: 10px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
@@ -31,18 +32,24 @@
 
 /* 🔸 Color Variations */
 .status.pending {
-  background: #fef9c3;  /* light yellow */
-  color: #854d0e;       /* dark yellow text */
+  background: #fef9c3;
+  /* light yellow */
+  color: #854d0e;
+  /* dark yellow text */
 }
 
 .status.overdue {
-  background: #fee2e2;  /* light red */
-  color: #b91c1c;       /* dark red text */
+  background: #fee2e2;
+  /* light red */
+  color: #b91c1c;
+  /* dark red text */
 }
 
 .status.submitted {
-  background: #dcfce7;  /* light green */
-  color: #166534;       /* dark green text */
+  background: #dcfce7;
+  /* light green */
+  color: #166534;
+  /* dark green text */
 }
 
 .issue-body p {
@@ -60,10 +67,12 @@
 }
 
 .issue-row .label {
-  width: 120px; /* fixed width for alignment */
+  width: 120px;
+  /* fixed width for alignment */
   font-weight: 600;
   color: #444;
-  text-align: left; /* left align text */
+  text-align: left;
+  /* left align text */
   position: relative;
   padding-right: 8px;
 }
@@ -81,37 +90,57 @@
   padding-left: 12px;
   margin-top: 6px;
 }
+
 /* 🔴 Overdue text color */
 .overdue-text {
-  color: #b91c1c !important; /* same red as your border */
+  color: #b91c1c !important;
+  /* same red as your border */
   font-weight: 600;
 }
+
 .footer-line {
   height: 1px;
   background: #eee;
   margin-top: 30px;
 }
+
 .response-received {
-  position: relative;
+  display: flex;
+  flex-direction: column;
   background-color: #F0FDF4;
-  height: 70px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  gap: 4px;
+  align-items: flex-start;
 }
+
 .res {
-  margin-left: 20px;
-  padding-top: 10px;
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: #333;
+  text-align: left;
+  width: 100%;
 }
+
+.res strong {
+  color: #000;
+  margin-right: 4px;
+}
+
 .res-button {
-  position: absolute;
-  right: 12px;
-  bottom: 12px; /* keep the button a little above the bottom */
+  align-self: flex-end;
   background: #19A752;
   color: white;
   border: none;
-  padding: 6px 10px;
+  padding: 6px 12px;
   border-radius: 6px;
   cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
   transition: background 0.2s ease;
 }
+
 .submit-btn {
   position: absolute;
   right: 12px;
@@ -128,12 +157,12 @@
 
 /* 🟡 Pending – Yellow button */
 .pending-btn {
-   background-color: #d7b838;
- color: white;
+  background-color: #d7b838;
+  color: white;
 }
 
 .pending-btn:hover {
-   background: #d7b016;
+  background: #d7b016;
   transform: scale(1.05);
 }
 
@@ -146,12 +175,20 @@
   background: #991b1b;
   transform: scale(1.05);
 }
+
 .issue-card {
   opacity: 0;
   animation: fadeInCard 0.3s ease forwards;
 }
 
 @keyframes fadeInCard {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
