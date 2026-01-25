@@ -107,11 +107,19 @@ class DPOIssueSerializer(serializers.ModelSerializer):
 
 class NotificationSerializer(serializers.ModelSerializer):
     time_ago = serializers.SerializerMethodField()
+    type = serializers.SerializerMethodField()
 
     class Meta:
         model = Notification
-        fields = ['id', 'message', 'is_read', 'time_ago', 'created_at'] # Ensure 'id' is used here too if needed
+        fields = ['id', 'message', 'is_read', 'time_ago', 'created_at', 'type']
 
     def get_time_ago(self, obj):
         from django.utils.timesince import timesince
         return timesince(obj.created_at) + " ago"
+
+    def get_type(self, obj):
+        msg = obj.message.lower()
+        if "response" in msg: return "response"
+        if "assigned" in msg or "action required" in msg: return "assign"
+        if "deadline" in msg or "overdue" in msg: return "deadline"
+        return "general"
