@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Header from "../../components/Collector/Header";
-import Tabs from "../../components/Collector/IssuePage/Tabs";
-import FilterBar from "../../components/Collector/IssuePage/FilterBar";
-import IssueCard from "../../components/Collector/IssuePage/IssueCard";
+import CollectorHeader from "../../components/Collector/CollectorHeader";
+import CollectorTabs from "../../components/Collector/IssuePage/CollectorTabs";
+import CollectorFilterBar from "../../components/Collector/IssuePage/CollectorFilterBar";
+import CollectorIssueCard from "../../components/Collector/IssuePage/CollectorIssueCard";
 import "./CollectorIssuePage.css";
 
 function CollectorIssuePage() {
@@ -46,7 +46,7 @@ function CollectorIssuePage() {
 
   return (
     <div className="dpo-container">
-      <Header />
+      <CollectorHeader />
 
       <div className="content">
         <div className="page-title">
@@ -54,7 +54,7 @@ function CollectorIssuePage() {
         </div>
 
         {/* When filter changes, enable searching mode */}
-        <FilterBar
+        <CollectorFilterBar
           activeTab={activeTab}
           onFilterChange={(newFilters) => {
             setFilters(newFilters);
@@ -64,7 +64,7 @@ function CollectorIssuePage() {
         />
 
         {/* Manual tab change should turn off searching mode */}
-        <Tabs
+        <CollectorTabs
           activeTab={activeTab}
           setActiveTab={(tab) => {
             setActiveTab(tab);
@@ -83,7 +83,7 @@ function CollectorIssuePage() {
                 (issue) =>
                   issue.status.toLowerCase() === activeTab.toLowerCase()
               )
-              .map((issue) => <IssueCard key={issue.issue_no} issue={issue} />)
+              .map((issue) => <CollectorIssueCard key={issue.issue_no} issue={issue} />)
           )}
         </div>
       </div>

@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import axios from "axios"; // THIS WAS MISSING
-import "./ResponseModal.css";
+import "./DepartmentResponseModal.css";
 import api from "../../api/axios";
 
 function ResponseModal({ isOpen, onClose, issue }) {

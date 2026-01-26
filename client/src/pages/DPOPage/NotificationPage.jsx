@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 // import axios from "axios";
-import Header from "../../components/DPO/Header";
+import DPOHeader from "../../components/DPO/DPOHeader";
 import "./NotificationPage.css";
 import api from "../../api/axios";
 

@@ -1,5 +1,5 @@
 import React from "react";
-import "./IssueCard.css";
+import "./DPOIssueCard.css";
 
 function IssueCard({ issue }) {
   const status = issue.status || "pending";

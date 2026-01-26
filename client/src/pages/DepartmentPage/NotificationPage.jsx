@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 // import axios from "axios";
-import Header from "../../components/Department/Header";
+import DepartmentHeader from "../../components/Department/DepartmentHeader";
 import "./NotificationPage.css";
 import api from "../../api/axios";
 

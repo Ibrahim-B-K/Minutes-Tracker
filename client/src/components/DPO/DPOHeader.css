@@ -1,4 +1,4 @@
-.header {
+.dpo-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -7,7 +7,7 @@
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-.logo {
+.dpo-logo {
   display: flex;
   align-items: center;
   font-weight: 600;
@@ -15,7 +15,7 @@
   color: #1a1a1a;
 }
 
-.logo-icon {
+.dpo-logo-icon {
   width: 28px;
   height: 28px;
   background: #2563eb;
@@ -23,19 +23,39 @@
   margin-right: 10px;
 }
 
+.dpo-header-icons {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  position: relative;
+}
+
 
 /* standard icon container */
 
 
-.icon.bell {
+.dpo-icon.bell {
   background: white; /* make the circular background white */
   color: #2563eb; /* bell color */
   font-size: 32px;
   margin-right: 15px;
 }
 
+.dpo-icon.profile {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #2563eb;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 30px;
+  text-align: center;
+}
+
 /* Profile dropdown */
-.profile-dropdown {
+.dpo-profile-dropdown {
   position: absolute;
   top: 55px;
   right: 0;
@@ -44,11 +64,11 @@
   width: 140px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
   padding: 8px 0;
-  animation: dropdownFade 0.2s ease;
+  animation: dpoDropdownFade 0.2s ease;
   z-index: 1000;
 }
 
-.profile-dropdown button {
+.dpo-profile-dropdown button {
   width: 100%;
   background: none;
   border: none;
@@ -59,12 +79,12 @@
   color: #111827;
 }
 
-.profile-dropdown button:hover {
+.dpo-profile-dropdown button:hover {
   background: #f3f4f6;
 }
 
 /* Smooth appearance */
-@keyframes dropdownFade {
+@keyframes dpoDropdownFade {
   from {
     opacity: 0;
     transform: translateY(-6px);
@@ -74,10 +94,7 @@
     transform: translateY(0);
   }
 }
-.icon.profile {
-  cursor: pointer;
-}
-.logout-btn {
+.dpo-logout-btn {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -91,11 +108,11 @@
   color: #111827;
 }
 
-.logout-btn:hover {
+.dpo-logout-btn:hover {
   background: #f3f4f6;
 }
 
-.logout-icon {
+.dpo-logout-icon {
   font-size: 18px;
   color: #ef4444; /* subtle red for logout */
 }

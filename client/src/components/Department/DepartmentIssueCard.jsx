@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import ResponseModal from "./ResponseModal";
-import "./IssueCard.css";
+import DepartmentResponseModal from "./DepartmentResponseModal";
+import "./DepartmentIssueCard.css";
 
-function IssueCard({ issue }) {
+function DepartmentIssueCard({ issue }) {
   // Normalize backend status: "received" → "submitted"
   const normalizedStatus = issue.status === "received" ? "submitted" : issue.status;
   const status = normalizedStatus || "pending";
@@ -91,7 +91,7 @@ function IssueCard({ issue }) {
         </div>
       </div>
 
-      <ResponseModal
+      <DepartmentResponseModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         issue={issue}
@@ -101,4 +101,4 @@ function IssueCard({ issue }) {
   );
 }
 
-export default IssueCard;
+export default DepartmentIssueCard;

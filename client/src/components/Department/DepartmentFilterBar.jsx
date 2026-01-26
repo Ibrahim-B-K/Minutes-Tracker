@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import "./FilterBar.css";
+import "./DepartmentFilterBar.css";
 
-function FilterBar({ activeTab, onFilterChange, issue_date }) {
+function DepartmentFilterBar({ activeTab, onFilterChange, issue_date }) {
   const [date, setDate] = useState("");
   const [filterBy, setFilterBy] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
@@ -129,4 +129,4 @@ function FilterBar({ activeTab, onFilterChange, issue_date }) {
   );
 }
 
-export default FilterBar;
+export default DepartmentFilterBar;

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import "./Header.css";
+import "./DPOHeader.css";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import LogoutIcon from "@mui/icons-material/Logout";
 
@@ -27,21 +27,21 @@ function Header() {
   };
 
   return (
-    <header className="header">
-      <div className="logo">
-        <div className="logo-icon"></div>
+    <header className="dpo-header">
+      <div className="dpo-logo">
+        <div className="dpo-logo-icon"></div>
         <span>Minutes Tracker System</span>
       </div>
 
-      <div className="header-icons" ref={dropdownRef}>
+      <div className="dpo-header-icons" ref={dropdownRef}>
         {/* Notifications */}
         <Link to="/dpo/notifications">
-          <NotificationsIcon className="icon bell" />
+          <NotificationsIcon className="dpo-icon bell" />
         </Link>
 
         {/* Profile */}
         <div
-          className="icon profile"
+          className="dpo-icon profile"
           onClick={() => setOpen((prev) => !prev)}
         >
           D
@@ -49,9 +49,9 @@ function Header() {
 
         {/* Dropdown */}
         {open && (
-          <div className="profile-dropdown">
-            <button onClick={handleLogout} className="logout-btn">
-              <LogoutIcon className="logout-icon" />
+          <div className="dpo-profile-dropdown">
+            <button onClick={handleLogout} className="dpo-logout-btn">
+              <LogoutIcon className="dpo-logout-icon" />
                 Logout
             </button>
 

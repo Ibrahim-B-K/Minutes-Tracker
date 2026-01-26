@@ -1,5 +1,5 @@
 import React from "react";
-import "./Stepper.css";
+import "./DPOStepper.css";
 
 export default function Stepper({ step }) {
   return (

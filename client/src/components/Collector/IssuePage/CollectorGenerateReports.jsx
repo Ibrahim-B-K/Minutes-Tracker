@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
-import "./GenerateReports.css";
-import GenerateReportCard from "./GenerateReportCard";
+import "./CollectorGenerateReports.css";
+import CollectorGenerateReportCard from "./CollectorGenerateReportCard";
 
 export default function GenerateReports({ isOpen, onClose }) {
   const [format, setFormat] = useState("pdf");
@@ -95,7 +95,7 @@ export default function GenerateReports({ isOpen, onClose }) {
             <p>No received issues available</p>
           ) : (
             reports.map((report, index) => (
-              <GenerateReportCard
+              <CollectorGenerateReportCard
                 key={report.id || index}
                 report={report}
                 index={index}

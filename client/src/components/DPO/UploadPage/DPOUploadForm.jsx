@@ -1,6 +1,6 @@
 // src/components/Upload/UploadForm.jsx
 import React, { useRef, useState, useEffect } from "react";
-import "./UploadForm.css";
+import "./DPOUploadForm.css";
 import api from "../../../api/axios";
 
 export default function UploadForm({ onProcessed }) {
