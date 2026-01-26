@@ -1,9 +1,9 @@
 // src/pages/UploadPage.jsx
 import React, { useState } from "react";
-import Header from "../../components/DPO/Header";
-import Stepper from "../../components/DPO/UploadPage/Stepper";
-import UploadForm from "../../components/DPO/UploadPage/UploadForm";
-import AssignIssues from "../../components/DPO/UploadPage/AssignIssues";
+import DPOHeader from "../../components/DPO/DPOHeader";
+import DPOStepper from "../../components/DPO/UploadPage/DPOStepper";
+import DPOUploadForm from "../../components/DPO/UploadPage/DPOUploadForm";
+import DPOAssignIssues from "../../components/DPO/UploadPage/DPOAssignIssues";
 import "./UploadPage.css";
 
 function UploadPage() {
@@ -15,20 +15,20 @@ function UploadPage() {
 
   return (
     <div className="uploadpage-container">
-      <Header />
+      <DPOHeader />
 
       <div className="uploadpage-content">
-        <Stepper step={step} />
+        <DPOStepper step={step} />
 
         {step === 1 && (
           <div className="upload-card">
-            <UploadForm onProcessed={handleProcessComplete} />
+            <DPOUploadForm onProcessed={handleProcessComplete} />
           </div>
         )}
 
         {step === 2 && (
           <div className="assign-card">
-            <AssignIssues /> {/* issues not needed */}
+            <DPOAssignIssues /> {/* issues not needed */}
           </div>
         )}
       </div>

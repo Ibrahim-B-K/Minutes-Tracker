@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
-import "./FilterBar.css";
-import GenerateReports from "./GenerateReports";
+import "./CollectorFilterBar.css";
+import CollectorGenerateReports from "./CollectorGenerateReports";
 
 function FilterBar({ activeTab, onFilterChange, issue_date }) {
   const [showReportModal, setShowReportModal] = useState(false);
@@ -139,7 +139,7 @@ function FilterBar({ activeTab, onFilterChange, issue_date }) {
         </button>
       )}
 
-      <GenerateReports
+      <CollectorGenerateReports
         isOpen={showReportModal}
         onClose={() => setShowReportModal(false)}
       />

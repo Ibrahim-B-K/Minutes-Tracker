@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
-import "./Header.css";
+import "./CollectorHeader.css";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import LogoutIcon from "@mui/icons-material/Logout";
 
 import { Link } from "react-router-dom";
 
-function Header() {
+function CollectorHeader() {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -27,21 +27,21 @@ function Header() {
   };
 
   return (
-    <header className="header">
-      <div className="logo">
-        <div className="logo-icon"></div>
-        <span>DISTRICT DEVELOPMENT COUNCIL MINUTES MANAGEMENT SYSTEM</span>
+    <header className="collector-header">
+      <div className="collector-logo">
+        <div className="collector-logo-icon"></div>
+        <span>Minutes Tracker System</span>
       </div>
 
-      <div className="header-icons" ref={dropdownRef}>
+      <div className="collector-header-icons" ref={dropdownRef}>
         {/* Notifications */}
-        <Link to="/department/notifications">
-          <NotificationsIcon className="icon bell" />
+        <Link to="/collector/notifications">
+          <NotificationsIcon className="collector-icon bell" />
         </Link>
 
         {/* Profile */}
         <div
-          className="icon profile"
+          className="collector-icon profile"
           onClick={() => setOpen((prev) => !prev)}
         >
           D
@@ -49,9 +49,9 @@ function Header() {
 
         {/* Dropdown */}
         {open && (
-          <div className="profile-dropdown">
-            <button onClick={handleLogout} className="logout-btn">
-              <LogoutIcon className="logout-icon" />
+          <div className="collector-profile-dropdown">
+            <button onClick={handleLogout} className="collector-logout-btn">
+              <LogoutIcon className="collector-logout-icon" />
                 Logout
             </button>
 
@@ -62,4 +62,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default CollectorHeader;

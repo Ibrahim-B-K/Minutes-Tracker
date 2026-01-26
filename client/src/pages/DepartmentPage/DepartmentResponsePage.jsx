@@ -3,9 +3,9 @@
 import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import Header from "../../components/Department/Header";
-import Tabs from "../../components/Department/Tabs";
-import IssueCard from "../../components/Department/IssueCard";
+import DepartmentHeader from "../../components/Department/DepartmentHeader";
+import DepartmentTabs from "../../components/Department/DepartmentTabs";
+import DepartmentIssueCard from "../../components/Department/DepartmentIssueCard";
 import "./DepartmentResponsePage.css";
 import api from "../../api/axios";
 
@@ -47,11 +47,11 @@ function DepartmentResponsePage() {
 
   return (
     <div className="dpo-container">
-      <Header departmentName={dept} />
+      <DepartmentHeader departmentName={dept} />
       <div className="content">
         <h1>{dept?.toUpperCase()} Department Portal</h1>
         
-        <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
+        <DepartmentTabs activeTab={activeTab} setActiveTab={setActiveTab} />
         
         <div className="tab-scroll-area">
           {loading ? (
@@ -60,7 +60,7 @@ function DepartmentResponsePage() {
             <>
               {displayedIssues.length > 0 ? (
                 displayedIssues.map((issue) => (
-                  <IssueCard 
+                  <DepartmentIssueCard 
                     // We fixed the serializer to return 'id', so use that
                     key={issue.id} 
                     issue={issue} 
