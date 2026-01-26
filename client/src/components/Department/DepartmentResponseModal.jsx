@@ -31,7 +31,6 @@ function ResponseModal({ isOpen, onClose, issue }) {
   const handleDragOver = (e) => e.preventDefault();
 
   const handleSubmit = async () => {
-    // Standardize the ID (using the one from our Serializer)
     const idToSend = issue.id || issue.issue_dept_id;
 
     if (!idToSend) {
@@ -40,18 +39,23 @@ function ResponseModal({ isOpen, onClose, issue }) {
     }
 
     try {
-      // Create data object
-      const payload = {
-        issue_id: idToSend,
-        response: responseText
-      };
+      const formData = new FormData();
+      formData.append("issue_id", idToSend);
+      formData.append("response", responseText);
+      if (file) {
+        formData.append("attachment", file);
+      }
 
-      const res = await api.post("/submit-response", payload);
+      const res = await api.post("/submit-response", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       if (res.data.success) {
         alert("Submitted successfully!");
         onClose();
-        window.location.reload(); // Moves issue to Submitted tab
+        window.location.reload();
       }
     } catch (error) {
       console.error("Submission error:", error.response?.data || error.message);

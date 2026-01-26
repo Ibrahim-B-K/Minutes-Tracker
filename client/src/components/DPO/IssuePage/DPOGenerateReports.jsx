@@ -27,10 +27,10 @@ export default function GenerateReports({ isOpen, onClose }) {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "Action_Taken_Report.xlsx"; // The file name
+      a.download = "Follow_Up_Report.xlsx"; // The file name
       document.body.appendChild(a);
       a.click();
-      
+
       // 3. Cleanup
       a.remove();
       window.URL.revokeObjectURL(url);
