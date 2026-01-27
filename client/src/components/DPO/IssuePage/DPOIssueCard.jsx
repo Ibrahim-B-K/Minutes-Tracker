@@ -1,5 +1,6 @@
 import React from "react";
 import "./DPOIssueCard.css";
+import api from "../../../api/axios";
 
 function IssueCard({ issue }) {
   const status = issue.status || "pending";
@@ -91,7 +92,7 @@ function IssueCard({ issue }) {
                     className="res-button"
                     style={{ position: 'static', marginTop: '10px' }}
                     onClick={() => {
-                      const baseUrl = "http://127.0.0.1:8000";
+                      const baseUrl = api.defaults.baseURL;
                       const fullUrl = resObj.attachment.startsWith("http") ? resObj.attachment : `${baseUrl}${resObj.attachment}`;
                       window.open(fullUrl, "_blank");
                     }}

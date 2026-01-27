@@ -2,12 +2,13 @@ import React, { useState, useRef, useEffect } from "react";
 import "./CollectorHeader.css";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import LogoutIcon from "@mui/icons-material/Logout";
-
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../../api/axios";
 
 function CollectorHeader() {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const navigate = useNavigate();
 
   /* Close dropdown when clicking outside */
   useEffect(() => {
@@ -21,9 +22,21 @@ function CollectorHeader() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleLogout = () => {
-    // clear auth data here
-    console.log("Logged out");
+  const handleLogout = async () => {
+    try {
+      // Call backend logout endpoint
+      await api.post("/logout");
+    } catch (err) {
+      console.error("Logout error:", err);
+    } finally {
+      // Clear localStorage regardless of API response
+      localStorage.removeItem("token");
+      localStorage.removeItem("username");
+      localStorage.removeItem("role");
+      localStorage.removeItem("department");
+      // Redirect to login
+      navigate("/login");
+    }
   };
 
   return (

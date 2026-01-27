@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "./DPOGenerateReports.css";
 import DPOGenerateReportCard from "./DPOGenerateReportCard";
+import api from "../../../api/axios";
 
 export default function GenerateReports({ isOpen, onClose }) {
   const [format, setFormat] = useState("pdf");
@@ -10,7 +11,7 @@ export default function GenerateReports({ isOpen, onClose }) {
     try {
       // 1. Request the blob (file) from backend
       // Note: We don't need to send 'reports' body anymore, the backend fetches fresh data.
-      const response = await fetch("http://127.0.0.1:8000/generate-report", {
+      const response = await fetch(`${api.defaults.baseURL}/generate-report`, {
         method: "POST",
         headers: {
           "Authorization": `Token ${localStorage.getItem("token")}`, // Auth is important!
