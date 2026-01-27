@@ -80,7 +80,7 @@ function DepartmentIssueCard({ issue }) {
                   <button
                     className="res-button"
                     onClick={() => {
-                      const baseUrl = "http://127.0.0.1:8000";
+                      const baseUrl = api.defaults.baseURL;
                       const fullUrl = issue.response.attachment.startsWith("http") ? issue.response.attachment : `${baseUrl}${issue.response.attachment}`;
                       window.open(fullUrl, "_blank");
                     }}

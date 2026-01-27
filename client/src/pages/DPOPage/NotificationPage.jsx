@@ -28,7 +28,7 @@ function DPONotificationPage() {
 
   return (
     <div className="notificationpage-container">
-      <Header activeTab="notifications" />
+      <DPOHeader activeTab="notifications" />
 
       <div className="notificationpage-content">
         <div className="notification-header">

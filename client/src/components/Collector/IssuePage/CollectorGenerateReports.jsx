@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "./CollectorGenerateReports.css";
 import CollectorGenerateReportCard from "./CollectorGenerateReportCard";
+import api from "../../../api/axios";
 
 export default function GenerateReports({ isOpen, onClose }) {
   const [format, setFormat] = useState("pdf");
@@ -8,7 +9,7 @@ export default function GenerateReports({ isOpen, onClose }) {
 
   const handleDownload = async () => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/generate-report", {
+      const res = await fetch(`${api.defaults.baseURL}/generate-report`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -43,7 +44,7 @@ export default function GenerateReports({ isOpen, onClose }) {
   useEffect(() => {
     if (!isOpen) return;
 
-    fetch("http://127.0.0.1:8000/issues/received")
+    fetch(`${api.defaults.baseURL}/issues/received`)
       .then((res) => res.json())
       .then((data) => setReports(data))
       .catch((err) => console.error("Error fetching reports:", err));
