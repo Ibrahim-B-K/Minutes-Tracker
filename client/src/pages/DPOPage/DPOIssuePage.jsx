@@ -4,10 +4,10 @@ import { Link } from "react-router-dom";
 import DriveFolderUploadSharpIcon from "@mui/icons-material/DriveFolderUploadSharp";
 
 // Import your existing components (Old Paths)
-import Header from "../../components/DPO/Header";
-import Tabs from "../../components/DPO/IssuePage/Tabs";
+import DPOHeader from "../../components/DPO/DPOHeader";
+import DPOTabs from "../../components/DPO/IssuePage/DPOTabs";
 import DPOFilterBar from "../../components/DPO/IssuePage/DPOFilterBar";
-import IssueCard from "../../components/DPO/IssuePage/IssueCard";
+import DPOIssueCard from "../../components/DPO/IssuePage/DPOIssueCard";
 
 // Import your existing CSS
 import "./DPOIssuePage.css";
@@ -83,7 +83,7 @@ function DPOIssuePage() {
 
   return (
     <div className="dpo-container">
-      <Header />
+      <DPOHeader />
 
       <div className="content">
         <div className="page-title">
@@ -100,7 +100,7 @@ function DPOIssuePage() {
         />
 
         {/* Reuse your existing Tabs */}
-        <Tabs
+        <DPOTabs
           activeTab={activeTab}
           setActiveTab={(tab) => setActiveTab(tab)}
         />
@@ -112,7 +112,7 @@ function DPOIssuePage() {
             <p className="no-issues">No issues found</p>
           ) : (
             displayedIssues.map((issue) => (
-                <IssueCard key={issue.id} issue={issue} />
+                <DPOIssueCard key={issue.id} issue={issue} />
             ))
           )}
         </div>

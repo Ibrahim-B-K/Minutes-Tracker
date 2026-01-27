@@ -1,7 +1,7 @@
 import React from "react";
-import "./Tabs.css";
+import "./DepartmentTabs.css";
 
-function Tabs({ activeTab, setActiveTab }) {
+function DepartmentTabs({ activeTab, setActiveTab }) {
   const tabs = ["Pending", "Overdue", "Submitted"];
 
   return (
@@ -21,4 +21,4 @@ function Tabs({ activeTab, setActiveTab }) {
   );
 }
 
-export default Tabs;
+export default DepartmentTabs;

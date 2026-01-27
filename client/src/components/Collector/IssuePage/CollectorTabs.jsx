@@ -1,5 +1,5 @@
 import React from "react";
-import "./Tabs.css";
+import "./CollectorTabs.css";
 
 function Tabs({ activeTab, setActiveTab }) {
   const tabs = ["Pending", "Overdue", "Received"];

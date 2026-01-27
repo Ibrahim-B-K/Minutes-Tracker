@@ -1,4 +1,4 @@
-.header {
+.collector-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -7,7 +7,7 @@
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-.logo {
+.collector-logo {
   display: flex;
   align-items: center;
   font-weight: 600;
@@ -15,7 +15,7 @@
   color: #1a1a1a;
 }
 
-.logo-icon {
+.collector-logo-icon {
   width: 28px;
   height: 28px;
   background: #2563eb;
@@ -23,24 +23,99 @@
   margin-right: 10px;
 }
 
-.header-icons {
+.collector-header-icons {
   display: flex;
   align-items: center;
   gap: 15px;
 }
 
-.icon {
-  width: 30px;
-  height: 30px;
-  background: #e5e7eb;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+
+/* standard icon container */
+
+
+.collector-icon.bell {
+  background: white; /* make the circular background white */
+  color: #2563eb; /* bell color */
+  font-size: 32px;
+  margin-right: 15px;
 }
 
-.profile {
+.collector-icon.profile {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
   background: #2563eb;
   color: white;
   font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 36px;
+  text-align: center;
 }
+
+/* Profile dropdown */
+.collector-profile-dropdown {
+  position: absolute;
+  top: 55px;
+  right: 0;
+  background: #fff;
+  border-radius: 10px;
+  width: 140px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  padding: 8px 0;
+  animation: collectorDropdownFade 0.2s ease;
+  z-index: 1000;
+}
+
+.collector-profile-dropdown button {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+  color: #111827;
+}
+
+.collector-profile-dropdown button:hover {
+  background: #f3f4f6;
+}
+
+/* Smooth appearance */
+@keyframes collectorDropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.collector-icon.profile {
+  cursor: pointer;
+}
+.collector-logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+  color: #111827;
+}
+
+.collector-logout-btn:hover {
+  background: #f3f4f6;
+}
+
+.collector-logout-icon {
+  font-size: 18px;
+  color: #ef4444; /* subtle red for logout */
+}
+

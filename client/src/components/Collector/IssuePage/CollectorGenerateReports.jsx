@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
-import "./GenerateReports.css";
-import GenerateReportCard from "./GenerateReportCard";
+import "./CollectorGenerateReports.css";
+import CollectorGenerateReportCard from "./CollectorGenerateReportCard";
 
 export default function GenerateReports({ isOpen, onClose }) {
   const [format, setFormat] = useState("pdf");
@@ -8,44 +8,42 @@ export default function GenerateReports({ isOpen, onClose }) {
 
   const handleDownload = async () => {
     try {
-      // 1. Request the blob (file) from backend
-      // Note: We don't need to send 'reports' body anymore, the backend fetches fresh data.
-      const response = await fetch("http://127.0.0.1:8000/generate-report", {
+      const res = await fetch("http://127.0.0.1:8000/generate-report", {
         method: "POST",
         headers: {
-          "Authorization": `Token ${localStorage.getItem("token")}`, // Auth is important!
+          "Content-Type": "application/json"
         },
+        body: JSON.stringify({
+          format,
+          reports
+        })
       });
 
-      if (!response.ok) {
-        alert("Failed to generate report");
+      if (!res.ok) {
+        alert("Failed to generate file");
         return;
       }
 
-      // 2. Convert response to a downloadable file
-      const blob = await response.blob();
+      const blob = await res.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "Follow_Up_Report.xlsx"; // The file name
+      a.download = format === "pdf" ? "report.pdf" : "report.xlsx";
       document.body.appendChild(a);
       a.click();
-
-      // 3. Cleanup
       a.remove();
       window.URL.revokeObjectURL(url);
-      onClose();
 
+      onClose();
     } catch (err) {
       console.error("Download error:", err);
-      alert("Error downloading file.");
     }
   };
 
   useEffect(() => {
     if (!isOpen) return;
 
-    fetch("http://localhost:5000/issues/received")
+    fetch("http://127.0.0.1:8000/issues/received")
       .then((res) => res.json())
       .then((data) => setReports(data))
       .catch((err) => console.error("Error fetching reports:", err));
@@ -97,7 +95,7 @@ export default function GenerateReports({ isOpen, onClose }) {
             <p>No received issues available</p>
           ) : (
             reports.map((report, index) => (
-              <GenerateReportCard
+              <CollectorGenerateReportCard
                 key={report.id || index}
                 report={report}
                 index={index}

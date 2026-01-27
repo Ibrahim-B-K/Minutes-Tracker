@@ -1,8 +1,8 @@
 // AssignIssues.jsx
 import React, { useState, useEffect } from "react";
-import "./AssignIssues.css";
+import "./DPOAssignIssues.css";
 import { Link } from "react-router-dom";
-import IssueAssignCard from "./IssueAssignCard";
+import DPOIssueAssignCard from "./DPOIssueAssignCard";
 import api from "../../../api/axios";
 
 export default function AssignIssues() {
@@ -60,7 +60,7 @@ export default function AssignIssues() {
       {/* Issue Cards */}
       <div className="issue-cards">
         {issues.map((issue, index) => (
-          <IssueAssignCard
+          <DPOIssueAssignCard
             key={issue.issue_id}
             issue={issue}
             index={index}

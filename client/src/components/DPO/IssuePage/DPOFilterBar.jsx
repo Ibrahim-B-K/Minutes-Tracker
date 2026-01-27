@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./DPOFilterBar.css";
-import GenerateReports from "./GenerateReports";
+import DPOGenerateReports from "./DPOGenerateReports";
 
 function DPOFilterBar({ activeTab, onFilterChange, issue_date }) {
   const [showReportModal, setShowReportModal] = useState(false);
@@ -232,7 +232,7 @@ function DPOFilterBar({ activeTab, onFilterChange, issue_date }) {
         </button>
       )}
 
-      <GenerateReports
+      <DPOGenerateReports
         isOpen={showReportModal}
         onClose={() => setShowReportModal(false)}
       />
