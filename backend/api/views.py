@@ -66,13 +66,8 @@ def login_view(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def logout_view(request):
-    logout(request)
+    request.user.auth_token.delete()  # Delete the token
     return Response({"success": True})
-# @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
-# def logout_view(request):
-#     request.auth.delete()   # delete token
-#     return Response({"success": True}) #keerthi added this js for verification-didnt check
 
 
 

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import DepartmentResponseModal from "./DepartmentResponseModal";
 import "./DepartmentIssueCard.css";
+import api from "../../api/axios";
 
 function DepartmentIssueCard({ issue }) {
   // Normalize backend status: "received" → "submitted"

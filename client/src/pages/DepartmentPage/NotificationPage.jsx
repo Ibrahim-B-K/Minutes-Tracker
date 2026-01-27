@@ -28,7 +28,7 @@ function DepartmentNotificationPage() {
 
   return (
     <div className="notificationpage-container">
-      <Header activeTab="notifications" />
+      <DepartmentHeader activeTab="notifications" />
 
       <div className="notificationpage-content">
         <div className="notification-header">
