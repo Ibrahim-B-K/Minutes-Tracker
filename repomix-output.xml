@@ -5060,87 +5060,6 @@ class Migration(migrations.Migration):
 }
 </file>
 
-<file path="client/src/components/Collector/CollectorHeader.jsx">
-import React, { useState, useRef, useEffect } from "react";
-import "./CollectorHeader.css";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import LogoutIcon from "@mui/icons-material/Logout";
-import { Link, useNavigate } from "react-router-dom";
-import api from "../../api/axios";
-
-function CollectorHeader() {
-  const [open, setOpen] = useState(false);
-  const dropdownRef = useRef(null);
-  const navigate = useNavigate();
-
-  /* Close dropdown when clicking outside */
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  const handleLogout = async () => {
-    try {
-      // Call backend logout endpoint
-      await api.post("/logout");
-    } catch (err) {
-      console.error("Logout error:", err);
-    } finally {
-      // Clear localStorage regardless of API response
-      localStorage.removeItem("token");
-      localStorage.removeItem("username");
-      localStorage.removeItem("role");
-      localStorage.removeItem("department");
-      // Redirect to login
-      navigate("/login");
-    }
-  };
-
-  return (
-    <header className="collector-header">
-      <div className="collector-logo">
-        <div className="collector-logo-icon"></div>
-        <span>Minutes Tracker System</span>
-      </div>
-
-      <div className="collector-header-icons" ref={dropdownRef}>
-        {/* Notifications */}
-        <Link to="/collector/notifications">
-          <NotificationsIcon className="collector-icon bell" />
-        </Link>
-
-        {/* Profile */}
-        <div
-          className="collector-icon profile"
-          onClick={() => setOpen((prev) => !prev)}
-        >
-          D
-        </div>
-
-        {/* Dropdown */}
-        {open && (
-          <div className="collector-profile-dropdown">
-            <button onClick={handleLogout} className="collector-logout-btn">
-              <LogoutIcon className="collector-logout-icon" />
-                Logout
-            </button>
-
-          </div>
-        )}
-      </div>
-    </header>
-  );
-}
-
-export default CollectorHeader;
-</file>
-
 <file path="client/src/components/Collector/IssuePage/CollectorGenerateReports.jsx">
 import React, { useState, useEffect, useCallback } from "react";
 import "./CollectorGenerateReports.css";
@@ -5908,103 +5827,6 @@ function IssueCard({ issue }) {
 export default IssueCard;
 </file>
 
-<file path="client/src/pages/CollectorPage/CollectorIssuePage.jsx">
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import CollectorHeader from "../../components/Collector/CollectorHeader";
-import CollectorTabs from "../../components/Collector/IssuePage/CollectorTabs";
-import CollectorFilterBar from "../../components/Collector/IssuePage/CollectorFilterBar";
-import CollectorIssueCard from "../../components/Collector/IssuePage/CollectorIssueCard";
-import "./CollectorIssuePage.css";
-
-function CollectorIssuePage() {
-  const [activeTab, setActiveTab] = useState("Pending");
-  const [filters, setFilters] = useState({});
-  const [issues, setIssues] = useState([]);
-  const [isSearching, setIsSearching] = useState(false); // NEW
-  const [loading, setLoading] = useState(false);
-
-  const lastIssueDate =
-    issues.length > 0 ? issues[issues.length - 1].assigned_date : "";
-
-  // Fetch issues from backend
-  useEffect(() => {
-    setLoading(true); // start
-
-    const params = {
-      status: filters.searchQuery ? "" : activeTab.toLowerCase(),
-      search: filters.searchQuery || "",
-      date: filters.date || "",
-      filterBy: filters.filterBy || "all",
-      sortBy: filters.sortBy || "newest",
-    };
-
-    axios
-      .get("http://localhost:5000/issues", { params })
-      .then((res) => {
-        const data = res.data;
-        setIssues(data);
-
-        if (isSearching && data.length > 0) {
-          const status = data[0].status;
-          const newTab = status.charAt(0).toUpperCase() + status.slice(1);
-          if (newTab !== activeTab) setActiveTab(newTab);
-        }
-      })
-      .catch((err) => console.error("Error fetching issues:", err))
-      .finally(() => setLoading(false)); // end
-  }, [activeTab, filters, isSearching]);
-
-  return (
-    <div className="dpo-container">
-      <CollectorHeader />
-
-      <div className="content">
-        <div className="page-title">
-          <h1>Issue Tracking & Management</h1>
-        </div>
-
-        {/* When filter changes, enable searching mode */}
-        <CollectorFilterBar
-          activeTab={activeTab}
-          onFilterChange={(newFilters) => {
-            setFilters(newFilters);
-            setIsSearching(!!newFilters.searchQuery);
-          }}
-          issue_date={lastIssueDate}
-        />
-
-        {/* Manual tab change should turn off searching mode */}
-        <CollectorTabs
-          activeTab={activeTab}
-          setActiveTab={(tab) => {
-            setActiveTab(tab);
-            setIsSearching(false);
-          }}
-        />
-
-        <div className="tab-scroll-area">
-          {loading ? (
-            <p className="loading-text">Loading...</p>
-          ) : issues.length === 0 ? (
-            <p className="no-issues">No issues found</p>
-          ) : (
-            issues
-              .filter(
-                (issue) =>
-                  issue.status.toLowerCase() === activeTab.toLowerCase()
-              )
-              .map((issue) => <CollectorIssueCard key={issue.issue_no} issue={issue} />)
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default CollectorIssuePage;
-</file>
-
 <file path="client/src/pages/CollectorPage/NotificationPage.jsx">
 import React from "react";
 import CollectorHeader from "../../components/Collector/CollectorHeader";
@@ -6312,7 +6134,6 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./LoginPage.css";
-import api from "../api/axios";
 
 // Backend base URL
 // const API_BASE_URL = "http://localhost:8000";
@@ -6335,10 +6156,10 @@ export default function Login() {
 
     try {
       // 🔴 IMPORTANT:
-      // NO withCredentials
-      // Backend uses TOKEN auth, not sessions
-      const response = await api.post(
-        "/login", // ✅ NO trailing slash (matches urls.py)
+      // Use plain axios for login (NOT api instance)
+      // api instance adds token interceptor, but we don't have a token yet
+      const response = await axios.post(
+        "http://127.0.0.1:8000/login",
         {
           username: username.trim(),
           password: password,
@@ -6429,6 +6250,87 @@ google-generativeai
 python-dotenv
 psycopg2-binary
 openpyxl
+</file>
+
+<file path="client/src/components/Collector/CollectorHeader.jsx">
+import React, { useState, useRef, useEffect } from "react";
+import "./CollectorHeader.css";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../../api/axios";
+
+function CollectorHeader() {
+  const [open, setOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  const navigate = useNavigate();
+
+  /* Close dropdown when clicking outside */
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      // Call backend logout endpoint
+      await api.post("/logout");
+    } catch (err) {
+      console.error("Logout error:", err);
+    } finally {
+      // Clear localStorage regardless of API response
+      localStorage.removeItem("token");
+      localStorage.removeItem("username");
+      localStorage.removeItem("role");
+      localStorage.removeItem("department");
+      // Redirect to login
+      navigate("/login");
+    }
+  };
+
+  return (
+    <header className="collector-header">
+      <div className="collector-logo">
+        <div className="collector-logo-icon"></div>
+        <span>Minutes Tracker System</span>
+      </div>
+
+      <div className="collector-header-icons" ref={dropdownRef}>
+        {/* Notifications */}
+        <Link to="/collector/notifications">
+          <NotificationsIcon className="collector-icon bell" />
+        </Link>
+
+        {/* Profile */}
+        <div
+          className="collector-icon profile"
+          onClick={() => setOpen((prev) => !prev)}
+        >
+          C
+        </div>
+
+        {/* Dropdown */}
+        {open && (
+          <div className="collector-profile-dropdown">
+            <button onClick={handleLogout} className="collector-logout-btn">
+              <LogoutIcon className="collector-logout-icon" />
+                Logout
+            </button>
+
+          </div>
+        )}
+      </div>
+    </header>
+  );
+}
+
+export default CollectorHeader;
 </file>
 
 <file path="client/src/components/Department/DepartmentIssueCard.jsx">
@@ -6550,6 +6452,126 @@ function DepartmentIssueCard({ issue }) {
 }
 
 export default DepartmentIssueCard;
+</file>
+
+<file path="client/src/pages/CollectorPage/CollectorIssuePage.jsx">
+import React, { useEffect, useState, useMemo } from "react";
+import CollectorHeader from "../../components/Collector/CollectorHeader";
+import CollectorTabs from "../../components/Collector/IssuePage/CollectorTabs";
+import CollectorFilterBar from "../../components/Collector/IssuePage/CollectorFilterBar";
+import CollectorIssueCard from "../../components/Collector/IssuePage/CollectorIssueCard";
+import "./CollectorIssuePage.css";
+import api from "../../api/axios"; // Uses your configured axios with Token
+
+function CollectorIssuePage() {
+  const [activeTab, setActiveTab] = useState("Pending");
+  const [filters, setFilters] = useState({});
+  const [allIssues, setAllIssues] = useState([]); 
+  const [loading, setLoading] = useState(false);
+
+  // 1. Fetch Logic: Get ALL issues once (or when Date filter changes)
+  useEffect(() => {
+    setLoading(true);
+    
+    // Use the specific date param if it exists, otherwise fetch all
+    const params = filters.date ? { date: filters.date } : {};
+
+    api.get("/issues", { params })
+      .then((res) => {
+        setAllIssues(res.data);
+      })
+      .catch((err) => console.error("Error fetching issues:", err))
+      .finally(() => setLoading(false));
+
+  }, [filters.date]); // Only re-fetch from server if the DATE filter changes
+
+  // 2. Instant Client-Side Filtering (Same logic as DPO page)
+  const displayedIssues = useMemo(() => {
+    return allIssues.filter((issue) => {
+        
+        // A. Filter by Tab
+        const status = issue.status ? issue.status.toLowerCase() : "pending";
+        const tab = activeTab.toLowerCase();
+        
+        let statusMatch = false;
+        if (tab === "received") {
+            // "Received" tab shows 'submitted' or 'completed' status
+            statusMatch = (status === "submitted" || status === "completed");
+        } else {
+            statusMatch = (status === tab);
+        }
+
+        if (!statusMatch) return false;
+
+        // B. Filter by Search Query
+        if (filters.searchQuery) {
+            const query = filters.searchQuery.toLowerCase();
+            const matchesSearch = 
+                (issue.issue && issue.issue.toLowerCase().includes(query)) ||
+                (issue.issue_no && issue.issue_no.toString().includes(query)) ||
+                (issue.department && issue.department.toLowerCase().includes(query));
+            
+            if (!matchesSearch) return false;
+        }
+
+        // C. Filter by Dropdown (Priority/Dept)
+        if (filters.filterBy && filters.filterBy !== "all") {
+             const filterVal = filters.filterBy.toLowerCase();
+             
+             // Check Priority
+             if (['high', 'medium', 'low'].includes(filterVal)) {
+                 if (issue.priority.toLowerCase() !== filterVal) return false;
+             }
+             // Check Department
+             else {
+                 if (!issue.department.toLowerCase().includes(filterVal)) return false;
+             }
+        }
+
+        // D. Sort Logic (Optional client-side sorting)
+        // You can add sort logic here if needed, currently implied by order of array
+
+        return true;
+    });
+  }, [allIssues, activeTab, filters]);
+
+  return (
+    <div className="dpo-container">
+      <CollectorHeader />
+
+      <div className="content">
+        <div className="page-title">
+          <h1>District Monitor</h1>
+        </div>
+
+        <CollectorFilterBar
+          activeTab={activeTab}
+          onFilterChange={(newFilters) => setFilters(prev => ({...prev, ...newFilters}))}
+          // specific date filtering if needed
+        />
+
+        <CollectorTabs
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+        />
+
+        <div className="tab-scroll-area">
+          {loading ? (
+            <p className="loading-text">Loading...</p>
+          ) : displayedIssues.length === 0 ? (
+            <p className="no-issues">No issues found</p>
+          ) : (
+            displayedIssues.map((issue) => (
+                <CollectorIssueCard key={issue.id} issue={issue} />
+            ))
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default CollectorIssuePage;
 </file>
 
 <file path=".gitignore">
@@ -7278,7 +7300,7 @@ import os
 import json
 import time
 
-GOOGLE_API_KEY = "AIzaSyBIwn5dox4ANPcTQyw4aLTUC3lcwcx5oIw"
+GOOGLE_API_KEY = "your_api_key_here"
 
 def get_best_model():
     try:
@@ -7352,7 +7374,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from django.db.models import Q
@@ -7391,16 +7413,53 @@ TEMP_DATA_CACHE = []
 @api_view(['POST'])
 @permission_classes([AllowAny]) 
 def login_view(request):
-    username = request.data.get('username')
-    password = request.data.get('password')
+    print("\n\n🔥 ================= DIAGNOSTIC LOGIN START ================= 🔥")
+    
+    # 1. Capture what the Frontend sent
+    username_input = request.data.get('username')
+    password_input = request.data.get('password')
+    print(f"🔥 INPUT RECEIVED -> Username: '{username_input}' | Password: '{password_input}'")
 
-    if not username or not password:
+    if not username_input or not password_input:
+        print("🔥 ERROR: Username or Password missing in request body.")
         return Response({"success": False, "message": "Missing credentials"}, status=400)
 
-    user = authenticate(username=username, password=password)
+    # 2. direct Database Check (Bypassing authentication to see if user exists)
+    User = get_user_model()
+    try:
+        # Try finding exact match
+        user_db = User.objects.get(username=username_input)
+        print(f"🔥 DB LOOKUP -> ✅ User '{username_input}' found in database.")
+        print(f"   - ID: {user_db.id}")
+        print(f"   - Role: {user_db.role}")
+        print(f"   - is_active: {user_db.is_active}")
+        print(f"   - Password Valid?: {user_db.check_password(password_input)}")
+        
+        if not user_db.is_active:
+            print("   ⚠️ WARNING: User is INACTIVE. Login will fail.")
+        
+        if not user_db.check_password(password_input):
+            print("   ⚠️ WARNING: Password check FAILED. The password stored does not match the input.")
+
+    except User.DoesNotExist:
+        print(f"🔥 DB LOOKUP -> ❌ User '{username_input}' does NOT exist.")
+        # Check if it exists with different capitalization
+        similar = User.objects.filter(username__iexact=username_input)
+        if similar.exists():
+            print(f"   ⚠️ FOUND MISMATCH: Did you mean '{similar.first().username}'?")
+        else:
+            print(f"   ⚠️ No user found. Available users: {list(User.objects.values_list('username', flat=True))}")
+
+    # 3. Actual Authentication Attempt
+    user = authenticate(username=username_input, password=password_input)
 
     if user is None:
+        print("🔥 FINAL RESULT -> ❌ authenticate() failed.")
+        print("🔥 ================= DIAGNOSTIC LOGIN END ================= 🔥\n\n")
         return Response({"success": False, "message": "Invalid username or password"}, status=401)
+
+    print("🔥 FINAL RESULT -> ✅ Login Successful!")
+    print("🔥 ================= DIAGNOSTIC LOGIN END ================= 🔥\n\n")
 
     token, _ = Token.objects.get_or_create(user=user)
 

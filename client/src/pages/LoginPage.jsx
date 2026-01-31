@@ -99,7 +99,6 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./LoginPage.css";
-import api from "../api/axios";
 
 // Backend base URL
 // const API_BASE_URL = "http://localhost:8000";
@@ -122,10 +121,10 @@ export default function Login() {
 
     try {
       // 🔴 IMPORTANT:
-      // NO withCredentials
-      // Backend uses TOKEN auth, not sessions
-      const response = await api.post(
-        "/login", // ✅ NO trailing slash (matches urls.py)
+      // Use plain axios for login (NOT api instance)
+      // api instance adds token interceptor, but we don't have a token yet
+      const response = await axios.post(
+        "http://127.0.0.1:8000/login",
         {
           username: username.trim(),
           password: password,
