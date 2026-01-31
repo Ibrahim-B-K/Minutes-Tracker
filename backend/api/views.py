@@ -2,7 +2,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from django.db.models import Q
@@ -41,16 +41,53 @@ TEMP_DATA_CACHE = []
 @api_view(['POST'])
 @permission_classes([AllowAny]) 
 def login_view(request):
-    username = request.data.get('username')
-    password = request.data.get('password')
+    print("\n\n🔥 ================= DIAGNOSTIC LOGIN START ================= 🔥")
+    
+    # 1. Capture what the Frontend sent
+    username_input = request.data.get('username')
+    password_input = request.data.get('password')
+    print(f"🔥 INPUT RECEIVED -> Username: '{username_input}' | Password: '{password_input}'")
 
-    if not username or not password:
+    if not username_input or not password_input:
+        print("🔥 ERROR: Username or Password missing in request body.")
         return Response({"success": False, "message": "Missing credentials"}, status=400)
 
-    user = authenticate(username=username, password=password)
+    # 2. direct Database Check (Bypassing authentication to see if user exists)
+    User = get_user_model()
+    try:
+        # Try finding exact match
+        user_db = User.objects.get(username=username_input)
+        print(f"🔥 DB LOOKUP -> ✅ User '{username_input}' found in database.")
+        print(f"   - ID: {user_db.id}")
+        print(f"   - Role: {user_db.role}")
+        print(f"   - is_active: {user_db.is_active}")
+        print(f"   - Password Valid?: {user_db.check_password(password_input)}")
+        
+        if not user_db.is_active:
+            print("   ⚠️ WARNING: User is INACTIVE. Login will fail.")
+        
+        if not user_db.check_password(password_input):
+            print("   ⚠️ WARNING: Password check FAILED. The password stored does not match the input.")
+
+    except User.DoesNotExist:
+        print(f"🔥 DB LOOKUP -> ❌ User '{username_input}' does NOT exist.")
+        # Check if it exists with different capitalization
+        similar = User.objects.filter(username__iexact=username_input)
+        if similar.exists():
+            print(f"   ⚠️ FOUND MISMATCH: Did you mean '{similar.first().username}'?")
+        else:
+            print(f"   ⚠️ No user found. Available users: {list(User.objects.values_list('username', flat=True))}")
+
+    # 3. Actual Authentication Attempt
+    user = authenticate(username=username_input, password=password_input)
 
     if user is None:
+        print("🔥 FINAL RESULT -> ❌ authenticate() failed.")
+        print("🔥 ================= DIAGNOSTIC LOGIN END ================= 🔥\n\n")
         return Response({"success": False, "message": "Invalid username or password"}, status=401)
+
+    print("🔥 FINAL RESULT -> ✅ Login Successful!")
+    print("🔥 ================= DIAGNOSTIC LOGIN END ================= 🔥\n\n")
 
     token, _ = Token.objects.get_or_create(user=user)
 
