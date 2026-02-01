@@ -1,7 +1,6 @@
-// IssueAssignCard.jsx
 import React, { useRef } from "react";
-
-export default function IssueAssignCard({ issue, onChange, index, onAllocate }) {
+import "./DPOSingleIssueAssignCard.css";
+export default function DPOIssueAssignCard({ issue, onChange, index, onAllocate }) {
   const dateRef = useRef(null);
 
   const handleChange = (field, value) => onChange(index, field, value);
@@ -25,55 +24,20 @@ export default function IssueAssignCard({ issue, onChange, index, onAllocate }) 
   };
 
   return (
-    <div className="issue-assign-card">
-      <div className="issue-top">
-        <div className="entry-id">{issue.issue_no}</div>
+    <div className="dpo-assign-card">
+      <div className="dpo-assign-top">
+        <div className="dpo-assign-entry-id">{issue.issue_no}</div>
 
-        {/* 🔹 ACTION BUTTONS */}
-<div
-  style={{
-    display: "flex",
-    alignItems: "center",
-    gap: "20px",
-    marginTop: "-10px",   // 👈 move buttons up
-  }}
->
-
-  <button
-    style={{
-      background: "none",
-      border: "none",
-      color: "#b91c1c",
-      fontSize: "18px",
-      cursor: "pointer",
-    }}
-  >
-    🗑️
-  </button>
-  {/* Allocate Button */}
-  <button
-    onClick={() => onAllocate(issue)}
-    style={{
-      backgroundColor: "#2563eb",
-      color: "#fff",
-      border: "none",
-      padding: "4px 10px",
-      borderRadius: "4px",
-      cursor: "pointer",
-      fontWeight: "400",
-    }}
-  >
-    Allocate
-  </button>
-
-  {/* Delete Button */}
-  
-</div>
-
+        <button
+          className="dpo-assign-allocate-btn"
+          onClick={() => onAllocate(issue)}
+        >
+          Allocate
+        </button>
       </div>
 
-      <div className="issue-form">
-        <div className="form-field">
+      <div className="dpo-assign-form">
+        <div className="dpo-assign-field">
           <label>Department:</label>
           <input
             type="text"
@@ -82,7 +46,7 @@ export default function IssueAssignCard({ issue, onChange, index, onAllocate }) 
           />
         </div>
 
-        <div className="form-field">
+        <div className="dpo-assign-field">
           <label>Issue title:</label>
           <textarea
             rows="2"
@@ -91,7 +55,7 @@ export default function IssueAssignCard({ issue, onChange, index, onAllocate }) 
           />
         </div>
 
-        <div className="form-field">
+        <div className="dpo-assign-field">
           <label>Description:</label>
           <textarea
             rows="2"
@@ -102,7 +66,7 @@ export default function IssueAssignCard({ issue, onChange, index, onAllocate }) 
           />
         </div>
 
-        <div className="form-field">
+        <div className="dpo-assign-field">
           <label>Priority:</label>
           <select
             value={issue.priority}
@@ -114,7 +78,7 @@ export default function IssueAssignCard({ issue, onChange, index, onAllocate }) 
           </select>
         </div>
 
-        <div className="form-field">
+        <div className="dpo-assign-field">
           <label>Location:</label>
           <input
             type="text"
@@ -123,9 +87,9 @@ export default function IssueAssignCard({ issue, onChange, index, onAllocate }) 
           />
         </div>
 
-        <div className="form-field">
+        <div className="dpo-assign-field">
           <label>Deadline:</label>
-          <div className="deadline-input">
+          <div className="dpo-assign-deadline">
             <input
               type="text"
               placeholder="DD-MM-YYYY"
@@ -148,7 +112,7 @@ export default function IssueAssignCard({ issue, onChange, index, onAllocate }) 
             />
 
             <span
-              className="calendar-icon"
+              className="dpo-assign-calendar"
               onClick={() => dateRef.current.showPicker()}
             >
               📅

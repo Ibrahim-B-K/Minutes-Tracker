@@ -3,9 +3,11 @@ import "./CollectorHeader.css";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Link, useNavigate } from "react-router-dom";
+import DescriptionIcon from "@mui/icons-material/Description";
+
 import api from "../../api/axios";
 
-function CollectorHeader() {
+function Header() {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
@@ -46,33 +48,38 @@ function CollectorHeader() {
         <span>Minutes Tracker System</span>
       </div>
 
-      <div className="collector-header-icons" ref={dropdownRef}>
-        {/* Notifications */}
-        <Link to="/collector/notifications">
-          <NotificationsIcon className="collector-icon bell" />
-        </Link>
+<div className="collector-header-icons" ref={dropdownRef}>
+  {/* Minutes Page */}
+  <Link to="/collector/minutes">
+    <DescriptionIcon className="collector-icon minutes" />
+  </Link>
 
-        {/* Profile */}
-        <div
-          className="collector-icon profile"
-          onClick={() => setOpen((prev) => !prev)}
-        >
-          C
-        </div>
+  {/* Notifications */}
+  <Link to="/dpo/notifications">
+    <NotificationsIcon className="collector-icon bell" />
+  </Link>
 
-        {/* Dropdown */}
-        {open && (
-          <div className="collector-profile-dropdown">
-            <button onClick={handleLogout} className="collector-logout-btn">
-              <LogoutIcon className="collector-logout-icon" />
-                Logout
-            </button>
+  {/* Profile */}
+  <div
+    className="collector-icon profile"
+    onClick={() => setOpen((prev) => !prev)}
+  >
+    D
+  </div>
 
-          </div>
-        )}
-      </div>
+  {/* Dropdown */}
+  {open && (
+    <div className="collector-profile-dropdown">
+      <button onClick={handleLogout} className="collector-logout-btn">
+        <LogoutIcon className="collector-logout-icon" />
+        Logout
+      </button>
+    </div>
+  )}
+</div>
+
     </header>
   );
 }
 
-export default CollectorHeader;
+export default Header;

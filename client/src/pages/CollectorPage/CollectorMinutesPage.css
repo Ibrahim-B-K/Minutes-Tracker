@@ -1,0 +1,69 @@
+.page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 25px;
+}
+
+.minutes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.minutes-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: #fff;
+  padding: 16px 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.pdf-icon {
+  font-size: 40px;
+  color: #dc2626;
+}
+
+.minutes-info {
+  flex: 1;
+}
+
+.minutes-info h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.minutes-info p {
+  margin: 4px 0 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.minutes-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.minutes-actions a {
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  background: #2563eb;
+  color: white;
+}
+
+.minutes-actions a:last-child {
+  background: #374151;
+}
+
+.no-minutes {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #6b7280;
+}
+
+.loading-text {
+  opacity: 0.7;
+}
