@@ -1,0 +1,132 @@
+/* ==============================
+   DPO Issue Assign Card
+============================== */
+
+.dpo-assign-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background-color: #f9fafb;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  transition: box-shadow 0.2s ease;
+}
+
+.dpo-assign-card:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+/* ==============================
+   Card Header
+============================== */
+
+.dpo-assign-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 2px;
+}
+
+.dpo-assign-entry-id {
+  font-weight: 600;
+  color: #111827;
+  font-size: 15px;
+}
+
+.dpo-assign-allocate-btn {
+  background-color: #2563eb;
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-bottom:5px;
+}
+
+
+
+/* ==============================
+   Form Section
+============================== */
+
+.dpo-assign-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dpo-assign-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.dpo-assign-field label {
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.dpo-assign-field input,
+.dpo-assign-field select {
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 14px;
+  background-color: #fff;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dpo-assign-field textarea {
+  resize: none;
+  height: 35px;
+  min-height: 35px;
+  padding: 6px 8px;
+  font-size: 13px;
+  line-height: 1.4;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background-color: #fff;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dpo-assign-field input:focus,
+.dpo-assign-field select:focus,
+.dpo-assign-field textarea:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* ==============================
+   Deadline Field
+============================== */
+
+.dpo-assign-deadline {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.dpo-assign-deadline input {
+  width: 100%;
+  padding-right: 38px;
+}
+
+.dpo-assign-calendar {
+  position: absolute;
+  right: 12px;
+  font-size: 18px;
+  color: #4b5563;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.dpo-assign-calendar:hover {
+  color: #2563eb;
+}

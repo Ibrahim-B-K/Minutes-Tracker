@@ -4,98 +4,121 @@
 
 .content {
   padding: 10px 70px;
+  position: relative;
+}
+
+/* ---------- Title ---------- */
+.page-title {
+  display: flex;
+  justify-content: space-between;
 }
 
 .page-title h1 {
   font-size: 2.1rem;
   font-weight: 700;
-  color: #111;
-  margin-bottom: 20px;
 }
 
-
-.filters {
-  display: flex;
-  gap: 15px;
-  align-items: center;
-  background: white;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-  margin-bottom: 20px;
-}
-
-.filters input,
-.filters select {
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 0.9rem;
-}
-
-.generate-btn {
-  background: #2563eb;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.generate-btn:hover {
-  background: #1d4ed8;
-}
-.page-title {
-  display: flex;
-justify-content: space-between;
-
-}
-
+/* ---------- Upload Icon ---------- */
 .upload-icon {
-  color: black;
-  border-radius: 8px; /* keep it slightly rounded, not circular */
-  padding: 2px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  transition: all 0.2s ease;
-  background: transparent;
+  font-size: 35px !important;
   margin-top: 40px;
-  margin-right: 5px;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
 .upload-icon:hover {
   color: #1d4ed8;
   transform: scale(1.05);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
-}
-.upload-icon {
-  font-size: 35px !important;
-  width: 35px !important;
-  height: 35px !important;
-}
-.no-issues {
-  font-size: 1.6rem;        /* Bigger text */
-  font-weight: 600;         /* Slightly bold */
-  text-align: center;       /* Center text */
-  color: #6b7280;           /* Soft gray (Tailwind gray-500) */
-  margin-top: 40px;         /* Add spacing from top */
-  padding: 20px;            /* Smooth breathing room */
-  background: #f3f4f6;      /* Light gray background */
-  border-radius: 12px;      /* Rounded corners */
-  width: 80%;               /* Not too wide */
-  margin-left: auto;
-  margin-right: auto;       /* Center block */
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08); /* Soft shadow */
-}
-.loading-text {
-  font-size: 18px;
-  opacity: 0.7;
 }
 .tab-scroll-area {
-  animation: fadeIn 0.25s ease;
+  height:380px;
 }
+
+/* ---------- Tabs ---------- */
+.tabs-wrapper {
+  position: relative;
+  margin-top: 10px;
+}
+
+/* Add icon anchored to tabs (NO layout impact) */
+.tabs-add-icon {
+  position: absolute;
+  right: -2px;
+  top: 60%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #555;
+  transition: 0.2s;
+}
+
 
 @keyframes fadeIn {
   from { opacity: 0.3; transform: translateY(3px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
+.no-issues {
+  text-align: center;
+  margin-top: 40px;
+  padding: 20px;
+  background: #f3f4f6;
+  border-radius: 12px;
+}
+
+.loading-text {
+  opacity: 0.7;
+}
+
+/* ---------- MODAL ---------- */
+.assign-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.assign-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(6px);
+}
+
+.assign-modal {
+  position: relative;
+  width: 720px;
+  max-height: 85vh;
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  overflow-y: auto;
+  z-index: 10000;
+}
+
+.assign-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+.allocate-btn {
+  background: #1d4ed8;
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  margin-bottom:4px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.allocate-btn:hover {
+  background: #1e40af;
+}

@@ -3,6 +3,8 @@ import "./DPOHeader.css";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Link, useNavigate } from "react-router-dom";
+import DescriptionIcon from "@mui/icons-material/Description";
+
 import api from "../../api/axios";
 
 function Header() {
@@ -46,31 +48,36 @@ function Header() {
         <span>Minutes Tracker System</span>
       </div>
 
-      <div className="dpo-header-icons" ref={dropdownRef}>
-        {/* Notifications */}
-        <Link to="/dpo/notifications">
-          <NotificationsIcon className="dpo-icon bell" />
-        </Link>
+<div className="dpo-header-icons" ref={dropdownRef}>
+  {/* Minutes Page */}
+  <Link to="/dpo/minutes">
+    <DescriptionIcon className="dpo-icon minutes" />
+  </Link>
 
-        {/* Profile */}
-        <div
-          className="dpo-icon profile"
-          onClick={() => setOpen((prev) => !prev)}
-        >
-          D
-        </div>
+  {/* Notifications */}
+  <Link to="/dpo/notifications">
+    <NotificationsIcon className="dpo-icon bell" />
+  </Link>
 
-        {/* Dropdown */}
-        {open && (
-          <div className="dpo-profile-dropdown">
-            <button onClick={handleLogout} className="dpo-logout-btn">
-              <LogoutIcon className="dpo-logout-icon" />
-                Logout
-            </button>
+  {/* Profile */}
+  <div
+    className="dpo-icon profile"
+    onClick={() => setOpen((prev) => !prev)}
+  >
+    D
+  </div>
 
-          </div>
-        )}
-      </div>
+  {/* Dropdown */}
+  {open && (
+    <div className="dpo-profile-dropdown">
+      <button onClick={handleLogout} className="dpo-logout-btn">
+        <LogoutIcon className="dpo-logout-icon" />
+        Logout
+      </button>
+    </div>
+  )}
+</div>
+
     </header>
   );
 }

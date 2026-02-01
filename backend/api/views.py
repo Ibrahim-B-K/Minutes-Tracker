@@ -113,7 +113,7 @@ def logout_view(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def upload_minutes(request):
-    if request.user.role != 'dpo':
+    if request.user.role.lower() != 'dpo':
         return Response({"error": "Only DPO can upload minutes"}, status=403)
 
     global TEMP_DATA_CACHE
@@ -147,7 +147,7 @@ def upload_minutes(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_assign_issues(request):
-    if request.user.role != 'dpo':
+    if request.user.role.lower() != 'dpo':
         return Response({"error": "Unauthorized"}, status=403)
     return Response(TEMP_DATA_CACHE)
 
@@ -157,7 +157,7 @@ def get_assign_issues(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def allocate_all(request):
-    if request.user.role != 'dpo':
+    if request.user.role.lower() != 'dpo':
         return Response({"error": "Only DPO can allocate"}, status=403)
 
     global TEMP_DATA_CACHE
@@ -245,7 +245,7 @@ def allocate_all(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_all_issues(request):
-    if request.user.role not in ['dpo', 'collector']:
+    if request.user.role.lower() not in ['dpo', 'collector']:
         return Response({"error": "Unauthorized"}, status=403)
 
     today = date.today()
@@ -281,7 +281,7 @@ def get_all_issues(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_dept_issues(request, dept_name):
-    if request.user.role != 'department':
+    if request.user.role.lower() != 'department':
         return Response({"error": "Unauthorized"}, status=403)
 
     today = date.today()
