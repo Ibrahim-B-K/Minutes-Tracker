@@ -2,7 +2,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from django.db.models import Q
@@ -41,16 +41,53 @@ TEMP_DATA_CACHE = []
 @api_view(['POST'])
 @permission_classes([AllowAny]) 
 def login_view(request):
-    username = request.data.get('username')
-    password = request.data.get('password')
+    print("\n\n🔥 ================= DIAGNOSTIC LOGIN START ================= 🔥")
+    
+    # 1. Capture what the Frontend sent
+    username_input = request.data.get('username')
+    password_input = request.data.get('password')
+    print(f"🔥 INPUT RECEIVED -> Username: '{username_input}' | Password: '{password_input}'")
 
-    if not username or not password:
+    if not username_input or not password_input:
+        print("🔥 ERROR: Username or Password missing in request body.")
         return Response({"success": False, "message": "Missing credentials"}, status=400)
 
-    user = authenticate(username=username, password=password)
+    # 2. direct Database Check (Bypassing authentication to see if user exists)
+    User = get_user_model()
+    try:
+        # Try finding exact match
+        user_db = User.objects.get(username=username_input)
+        print(f"🔥 DB LOOKUP -> ✅ User '{username_input}' found in database.")
+        print(f"   - ID: {user_db.id}")
+        print(f"   - Role: {user_db.role}")
+        print(f"   - is_active: {user_db.is_active}")
+        print(f"   - Password Valid?: {user_db.check_password(password_input)}")
+        
+        if not user_db.is_active:
+            print("   ⚠️ WARNING: User is INACTIVE. Login will fail.")
+        
+        if not user_db.check_password(password_input):
+            print("   ⚠️ WARNING: Password check FAILED. The password stored does not match the input.")
+
+    except User.DoesNotExist:
+        print(f"🔥 DB LOOKUP -> ❌ User '{username_input}' does NOT exist.")
+        # Check if it exists with different capitalization
+        similar = User.objects.filter(username__iexact=username_input)
+        if similar.exists():
+            print(f"   ⚠️ FOUND MISMATCH: Did you mean '{similar.first().username}'?")
+        else:
+            print(f"   ⚠️ No user found. Available users: {list(User.objects.values_list('username', flat=True))}")
+
+    # 3. Actual Authentication Attempt
+    user = authenticate(username=username_input, password=password_input)
 
     if user is None:
+        print("🔥 FINAL RESULT -> ❌ authenticate() failed.")
+        print("🔥 ================= DIAGNOSTIC LOGIN END ================= 🔥\n\n")
         return Response({"success": False, "message": "Invalid username or password"}, status=401)
+
+    print("🔥 FINAL RESULT -> ✅ Login Successful!")
+    print("🔥 ================= DIAGNOSTIC LOGIN END ================= 🔥\n\n")
 
     token, _ = Token.objects.get_or_create(user=user)
 
@@ -66,13 +103,8 @@ def login_view(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def logout_view(request):
-    logout(request)
+    request.user.auth_token.delete()  # Delete the token
     return Response({"success": True})
-# @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
-# def logout_view(request):
-#     request.auth.delete()   # delete token
-#     return Response({"success": True}) #keerthi added this js for verification-didnt check
 
 
 
@@ -81,7 +113,7 @@ def logout_view(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def upload_minutes(request):
-    if request.user.role != 'dpo':
+    if request.user.role.lower() != 'dpo':
         return Response({"error": "Only DPO can upload minutes"}, status=403)
 
     global TEMP_DATA_CACHE
@@ -115,7 +147,7 @@ def upload_minutes(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_assign_issues(request):
-    if request.user.role != 'dpo':
+    if request.user.role.lower() != 'dpo':
         return Response({"error": "Unauthorized"}, status=403)
     return Response(TEMP_DATA_CACHE)
 
@@ -125,7 +157,7 @@ def get_assign_issues(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def allocate_all(request):
-    if request.user.role != 'dpo':
+    if request.user.role.lower() != 'dpo':
         return Response({"error": "Only DPO can allocate"}, status=403)
 
     global TEMP_DATA_CACHE
@@ -213,7 +245,7 @@ def allocate_all(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_all_issues(request):
-    if request.user.role not in ['dpo', 'collector']:
+    if request.user.role.lower() not in ['dpo', 'collector']:
         return Response({"error": "Unauthorized"}, status=403)
 
     today = date.today()
@@ -249,7 +281,7 @@ def get_all_issues(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_dept_issues(request, dept_name):
-    if request.user.role != 'department':
+    if request.user.role.lower() != 'department':
         return Response({"error": "Unauthorized"}, status=403)
 
     today = date.today()
@@ -273,58 +305,50 @@ def get_dept_issues(request, dept_name):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def submit_response(request):
-    # 1. Get the ID safely
+    # 1. Get data safely (handle both JSON and FormData)
     issue_id = request.data.get('issue_id') or request.data.get('id')
     response_text = request.data.get('response')
+    attachment = request.FILES.get('attachment')
 
-    print(f"📝 Submitting response for ID: {issue_id}") # Debug Log
+    print(f"📝 Submitting response for ID: {issue_id}")
 
     if not issue_id or str(issue_id) == "undefined":
         return Response({"error": "Invalid ID provided"}, status=400)
 
     try:
-        # FIX 1: Use 'id' (the database primary key), not 'issue_dept_id'
-
         issue_link = IssueDepartment.objects.get(id=issue_id)
         
-        # FIX 2: Create Response (Using 'issue_department' which matches your model)
-        # We use 'create' instead of update_or_create to allow history of responses
+        # FIX: Create Response with attachment
         ResponseModel.objects.create(
             issue_department=issue_link, 
-            response_text=response_text
+            response_text=response_text or "",
+            attachment_path=attachment
         )
         
-        # FIX 3: Status must be lowercase 'submitted' to match your frontend logic
         issue_link.status = 'submitted'
         issue_link.save()
         
         # --- NOTIFY DPO ---
         dpos = User.objects.filter(Q(role__iexact='DPO') | Q(username__iexact='dpo'))
-        
-        # FIX 4: Use 'issue.id' because 'issue_no' column might not exist
         issue_number = issue_link.issue.id 
         dept_name = issue_link.department.dept_name
 
         for d in dpos:
             Notification.objects.create(
                 user=d, 
-                issue_department=issue_link,  # FIX 5: Field name is 'issue_department'
-                # type='response', # Uncomment only if your Notification model has this field
+                issue_department=issue_link,
                 message=f"Response Received: {dept_name} responded to Issue #{issue_number}"
             )
             
-        print(f"✅ Response success for Issue #{issue_number}")
         return Response({"success": True})
 
     except IssueDepartment.DoesNotExist:
-        print(f"❌ Error: IssueDepartment with ID {issue_id} not found.")
         return Response({"error": "Issue not found"}, status=404)
-        
     except Exception as e:
-        print(f"🔥 CRITICAL SUBMIT ERROR: {str(e)}") # Prints exact error to terminal
+        print(f"🔥 CRITICAL SUBMIT ERROR: {str(e)}")
         import traceback
         traceback.print_exc()
-        return Response({"error": str(e)}, status=500) 
+        return Response({"error": str(e)}, status=500)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -379,37 +403,55 @@ def generate_report(request):
     # 3. Create Workbook
     wb = openpyxl.Workbook()
     ws = wb.active
-    ws.title = "Action Taken Report"
+    ws.title = "Follow Up Report"
 
     # Define Styles
     header_font = Font(bold=True, size=11, name='Calibri')
     center_align = Alignment(horizontal='center', vertical='center', wrap_text=True)
-    content_align = Alignment(horizontal='left', vertical='top', wrap_text=True)
+    content_align = Alignment(horizontal='left', vertical='center', wrap_text=True, indent=1)
     thin_border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
 
-    # Set Column Widths
-    ws.column_dimensions['A'].width = 8   # Sl No
-    ws.column_dimensions['B'].width = 25  # Date & Subject
-    ws.column_dimensions['C'].width = 40  # Description
-    ws.column_dimensions['D'].width = 25  # Depts
-    ws.column_dimensions['E'].width = 45  # Responses
+    # Set Column Widths (Adjusted for better readability and padding)
+    ws.column_dimensions['A'].width = 10  # Sl No
+    ws.column_dimensions['B'].width = 40  # Date & Subject
+    ws.column_dimensions['C'].width = 30  # Depts
+    ws.column_dimensions['D'].width = 80  # Description
+    ws.column_dimensions['E'].width = 60  # Responses
 
-    # Headers
+    # Create headers
     headers = [
         "ക്രമ നമ്പർ", 
         "ഉന്നയിച്ച തീയതി & വകുപ്പ്/വിഷയം", 
+        "നടപടി സ്വീകരിക്കേണ്ട ഉദ്യോഗസ്ഥൻ",
         "മുൻ യോഗത്തിൽ ചർച്ച ചെയ്തതും യോഗ നിർദ്ദേശവും", 
-        "നടപടി സ്വീകരിക്കേണ്ട ഉദ്യോഗസ്ഥൻ", 
         "നിലവിലെ സ്റ്റാറ്റസ്"
     ]
+    
+    # 3.5. Determine Meeting Date for Header
+    meeting_date_str = timezone.now().strftime("%d-%m-%Y")
+    for item in items:
+        if item.issue and item.issue.minutes and item.issue.minutes.meeting_date:
+            meeting_date_str = item.issue.minutes.meeting_date.strftime("%d-%m-%Y")
+            break
+
+    # Main Header Row
+    ws.merge_cells('A1:E1')
+    main_header = ws['A1']
+    main_header.value = f"{meeting_date_str} -ന് ചേർന്ന ജില്ലാ വികസന സമിതി യോഗത്തിന്റെ തുടർ നടപടി റിപ്പോർട്ട്"
+    main_header.font = Font(bold=True, size=12, name='Calibri')
+    main_header.alignment = Alignment(horizontal='center', vertical='center')
+    main_header.border = thin_border
+    ws.row_dimensions[1].height = 30
+
+    # Table Headers (now on row 2)
     ws.append(headers)
 
-    # Apply Header Style
-    for cell in ws[1]:
+    # Apply Table Header Style
+    for cell in ws[2]:
         cell.font = header_font
         cell.alignment = center_align
         cell.border = thin_border
-        ws.row_dimensions[1].height = 45
+        ws.row_dimensions[2].height = 45
 
     # 4. Write Grouped Data to Excel
     for index, (issue_id, data) in enumerate(grouped_data.items(), start=1):
@@ -431,8 +473,8 @@ def generate_report(request):
         row_data = [
             index,                  # Sl No
             subject_col_text,       # Date & Subject
-            issue.issue_description,# Description
             dept_str,               # Departments (Combined)
+            issue.issue_description,# Description
             response_str            # Responses (Combined)
         ]
         
@@ -448,6 +490,6 @@ def generate_report(request):
     response = HttpResponse(
         content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     )
-    response['Content-Disposition'] = 'attachment; filename="Action_Taken_Report.xlsx"'
+    response['Content-Disposition'] = 'attachment; filename="Follow_Up_Report.xlsx"'
     wb.save(response)
     return response

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 // import axios from "axios";
-import Header from "../../components/DPO/Header";
+import DPOHeader from "../../components/DPO/DPOHeader";
 import "./NotificationPage.css";
 import api from "../../api/axios";
 
@@ -28,7 +28,7 @@ function DPONotificationPage() {
 
   return (
     <div className="notificationpage-container">
-      <Header activeTab="notifications" />
+      <DPOHeader activeTab="notifications" />
 
       <div className="notificationpage-content">
         <div className="notification-header">
@@ -41,21 +41,25 @@ function DPONotificationPage() {
           ) : notifications.length === 0 ? (
             <div className="no-notifications">No new notifications</div>
           ) : (
-            notifications.map((note) => (
-              <div key={note.notification_id} className={`notification-card ${note.type}`}>
-                <div className="notification-icon">
-                  {note.type === "response" && <span>📩</span>}
-                  {note.type === "assign" && <span>📝</span>}
-                  {note.type === "deadline" && <span>⏰</span>}
-                </div>
+            notifications.map((note) => {
+              const safeType = note.type || "general";
+              return (
+                <div key={note.id} className={`notification-card ${safeType}`}>
+                  <div className="notification-icon">
+                    {safeType === "response" && <span>📩</span>}
+                    {safeType === "assign" && <span>📝</span>}
+                    {safeType === "deadline" && <span>⏰</span>}
+                    {safeType === "general" && <span>🔔</span>}
+                  </div>
 
-                <div className="notification-content">
-                  <h3>{note.type.toUpperCase()}</h3>
-                  <p>{note.message}</p>
-                  <span className="time">{note.time_ago}</span>
+                  <div className="notification-content">
+                    <h3>{safeType.toUpperCase()}</h3>
+                    <p>{note.message}</p>
+                    <span className="time">{note.time_ago}</span>
+                  </div>
                 </div>
-              </div>
-            ))
+              );
+            })
           )}
         </div>
       </div>

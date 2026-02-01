@@ -1,0 +1,203 @@
+
+
+.filter-bar {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+/* ================= SEARCH ================= */
+
+.search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 200px;
+  max-width: 400px;
+}
+
+.search-wrapper input {
+  padding: 10px 35px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  width: 100%;
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  user-select: none;
+}
+
+/* ================= DATE INPUT ================= */
+
+.date-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.date-input-wrapper input {
+  padding: 10px 35px 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.calendar-icon {
+  position: absolute;
+  right: 10px;
+  font-size: 1rem;
+  color: #666;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* ================= FILTER / SORT GROUP ================= */
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.filter-group label {
+  color: #666;
+  font-size: 0.9rem;
+  min-width: 60px;
+}
+
+/* ===== COMMON CONTROL STYLE (Filter & Sort SAME) ===== */
+
+.filter-select,
+.filter-btn {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  width: 160px;
+  background: white;
+  color: #333;
+  cursor: pointer;
+  text-align: left;
+}
+
+/* ================= GENERATE BUTTON ================= */
+
+.generate-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  margin-left: auto;
+}
+
+.generate-btn:hover {
+  background: #1d4ed8;
+}
+
+/* ================= UPLOAD BUTTON ================= */
+
+.upload-btn {
+  position: absolute;
+  right: 12px;
+  top: -18px;
+  z-index: 20;
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  box-shadow: 0 6px 12px rgba(16, 185, 129, 0.12);
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.upload-btn img {
+  width: 14px;
+  height: 14px;
+}
+
+.upload-btn:hover {
+  background: #059669;
+}
+
+/* ================= CUSTOM FILTER DROPDOWN ================= */
+
+.custom-filter,
+.filter-dropdown {
+  position: relative;
+
+}
+
+/* Dropdown Menu */
+.filter-menu {
+  display: none;
+  position: absolute;
+  top: 39px;
+  left: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  min-width: 160px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  z-index: 50;
+}
+
+.filter-dropdown:hover .filter-menu {
+  display: block;
+}
+
+/* Dropdown Items */
+.filter-item {
+  padding: 10px 12px;
+  cursor: pointer;
+  position: relative;
+  white-space: nowrap;
+}
+
+.filter-item:hover {
+  background: #f3f4f6;
+}
+
+/* ================= SUB MENU ================= */
+
+.sub-menu {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 100%;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  min-width: 160px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.filter-item:hover .sub-menu {
+  display: block;
+}
+
+.sub-menu div {
+  padding: 10px 12px;
+}
+
+.sub-menu div:hover {
+  background: #e5e7eb;
+}

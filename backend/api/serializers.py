@@ -2,10 +2,7 @@ from rest_framework import serializers
 from .models import IssueDepartment, Notification, Issue
 
 class IssueDepartmentSerializer(serializers.ModelSerializer):
-    # FIX: Use 'id' directly. Removed 'source=issue_dept_id' which caused the crash.
     id = serializers.IntegerField(read_only=True)
-    
-    # FIX: Use 'issue.id' because we didn't add the 'issue_no' column to the DB
     issue_no = serializers.CharField(source='issue.id', read_only=True)
     issue_description = serializers.CharField(source='issue.issue_description', read_only=True)
     issue = serializers.CharField(source='issue.issue_title', read_only=True)
@@ -14,14 +11,13 @@ class IssueDepartmentSerializer(serializers.ModelSerializer):
     location = serializers.CharField(source='issue.location', read_only=True)
     priority = serializers.CharField(source='issue.priority', read_only=True)
     
-    # FIX: Use a method to get the response safely (since it's a One-to-Many relation)
+    # Custom response field to return both text and the file link
     response = serializers.SerializerMethodField()
 
     class Meta:
         model = IssueDepartment
         fields = [
             'id',             
-            # 'issue_dept_id',  <-- REMOVED THIS CAUSE OF ERROR
             'issue_no', 
             'issue',
             'issue_description',
@@ -34,20 +30,24 @@ class IssueDepartmentSerializer(serializers.ModelSerializer):
         ]
 
     def get_response(self, obj):
-        # Fetch the latest response text if available
+        # Fetch the latest response record for this specific issue-department link
         last_response = obj.responses.last()
-        return last_response.response_text if last_response else None
+        if not last_response:
+            return None
+            
+        return {
+            "text": last_response.response_text,
+            "attachment": last_response.attachment_path.url if last_response.attachment_path else None
+        }
 
 class DPOIssueSerializer(serializers.ModelSerializer):
-    # FIX: Use 'id' as issue_no
     issue_no = serializers.IntegerField(source='id', read_only=True)
-    
     issue = serializers.CharField(source='issue_title')
     issue_description = serializers.CharField()
     location = serializers.CharField()
     priority = serializers.CharField()
     
-    # Custom fields for grouping
+    # For DPO, we group by departments and collect ALL responses
     department = serializers.SerializerMethodField()
     status = serializers.SerializerMethodField()
     deadline = serializers.SerializerMethodField()
@@ -69,7 +69,6 @@ class DPOIssueSerializer(serializers.ModelSerializer):
         ]
     
     def get_department(self, obj):
-        # Combines multiple departments: "POLICE, PWD"
         assignments = obj.issuedepartment_set.all()
         return ", ".join([a.department.dept_name for a in assignments])
 
@@ -87,21 +86,33 @@ class DPOIssueSerializer(serializers.ModelSerializer):
         return min(deadlines).strftime("%d-%m-%Y")
 
     def get_response(self, obj):
-        # Collects responses: ["Police: Action Taken", "PWD: Work Started"]
+        # Returns a list of response objects from all assigned departments
         response_list = []
         for assign in obj.issuedepartment_set.all():
             latest_resp = assign.responses.last()
-            if latest_resp and latest_resp.response_text:
-                response_list.append(f"{assign.department.dept_name}: {latest_resp.response_text}")
+            if latest_resp:
+                response_list.append({
+                    "department": assign.department.dept_name,
+                    "text": latest_resp.response_text or "",
+                    "attachment": latest_resp.attachment_path.url if latest_resp.attachment_path else None
+                })
         return response_list if response_list else None
 
 class NotificationSerializer(serializers.ModelSerializer):
     time_ago = serializers.SerializerMethodField()
+    type = serializers.SerializerMethodField()
 
     class Meta:
         model = Notification
-        fields = ['id', 'message', 'is_read', 'time_ago', 'created_at'] # Ensure 'id' is used here too if needed
+        fields = ['id', 'message', 'is_read', 'time_ago', 'created_at', 'type']
 
     def get_time_ago(self, obj):
         from django.utils.timesince import timesince
         return timesince(obj.created_at) + " ago"
+
+    def get_type(self, obj):
+        msg = obj.message.lower()
+        if "response" in msg: return "response"
+        if "assigned" in msg or "action required" in msg: return "assign"
+        if "deadline" in msg or "overdue" in msg: return "deadline"
+        return "general"

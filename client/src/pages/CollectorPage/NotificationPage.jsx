@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "../../components/Collector/Header";
+import CollectorHeader from "../../components/Collector/CollectorHeader";
 import "./NotificationPage.css";
 
 function CollectorNotificationPage() {
@@ -22,7 +22,7 @@ function CollectorNotificationPage() {
 
   return (
     <div className="notificationpage-container">
-      <Header activeTab="notifications" />
+      <CollectorHeader />
 
       <div className="notificationpage-content">
         <div className="notification-header">

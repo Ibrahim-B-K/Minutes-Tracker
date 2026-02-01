@@ -1,0 +1,119 @@
+.dept-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 15px 25px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.dept-logo {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #1a1a1a;
+}
+
+.dept-logo-icon {
+  width: 28px;
+  height: 28px;
+  background: #2563eb;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.dept-header-icons {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  position: relative;
+}
+
+
+/* standard icon container */
+
+
+.dept-icon.bell {
+  background: white; /* make the circular background white */
+  color: #2563eb; /* bell color */
+  font-size: 32px;
+  margin-right: 15px;
+}
+
+.dept-icon.profile {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #2563eb;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 36px;
+  text-align: center;
+}
+
+/* Profile dropdown */
+.dept-profile-dropdown {
+  position: absolute;
+  top: 55px;
+  right: 0;
+  background: #fff;
+  border-radius: 10px;
+  width: 140px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  padding: 8px 0;
+  animation: deptDropdownFade 0.2s ease;
+  z-index: 1000;
+}
+
+.dept-profile-dropdown button {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+  color: #111827;
+}
+
+.dept-profile-dropdown button:hover {
+  background: #f3f4f6;
+}
+
+/* Smooth appearance */
+@keyframes deptDropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.dept-logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+  color: #111827;
+}
+
+.dept-logout-btn:hover {
+  background: #f3f4f6;
+}
+
+.dept-logout-icon {
+  font-size: 18px;
+  color: #ef4444; /* subtle red for logout */
+}
+

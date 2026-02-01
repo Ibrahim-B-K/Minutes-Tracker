@@ -41,6 +41,7 @@ The content is organized as follows:
 
 <directory_structure>
 .gitignore
+backend/.gitignore
 backend/api/__init__.py
 backend/api/admin.py
 backend/api/apps.py
@@ -62,57 +63,65 @@ backend/backend/wsgi.py
 backend/fix_db.py
 backend/fix_wsgi.py
 backend/manage.py
+backend/media/minutes/1️⃣ USERS TABLE.pdf
+backend/media/minutes/CST424-M1 -Ktunotes.in.pdf
 backend/media/minutes/DDC MINUTES 1-03-2025 Final.docx
 backend/media/minutes/DDC MINUTES 1-03-2025 Final.pdf
 backend/media/minutes/DDC MINUTES 27.09.2025.pdf
 backend/media/minutes/DDC MINUTES keerthi.pdf
 backend/media/minutes/DDC MINUTES small.pdf
 backend/media/minutes/pdf&rendition=1-6 (1).pdf
+backend/media/responses/1_USERS_TABLE_3rjgjmz.pdf
+backend/media/responses/1_USERS_TABLE_VxpBP14.pdf
+backend/media/responses/1_USERS_TABLE_Xtb7w0s.pdf
+backend/media/responses/1_USERS_TABLE.pdf
+backend/media/responses/PP1_eh0WYOf.pdf
+backend/media/responses/PP1.pdf
 backend/requirements.txt
 client/index.html
 client/package.json
 client/src/api/axios.js
 client/src/App.css
 client/src/App.jsx
-client/src/components/Collector/Header.css
-client/src/components/Collector/Header.jsx
-client/src/components/Collector/IssuePage/FilterBar.css
-client/src/components/Collector/IssuePage/FilterBar.jsx
-client/src/components/Collector/IssuePage/GenerateReportCard.jsx
-client/src/components/Collector/IssuePage/GenerateReports.css
-client/src/components/Collector/IssuePage/GenerateReports.jsx
-client/src/components/Collector/IssuePage/IssueCard.css
-client/src/components/Collector/IssuePage/IssueCard.jsx
-client/src/components/Collector/IssuePage/Tabs.css
-client/src/components/Collector/IssuePage/Tabs.jsx
-client/src/components/Department/FilterBar.css
-client/src/components/Department/FilterBar.jsx
-client/src/components/Department/Header.css
-client/src/components/Department/Header.jsx
-client/src/components/Department/IssueCard.css
-client/src/components/Department/IssueCard.jsx
-client/src/components/Department/ResponseModal.css
-client/src/components/Department/ResponseModal.jsx
-client/src/components/Department/Tabs.css
-client/src/components/Department/Tabs.jsx
-client/src/components/DPO/Header.css
-client/src/components/DPO/Header.jsx
-client/src/components/DPO/IssuePage/FilterBar.css
-client/src/components/DPO/IssuePage/FilterBar.jsx
-client/src/components/DPO/IssuePage/GenerateReportCard.jsx
-client/src/components/DPO/IssuePage/GenerateReports.css
-client/src/components/DPO/IssuePage/GenerateReports.jsx
-client/src/components/DPO/IssuePage/IssueCard.css
-client/src/components/DPO/IssuePage/IssueCard.jsx
-client/src/components/DPO/IssuePage/Tabs.css
-client/src/components/DPO/IssuePage/Tabs.jsx
-client/src/components/DPO/UploadPage/AssignIssues.css
-client/src/components/DPO/UploadPage/AssignIssues.jsx
-client/src/components/DPO/UploadPage/IssueAssignCard.jsx
-client/src/components/DPO/UploadPage/Stepper.css
-client/src/components/DPO/UploadPage/Stepper.jsx
-client/src/components/DPO/UploadPage/UploadForm.css
-client/src/components/DPO/UploadPage/UploadForm.jsx
+client/src/components/Collector/CollectorHeader.css
+client/src/components/Collector/CollectorHeader.jsx
+client/src/components/Collector/IssuePage/CollectorFilterBar.css
+client/src/components/Collector/IssuePage/CollectorFilterBar.jsx
+client/src/components/Collector/IssuePage/CollectorGenerateReportCard.jsx
+client/src/components/Collector/IssuePage/CollectorGenerateReports.css
+client/src/components/Collector/IssuePage/CollectorGenerateReports.jsx
+client/src/components/Collector/IssuePage/CollectorIssueCard.css
+client/src/components/Collector/IssuePage/CollectorIssueCard.jsx
+client/src/components/Collector/IssuePage/CollectorTabs.css
+client/src/components/Collector/IssuePage/CollectorTabs.jsx
+client/src/components/Department/DepartmentFilterBar.css
+client/src/components/Department/DepartmentFilterBar.jsx
+client/src/components/Department/DepartmentHeader.css
+client/src/components/Department/DepartmentHeader.jsx
+client/src/components/Department/DepartmentIssueCard.css
+client/src/components/Department/DepartmentIssueCard.jsx
+client/src/components/Department/DepartmentResponseModal.css
+client/src/components/Department/DepartmentResponseModal.jsx
+client/src/components/Department/DepartmentTabs.css
+client/src/components/Department/DepartmentTabs.jsx
+client/src/components/DPO/DPOHeader.css
+client/src/components/DPO/DPOHeader.jsx
+client/src/components/DPO/IssuePage/DPOFilterBar.css
+client/src/components/DPO/IssuePage/DPOFilterBar.jsx
+client/src/components/DPO/IssuePage/DPOGenerateReportCard.jsx
+client/src/components/DPO/IssuePage/DPOGenerateReports.css
+client/src/components/DPO/IssuePage/DPOGenerateReports.jsx
+client/src/components/DPO/IssuePage/DPOIssueCard.css
+client/src/components/DPO/IssuePage/DPOIssueCard.jsx
+client/src/components/DPO/IssuePage/DPOTabs.css
+client/src/components/DPO/IssuePage/DPOTabs.jsx
+client/src/components/DPO/UploadPage/DPOAssignIssues.css
+client/src/components/DPO/UploadPage/DPOAssignIssues.jsx
+client/src/components/DPO/UploadPage/DPOIssueAssignCard.jsx
+client/src/components/DPO/UploadPage/DPOStepper.css
+client/src/components/DPO/UploadPage/DPOStepper.jsx
+client/src/components/DPO/UploadPage/DPOUploadForm.css
+client/src/components/DPO/UploadPage/DPOUploadForm.jsx
 client/src/index.css
 client/src/main.jsx
 client/src/pages/CollectorPage/CollectorIssuePage.css
@@ -138,6 +147,12 @@ vite.config.js
 
 <files>
 This section contains the contents of the repository's files.
+
+<file path="backend/.gitignore">
+__pycache__/
+*.pyc
+.env
+</file>
 
 <file path="backend/api/__init__.py">
 
@@ -348,21 +363,6 @@ if __name__ == '__main__':
     main()
 </file>
 
-<file path="client/index.html">
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Minutes Tracker</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
-</html>
-</file>
-
 <file path="client/package.json">
 {
   "name": "client",
@@ -458,85 +458,7 @@ function App() {
 export default App;
 </file>
 
-<file path="client/src/components/Collector/Header.css">
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: white;
-  padding: 15px 25px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  font-weight: 600;
-  font-size: 1.1rem;
-  color: #1a1a1a;
-}
-
-.logo-icon {
-  width: 28px;
-  height: 28px;
-  background: #2563eb;
-  border-radius: 5px;
-  margin-right: 10px;
-}
-
-.header-icons {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.icon {
-  width: 30px;
-  height: 30px;
-  background: #e5e7eb;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.profile {
-  background: #2563eb;
-  color: white;
-  font-weight: 600;
-}
-</file>
-
-<file path="client/src/components/Collector/Header.jsx">
-import React from "react";
-import "./Header.css";
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import { Link } from "react-router-dom";
-function Header() {
-  return (
-    <header className="header">
-      <div className="logo">
-        {/* Placeholder for logo icon */}
-        <div className="logo-icon"></div>
-        <span>Minutes Tracker System</span>
-      </div>
-
-      <div className="header-icons">
-        {/* Notification Bell Placeholder */}
-        <Link to="/collector/notifications">
-        <NotificationsIcon className="icon bell" />
-        </Link>
-        {/* Profile Circle Placeholder */}
-        <div className="icon profile">C</div>
-      </div>
-    </header>
-  );
-}
-
-export default Header;
-</file>
-
-<file path="client/src/components/Collector/IssuePage/FilterBar.css">
+<file path="client/src/components/Collector/IssuePage/CollectorFilterBar.css">
 .filter-bar {
   display: flex;
   gap: 15px;
@@ -663,10 +585,10 @@ export default Header;
 }
 </file>
 
-<file path="client/src/components/Collector/IssuePage/FilterBar.jsx">
+<file path="client/src/components/Collector/IssuePage/CollectorFilterBar.jsx">
 import React, { useEffect, useState, useRef } from "react";
-import "./FilterBar.css";
-import GenerateReports from "./GenerateReports";
+import "./CollectorFilterBar.css";
+import CollectorGenerateReports from "./CollectorGenerateReports";
 
 function FilterBar({ activeTab, onFilterChange, issue_date }) {
   const [showReportModal, setShowReportModal] = useState(false);
@@ -805,7 +727,7 @@ function FilterBar({ activeTab, onFilterChange, issue_date }) {
         </button>
       )}
 
-      <GenerateReports
+      <CollectorGenerateReports
         isOpen={showReportModal}
         onClose={() => setShowReportModal(false)}
       />
@@ -816,7 +738,77 @@ function FilterBar({ activeTab, onFilterChange, issue_date }) {
 export default FilterBar;
 </file>
 
-<file path="client/src/components/Collector/IssuePage/GenerateReports.css">
+<file path="client/src/components/Collector/IssuePage/CollectorGenerateReportCard.jsx">
+import React from "react";
+
+const GenerateReportCard = React.memo(function GenerateReportCard({
+  report,
+  index,
+  handleChange,
+  removeCard,
+}) {
+  return (
+    <div className="generate-report-card">
+      <div className="report-top">
+        <div className="report-id">{report.issue_no}</div>
+        <button className="report-delete-btn" onClick={() => removeCard(index)}>
+          🗑️
+        </button>
+      </div>
+
+      <div className="report-form">
+        <div className="form-field">
+          <label>Department:</label>
+          <input
+            type="text"
+            value={report.department}
+            onChange={e => handleChange(index, "department", e.target.value)}
+          />
+        </div>
+
+        <div className="form-field">
+          <label>Issue:</label>
+          <textarea
+            value={report.issue}
+            onChange={e => handleChange(index, "issue", e.target.value)}
+            rows="3"
+          />
+        </div>
+        <div className="form-field">
+          <label>Description:</label>
+          <textarea
+            rows="2"
+            value={report.issue_description}
+            onChange={(e) => handleChange("issue_description", e.target.value)}
+          />
+        </div>
+
+        <div className="form-field">
+          <label>Response:</label>
+          <textarea
+            value={report.response || ""}
+            onChange={e => handleChange(index, "response", e.target.value)}
+            rows="3"
+          />
+        </div>
+
+        <div className="form-field">
+          <label>Location:</label>
+          <input
+            type="text"
+            value={report.location}
+            onChange={e => handleChange(index, "location", e.target.value)}
+          />
+        </div>
+      </div>
+    </div>
+  );
+});
+
+export default GenerateReportCard;
+</file>
+
+<file path="client/src/components/Collector/IssuePage/CollectorGenerateReports.css">
 /* ==============================
    Main Container
 ============================== */
@@ -1049,127 +1041,7 @@ export default FilterBar;
 }
 </file>
 
-<file path="client/src/components/Collector/IssuePage/GenerateReports.jsx">
-import React, { useState, useEffect, useCallback } from "react";
-import "./GenerateReports.css";
-import GenerateReportCard from "./GenerateReportCard";
-
-export default function GenerateReports({ isOpen, onClose }) {
-  const [format, setFormat] = useState("pdf");
-  const [reports, setReports] = useState([]);
-
-  const handleDownload = async () => {
-    try {
-      const res = await fetch("http://127.0.0.1:8000/generate-report", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          format,
-          reports
-        })
-      });
-
-      if (!res.ok) {
-        alert("Failed to generate file");
-        return;
-      }
-
-      const blob = await res.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = format === "pdf" ? "report.pdf" : "report.xlsx";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      window.URL.revokeObjectURL(url);
-
-      onClose();
-    } catch (err) {
-      console.error("Download error:", err);
-    }
-  };
-
-  useEffect(() => {
-    if (!isOpen) return;
-
-    fetch("http://127.0.0.1:8000/issues/received")
-      .then((res) => res.json())
-      .then((data) => setReports(data))
-      .catch((err) => console.error("Error fetching reports:", err));
-  }, [isOpen]);
-
-  const handleChange = useCallback((index, field, value) => {
-    setReports((prev) => {
-      const updated = [...prev];
-      updated[index] = { ...updated[index], [field]: value };
-      return updated;
-    });
-  }, []);
-
-  const removeCard = useCallback((index) => {
-    setReports((prev) => prev.filter((_, i) => i !== index));
-  }, []);
-
-  if (!isOpen) return null;
-
-  return (
-    <div className="modal-overlay">
-      <div
-        className="generate-reports-container"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="generate-header">
-          <div className="format-toggle">
-            <button
-              className={`format-btn ${format === "pdf" ? "active" : ""}`}
-              onClick={() => setFormat("pdf")}
-            >
-              PDF
-            </button>
-            <button
-              className={`format-btn ${format === "excel" ? "active" : ""}`}
-              onClick={() => setFormat("excel")}
-            >
-              Excel
-            </button>
-          </div>
-
-          <button className="close" onClick={onClose}>
-            &times;
-          </button>
-        </div>
-
-        <div className="report-list">
-          {reports.length === 0 ? (
-            <p>No received issues available</p>
-          ) : (
-            reports.map((report, index) => (
-              <GenerateReportCard
-                key={report.id || index}
-                report={report}
-                index={index}
-                handleChange={handleChange}
-                removeCard={removeCard}
-              />
-            ))
-          )}
-        </div>
-
-        <div className="download-section">
-          <button className="generate-download-btn" onClick={handleDownload}>
-            Download Report
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-</file>
-
-<file path="client/src/components/Collector/IssuePage/IssueCard.css">
+<file path="client/src/components/Collector/IssuePage/CollectorIssueCard.css">
 .issue-card {
   background: white;
   border-radius: 10px;
@@ -1293,7 +1165,101 @@ export default function GenerateReports({ isOpen, onClose }) {
 }
 </file>
 
-<file path="client/src/components/Collector/IssuePage/Tabs.css">
+<file path="client/src/components/Collector/IssuePage/CollectorIssueCard.jsx">
+import React from "react";
+import "./CollectorIssueCard.css";
+
+function IssueCard({ issue }) {
+  const status = issue.status || "pending";
+
+  const getStatusStyle = () => {
+    switch (status) {
+      case "overdue":
+        return { borderColor: "#b91c1c" };
+      case "received":
+        return { borderColor: "#16a34a" };
+      default:
+        return { borderColor: "#facc15" };
+    }
+  };
+
+  return (
+    <div className="issue-card" style={getStatusStyle()}>
+      <div className="issue-header">
+        <span className="issue-id">{issue.issue_no}</span>
+        <span className={`status ${status}`}>{status}</span>
+      </div>
+
+      <div className="issue-body">
+        <div className="issue-row">
+          <div className="label">Department</div>
+          <div className="value">{issue.department}</div>
+        </div>
+
+        <div className="issue-row">
+          <div className="label">Issue</div>
+          <div className="value">{issue.issue}</div>
+        </div>
+        <div className="issue-row">
+          <div className="label">Description</div>
+          <div className="value">{issue.issue_description}</div>
+        </div>
+        <div className="issue-row">
+          <div className="label">Priority</div>
+          <div className="value">{issue.priority}</div>
+        </div>
+
+        <div className="issue-row">
+          <div className="label">Location</div>
+          <div className="value">{issue.location}</div>
+        </div>
+
+        <div className="issue-row">
+          <div
+            className={`label ${
+              status === "overdue" ? "overdue-text" : ""
+            }`}
+          >
+            Deadline
+          </div>
+          <div
+            className={`value ${
+              status === "overdue" ? "overdue-text" : ""
+            }`}
+          >
+            <span>{issue.deadline}</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="issue-footer">
+        <div className="footer-line"></div>
+
+        {status === "pending" && (
+          <p className="no-response">No response received yet</p>
+        )}
+
+        {status === "overdue" && (
+          <p className="no-response">Response overdue ⚠️</p>
+        )}
+
+        {status === "received" && (
+          <div className="response-received">
+            <p className="res">
+              <strong>Department Response:</strong> {issue.response}
+            </p>
+            <button className="res-button">Download Attachment</button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default IssueCard;
+</file>
+
+<file path="client/src/components/Collector/IssuePage/CollectorTabs.css">
 .tabs-container {
   display: flex;
   flex-direction: column;
@@ -1332,9 +1298,9 @@ export default function GenerateReports({ isOpen, onClose }) {
 }
 </file>
 
-<file path="client/src/components/Collector/IssuePage/Tabs.jsx">
+<file path="client/src/components/Collector/IssuePage/CollectorTabs.jsx">
 import React from "react";
-import "./Tabs.css";
+import "./CollectorTabs.css";
 
 function Tabs({ activeTab, setActiveTab }) {
   const tabs = ["Pending", "Overdue", "Received"];
@@ -1359,7 +1325,7 @@ function Tabs({ activeTab, setActiveTab }) {
 export default Tabs;
 </file>
 
-<file path="client/src/components/Department/FilterBar.css">
+<file path="client/src/components/Department/DepartmentFilterBar.css">
 .filter-bar {
   display: flex;
   gap: 15px;
@@ -1464,11 +1430,11 @@ export default Tabs;
 }
 </file>
 
-<file path="client/src/components/Department/FilterBar.jsx">
+<file path="client/src/components/Department/DepartmentFilterBar.jsx">
 import React, { useState, useEffect, useRef } from "react";
-import "./FilterBar.css";
+import "./DepartmentFilterBar.css";
 
-function FilterBar({ activeTab, onFilterChange, issue_date }) {
+function DepartmentFilterBar({ activeTab, onFilterChange, issue_date }) {
   const [date, setDate] = useState("");
   const [filterBy, setFilterBy] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
@@ -1596,11 +1562,11 @@ function FilterBar({ activeTab, onFilterChange, issue_date }) {
   );
 }
 
-export default FilterBar;
+export default DepartmentFilterBar;
 </file>
 
-<file path="client/src/components/Department/Header.css">
-.header {
+<file path="client/src/components/Department/DepartmentHeader.css">
+.dept-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1609,7 +1575,7 @@ export default FilterBar;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-.logo {
+.dept-logo {
   display: flex;
   align-items: center;
   font-weight: 600;
@@ -1617,7 +1583,7 @@ export default FilterBar;
   color: #1a1a1a;
 }
 
-.logo-icon {
+.dept-logo-icon {
   width: 28px;
   height: 28px;
   background: #2563eb;
@@ -1625,61 +1591,105 @@ export default FilterBar;
   margin-right: 10px;
 }
 
-.header-icons {
+.dept-header-icons {
   display: flex;
   align-items: center;
   gap: 15px;
+  position: relative;
 }
 
-.icon {
-  width: 30px;
-  height: 30px;
-  background: #e5e7eb;
+
+/* standard icon container */
+
+
+.dept-icon.bell {
+  background: white; /* make the circular background white */
+  color: #2563eb; /* bell color */
+  font-size: 32px;
+  margin-right: 15px;
+}
+
+.dept-icon.profile {
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.profile {
   background: #2563eb;
   color: white;
   font-weight: 600;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 36px;
+  text-align: center;
+}
+
+/* Profile dropdown */
+.dept-profile-dropdown {
+  position: absolute;
+  top: 55px;
+  right: 0;
+  background: #fff;
+  border-radius: 10px;
+  width: 140px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  padding: 8px 0;
+  animation: deptDropdownFade 0.2s ease;
+  z-index: 1000;
+}
+
+.dept-profile-dropdown button {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+  color: #111827;
+}
+
+.dept-profile-dropdown button:hover {
+  background: #f3f4f6;
+}
+
+/* Smooth appearance */
+@keyframes deptDropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.dept-logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+  color: #111827;
+}
+
+.dept-logout-btn:hover {
+  background: #f3f4f6;
+}
+
+.dept-logout-icon {
+  font-size: 18px;
+  color: #ef4444; /* subtle red for logout */
 }
 </file>
 
-<file path="client/src/components/Department/Header.jsx">
-import React from "react";
-import "./Header.css";
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import { Link } from "react-router-dom";
-function Header() {
-  return (
-    <header className="header">
-      <div className="logo">
-        {/* Placeholder for logo icon */}
-        <div className="logo-icon"></div>
-        <span>Minutes Tracker System</span>
-      </div>
-
-      <div className="header-icons">
-        {/* Notification Bell Placeholder */}
-        <Link to="/department/notifications">
-        <NotificationsIcon className="icon bell" />
-        </Link>
-        {/* Profile Circle Placeholder */}
-        <div className="icon profile">D</div>
-      </div>
-    </header>
-  );
-}
-
-export default Header;
-</file>
-
-<file path="client/src/components/Department/IssueCard.css">
+<file path="client/src/components/Department/DepartmentIssueCard.css">
 .issue-card {
-  position: relative; /* Needed for absolute positioning */
+  position: relative;
+  /* Needed for absolute positioning */
   background: white;
   border-radius: 10px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
@@ -1711,18 +1721,24 @@ export default Header;
 
 /* 🔸 Color Variations */
 .status.pending {
-  background: #fef9c3;  /* light yellow */
-  color: #854d0e;       /* dark yellow text */
+  background: #fef9c3;
+  /* light yellow */
+  color: #854d0e;
+  /* dark yellow text */
 }
 
 .status.overdue {
-  background: #fee2e2;  /* light red */
-  color: #b91c1c;       /* dark red text */
+  background: #fee2e2;
+  /* light red */
+  color: #b91c1c;
+  /* dark red text */
 }
 
 .status.submitted {
-  background: #dcfce7;  /* light green */
-  color: #166534;       /* dark green text */
+  background: #dcfce7;
+  /* light green */
+  color: #166534;
+  /* dark green text */
 }
 
 .issue-body p {
@@ -1740,10 +1756,12 @@ export default Header;
 }
 
 .issue-row .label {
-  width: 120px; /* fixed width for alignment */
+  width: 120px;
+  /* fixed width for alignment */
   font-weight: 600;
   color: #444;
-  text-align: left; /* left align text */
+  text-align: left;
+  /* left align text */
   position: relative;
   padding-right: 8px;
 }
@@ -1761,37 +1779,57 @@ export default Header;
   padding-left: 12px;
   margin-top: 6px;
 }
+
 /* 🔴 Overdue text color */
 .overdue-text {
-  color: #b91c1c !important; /* same red as your border */
+  color: #b91c1c !important;
+  /* same red as your border */
   font-weight: 600;
 }
+
 .footer-line {
   height: 1px;
   background: #eee;
   margin-top: 30px;
 }
+
 .response-received {
-  position: relative;
+  display: flex;
+  flex-direction: column;
   background-color: #F0FDF4;
-  height: 70px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  gap: 4px;
+  align-items: flex-start;
 }
+
 .res {
-  margin-left: 20px;
-  padding-top: 10px;
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: #333;
+  text-align: left;
+  width: 100%;
 }
+
+.res strong {
+  color: #000;
+  margin-right: 4px;
+}
+
 .res-button {
-  position: absolute;
-  right: 12px;
-  bottom: 12px; /* keep the button a little above the bottom */
+  align-self: flex-end;
   background: #19A752;
   color: white;
   border: none;
-  padding: 6px 10px;
+  padding: 6px 12px;
   border-radius: 6px;
   cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
   transition: background 0.2s ease;
 }
+
 .submit-btn {
   position: absolute;
   right: 12px;
@@ -1808,12 +1846,12 @@ export default Header;
 
 /* 🟡 Pending – Yellow button */
 .pending-btn {
-   background-color: #d7b838;
- color: white;
+  background-color: #d7b838;
+  color: white;
 }
 
 .pending-btn:hover {
-   background: #d7b016;
+  background: #d7b016;
   transform: scale(1.05);
 }
 
@@ -1826,18 +1864,26 @@ export default Header;
   background: #991b1b;
   transform: scale(1.05);
 }
+
 .issue-card {
   opacity: 0;
   animation: fadeInCard 0.3s ease forwards;
 }
 
 @keyframes fadeInCard {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </file>
 
-<file path="client/src/components/Department/ResponseModal.css">
+<file path="client/src/components/Department/DepartmentResponseModal.css">
 /* Overlay with blur effect */
 .modal-overlay {
   position: fixed;
@@ -2044,7 +2090,150 @@ export default Header;
 }
 </file>
 
-<file path="client/src/components/Department/Tabs.css">
+<file path="client/src/components/Department/DepartmentResponseModal.jsx">
+import React, { useRef, useState } from "react";
+import axios from "axios"; // THIS WAS MISSING
+import "./DepartmentResponseModal.css";
+import api from "../../api/axios";
+
+function ResponseModal({ isOpen, onClose, issue }) {
+  const fileInputRef = useRef(null);
+  const [fileName, setFileName] = useState("");
+  const [file, setFile] = useState(null);
+  const [responseText, setResponseText] = useState("");
+
+  if (!isOpen) return null;
+
+  const handleFileChange = (e) => {
+    const selected = e.target.files[0];
+    if (selected) {
+      setFile(selected);
+      setFileName(selected.name);
+    }
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    const selected = e.dataTransfer.files[0];
+    if (selected) {
+      setFile(selected);
+      setFileName(selected.name);
+    }
+  };
+
+  const handleDragOver = (e) => e.preventDefault();
+
+  const handleSubmit = async () => {
+    const idToSend = issue.id || issue.issue_dept_id;
+
+    if (!idToSend) {
+      alert("Error: Issue ID is missing. Please refresh the page.");
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append("issue_id", idToSend);
+      formData.append("response", responseText);
+      if (file) {
+        formData.append("attachment", file);
+      }
+
+      const res = await api.post("/submit-response", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (res.data.success) {
+        alert("Submitted successfully!");
+        onClose();
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error("Submission error:", error.response?.data || error.message);
+      alert("Submission failed!");
+    }
+  };
+
+  return (
+    <div className="modal-overlay" >
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <button className="close-btn" onClick={onClose}>
+          &times;
+        </button>
+
+        <h2 className="issue-title">Issue #{issue.issue_no}</h2>
+
+        <div className="modal-fields">
+          <div className="modal-row">
+            <label>Issue</label>
+            <input type="text" value={issue.issue} readOnly />
+          </div>
+
+          <div className="modal-row">
+            <label>Priority</label>
+            <input type="text" value={issue.priority} readOnly />
+          </div>
+
+          <div className="modal-row">
+            <label>Location</label>
+            <input type="text" value={issue.location} readOnly />
+          </div>
+
+          <div className="modal-row">
+            <label>Deadline</label>
+            <input type="text" value={issue.deadline} readOnly />
+          </div>
+
+          <div className="modal-row">
+            <label>Your Response</label>
+            <textarea
+              placeholder="Type your response here..."
+              value={responseText}
+              onChange={(e) => setResponseText(e.target.value)}
+            />
+          </div>
+
+          <div className="modal-row">
+            <label>Upload File</label>
+
+            <div
+              className="upload-area"
+              onClick={() => fileInputRef.current.click()}
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
+            >
+              {fileName ? (
+                <p className="file-name">{fileName}</p>
+              ) : (
+                <p>
+                  <strong>Click to upload</strong> or drag and drop file here
+                </p>
+              )}
+
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                hidden
+              />
+            </div>
+          </div>
+        </div>
+
+        <button className="su" onClick={handleSubmit}>
+          Submit
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export default ResponseModal;
+</file>
+
+<file path="client/src/components/Department/DepartmentTabs.css">
 .tabs-container {
   display: flex;
   flex-direction: column;
@@ -2082,11 +2271,11 @@ export default Header;
 }
 </file>
 
-<file path="client/src/components/Department/Tabs.jsx">
+<file path="client/src/components/Department/DepartmentTabs.jsx">
 import React from "react";
-import "./Tabs.css";
+import "./DepartmentTabs.css";
 
-function Tabs({ activeTab, setActiveTab }) {
+function DepartmentTabs({ activeTab, setActiveTab }) {
   const tabs = ["Pending", "Overdue", "Submitted"];
 
   return (
@@ -2106,11 +2295,11 @@ function Tabs({ activeTab, setActiveTab }) {
   );
 }
 
-export default Tabs;
+export default DepartmentTabs;
 </file>
 
-<file path="client/src/components/DPO/Header.css">
-.header {
+<file path="client/src/components/DPO/DPOHeader.css">
+.dpo-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -2119,7 +2308,7 @@ export default Tabs;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-.logo {
+.dpo-logo {
   display: flex;
   align-items: center;
   font-weight: 600;
@@ -2127,7 +2316,7 @@ export default Tabs;
   color: #1a1a1a;
 }
 
-.logo-icon {
+.dpo-logo-icon {
   width: 28px;
   height: 28px;
   background: #2563eb;
@@ -2135,48 +2324,102 @@ export default Tabs;
   margin-right: 10px;
 }
 
+.dpo-header-icons {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  position: relative;
+}
+
 
 /* standard icon container */
 
 
-.icon.bell {
+.dpo-icon.bell {
   background: white; /* make the circular background white */
   color: #2563eb; /* bell color */
   font-size: 32px;
   margin-right: 15px;
 }
-</file>
 
-<file path="client/src/components/DPO/Header.jsx">
-import React from "react";
-import "./Header.css";
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import { Link } from "react-router-dom";
-function Header() {
-  return (
-    <header className="header">
-      <div className="logo">
-        {/* Placeholder for logo icon */}
-        <div className="logo-icon"></div>
-        <span>Minutes Tracker System</span>
-      </div>
-
-      <div className="header-icons">
-        {/* Notification Bell Placeholder */}
-        <Link to="/dpo/notifications">
-        <NotificationsIcon className="icon bell" />
-        </Link>
-        {/* Profile Circle Placeholder */}
-        <div className="icon profile">D</div>
-      </div>
-    </header>
-  );
+.dpo-icon.profile {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #2563eb;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 30px;
+  text-align: center;
 }
 
-export default Header;
+/* Profile dropdown */
+.dpo-profile-dropdown {
+  position: absolute;
+  top: 55px;
+  right: 0;
+  background: #fff;
+  border-radius: 10px;
+  width: 140px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  padding: 8px 0;
+  animation: dpoDropdownFade 0.2s ease;
+  z-index: 1000;
+}
+
+.dpo-profile-dropdown button {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+  color: #111827;
+}
+
+.dpo-profile-dropdown button:hover {
+  background: #f3f4f6;
+}
+
+/* Smooth appearance */
+@keyframes dpoDropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.dpo-logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+  color: #111827;
+}
+
+.dpo-logout-btn:hover {
+  background: #f3f4f6;
+}
+
+.dpo-logout-icon {
+  font-size: 18px;
+  color: #ef4444; /* subtle red for logout */
+}
 </file>
 
-<file path="client/src/components/DPO/IssuePage/FilterBar.css">
+<file path="client/src/components/DPO/IssuePage/DPOFilterBar.css">
 .filter-bar {
   display: flex;
   gap: 15px;
@@ -2186,12 +2429,12 @@ export default Header;
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   margin-bottom: 20px;
-  flex-wrap: wrap;
-  position: relative; /* positioning context for floating buttons */
-}
-.filter-bar {
+
+  position: relative;
   transition: all 0.2s ease;
 }
+
+/* ================= SEARCH ================= */
 
 .search-wrapper {
   position: relative;
@@ -2203,7 +2446,7 @@ export default Header;
 }
 
 .search-wrapper input {
-  padding: 10px 35px 10px 35px;
+  padding: 10px 35px;
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 0.9rem;
@@ -2216,6 +2459,8 @@ export default Header;
   user-select: none;
 }
 
+/* ================= DATE INPUT ================= */
+
 .date-input-wrapper {
   position: relative;
   display: flex;
@@ -2227,10 +2472,10 @@ export default Header;
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 0.9rem;
-  width: 160px;
 }
 
 .calendar-icon {
+  position: absolute;
   right: 10px;
   font-size: 1rem;
   color: #666;
@@ -2238,10 +2483,12 @@ export default Header;
   user-select: none;
 }
 
+/* ================= FILTER / SORT GROUP ================= */
+
 .filter-group {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .filter-group label {
@@ -2250,15 +2497,22 @@ export default Header;
   min-width: 60px;
 }
 
-.filter-select {
+/* ===== COMMON CONTROL STYLE (Filter & Sort SAME) ===== */
+
+.filter-select,
+.filter-btn {
   padding: 10px 12px;
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 0.9rem;
   width: 160px;
-  color: #333;
   background: white;
+  color: #333;
+  cursor: pointer;
+  text-align: left;
 }
+
+/* ================= GENERATE BUTTON ================= */
 
 .generate-btn {
   background: #2563eb;
@@ -2274,6 +2528,8 @@ export default Header;
 .generate-btn:hover {
   background: #1d4ed8;
 }
+
+/* ================= UPLOAD BUTTON ================= */
 
 .upload-btn {
   position: absolute;
@@ -2301,162 +2557,73 @@ export default Header;
 .upload-btn:hover {
   background: #059669;
 }
-</file>
 
-<file path="client/src/components/DPO/IssuePage/FilterBar.jsx">
-import React, { useEffect, useState, useRef } from "react";
-import "./FilterBar.css";
-import GenerateReports from "./GenerateReports";
+/* ================= CUSTOM FILTER DROPDOWN ================= */
 
-function FilterBar({ activeTab, onFilterChange, issue_date }) {
-  const [showReportModal, setShowReportModal] = useState(false);
-  const [date, setDate] = useState([]);
-  const [filterBy, setFilterBy] = useState("all");
-  const [sortBy, setSortBy] = useState("newest");
-  const [searchQuery, setSearchQuery] = useState("");
-  const datePickerRef = useRef(null);
+.custom-filter,
+.filter-dropdown {
+  position: relative;
 
-  const handleGenerate = () => {
-    setShowReportModal(true);
-  };
-
-  // When parent updates issue_date, update local date state
-  useEffect(() => {
-    if (issue_date) {
-      setDate(issue_date);
-    }
-  }, [issue_date]);
-
-  const handleFilterChange = (type, value) => {
-    let updatedFilters = {
-      date,
-      filterBy,
-      sortBy,
-      searchQuery
-    };
-
-    if (type === "date") {
-      updatedFilters.date = formatDateInput(value);
-      setDate(updatedFilters.date);
-    } else if (type === "filterBy") {
-      updatedFilters.filterBy = value;
-      setFilterBy(value);
-    } else if (type === "sortBy") {
-      updatedFilters.sortBy = value;
-      setSortBy(value);
-    } else if (type === "search") {
-      updatedFilters.searchQuery = value;
-      setSearchQuery(value);
-    }
-
-    onFilterChange(updatedFilters);
-  };
-
-  const handleDatePick = (e) => {
-    const parts = e.target.value.split("-");
-    if (parts.length === 3) {
-      const formatted = `${parts[2]}-${parts[1]}-${parts[0]}`;
-      setDate(formatted);
-      handleFilterChange("date", formatted);
-    }
-  };
-
-  const formatDateInput = (raw) => {
-    const digits = raw.replace(/\D/g, "").slice(0, 8);
-    if (digits.length <= 2) return digits;
-    if (digits.length <= 4) return `${digits.slice(0, 2)}-${digits.slice(2)}`;
-    return `${digits.slice(0, 2)}-${digits.slice(2, 4)}-${digits.slice(4)}`;
-  };
-
-  const handleDateChange = (e) => {
-    const formatted = formatDateInput(e.target.value);
-    setDate(formatted);
-    handleFilterChange("date", formatted);
-  };
-
-  return (
-    <div className="filter-bar">
-      <div className="search-wrapper">
-        <span className="search-icon">🔍</span>
-        <input
-          type="text"
-          placeholder="Search issues..."
-          value={searchQuery}
-          onChange={(e) => handleFilterChange("search", e.target.value)}
-        />
-      </div>
-
-      <div className="date-input-wrapper">
-        <input
-          type="text"
-          placeholder="dd-mm-yyyy"
-          value={date}
-          onChange={handleDateChange}
-        />
-        <span
-          className="calendar-icon"
-          onClick={() => datePickerRef.current.showPicker()}
-        >
-          📅
-        </span>
-
-        {/* hidden actual date picker */}
-        <input
-          type="date"
-          ref={datePickerRef}
-          onChange={handleDatePick}
-          style={{ visibility: "hidden", position: "absolute" }}
-        />
-      </div>
-
-      <div className="filter-group">
-        <label>Filter By:</label>
-        <select
-          value={filterBy}
-          onChange={(e) => handleFilterChange("filterBy", e.target.value)}
-          className="filter-select"
-        >
-          <option value="all">All Issues</option>
-          <option value="high">High Priority</option>
-          <option value="medium">Medium Priority</option>
-          <option value="low">Low Priority</option>
-          <option value="health">Health Dept</option>
-          <option value="education">Education Dept</option>
-          <option value="works">Public Works</option>
-        </select>
-      </div>
-
-      <div className="filter-group">
-        <label>Sort By:</label>
-        <select
-          value={sortBy}
-          onChange={(e) => handleFilterChange("sortBy", e.target.value)}
-          className="filter-select"
-        >
-          <option value="priority">Priority</option>
-          <option value="department">Department</option>
-          <option value="deadline">Deadline</option>
-        </select>
-      </div>
-
-      {activeTab === "Received" && (
-        <button className="generate-btn" onClick={handleGenerate}>
-          Generate Report
-        </button>
-      )}
-
-      <GenerateReports
-        isOpen={showReportModal}
-        onClose={() => setShowReportModal(false)}
-      />
-    </div>
-  );
 }
 
-export default FilterBar;
+/* Dropdown Menu */
+.filter-menu {
+  display: none;
+  position: absolute;
+  top: 39px;
+  left: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  min-width: 160px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  z-index: 50;
+}
+
+.filter-dropdown:hover .filter-menu {
+  display: block;
+}
+
+/* Dropdown Items */
+.filter-item {
+  padding: 10px 12px;
+  cursor: pointer;
+  position: relative;
+  white-space: nowrap;
+}
+
+.filter-item:hover {
+  background: #f3f4f6;
+}
+
+/* ================= SUB MENU ================= */
+
+.sub-menu {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 100%;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  min-width: 160px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.filter-item:hover .sub-menu {
+  display: block;
+}
+
+.sub-menu div {
+  padding: 10px 12px;
+}
+
+.sub-menu div:hover {
+  background: #e5e7eb;
+}
 </file>
 
-<file path="client/src/components/DPO/IssuePage/GenerateReportCard.jsx">
+<file path="client/src/components/DPO/IssuePage/DPOGenerateReportCard.jsx">
 import React from "react";
 
 const GenerateReportCard = React.memo(function GenerateReportCard({
@@ -2518,7 +2685,7 @@ const GenerateReportCard = React.memo(function GenerateReportCard({
 export default GenerateReportCard;
 </file>
 
-<file path="client/src/components/DPO/IssuePage/GenerateReports.css">
+<file path="client/src/components/DPO/IssuePage/DPOGenerateReports.css">
 /* ==============================
    Main Container
 ============================== */
@@ -2751,134 +2918,15 @@ export default GenerateReportCard;
 }
 </file>
 
-<file path="client/src/components/DPO/IssuePage/GenerateReports.jsx">
-import React, { useState, useEffect, useCallback } from "react";
-import "./GenerateReports.css";
-import GenerateReportCard from "./GenerateReportCard";
-
-export default function GenerateReports({ isOpen, onClose }) {
-  const [format, setFormat] = useState("pdf");
-  const [reports, setReports] = useState([]);
-
-  const handleDownload = async () => {
-    try {
-      const res = await fetch("http://localhost:5000/generate-report", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          format,
-          reports
-        })
-      });
-
-      if (!res.ok) {
-        alert("Failed to generate file");
-        return;
-      }
-
-      const blob = await res.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = format === "pdf" ? "report.pdf" : "report.xlsx";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      window.URL.revokeObjectURL(url);
-
-      onClose();
-    } catch (err) {
-      console.error("Download error:", err);
-    }
-  };
-
-  useEffect(() => {
-    if (!isOpen) return;
-
-    fetch("http://localhost:5000/issues/received")
-      .then((res) => res.json())
-      .then((data) => setReports(data))
-      .catch((err) => console.error("Error fetching reports:", err));
-  }, [isOpen]);
-
-  const handleChange = useCallback((index, field, value) => {
-    setReports((prev) => {
-      const updated = [...prev];
-      updated[index] = { ...updated[index], [field]: value };
-      return updated;
-    });
-  }, []);
-
-  const removeCard = useCallback((index) => {
-    setReports((prev) => prev.filter((_, i) => i !== index));
-  }, []);
-
-  if (!isOpen) return null;
-
-  return (
-    <div className="modal-overlay">
-      <div
-        className="generate-reports-container"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="generate-header">
-          <div className="format-toggle">
-            <button
-              className={`format-btn ${format === "pdf" ? "active" : ""}`}
-              onClick={() => setFormat("pdf")}
-            >
-              PDF
-            </button>
-            <button
-              className={`format-btn ${format === "excel" ? "active" : ""}`}
-              onClick={() => setFormat("excel")}
-            >
-              Excel
-            </button>
-          </div>
-
-          <button className="close" onClick={onClose}>
-            &times;
-          </button>
-        </div>
-
-        <div className="report-list">
-          {reports.length === 0 ? (
-            <p>No received issues available</p>
-          ) : (
-            reports.map((report, index) => (
-              <GenerateReportCard
-                key={report.id || index}
-                report={report}
-                index={index}
-                handleChange={handleChange}
-                removeCard={removeCard}
-              />
-            ))
-          )}
-        </div>
-
-        <div className="download-section">
-          <button className="generate-download-btn" onClick={handleDownload}>
-            Download Report
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-</file>
-
-<file path="client/src/components/DPO/IssuePage/IssueCard.css">
+<file path="client/src/components/DPO/IssuePage/DPOIssueCard.css">
 .issue-card {
   background: white;
   border-radius: 10px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
   padding: 20px;
   margin-top: 10px;
-  border-left: 5px solid #facc15; /* default yellow for pending */
+  border-left: 5px solid #facc15;
+  /* default yellow for pending */
 }
 
 .issue-header {
@@ -2903,18 +2951,24 @@ export default function GenerateReports({ isOpen, onClose }) {
 
 /* 🔸 Color Variations */
 .status.pending {
-  background: #fef9c3;  /* light yellow */
-  color: #854d0e;       /* dark yellow text */
+  background: #fef9c3;
+  /* light yellow */
+  color: #854d0e;
+  /* dark yellow text */
 }
 
 .status.overdue {
-  background: #fee2e2;  /* light red */
-  color: #b91c1c;       /* dark red text */
+  background: #fee2e2;
+  /* light red */
+  color: #b91c1c;
+  /* dark red text */
 }
 
 .status.received {
-  background: #dcfce7;  /* light green */
-  color: #166534;       /* dark green text */
+  background: #dcfce7;
+  /* light green */
+  color: #166534;
+  /* dark green text */
 }
 
 .issue-body p {
@@ -2932,10 +2986,12 @@ export default function GenerateReports({ isOpen, onClose }) {
 }
 
 .issue-row .label {
-  width: 120px; /* fixed width for alignment */
+  width: 120px;
+  /* fixed width for alignment */
   font-weight: 600;
   color: #444;
-  text-align: left; /* left align text */
+  text-align: left;
+  /* left align text */
   position: relative;
   padding-right: 8px;
 }
@@ -2953,49 +3009,77 @@ export default function GenerateReports({ isOpen, onClose }) {
   padding-left: 12px;
   margin-top: 6px;
 }
+
 /* 🔴 Overdue text color */
 .overdue-text {
-  color: #b91c1c !important; /* same red as your border */
+  color: #b91c1c !important;
+  /* same red as your border */
   font-weight: 600;
 }
+
 .footer-line {
   height: 1px;
   background: #eee;
   margin-top: 30px;
 }
+
 .response-received {
-  position: relative;
+  display: flex;
+  flex-direction: column;
   background-color: #F0FDF4;
-  height: 70px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  gap: 4px;
+  align-items: flex-start;
 }
+
 .res {
-  margin-left: 20px;
-  padding-top: 10px;
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: #333;
+  text-align: left;
+  width: 100%;
 }
+
+.res strong {
+  color: #000;
+  margin-right: 4px;
+}
+
 .res-button {
-  position: absolute;
-  right: 12px;
-  bottom: 12px; /* keep the button a little above the bottom */
+  align-self: flex-end;
+  /* Align button to the right */
   background: #19A752;
   color: white;
   border: none;
-  padding: 6px 10px;
+  padding: 6px 12px;
   border-radius: 6px;
   cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
   transition: background 0.2s ease;
 }
+
 .issue-card {
   opacity: 0;
   animation: fadeInCard 0.3s ease forwards;
 }
 
 @keyframes fadeInCard {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </file>
 
-<file path="client/src/components/DPO/IssuePage/Tabs.css">
+<file path="client/src/components/DPO/IssuePage/DPOTabs.css">
 .tabs-container {
   display: flex;
   flex-direction: column;
@@ -3034,9 +3118,9 @@ export default function GenerateReports({ isOpen, onClose }) {
 }
 </file>
 
-<file path="client/src/components/DPO/IssuePage/Tabs.jsx">
+<file path="client/src/components/DPO/IssuePage/DPOTabs.jsx">
 import React from "react";
-import "./Tabs.css";
+import "./DPOTabs.css";
 
 function Tabs({ activeTab, setActiveTab }) {
   const tabs = ["Pending", "Overdue", "Received"];
@@ -3061,7 +3145,7 @@ function Tabs({ activeTab, setActiveTab }) {
 export default Tabs;
 </file>
 
-<file path="client/src/components/DPO/UploadPage/AssignIssues.css">
+<file path="client/src/components/DPO/UploadPage/DPOAssignIssues.css">
 /* ==============================
    Main Container
 ============================== */
@@ -3268,7 +3352,205 @@ export default Tabs;
 }
 </file>
 
-<file path="client/src/components/DPO/UploadPage/Stepper.css">
+<file path="client/src/components/DPO/UploadPage/DPOAssignIssues.jsx">
+// AssignIssues.jsx
+import React, { useState, useEffect } from "react";
+import "./DPOAssignIssues.css";
+import { Link } from "react-router-dom";
+import DPOIssueAssignCard from "./DPOIssueAssignCard";
+import api from "../../../api/axios";
+
+export default function AssignIssues() {
+  const [issues, setIssues] = useState([]);
+
+  // 🔹 Fetch issues from backend on load
+  useEffect(() => {
+    const fetchIssues = async () => {
+      try {
+        const res = await api.get("/assign-issues");
+        setIssues(res.data);
+      } catch (err) {
+        console.error("Failed to load issues:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchIssues();
+  }, []);
+
+  // 🔹 Handle editing issue fields (department, deadline, priority etc.)
+  const handleChange = (index, field, value) => {
+    setIssues(prev => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], [field]: value };
+      return updated;
+    });
+  };
+
+  // 🔹 Allocate all issues
+  const handleAllocateAll = () => {
+    api
+      .post("/assign-issues/allocate-all", { issues })
+      .then(() => alert("All issues allocated!"))
+      .catch(err => console.error(err));
+  };
+
+
+  return (
+    <div className="assign-issues-container">
+      <div className="assign-header">
+        <h2>Assign Issues</h2>
+
+        <Link to="/dpo">
+          <button className="allocate-btn" onClick={handleAllocateAll}>
+            Allocate All
+          </button>
+        </Link>
+      </div>
+
+      {/* No issues */}
+      {issues.length === 0 && <p>No pending issues found</p>}
+
+      {/* Issue Cards */}
+      <div className="issue-cards">
+        {issues.map((issue, index) => (
+          <DPOIssueAssignCard
+            key={issue.issue_id}
+            issue={issue}
+            index={index}
+            onChange={handleChange}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="client/src/components/DPO/UploadPage/DPOIssueAssignCard.jsx">
+// IssueAssignCard.jsx
+import React, { useRef } from "react";
+
+export default function IssueAssignCard({ issue, onChange, index }) {
+  const dateRef = useRef(null);
+
+  const handleChange = (field, value) => onChange(index, field, value);
+
+  // Format text input as DD-MM-YYYY while typing
+  const formatDateInput = (text) => {
+    const digits = text.replace(/\D/g, ""); // keep only numbers
+    let day = digits.substring(0, 2);
+    let month = digits.substring(2, 4);
+    let year = digits.substring(4, 8);
+
+    let formatted = day;
+    if (month) formatted += "-" + month;
+    if (year) formatted += "-" + year;
+
+    return formatted;
+  };
+
+  // Convert date picker value YYYY-MM-DD → DD-MM-YYYY
+  const convertDatePickerValue = (value) => {
+    const [y, m, d] = value.split("-");
+    return `${d}-${m}-${y}`;
+  };
+
+  return (
+    <div className="issue-assign-card">
+      <div className="issue-top">
+        <div className="entry-id">{issue.issue_no}</div>
+        <button className="delete-btn">🗑️</button>
+      </div>
+
+      <div className="issue-form">
+        <div className="form-field">
+          <label>Department:</label>
+          <input
+            type="text"
+            value={issue.department}
+            onChange={(e) => handleChange("department", e.target.value)}
+          />
+        </div>
+
+        <div className="form-field">
+          <label>Issue title:</label>
+          <textarea
+            rows="2"
+            value={issue.issue}
+            onChange={(e) => handleChange("issue", e.target.value)}
+          />
+        </div>
+        <div className="form-field">
+          <label>Description:</label>
+          <textarea
+            rows="2"
+            value={issue.issue_description}
+            onChange={(e) => handleChange("issue_description", e.target.value)}
+          />
+        </div>
+
+        <div className="form-field">
+          <label>Priority:</label>
+          <select
+            value={issue.priority}
+            onChange={(e) => handleChange("priority", e.target.value)}
+          >
+            <option>High</option>
+            <option>Medium</option>
+            <option>Low</option>
+          </select>
+        </div>
+
+        <div className="form-field">
+          <label>Location:</label>
+          <input
+            type="text"
+            value={issue.location}
+            onChange={(e) => handleChange("location", e.target.value)}
+          />
+        </div>
+
+        {/* ----- DEADLINE FIELD WITH DATE PICKER ----- */}
+        <div className="form-field">
+          <label>Deadline:</label>
+          <div className="deadline-input">
+            <input
+              type="text"
+              placeholder="DD-MM-YYYY"
+              value={issue.deadline}
+              onChange={(e) =>
+                handleChange("deadline", formatDateInput(e.target.value))
+              }
+            />
+
+            {/* Hidden date picker */}
+            <input
+              type="date"
+              ref={dateRef}
+              style={{ display: "none" }}
+              onChange={(e) =>
+                handleChange("deadline", convertDatePickerValue(e.target.value))
+              }
+            />
+
+            <span
+              className="calendar-icon"
+              onClick={() => dateRef.current.showPicker()}
+              style={{ cursor: "pointer" }}
+            >
+              📅
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="client/src/components/DPO/UploadPage/DPOStepper.css">
 .stepper-container {
   display: flex;
   align-items: center;
@@ -3335,9 +3617,9 @@ export default Tabs;
 }
 </file>
 
-<file path="client/src/components/DPO/UploadPage/Stepper.jsx">
+<file path="client/src/components/DPO/UploadPage/DPOStepper.jsx">
 import React from "react";
-import "./Stepper.css";
+import "./DPOStepper.css";
 
 export default function Stepper({ step }) {
   return (
@@ -3362,7 +3644,7 @@ export default function Stepper({ step }) {
 }
 </file>
 
-<file path="client/src/components/DPO/UploadPage/UploadForm.css">
+<file path="client/src/components/DPO/UploadPage/DPOUploadForm.css">
 /* src/components/Upload/UploadForm.css */
 
 .upload-form {
@@ -3478,6 +3760,287 @@ export default function Stepper({ step }) {
   flex-direction: column;
   gap: 10px;
 }
+.loading-card {
+   background: #fff;
+  border-radius: 14px;
+  padding: 28px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  max-width: 550px;
+  margin: 0 auto;
+  font-family: "Inter", sans-serif;
+  margin-top: -20px;
+}
+
+/* ================= EXTRACTION ANIMATION ================= */
+.extract-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  font-family: system-ui, sans-serif;
+}
+h4{
+   color:#2563eb;
+  align-items:center;
+  justify-content:center
+}
+
+.document {
+  position: relative;
+  width: 220px;
+  height: 240px;
+  background: #f9fbff;
+  border: 2px solid #2979ff;
+  border-radius: 10px;
+  padding: 20px;
+  overflow: hidden;
+}
+
+/* Document fill effect */
+.document::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 0%;
+  width: 100%;
+  background: rgba(41, 121, 255, 0.08);
+  animation: fillDoc 4s ease-in-out infinite;
+  z-index: 0;
+}
+
+/* Scanning line */
+.scan-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  background: linear-gradient(90deg, transparent, #2979ff, transparent);
+  animation: scan 2s ease-in-out infinite;
+  z-index: 2;
+}
+
+/* Fake extracted fields */
+.field {
+  height: 14px;
+  background: #cfe0ff;
+  border-radius: 4px;
+  margin-bottom: 14px;
+  animation: highlight 2s ease-in-out infinite;
+  position: relative;
+  z-index: 1;
+}
+
+.field.short { width: 60%; }
+.field.medium { width: 80%; }
+
+/* Status text */
+.status {
+  font-size: 1px;
+  color: #2979ff;
+  letter-spacing: 0.3px;
+
+}
+
+/* Animations */
+@keyframes scan {
+  0% { top: 0; opacity: 0; }
+  10% { opacity: 1; }
+  50% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+@keyframes fillDoc {
+  0% { height: 0%; }
+  100% { height: 100%; }
+}
+
+@keyframes highlight {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+</file>
+
+<file path="client/src/components/DPO/UploadPage/DPOUploadForm.jsx">
+// src/components/Upload/UploadForm.jsx
+import React, { useRef, useState, useEffect } from "react";
+import "./DPOUploadForm.css";
+import api from "../../../api/axios";
+
+export default function UploadForm({ onProcessed }) {
+  /* ================= REFS ================= */
+  const datePickerRef = useRef(null);
+
+  /* ================= STATE ================= */
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [fileName, setFileName] = useState("");
+  const [date, setDate] = useState("");
+  const [dragOver, setDragOver] = useState(false);
+  const [uploading, setUploading] = useState(false);
+
+  /* ================= STATUS TEXT ================= */
+  const statusMessages = [
+    "This may take a few moments…",
+    "Scanning document…",
+    "Extracting fields…",
+    "Validating extracted data…",
+  ];
+
+  const [statusIndex, setStatusIndex] = useState(0);
+
+  /* ================= EFFECTS ================= */
+  useEffect(() => {
+    if (!uploading) return;
+
+    const interval = setInterval(() => {
+      setStatusIndex((prev) => (prev + 1) % statusMessages.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [uploading, statusMessages.length]);
+
+  /* ================= HELPERS ================= */
+  const formatDateInput = (raw) => {
+    const digits = raw.replace(/\D/g, "").slice(0, 8);
+    if (digits.length <= 2) return digits;
+    if (digits.length <= 4) return `${digits.slice(0, 2)}-${digits.slice(2)}`;
+    return `${digits.slice(0, 2)}-${digits.slice(2, 4)}-${digits.slice(4)}`;
+  };
+
+  /* ================= HANDLERS ================= */
+  const handleDateChange = (e) => {
+    setDate(formatDateInput(e.target.value));
+  };
+
+  const handleHiddenDatePick = (e) => {
+    const [year, month, day] = e.target.value.split("-");
+    if (day) setDate(`${day}-${month}-${year}`);
+  };
+
+  const handleFileSelect = (file) => {
+    if (!file) return;
+    setSelectedFile(file);
+    setFileName(file.name);
+  };
+
+  const handleUploadAndProcess = async () => {
+    if (!date || !selectedFile) {
+      alert("Please select a date and upload a file.");
+      return;
+    }
+
+    try {
+      setUploading(true);
+
+      const formData = new FormData();
+      formData.append("meeting_date", date);
+      formData.append("file", selectedFile);
+
+      await api.post("/upload-minutes", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      onProcessed();
+    } catch (err) {
+      console.error("Upload error:", err);
+      alert("Failed to upload file.");
+      setUploading(false);
+    }
+  };
+
+  /* ================= LOADING UI ================= */
+  if (uploading) {
+    return (
+      <div className="upload-form loading-card">
+        <h4>Extracting fields from document…</h4>
+
+        <div className="extract-wrapper">
+          <div className="document">
+            <div className="scan-line"></div>
+
+            <div className="field"></div>
+            <div className="field short"></div>
+            <div className="field"></div>
+            <div className="field medium"></div>
+          </div>
+
+          <p className="status">{statusMessages[statusIndex]}</p>
+        </div>
+      </div>
+    );
+  }
+
+  /* ================= FORM UI ================= */
+  return (
+    <div className="upload-form">
+      <h2 className="upload-title">Upload Meeting Minutes</h2>
+
+      <div className="form-content">
+        {/* DATE */}
+        <label className="field-label">Upload Date</label>
+        <div className="date-input-wrapper">
+          <input
+            type="text"
+            placeholder="dd-mm-yyyy"
+            value={date}
+            onChange={handleDateChange}
+            maxLength={10}
+          />
+
+          <span
+            className="calendar-icon"
+            onClick={() => datePickerRef.current?.showPicker()}
+          >
+            📅
+          </span>
+
+          <input
+            type="date"
+            ref={datePickerRef}
+            onChange={handleHiddenDatePick}
+            style={{ visibility: "hidden", position: "absolute" }}
+          />
+        </div>
+
+        {/* FILE */}
+        <label className="field-label">Upload Minutes File</label>
+        <div
+          className={`file-drop ${dragOver ? "drag-over" : ""}`}
+          onDragOver={(e) => {
+            e.preventDefault();
+            setDragOver(true);
+          }}
+          onDragLeave={() => setDragOver(false)}
+          onDrop={(e) => {
+            e.preventDefault();
+            setDragOver(false);
+            handleFileSelect(e.dataTransfer.files?.[0]);
+          }}
+        >
+          <div className="file-drop-inner">
+            <div className="file-icon">📄</div>
+            <div className="file-text">
+              {fileName || "Click to upload or drag and drop"}
+            </div>
+
+            <input
+              type="file"
+              className="file-input"
+              accept=".pdf,.doc,.docx"
+              onChange={(e) => handleFileSelect(e.target.files?.[0])}
+            />
+          </div>
+        </div>
+
+        {/* SUBMIT */}
+        <button className="up" onClick={handleUploadAndProcess}>
+          Upload & Continue
+        </button>
+      </div>
+    </div>
+  );
+}
 </file>
 
 <file path="client/src/index.css">
@@ -3562,103 +4125,6 @@ h1 {
 justify-content: space-between;
 
 }
-</file>
-
-<file path="client/src/pages/CollectorPage/CollectorIssuePage.jsx">
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import Header from "../../components/Collector/Header";
-import Tabs from "../../components/Collector/IssuePage/Tabs";
-import FilterBar from "../../components/Collector/IssuePage/FilterBar";
-import IssueCard from "../../components/Collector/IssuePage/IssueCard";
-import "./CollectorIssuePage.css";
-
-function CollectorIssuePage() {
-  const [activeTab, setActiveTab] = useState("Pending");
-  const [filters, setFilters] = useState({});
-  const [issues, setIssues] = useState([]);
-  const [isSearching, setIsSearching] = useState(false); // NEW
-  const [loading, setLoading] = useState(false);
-
-  const lastIssueDate =
-    issues.length > 0 ? issues[issues.length - 1].assigned_date : "";
-
-  // Fetch issues from backend
-  useEffect(() => {
-    setLoading(true); // start
-
-    const params = {
-      status: filters.searchQuery ? "" : activeTab.toLowerCase(),
-      search: filters.searchQuery || "",
-      date: filters.date || "",
-      filterBy: filters.filterBy || "all",
-      sortBy: filters.sortBy || "newest",
-    };
-
-    axios
-      .get("http://localhost:5000/issues", { params })
-      .then((res) => {
-        const data = res.data;
-        setIssues(data);
-
-        if (isSearching && data.length > 0) {
-          const status = data[0].status;
-          const newTab = status.charAt(0).toUpperCase() + status.slice(1);
-          if (newTab !== activeTab) setActiveTab(newTab);
-        }
-      })
-      .catch((err) => console.error("Error fetching issues:", err))
-      .finally(() => setLoading(false)); // end
-  }, [activeTab, filters, isSearching]);
-
-  return (
-    <div className="dpo-container">
-      <Header />
-
-      <div className="content">
-        <div className="page-title">
-          <h1>Issue Tracking & Management</h1>
-        </div>
-
-        {/* When filter changes, enable searching mode */}
-        <FilterBar
-          activeTab={activeTab}
-          onFilterChange={(newFilters) => {
-            setFilters(newFilters);
-            setIsSearching(!!newFilters.searchQuery);
-          }}
-          issue_date={lastIssueDate}
-        />
-
-        {/* Manual tab change should turn off searching mode */}
-        <Tabs
-          activeTab={activeTab}
-          setActiveTab={(tab) => {
-            setActiveTab(tab);
-            setIsSearching(false);
-          }}
-        />
-
-        <div className="tab-scroll-area">
-          {loading ? (
-            <p className="loading-text">Loading...</p>
-          ) : issues.length === 0 ? (
-            <p className="no-issues">No issues found</p>
-          ) : (
-            issues
-              .filter(
-                (issue) =>
-                  issue.status.toLowerCase() === activeTab.toLowerCase()
-              )
-              .map((issue) => <IssueCard key={issue.issue_no} issue={issue} />)
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default CollectorIssuePage;
 </file>
 
 <file path="client/src/pages/CollectorPage/NotificationPage.css">
@@ -3769,66 +4235,6 @@ h1 {
     padding: 18px;
   }
 }
-</file>
-
-<file path="client/src/pages/CollectorPage/NotificationPage.jsx">
-import React from "react";
-import Header from "../../components/Collector/Header";
-import "./NotificationPage.css";
-
-function CollectorNotificationPage() {
-  const notifications = [
-    {
-      id: 1,
-      title: "Response Received",
-      message: "A response has been submitted for Issue #1023.",
-      time: "10 minutes ago",
-      type: "response",
-    },
-    {
-      id: 2,
-      title: "Deadline Exceeded",
-      message: "Issue #1009 has exceeded its deadline. Immediate attention required.",
-      time: "1 hour ago",
-      type: "deadline",
-    },
-  ];
-
-  return (
-    <div className="notificationpage-container">
-      <Header activeTab="notifications" />
-
-      <div className="notificationpage-content">
-        <div className="notification-header">
-          <h1>Notifications</h1>
-        </div>
-
-        <div className="notification-list">
-          {notifications.map((note) => (
-                <div key={note.id} className={`notification-card ${note.type}`}>
-              <div className="notification-icon">
-                {note.type === "response" && <span>📩</span>}
-                {note.type === "deadline" && <span>⏰</span>}
-              </div>
-
-              <div className="notification-content">
-                <h3>{note.title}</h3>
-                <p>{note.message}</p>
-                <span className="time">{note.time}</span>
-              </div>
-            </div>
-          ))}
-
-          {notifications.length === 0 && (
-            <div className="no-notifications">No new notifications</div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default CollectorNotificationPage;
 </file>
 
 <file path="client/src/pages/DepartmentPage/DepartmentResponsePage.css">
@@ -4021,108 +4427,6 @@ justify-content: space-between;
 }
 </file>
 
-<file path="client/src/pages/DPOPage/DPOIssuePage.css">
-.dpo-container {
-  width: 100%;
-}
-
-.content {
-  padding: 10px 70px;
-}
-
-h1 {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 20px;
-  color: #111;
-}
-
-.filters {
-  display: flex;
-  gap: 15px;
-  align-items: center;
-  background: white;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-  margin-bottom: 20px;
-}
-
-.filters input,
-.filters select {
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 0.9rem;
-}
-
-.generate-btn {
-  background: #2563eb;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.generate-btn:hover {
-  background: #1d4ed8;
-}
-.page-title {
-  display: flex;
-justify-content: space-between;
-
-}
-
-.upload-icon {
-  color: black;
-  border-radius: 8px; /* keep it slightly rounded, not circular */
-  padding: 2px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  transition: all 0.2s ease;
-  background: transparent;
-  margin-top: 40px;
-  margin-right: 5px;
-}
-
-.upload-icon:hover {
-  color: #1d4ed8;
-  transform: scale(1.05);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
-}
-.upload-icon {
-  font-size: 35px !important;
-  width: 35px !important;
-  height: 35px !important;
-}
-.no-issues {
-  font-size: 1.6rem;        /* Bigger text */
-  font-weight: 600;         /* Slightly bold */
-  text-align: center;       /* Center text */
-  color: #6b7280;           /* Soft gray (Tailwind gray-500) */
-  margin-top: 40px;         /* Add spacing from top */
-  padding: 20px;            /* Smooth breathing room */
-  background: #f3f4f6;      /* Light gray background */
-  border-radius: 12px;      /* Rounded corners */
-  width: 80%;               /* Not too wide */
-  margin-left: auto;
-  margin-right: auto;       /* Center block */
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08); /* Soft shadow */
-}
-.loading-text {
-  font-size: 18px;
-  opacity: 0.7;
-}
-.tab-scroll-area {
-  animation: fadeIn 0.25s ease;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0.3; transform: translateY(3px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-</file>
-
 <file path="client/src/pages/DPOPage/NotificationPage.css">
 .notificationpage-container {
   width: 100%;
@@ -4255,48 +4559,6 @@ justify-content: space-between;
     padding: 10px 20px;
   }
 }
-</file>
-
-<file path="client/src/pages/DPOPage/UploadPage.jsx">
-// src/pages/UploadPage.jsx
-import React, { useState } from "react";
-import Header from "../../components/DPO/Header";
-import Stepper from "../../components/DPO/UploadPage/Stepper";
-import UploadForm from "../../components/DPO/UploadPage/UploadForm";
-import AssignIssues from "../../components/DPO/UploadPage/AssignIssues";
-import "./UploadPage.css";
-
-function UploadPage() {
-  const [step, setStep] = useState(1);
-
-  const handleProcessComplete = () => {
-    setStep(2); // just go to next step
-  };
-
-  return (
-    <div className="uploadpage-container">
-      <Header />
-
-      <div className="uploadpage-content">
-        <Stepper step={step} />
-
-        {step === 1 && (
-          <div className="upload-card">
-            <UploadForm onProcessed={handleProcessComplete} />
-          </div>
-        )}
-
-        {step === 2 && (
-          <div className="assign-card">
-            <AssignIssues /> {/* issues not needed */}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-export default UploadPage;
 </file>
 
 <file path="client/src/pages/LoginPage.css">
@@ -4502,36 +4764,6 @@ export default defineConfig({
 })
 </file>
 
-<file path=".gitignore">
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
-node_modules
-/.pnp
-.pnp.js
-venv
-
-# testing
-/coverage
-
-# production
-/build
-
-# misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-
-repomix-output.xml
-</file>
-
 <file path="backend/api/admin.py">
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
@@ -4690,107 +4922,800 @@ class Migration(migrations.Migration):
     ]
 </file>
 
-<file path="backend/api/urls.py">
-from django.urls import path
-from . import views
-
-urlpatterns = [
-    path('login', views.login_view),
-    path('upload-minutes', views.upload_minutes),
-    path('assign-issues', views.get_assign_issues), # NEW!
-    path('assign-issues/allocate-all', views.allocate_all),
-    path('issues', views.get_all_issues),
-    path('issues/<str:dept_name>', views.get_dept_issues),
-    path('submit-response', views.submit_response),
-    path('notifications', views.get_notifications),
-    path('me', views.me),
-    path("test/", views.test_view),
-
-]
+<file path="client/index.html">
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DISTRICT DEVELOPMENT COUNCIL MINUTES MANAGEMENT SYSTEM</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
 </file>
 
-<file path="backend/requirements.txt">
-django
-djangorestframework
-django-cors-headers
-google-generativeai
-python-dotenv
-psycopg2-binary
+<file path="client/src/components/Collector/CollectorHeader.css">
+.collector-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 15px 25px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.collector-logo {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #1a1a1a;
+}
+
+.collector-logo-icon {
+  width: 28px;
+  height: 28px;
+  background: #2563eb;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.collector-header-icons {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+
+/* standard icon container */
+
+
+.collector-icon.bell {
+  background: white; /* make the circular background white */
+  color: #2563eb; /* bell color */
+  font-size: 32px;
+  margin-right: 15px;
+}
+
+.collector-icon.profile {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #2563eb;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 36px;
+  text-align: center;
+}
+
+/* Profile dropdown */
+.collector-profile-dropdown {
+  position: absolute;
+  top: 55px;
+  right: 0;
+  background: #fff;
+  border-radius: 10px;
+  width: 140px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  padding: 8px 0;
+  animation: collectorDropdownFade 0.2s ease;
+  z-index: 1000;
+}
+
+.collector-profile-dropdown button {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+  color: #111827;
+}
+
+.collector-profile-dropdown button:hover {
+  background: #f3f4f6;
+}
+
+/* Smooth appearance */
+@keyframes collectorDropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.collector-icon.profile {
+  cursor: pointer;
+}
+.collector-logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+  color: #111827;
+}
+
+.collector-logout-btn:hover {
+  background: #f3f4f6;
+}
+
+.collector-logout-icon {
+  font-size: 18px;
+  color: #ef4444; /* subtle red for logout */
+}
 </file>
 
-<file path="client/src/components/Collector/IssuePage/GenerateReportCard.jsx">
-import React from "react";
+<file path="client/src/components/Collector/IssuePage/CollectorGenerateReports.jsx">
+import React, { useState, useEffect, useCallback } from "react";
+import "./CollectorGenerateReports.css";
+import CollectorGenerateReportCard from "./CollectorGenerateReportCard";
+import api from "../../../api/axios";
 
-const GenerateReportCard = React.memo(function GenerateReportCard({
-  report,
-  index,
-  handleChange,
-  removeCard,
-}) {
+export default function GenerateReports({ isOpen, onClose }) {
+  const [format, setFormat] = useState("pdf");
+  const [reports, setReports] = useState([]);
+
+  const handleDownload = async () => {
+    try {
+      const res = await fetch(`${api.defaults.baseURL}/generate-report`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          format,
+          reports
+        })
+      });
+
+      if (!res.ok) {
+        alert("Failed to generate file");
+        return;
+      }
+
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = format === "pdf" ? "report.pdf" : "report.xlsx";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+
+      onClose();
+    } catch (err) {
+      console.error("Download error:", err);
+    }
+  };
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    fetch(`${api.defaults.baseURL}/issues/received`)
+      .then((res) => res.json())
+      .then((data) => setReports(data))
+      .catch((err) => console.error("Error fetching reports:", err));
+  }, [isOpen]);
+
+  const handleChange = useCallback((index, field, value) => {
+    setReports((prev) => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], [field]: value };
+      return updated;
+    });
+  }, []);
+
+  const removeCard = useCallback((index) => {
+    setReports((prev) => prev.filter((_, i) => i !== index));
+  }, []);
+
+  if (!isOpen) return null;
+
   return (
-    <div className="generate-report-card">
-      <div className="report-top">
-        <div className="report-id">{report.issue_no}</div>
-        <button className="report-delete-btn" onClick={() => removeCard(index)}>
-          🗑️
-        </button>
-      </div>
+    <div className="modal-overlay">
+      <div
+        className="generate-reports-container"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="generate-header">
+          <div className="format-toggle">
+            <button
+              className={`format-btn ${format === "pdf" ? "active" : ""}`}
+              onClick={() => setFormat("pdf")}
+            >
+              PDF
+            </button>
+            <button
+              className={`format-btn ${format === "excel" ? "active" : ""}`}
+              onClick={() => setFormat("excel")}
+            >
+              Excel
+            </button>
+          </div>
 
-      <div className="report-form">
-        <div className="form-field">
-          <label>Department:</label>
-          <input
-            type="text"
-            value={report.department}
-            onChange={e => handleChange(index, "department", e.target.value)}
-          />
+          <button className="close" onClick={onClose}>
+            &times;
+          </button>
         </div>
 
-        <div className="form-field">
-          <label>Issue:</label>
-          <textarea
-            value={report.issue}
-            onChange={e => handleChange(index, "issue", e.target.value)}
-            rows="3"
-          />
-        </div>
-        <div className="form-field">
-          <label>Description:</label>
-          <textarea
-            rows="2"
-            value={report.issue_description}
-            onChange={(e) => handleChange("issue_description", e.target.value)}
-          />
-        </div>
-
-        <div className="form-field">
-          <label>Response:</label>
-          <textarea
-            value={report.response || ""}
-            onChange={e => handleChange(index, "response", e.target.value)}
-            rows="3"
-          />
+        <div className="report-list">
+          {reports.length === 0 ? (
+            <p>No received issues available</p>
+          ) : (
+            reports.map((report, index) => (
+              <CollectorGenerateReportCard
+                key={report.id || index}
+                report={report}
+                index={index}
+                handleChange={handleChange}
+                removeCard={removeCard}
+              />
+            ))
+          )}
         </div>
 
-        <div className="form-field">
-          <label>Location:</label>
-          <input
-            type="text"
-            value={report.location}
-            onChange={e => handleChange(index, "location", e.target.value)}
-          />
+        <div className="download-section">
+          <button className="generate-download-btn" onClick={handleDownload}>
+            Download Report
+          </button>
         </div>
       </div>
     </div>
   );
-});
-
-export default GenerateReportCard;
+}
 </file>
 
-<file path="client/src/components/Collector/IssuePage/IssueCard.jsx">
+<file path="client/src/components/Department/DepartmentHeader.jsx">
+import React, { useState, useRef, useEffect } from "react";
+import "./DepartmentHeader.css";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../../api/axios";
+
+function Header() {
+  const [open, setOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  const navigate = useNavigate();
+
+  /* Close dropdown when clicking outside */
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      // Call backend logout endpoint
+      await api.post("/logout");
+    } catch (err) {
+      console.error("Logout error:", err);
+    } finally {
+      // Clear localStorage regardless of API response
+      localStorage.removeItem("token");
+      localStorage.removeItem("username");
+      localStorage.removeItem("role");
+      localStorage.removeItem("department");
+      // Redirect to login
+      navigate("/login");
+    }
+  };
+
+  return (
+    <header className="dept-header">
+      <div className="dept-logo">
+        <div className="dept-logo-icon"></div>
+        <span>Minutes Tracker System</span>
+      </div>
+
+      <div className="dept-header-icons" ref={dropdownRef}>
+        {/* Notifications */}
+        <Link to="/department/notifications">
+          <NotificationsIcon className="dept-icon bell" />
+        </Link>
+
+        {/* Profile */}
+        <div
+          className="dept-icon profile"
+          onClick={() => setOpen((prev) => !prev)}
+        >
+          D
+        </div>
+
+        {/* Dropdown */}
+        {open && (
+          <div className="dept-profile-dropdown">
+            <button onClick={handleLogout} className="dept-logout-btn">
+              <LogoutIcon className="dept-logout-icon" />
+                Logout
+            </button>
+
+          </div>
+        )}
+      </div>
+    </header>
+  );
+}
+
+export default Header;
+</file>
+
+<file path="client/src/components/DPO/DPOHeader.jsx">
+import React, { useState, useRef, useEffect } from "react";
+import "./DPOHeader.css";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../../api/axios";
+
+function Header() {
+  const [open, setOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  const navigate = useNavigate();
+
+  /* Close dropdown when clicking outside */
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      // Call backend logout endpoint
+      await api.post("/logout");
+    } catch (err) {
+      console.error("Logout error:", err);
+    } finally {
+      // Clear localStorage regardless of API response
+      localStorage.removeItem("token");
+      localStorage.removeItem("username");
+      localStorage.removeItem("role");
+      localStorage.removeItem("department");
+      // Redirect to login
+      navigate("/login");
+    }
+  };
+
+  return (
+    <header className="dpo-header">
+      <div className="dpo-logo">
+        <div className="dpo-logo-icon"></div>
+        <span>Minutes Tracker System</span>
+      </div>
+
+      <div className="dpo-header-icons" ref={dropdownRef}>
+        {/* Notifications */}
+        <Link to="/dpo/notifications">
+          <NotificationsIcon className="dpo-icon bell" />
+        </Link>
+
+        {/* Profile */}
+        <div
+          className="dpo-icon profile"
+          onClick={() => setOpen((prev) => !prev)}
+        >
+          D
+        </div>
+
+        {/* Dropdown */}
+        {open && (
+          <div className="dpo-profile-dropdown">
+            <button onClick={handleLogout} className="dpo-logout-btn">
+              <LogoutIcon className="dpo-logout-icon" />
+                Logout
+            </button>
+
+          </div>
+        )}
+      </div>
+    </header>
+  );
+}
+
+export default Header;
+</file>
+
+<file path="client/src/components/DPO/IssuePage/DPOFilterBar.jsx">
+import React, { useEffect, useState, useRef } from "react";
+import "./DPOFilterBar.css";
+import DPOGenerateReports from "./DPOGenerateReports";
+
+function DPOFilterBar({ activeTab, onFilterChange, issue_date }) {
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [filterBy, setFilterBy] = useState("all"); // ✅ default All Issues
+  const [sortBy, setSortBy] = useState("newest");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeDateField, setActiveDateField] = useState(null);
+
+  const fromDatePickerRef = useRef(null);
+  const toDatePickerRef = useRef(null);
+
+  const handleGenerate = () => {
+    setShowReportModal(true);
+  };
+
+  // Sync dates from parent
+  useEffect(() => {
+    if (issue_date?.fromDate) setFromDate(issue_date.fromDate);
+    if (issue_date?.toDate) setToDate(issue_date.toDate);
+  }, [issue_date]);
+
+  const formatDateInput = (raw) => {
+    const digits = raw.replace(/\D/g, "").slice(0, 8);
+    if (digits.length <= 2) return digits;
+    if (digits.length <= 4) return `${digits.slice(0, 2)}-${digits.slice(2)}`;
+    return `${digits.slice(0, 2)}-${digits.slice(2, 4)}-${digits.slice(4)}`;
+  };
+
+  const handleFilterChange = (type, value) => {
+    let updatedFilters = {
+      fromDate,
+      toDate,
+      filterBy,
+      sortBy,
+      searchQuery
+    };
+
+    if (type === "fromDate") {
+      const v = formatDateInput(value);
+      setFromDate(v);
+      updatedFilters.fromDate = v;
+    } else if (type === "toDate") {
+      const v = formatDateInput(value);
+      setToDate(v);
+      updatedFilters.toDate = v;
+    } else if (type === "filterBy") {
+      setFilterBy(value);
+      updatedFilters.filterBy = value;
+    } else if (type === "sortBy") {
+      setSortBy(value);
+      updatedFilters.sortBy = value;
+    } else if (type === "search") {
+      setSearchQuery(value);
+      updatedFilters.searchQuery = value;
+    }
+
+    onFilterChange(updatedFilters);
+  };
+
+  const handleDatePick = (e) => {
+    const parts = e.target.value.split("-");
+    if (parts.length === 3) {
+      const formatted = `${parts[2]}-${parts[1]}-${parts[0]}`;
+
+      if (activeDateField === "from") {
+        setFromDate(formatted);
+        handleFilterChange("fromDate", formatted);
+      } else if (activeDateField === "to") {
+        setToDate(formatted);
+        handleFilterChange("toDate", formatted);
+      }
+    }
+  };
+
+  const filterLabel = {
+    all: "All Issues",
+    high: "High Priority",
+    medium: "Medium Priority",
+    low: "Low Priority",
+    health: "Health Dept",
+    education: "Education Dept",
+    works: "Public Works"
+  };
+
+  return (
+    <div className="filter-bar">
+      {/* Search */}
+      <div className="search-wrapper">
+        <span className="search-icon">🔍</span>
+        <input
+          type="text"
+          placeholder="Search issues..."
+          value={searchQuery}
+          onChange={(e) => handleFilterChange("search", e.target.value)}
+        />
+      </div>
+
+      {/* From Date */}
+      <div className="date-input-wrapper">
+        <input
+          type="text"
+          placeholder="From: (dd-mm-yyyy)"
+          value={fromDate}
+          onChange={(e) => handleFilterChange("fromDate", e.target.value)}
+        />
+        <span
+          className="calendar-icon"
+          onClick={() => {
+            setActiveDateField("from");
+            fromDatePickerRef.current.showPicker();
+          }}
+        >
+          📅
+        </span>
+        <input
+          type="date"
+          ref={fromDatePickerRef}
+          onChange={handleDatePick}
+          style={{ visibility: "hidden", position: "absolute" }}
+        />
+      </div>
+
+      {/* To Date */}
+      <div className="date-input-wrapper">
+        <input
+          type="text"
+          placeholder="To: (dd-mm-yyyy)"
+          value={toDate}
+          onChange={(e) => handleFilterChange("toDate", e.target.value)}
+        />
+        <span
+          className="calendar-icon"
+          onClick={() => {
+            setActiveDateField("to");
+            toDatePickerRef.current.showPicker();
+          }}
+        >
+          📅
+        </span>
+        <input
+          type="date"
+          ref={toDatePickerRef}
+          onChange={handleDatePick}
+          style={{ visibility: "hidden", position: "absolute" }}
+        />
+      </div>
+
+      {/* Filter (Nested) */}
+      <div className="filter-group custom-filter">
+        <label>Filter:</label>
+        <div className="filter-dropdown">
+          <button className="filter-btn">
+            {filterLabel[filterBy]} ▾
+          </button>
+
+          <div className="filter-menu">
+            <div className="filter-item">
+              Priority ▸
+              <div className="sub-menu">
+                <div onClick={() => handleFilterChange("filterBy", "high")}>High</div>
+                <div onClick={() => handleFilterChange("filterBy", "medium")}>Medium</div>
+                <div onClick={() => handleFilterChange("filterBy", "low")}>Low</div>
+              </div>
+            </div>
+
+            <div className="filter-item">
+              Department ▸
+              <div className="sub-menu">
+                <div onClick={() => handleFilterChange("filterBy", "health")}>Health</div>
+                <div onClick={() => handleFilterChange("filterBy", "education")}>Education</div>
+                <div onClick={() => handleFilterChange("filterBy", "works")}>Public Works</div>
+              </div>
+            </div>
+
+            <div
+              className="filter-item"
+              onClick={() => handleFilterChange("filterBy", "all")}
+            >
+              All Issues
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Sort */}
+<div className="filter-group custom-filter">
+  <label>Sort:</label>
+  <div className="filter-dropdown">
+    <button className="filter-btn">
+      {sortBy === "priority"
+        ? "Priority"
+        : sortBy === "department"
+        ? "Department"
+        : "Deadline"} ▾
+    </button>
+
+    <div className="filter-menu">
+      <div
+        className="filter-item"
+        onClick={() => handleFilterChange("sortBy", "priority")}
+      >
+        Priority
+      </div>
+
+      <div
+        className="filter-item"
+        onClick={() => handleFilterChange("sortBy", "department")}
+      >
+        Department
+      </div>
+
+      <div
+        className="filter-item"
+        onClick={() => handleFilterChange("sortBy", "deadline")}
+      >
+        Deadline
+      </div>
+    </div>
+  </div>
+</div>
+
+
+      {/* Generate */}
+      {activeTab === "Received" && (
+        <button className="generate-btn" onClick={handleGenerate}>
+          Generate Report
+        </button>
+      )}
+
+      <DPOGenerateReports
+        isOpen={showReportModal}
+        onClose={() => setShowReportModal(false)}
+      />
+    </div>
+  );
+}
+
+export default DPOFilterBar;
+</file>
+
+<file path="client/src/components/DPO/IssuePage/DPOGenerateReports.jsx">
+import React, { useState, useEffect, useCallback } from "react";
+import "./DPOGenerateReports.css";
+import DPOGenerateReportCard from "./DPOGenerateReportCard";
+import api from "../../../api/axios";
+
+export default function GenerateReports({ isOpen, onClose }) {
+  const [format, setFormat] = useState("pdf");
+  const [reports, setReports] = useState([]);
+
+  const handleDownload = async () => {
+    try {
+      // 1. Request the blob (file) from backend
+      // Note: We don't need to send 'reports' body anymore, the backend fetches fresh data.
+      const response = await fetch(`${api.defaults.baseURL}/generate-report`, {
+        method: "POST",
+        headers: {
+          "Authorization": `Token ${localStorage.getItem("token")}`, // Auth is important!
+        },
+      });
+
+      if (!response.ok) {
+        alert("Failed to generate report");
+        return;
+      }
+
+      // 2. Convert response to a downloadable file
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "Follow_Up_Report.xlsx"; // The file name
+      document.body.appendChild(a);
+      a.click();
+
+      // 3. Cleanup
+      a.remove();
+      window.URL.revokeObjectURL(url);
+      onClose();
+
+    } catch (err) {
+      console.error("Download error:", err);
+      alert("Error downloading file.");
+    }
+  };
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    fetch("http://localhost:5000/issues/received")
+      .then((res) => res.json())
+      .then((data) => setReports(data))
+      .catch((err) => console.error("Error fetching reports:", err));
+  }, [isOpen]);
+
+  const handleChange = useCallback((index, field, value) => {
+    setReports((prev) => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], [field]: value };
+      return updated;
+    });
+  }, []);
+
+  const removeCard = useCallback((index) => {
+    setReports((prev) => prev.filter((_, i) => i !== index));
+  }, []);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="modal-overlay">
+      <div
+        className="generate-reports-container"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="generate-header">
+          <div className="format-toggle">
+            <button
+              className={`format-btn ${format === "pdf" ? "active" : ""}`}
+              onClick={() => setFormat("pdf")}
+            >
+              PDF
+            </button>
+            <button
+              className={`format-btn ${format === "excel" ? "active" : ""}`}
+              onClick={() => setFormat("excel")}
+            >
+              Excel
+            </button>
+          </div>
+
+          <button className="close" onClick={onClose}>
+            &times;
+          </button>
+        </div>
+
+        <div className="report-list">
+          {reports.length === 0 ? (
+            <p>No received issues available</p>
+          ) : (
+            reports.map((report, index) => (
+              <DPOGenerateReportCard
+                key={report.id || index}
+                report={report}
+                index={index}
+                handleChange={handleChange}
+                removeCard={removeCard}
+              />
+            ))
+          )}
+        </div>
+
+        <div className="download-section">
+          <button className="generate-download-btn" onClick={handleDownload}>
+            Download Report
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="client/src/components/DPO/IssuePage/DPOIssueCard.jsx">
 import React from "react";
-import "./IssueCard.css";
+import "./DPOIssueCard.css";
+import api from "../../../api/axios";
 
 function IssueCard({ issue }) {
   const status = issue.status || "pending";
@@ -4799,6 +5724,7 @@ function IssueCard({ issue }) {
     switch (status) {
       case "overdue":
         return { borderColor: "#b91c1c" };
+      case "submitted": // Backend sends "submitted", Frontend logic maps this to "received" tab
       case "received":
         return { borderColor: "#16a34a" };
       default:
@@ -4810,12 +5736,16 @@ function IssueCard({ issue }) {
     <div className="issue-card" style={getStatusStyle()}>
       <div className="issue-header">
         <span className="issue-id">{issue.issue_no}</span>
-        <span className={`status ${status}`}>{status}</span>
+        {/* Status Badge */}
+        <span className={`status ${status === "submitted" ? "received" : status}`}>
+          {status === "submitted" ? "Received" : status}
+        </span>
       </div>
 
       <div className="issue-body">
         <div className="issue-row">
           <div className="label">Department</div>
+          {/* Now displays "Police, PWD, KWA" */}
           <div className="value">{issue.department}</div>
         </div>
 
@@ -4823,10 +5753,12 @@ function IssueCard({ issue }) {
           <div className="label">Issue</div>
           <div className="value">{issue.issue}</div>
         </div>
+
         <div className="issue-row">
           <div className="label">Description</div>
           <div className="value">{issue.issue_description}</div>
         </div>
+
         <div className="issue-row">
           <div className="label">Priority</div>
           <div className="value">{issue.priority}</div>
@@ -4838,18 +5770,10 @@ function IssueCard({ issue }) {
         </div>
 
         <div className="issue-row">
-          <div
-            className={`label ${
-              status === "overdue" ? "overdue-text" : ""
-            }`}
-          >
+          <div className={`label ${status === "overdue" ? "overdue-text" : ""}`}>
             Deadline
           </div>
-          <div
-            className={`value ${
-              status === "overdue" ? "overdue-text" : ""
-            }`}
-          >
+          <div className={`value ${status === "overdue" ? "overdue-text" : ""}`}>
             <span>{issue.deadline}</span>
           </div>
         </div>
@@ -4858,20 +5782,41 @@ function IssueCard({ issue }) {
       <div className="issue-footer">
         <div className="footer-line"></div>
 
-        {status === "pending" && (
+        {/* LOGIC FOR DISPLAYING RESPONSES */}
+
+        {/* If there are NO responses yet */}
+        {(!issue.response || issue.response.length === 0) && status === "pending" && (
           <p className="no-response">No response received yet</p>
         )}
 
+        {/* If status is Overdue */}
         {status === "overdue" && (
           <p className="no-response">Response overdue ⚠️</p>
         )}
 
-        {status === "received" && (
-          <div className="response-received">
-            <p className="res">
-              <strong>Department Response:</strong> {issue.response}
-            </p>
-            <button className="res-button">Download Attachment</button>
+        {/* If there ARE responses (Show list) */}
+        {issue.response && issue.response.length > 0 && (
+          <div className="response-container" style={{ marginTop: "10px" }}>
+            {issue.response.map((resObj, index) => (
+              <div key={index} className="response-received">
+                <p className="res">
+                  <strong>{resObj.department}:</strong> {resObj.text}
+                </p>
+                {resObj.attachment && (
+                  <button
+                    className="res-button"
+                    style={{ position: 'static', marginTop: '10px' }}
+                    onClick={() => {
+                      const baseUrl = api.defaults.baseURL;
+                      const fullUrl = resObj.attachment.startsWith("http") ? resObj.attachment : `${baseUrl}${resObj.attachment}`;
+                      window.open(fullUrl, "_blank");
+                    }}
+                  >
+                    Download Attachment
+                  </button>
+                )}
+              </div>
+            ))}
           </div>
         )}
       </div>
@@ -4882,716 +5827,209 @@ function IssueCard({ issue }) {
 export default IssueCard;
 </file>
 
-<file path="client/src/components/Department/IssueCard.jsx">
+<file path="client/src/pages/CollectorPage/NotificationPage.jsx">
+import React from "react";
+import CollectorHeader from "../../components/Collector/CollectorHeader";
+import "./NotificationPage.css";
+
+function CollectorNotificationPage() {
+  const notifications = [
+    {
+      id: 1,
+      title: "Response Received",
+      message: "A response has been submitted for Issue #1023.",
+      time: "10 minutes ago",
+      type: "response",
+    },
+    {
+      id: 2,
+      title: "Deadline Exceeded",
+      message: "Issue #1009 has exceeded its deadline. Immediate attention required.",
+      time: "1 hour ago",
+      type: "deadline",
+    },
+  ];
+
+  return (
+    <div className="notificationpage-container">
+      <CollectorHeader />
+
+      <div className="notificationpage-content">
+        <div className="notification-header">
+          <h1>Notifications</h1>
+        </div>
+
+        <div className="notification-list">
+          {notifications.map((note) => (
+                <div key={note.id} className={`notification-card ${note.type}`}>
+              <div className="notification-icon">
+                {note.type === "response" && <span>📩</span>}
+                {note.type === "deadline" && <span>⏰</span>}
+              </div>
+
+              <div className="notification-content">
+                <h3>{note.title}</h3>
+                <p>{note.message}</p>
+                <span className="time">{note.time}</span>
+              </div>
+            </div>
+          ))}
+
+          {notifications.length === 0 && (
+            <div className="no-notifications">No new notifications</div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default CollectorNotificationPage;
+</file>
+
+<file path="client/src/pages/DPOPage/DPOIssuePage.css">
+.dpo-container {
+  width: 100%;
+}
+
+.content {
+  padding: 10px 70px;
+}
+
+.page-title h1 {
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 20px;
+}
+
+
+.filters {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+}
+
+.filters input,
+.filters select {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.generate-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.generate-btn:hover {
+  background: #1d4ed8;
+}
+.page-title {
+  display: flex;
+justify-content: space-between;
+
+}
+
+.upload-icon {
+  color: black;
+  border-radius: 8px; /* keep it slightly rounded, not circular */
+  padding: 2px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+  background: transparent;
+  margin-top: 40px;
+  margin-right: 5px;
+}
+
+.upload-icon:hover {
+  color: #1d4ed8;
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+}
+.upload-icon {
+  font-size: 35px !important;
+  width: 35px !important;
+  height: 35px !important;
+}
+.no-issues {
+  font-size: 1.6rem;        /* Bigger text */
+  font-weight: 600;         /* Slightly bold */
+  text-align: center;       /* Center text */
+  color: #6b7280;           /* Soft gray (Tailwind gray-500) */
+  margin-top: 40px;         /* Add spacing from top */
+  padding: 20px;            /* Smooth breathing room */
+  background: #f3f4f6;      /* Light gray background */
+  border-radius: 12px;      /* Rounded corners */
+  width: 80%;               /* Not too wide */
+  margin-left: auto;
+  margin-right: auto;       /* Center block */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08); /* Soft shadow */
+}
+.loading-text {
+  font-size: 18px;
+  opacity: 0.7;
+}
+.tab-scroll-area {
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0.3; transform: translateY(3px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</file>
+
+<file path="client/src/pages/DPOPage/UploadPage.jsx">
+// src/pages/UploadPage.jsx
 import React, { useState } from "react";
-import ResponseModal from "./ResponseModal";
-import "./IssueCard.css";
+import DPOHeader from "../../components/DPO/DPOHeader";
+import DPOStepper from "../../components/DPO/UploadPage/DPOStepper";
+import DPOUploadForm from "../../components/DPO/UploadPage/DPOUploadForm";
+import DPOAssignIssues from "../../components/DPO/UploadPage/DPOAssignIssues";
+import "./UploadPage.css";
 
-function IssueCard({ issue }) {
-  // Normalize backend status: "received" → "submitted"
-  const normalizedStatus = issue.status === "received" ? "submitted" : issue.status;
-  const status = normalizedStatus || "pending";
+function UploadPage() {
+  const [step, setStep] = useState(1);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleSubmit = () => {
-    setIsModalOpen(false);
-    alert("Response submitted successfully!");
-  };
-
-  const getStatusStyle = () => {
-    switch (status) {
-      case "overdue":
-        return { borderColor: "#b91c1c" };
-      case "submitted":
-        return { borderColor: "#16a34a" };
-      default:
-        return { borderColor: "#facc15" };
-    }
+  const handleProcessComplete = () => {
+    setStep(2); // just go to next step
   };
 
   return (
-    <>
-      <div className="issue-card" style={getStatusStyle()}>
-        <div className="issue-header">
-          <span className="issue-id">{issue.issue_no}</span>
-          <span className={`status ${status}`}>
-            {status === "pending"
-              ? "Response Required"
-              : status === "overdue"
-              ? "Overdue"
-              : "Response Submitted"}
-          </span>
-        </div>
+    <div className="uploadpage-container">
+      <DPOHeader />
 
-        <div className="issue-body">
-          <div className="issue-row">
-            <div className="label">Issue</div>
-            <div className="value">{issue.issue}</div>
+      <div className="uploadpage-content">
+        <DPOStepper step={step} />
+
+        {step === 1 && (
+          <div className="upload-card">
+            <DPOUploadForm onProcessed={handleProcessComplete} />
           </div>
-          <div className="issue-row">
-            <div className="label">Description</div>
-            <div className="value">{issue.issue_description}</div>
+        )}
+
+        {step === 2 && (
+          <div className="assign-card">
+            <DPOAssignIssues /> {/* issues not needed */}
           </div>
-          <div className="issue-row">
-            <div className="label">Priority</div>
-            <div className="value">{issue.priority}</div>
-          </div>
-
-          <div className="issue-row">
-            <div className="label">Location</div>
-            <div className="value">{issue.location}</div>
-          </div>
-
-          <div className="issue-row">
-            <div className={`label ${status === "overdue" ? "overdue-text" : ""}`}>
-              Deadline
-            </div>
-            <div className={`value ${status === "overdue" ? "overdue-text" : ""}`}>
-              <span>{issue.deadline}</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="issue-footer">
-          {status === "submitted" && (
-            <>
-              <div className="footer-line"></div>
-              <div className="response-received">
-                <p className="res">Your Response  :  {issue.response}</p>
-              </div>
-            </>
-          )}
-
-          {(status === "pending" || status === "overdue") && (
-            <button
-              className={`submit-btn ${
-                status === "pending" ? "pending-btn" : "overdue-btn"
-              }`}
-              onClick={() => setIsModalOpen(true)}
-            >
-              Submit Response
-            </button>
-          )}
-        </div>
-      </div>
-
-      <ResponseModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        issue={issue}
-        onSubmit={handleSubmit}
-      />
-    </>
-  );
-}
-
-export default IssueCard;
-</file>
-
-<file path="client/src/components/Department/ResponseModal.jsx">
-import React, { useRef, useState } from "react";
-import axios from "axios"; // THIS WAS MISSING
-import "./ResponseModal.css";
-import api from "../../api/axios";
-
-function ResponseModal({ isOpen, onClose, issue }) {
-  const fileInputRef = useRef(null);
-  const [fileName, setFileName] = useState("");
-  const [file, setFile] = useState(null);
-  const [responseText, setResponseText] = useState("");
-
-  if (!isOpen) return null;
-
-  const handleFileChange = (e) => {
-    const selected = e.target.files[0];
-    if (selected) {
-      setFile(selected);
-      setFileName(selected.name);
-    }
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    const selected = e.dataTransfer.files[0];
-    if (selected) {
-      setFile(selected);
-      setFileName(selected.name);
-    }
-  };
-
-  const handleDragOver = (e) => e.preventDefault();
-
-  const handleSubmit = async () => {
-    // Standardize the ID (using the one from our Serializer)
-    const idToSend = issue.id || issue.issue_dept_id;
-
-    if (!idToSend) {
-      alert("Error: Issue ID is missing. Please refresh the page.");
-      return;
-    }
-
-    try {
-      // Create data object
-      const payload = {
-        issue_id: idToSend,
-        response: responseText
-      };
-
-      const res = await api.post("/submit-response", payload);
-
-      if (res.data.success) {
-        alert("Submitted successfully!");
-        onClose();
-        window.location.reload(); // Moves issue to Submitted tab
-      }
-    } catch (error) {
-      console.error("Submission error:", error.response?.data || error.message);
-      alert("Submission failed!");
-    }
-  };
-
-  return (
-    <div className="modal-overlay" >
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <button className="close-btn" onClick={onClose}>
-          &times;
-        </button>
-
-        <h2 className="issue-title">Issue #{issue.issue_no}</h2>
-
-        <div className="modal-fields">
-          <div className="modal-row">
-            <label>Issue</label>
-            <input type="text" value={issue.issue} readOnly />
-          </div>
-
-          <div className="modal-row">
-            <label>Priority</label>
-            <input type="text" value={issue.priority} readOnly />
-          </div>
-
-          <div className="modal-row">
-            <label>Location</label>
-            <input type="text" value={issue.location} readOnly />
-          </div>
-
-          <div className="modal-row">
-            <label>Deadline</label>
-            <input type="text" value={issue.deadline} readOnly />
-          </div>
-
-          <div className="modal-row">
-            <label>Your Response</label>
-            <textarea
-              placeholder="Type your response here..."
-              value={responseText}
-              onChange={(e) => setResponseText(e.target.value)}
-            />
-          </div>
-
-          <div className="modal-row">
-            <label>Upload File</label>
-
-            <div
-              className="upload-area"
-              onClick={() => fileInputRef.current.click()}
-              onDrop={handleDrop}
-              onDragOver={handleDragOver}
-            >
-              {fileName ? (
-                <p className="file-name">{fileName}</p>
-              ) : (
-                <p>
-                  <strong>Click to upload</strong> or drag and drop file here
-                </p>
-              )}
-
-              <input
-                type="file"
-                ref={fileInputRef}
-                onChange={handleFileChange}
-                hidden
-              />
-            </div>
-          </div>
-        </div>
-
-        <button className="su" onClick={handleSubmit}>
-          Submit
-        </button>
+        )}
       </div>
     </div>
   );
 }
 
-export default ResponseModal;
-</file>
-
-<file path="client/src/components/DPO/UploadPage/AssignIssues.jsx">
-// AssignIssues.jsx
-import React, { useState, useEffect } from "react";
-import "./AssignIssues.css";
-import { Link } from "react-router-dom";
-import IssueAssignCard from "./IssueAssignCard";
-import api from "../../../api/axios";
-export default function AssignIssues() {
-  const [issues, setIssues] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  // 🔹 Fetch issues from backend on load
-  useEffect(() => {
-    const fetchIssues = async () => {
-      try {
-        const res = await api.get("/assign-issues");
-        setIssues(res.data);
-      } catch (err) {
-        console.error("Failed to load issues:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchIssues();
-  }, []);
-
-  // 🔹 Handle editing issue fields (department, deadline, priority etc.)
-  const handleChange = (index, field, value) => {
-    setIssues(prev => {
-      const updated = [...prev];
-      updated[index] = { ...updated[index], [field]: value };
-      return updated;
-    });
-  };
-
-  // 🔹 Allocate all issues
-  const handleAllocateAll = () => {
-        api
-      .post("/assign-issues/allocate-all", { issues })
-      .then(() => alert("All issues allocated!"))
-      .catch(err => console.error(err));
-  };
-
-  return (
-    <div className="assign-issues-container">
-      <div className="assign-header">
-        <h2>Assign Issues</h2>
-
-        <Link to="/dpo">
-          <button className="allocate-btn" onClick={handleAllocateAll}>
-            Allocate All
-          </button>
-        </Link>
-      </div>
-
-      {/* Loading State */}
-      {loading && <p>Loading issues...</p>}
-
-      {/* No issues */}
-      {!loading && issues.length === 0 && <p>No pending issues found</p>}
-
-      {/* Issue Cards */}
-      <div className="issue-cards">
-        {issues.map((issue, index) => (
-          <IssueAssignCard
-            key={issue.issue_id}
-            issue={issue}
-            index={index}
-            onChange={handleChange}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
-</file>
-
-<file path="client/src/components/DPO/UploadPage/IssueAssignCard.jsx">
-// IssueAssignCard.jsx
-import React, { useRef } from "react";
-
-export default function IssueAssignCard({ issue, onChange, index }) {
-  const dateRef = useRef(null);
-
-  const handleChange = (field, value) => onChange(index, field, value);
-
-  // Format text input as DD-MM-YYYY while typing
-  const formatDateInput = (text) => {
-    const digits = text.replace(/\D/g, ""); // keep only numbers
-    let day = digits.substring(0, 2);
-    let month = digits.substring(2, 4);
-    let year = digits.substring(4, 8);
-
-    let formatted = day;
-    if (month) formatted += "-" + month;
-    if (year) formatted += "-" + year;
-
-    return formatted;
-  };
-
-  // Convert date picker value YYYY-MM-DD → DD-MM-YYYY
-  const convertDatePickerValue = (value) => {
-    const [y, m, d] = value.split("-");
-    return `${d}-${m}-${y}`;
-  };
-
-  return (
-    <div className="issue-assign-card">
-      <div className="issue-top">
-        <div className="entry-id">{issue.issue_no}</div>
-        <button className="delete-btn">🗑️</button>
-      </div>
-
-      <div className="issue-form">
-        <div className="form-field">
-          <label>Department:</label>
-          <input
-            type="text"
-            value={issue.department}
-            onChange={(e) => handleChange("department", e.target.value)}
-          />
-        </div>
-
-        <div className="form-field">
-          <label>Issue title:</label>
-          <textarea
-            rows="2"
-            value={issue.issue}
-            onChange={(e) => handleChange("issue", e.target.value)}
-          />
-        </div>
-        <div className="form-field">
-          <label>Description:</label>
-          <textarea
-            rows="2"
-            value={issue.issue_description}
-            onChange={(e) => handleChange("issue_description", e.target.value)}
-          />
-        </div>
-
-        <div className="form-field">
-          <label>Priority:</label>
-          <select
-            value={issue.priority}
-            onChange={(e) => handleChange("priority", e.target.value)}
-          >
-            <option>High</option>
-            <option>Medium</option>
-            <option>Low</option>
-          </select>
-        </div>
-
-        <div className="form-field">
-          <label>Location:</label>
-          <input
-            type="text"
-            value={issue.location}
-            onChange={(e) => handleChange("location", e.target.value)}
-          />
-        </div>
-
-        {/* ----- DEADLINE FIELD WITH DATE PICKER ----- */}
-        <div className="form-field">
-          <label>Deadline:</label>
-          <div className="deadline-input">
-            <input
-              type="text"
-              placeholder="DD-MM-YYYY"
-              value={issue.deadline}
-              onChange={(e) =>
-                handleChange("deadline", formatDateInput(e.target.value))
-              }
-            />
-
-            {/* Hidden date picker */}
-            <input
-              type="date"
-              ref={dateRef}
-              style={{ display: "none" }}
-              onChange={(e) =>
-                handleChange("deadline", convertDatePickerValue(e.target.value))
-              }
-            />
-
-            <span
-              className="calendar-icon"
-              onClick={() => dateRef.current.showPicker()}
-              style={{ cursor: "pointer" }}
-            >
-              📅
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-</file>
-
-<file path="client/src/components/DPO/UploadPage/UploadForm.jsx">
-// src/components/Upload/UploadForm.jsx
-import React, { useRef, useState } from "react";
-import axios from "axios";
-import "./UploadForm.css";
-import api from "../../../api/axios";
-
-export default function UploadForm({ onProcessed }) {
-  const datePickerRef = useRef(null);
-  const [selectedFile, setSelectedFile] = useState(null);
-
-  const [date, setDate] = useState("");
-  const [fileName, setFileName] = useState("");
-  const [dragOver, setDragOver] = useState(false);
-
-  const formatDateInput = (raw) => {
-    const digits = raw.replace(/\D/g, "").slice(0, 8);
-    if (digits.length <= 2) return digits;
-    if (digits.length <= 4) return `${digits.slice(0, 2)}-${digits.slice(2)}`;
-    return `${digits.slice(0, 2)}-${digits.slice(2, 4)}-${digits.slice(4)}`;
-  };
-
-  const handleDateChange = (e) => setDate(formatDateInput(e.target.value));
-
-  const handleHiddenDatePick = (e) => {
-    const parts = e.target.value.split("-");
-    if (parts.length === 3) setDate(`${parts[2]}-${parts[1]}-${parts[0]}`);
-  };
-
-  const handleFileSelect = (file) => {
-    if (file) {
-      setSelectedFile(file);
-      setFileName(file.name);
-    }
-  };
-
-  const handleUploadAndProcess = async () => {
-    if (!date || !fileName) {
-      alert("Please select a date and upload a file.");
-      return;
-    }
-
-    try {
-      const formData = new FormData();
-      formData.append("meeting_date", date);
-      formData.append("file", selectedFile);
-
-      await api.post(
-        "/upload-minutes",
-        formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
-
-      // 👇 Only move to next step — no data needed
-      onProcessed();
-
-    } catch (err) {
-      console.error("Upload error:", err);
-      alert("Failed to upload file.");
-    }
-  };
-
-  return (
-    <div className="upload-form">
-      <h2 className="upload-title">Upload Meeting Minutes</h2>
-
-      <div className="form-content">
-        <label className="field-label">Upload Date</label>
-        <div className="date-input-wrapper">
-          <input
-            type="text"
-            placeholder="dd-mm-yyyy"
-            value={date}
-            onChange={handleDateChange}
-            maxLength={10}
-          />
-          <span
-            className="calendar-icon"
-            onClick={() => datePickerRef.current?.showPicker()}
-          >
-            📅
-          </span>
-          <input
-            type="date"
-            ref={datePickerRef}
-            onChange={handleHiddenDatePick}
-            style={{ visibility: "hidden", position: "absolute" }}
-          />
-        </div>
-
-        <label className="field-label">Upload Minutes File</label>
-        <div
-          className={`file-drop ${dragOver ? "drag-over" : ""}`}
-          onDragOver={(e) => {
-            e.preventDefault();
-            setDragOver(true);
-          }}
-          onDragLeave={() => setDragOver(false)}
-          onDrop={(e) => {
-            e.preventDefault();
-            setDragOver(false);
-            handleFileSelect(e.dataTransfer.files?.[0]);
-          }}
-        >
-          <div className="file-drop-inner">
-            <div className="file-icon">🖼️</div>
-            <div className="file-text">
-              {fileName || "Click to upload or drag and drop"}
-            </div>
-
-            <input
-              type="file"
-              className="file-input"
-              onChange={(e) => handleFileSelect(e.target.files?.[0])}
-              accept=".pdf,.doc,.docx"
-            />
-          </div>
-        </div>
-
-        <button className="up" onClick={handleUploadAndProcess}>
-          Upload & Continue
-        </button>
-      </div>
-    </div>
-  );
-}
-</file>
-
-<file path="client/src/pages/DepartmentPage/NotificationPage.jsx">
-import React, { useEffect, useState } from "react";
-// import axios from "axios";
-import Header from "../../components/Department/Header";
-import "./NotificationPage.css";
-import api from "../../api/axios";
-
-function DepartmentNotificationPage() {
-  const [notifications, setNotifications] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      const username = localStorage.getItem("username");
-      try {
-        const res = await api.get("/notifications", {
-          params: { username }
-        });
-        setNotifications(res.data);
-      } catch (err) {
-        console.error("Error fetching notifications:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchNotifications();
-  }, []);
-
-  return (
-    <div className="notificationpage-container">
-      <Header activeTab="notifications" />
-
-      <div className="notificationpage-content">
-        <div className="notification-header">
-          <h1>Notifications</h1>
-        </div>
-
-        <div className="notification-list">
-          {loading ? (
-            <p>Loading...</p>
-          ) : notifications.length === 0 ? (
-            <div className="no-notifications">No new notifications</div>
-          ) : (
-            notifications.map((note) => (
-              <div key={note.notification_id} className={`notification-card ${note.type}`}>
-                <div className="notification-icon">
-                  {note.type === "assign" && <span>📝</span>}
-                  {note.type === "deadline" && <span>⏰</span>}
-                  {note.type === "response" && <span>📩</span>}
-                </div>
-
-                <div className="notification-content">
-                  <h3>{note.type.toUpperCase()}</h3>
-                  <p>{note.message}</p>
-                  <span className="time">{note.time_ago}</span>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default DepartmentNotificationPage;
-</file>
-
-<file path="client/src/pages/DPOPage/NotificationPage.jsx">
-import React, { useEffect, useState } from "react";
-// import axios from "axios";
-import Header from "../../components/DPO/Header";
-import "./NotificationPage.css";
-import api from "../../api/axios";
-
-function DPONotificationPage() {
-  const [notifications, setNotifications] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      const username = localStorage.getItem("username");
-      try {
-        const res = await api.get("/notifications", {
-          params: { username }
-        });
-        setNotifications(res.data);
-      } catch (err) {
-        console.error("Error fetching notifications:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchNotifications();
-  }, []);
-
-  return (
-    <div className="notificationpage-container">
-      <Header activeTab="notifications" />
-
-      <div className="notificationpage-content">
-        <div className="notification-header">
-          <h1>Notifications</h1>
-        </div>
-
-        <div className="notification-list">
-          {loading ? (
-            <p>Loading...</p>
-          ) : notifications.length === 0 ? (
-            <div className="no-notifications">No new notifications</div>
-          ) : (
-            notifications.map((note) => (
-              <div key={note.notification_id} className={`notification-card ${note.type}`}>
-                <div className="notification-icon">
-                  {note.type === "response" && <span>📩</span>}
-                  {note.type === "assign" && <span>📝</span>}
-                  {note.type === "deadline" && <span>⏰</span>}
-                </div>
-
-                <div className="notification-content">
-                  <h3>{note.type.toUpperCase()}</h3>
-                  <p>{note.message}</p>
-                  <span className="time">{note.time_ago}</span>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default DPONotificationPage;
+export default UploadPage;
 </file>
 
 <file path="client/src/pages/LoginPage.jsx">
@@ -5696,7 +6134,6 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./LoginPage.css";
-import api from "../api/axios";
 
 // Backend base URL
 // const API_BASE_URL = "http://localhost:8000";
@@ -5719,10 +6156,10 @@ export default function Login() {
 
     try {
       // 🔴 IMPORTANT:
-      // NO withCredentials
-      // Backend uses TOKEN auth, not sessions
-      const response = await api.post(
-        "/login", // ✅ NO trailing slash (matches urls.py)
+      // Use plain axios for login (NOT api instance)
+      // api instance adds token interceptor, but we don't have a token yet
+      const response = await axios.post(
+        "http://127.0.0.1:8000/login",
         {
           username: username.trim(),
           password: password,
@@ -5805,128 +6242,120 @@ export default function Login() {
 }
 </file>
 
-<file path="backend/api/serializers.py">
-from rest_framework import serializers
-from .models import IssueDepartment, Notification, Issue
-
-class IssueDepartmentSerializer(serializers.ModelSerializer):
-    # FIX: Use 'id' directly. Removed 'source=issue_dept_id' which caused the crash.
-    id = serializers.IntegerField(read_only=True)
-    
-    # FIX: Use 'issue.id' because we didn't add the 'issue_no' column to the DB
-    issue_no = serializers.CharField(source='issue.id', read_only=True)
-    
-    issue = serializers.CharField(source='issue.issue_title', read_only=True)
-    department = serializers.CharField(source='department.dept_name', read_only=True)
-    deadline = serializers.DateField(source='deadline_date', read_only=True, format="%d-%m-%Y")
-    location = serializers.CharField(source='issue.location', read_only=True)
-    priority = serializers.CharField(source='issue.priority', read_only=True)
-    
-    # FIX: Use a method to get the response safely (since it's a One-to-Many relation)
-    response = serializers.SerializerMethodField()
-
-    class Meta:
-        model = IssueDepartment
-        fields = [
-            'id',             
-            # 'issue_dept_id',  <-- REMOVED THIS CAUSE OF ERROR
-            'issue_no', 
-            'issue', 
-            'department', 
-            'location', 
-            'priority', 
-            'deadline', 
-            'status', 
-            'response'
-        ]
-
-    def get_response(self, obj):
-        # Fetch the latest response text if available
-        last_response = obj.responses.last()
-        return last_response.response_text if last_response else None
-
-class DPOIssueSerializer(serializers.ModelSerializer):
-    # FIX: Use 'id' as issue_no
-    issue_no = serializers.IntegerField(source='id', read_only=True)
-    
-    issue = serializers.CharField(source='issue_title')
-    issue_description = serializers.CharField()
-    location = serializers.CharField()
-    priority = serializers.CharField()
-    
-    # Custom fields for grouping
-    department = serializers.SerializerMethodField()
-    status = serializers.SerializerMethodField()
-    deadline = serializers.SerializerMethodField()
-    response = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Issue
-        fields = [
-            'id', 
-            'issue_no', 
-            'issue', 
-            'issue_description',
-            'location', 
-            'priority', 
-            'department', 
-            'status', 
-            'deadline', 
-            'response'
-        ]
-    
-    def get_department(self, obj):
-        # Combines multiple departments: "POLICE, PWD"
-        assignments = obj.issuedepartment_set.all()
-        return ", ".join([a.department.dept_name for a in assignments])
-
-    def get_status(self, obj):
-        statuses = [a.status.lower() for a in obj.issuedepartment_set.all()]
-        if not statuses: return "pending"
-        if "overdue" in statuses: return "overdue"
-        if all(s in ["submitted", "completed"] for s in statuses):
-            return "submitted"
-        return "pending"
-
-    def get_deadline(self, obj):
-        deadlines = [a.deadline_date for a in obj.issuedepartment_set.all() if a.deadline_date]
-        if not deadlines: return "N/A"
-        return min(deadlines).strftime("%d-%m-%Y")
-
-    def get_response(self, obj):
-        # Collects responses: ["Police: Action Taken", "PWD: Work Started"]
-        response_list = []
-        for assign in obj.issuedepartment_set.all():
-            latest_resp = assign.responses.last()
-            if latest_resp and latest_resp.response_text:
-                response_list.append(f"{assign.department.dept_name}: {latest_resp.response_text}")
-        return response_list if response_list else None
-
-class NotificationSerializer(serializers.ModelSerializer):
-    time_ago = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Notification
-        fields = ['id', 'message', 'is_read', 'time_ago', 'created_at'] # Ensure 'id' is used here too if needed
-
-    def get_time_ago(self, obj):
-        from django.utils.timesince import timesince
-        return timesince(obj.created_at) + " ago"
+<file path="backend/requirements.txt">
+django
+djangorestframework
+django-cors-headers
+google-generativeai
+python-dotenv
+psycopg2-binary
+openpyxl
 </file>
 
-<file path="client/src/components/DPO/IssuePage/IssueCard.jsx">
-import React from "react";
-import "./IssueCard.css";
+<file path="client/src/components/Collector/CollectorHeader.jsx">
+import React, { useState, useRef, useEffect } from "react";
+import "./CollectorHeader.css";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../../api/axios";
 
-function IssueCard({ issue }) {
-  const status = issue.status || "pending";
+function CollectorHeader() {
+  const [open, setOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  const navigate = useNavigate();
+
+  /* Close dropdown when clicking outside */
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      // Call backend logout endpoint
+      await api.post("/logout");
+    } catch (err) {
+      console.error("Logout error:", err);
+    } finally {
+      // Clear localStorage regardless of API response
+      localStorage.removeItem("token");
+      localStorage.removeItem("username");
+      localStorage.removeItem("role");
+      localStorage.removeItem("department");
+      // Redirect to login
+      navigate("/login");
+    }
+  };
+
+  return (
+    <header className="collector-header">
+      <div className="collector-logo">
+        <div className="collector-logo-icon"></div>
+        <span>Minutes Tracker System</span>
+      </div>
+
+      <div className="collector-header-icons" ref={dropdownRef}>
+        {/* Notifications */}
+        <Link to="/collector/notifications">
+          <NotificationsIcon className="collector-icon bell" />
+        </Link>
+
+        {/* Profile */}
+        <div
+          className="collector-icon profile"
+          onClick={() => setOpen((prev) => !prev)}
+        >
+          C
+        </div>
+
+        {/* Dropdown */}
+        {open && (
+          <div className="collector-profile-dropdown">
+            <button onClick={handleLogout} className="collector-logout-btn">
+              <LogoutIcon className="collector-logout-icon" />
+                Logout
+            </button>
+
+          </div>
+        )}
+      </div>
+    </header>
+  );
+}
+
+export default CollectorHeader;
+</file>
+
+<file path="client/src/components/Department/DepartmentIssueCard.jsx">
+import React, { useState } from "react";
+import DepartmentResponseModal from "./DepartmentResponseModal";
+import "./DepartmentIssueCard.css";
+import api from "../../api/axios";
+
+function DepartmentIssueCard({ issue }) {
+  // Normalize backend status: "received" → "submitted"
+  const normalizedStatus = issue.status === "received" ? "submitted" : issue.status;
+  const status = normalizedStatus || "pending";
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleSubmit = () => {
+    setIsModalOpen(false);
+    alert("Response submitted successfully!");
+  };
 
   const getStatusStyle = () => {
     switch (status) {
       case "overdue":
         return { borderColor: "#b91c1c" };
-      case "submitted": // Backend sends "submitted", Frontend logic maps this to "received" tab
-      case "received":
+      case "submitted":
         return { borderColor: "#16a34a" };
       default:
         return { borderColor: "#facc15" };
@@ -5934,225 +6363,139 @@ function IssueCard({ issue }) {
   };
 
   return (
-    <div className="issue-card" style={getStatusStyle()}>
-      <div className="issue-header">
-        <span className="issue-id">{issue.issue_no}</span>
-        {/* Status Badge */}
-        <span className={`status ${status === "submitted" ? "received" : status}`}>
-          {status === "submitted" ? "Received" : status}
-        </span>
-      </div>
-
-      <div className="issue-body">
-        <div className="issue-row">
-          <div className="label">Department</div>
-          {/* Now displays "Police, PWD, KWA" */}
-          <div className="value">{issue.department}</div>
+    <>
+      <div className="issue-card" style={getStatusStyle()}>
+        <div className="issue-header">
+          <span className="issue-id">{issue.issue_no}</span>
+          <span className={`status ${status}`}>
+            {status === "pending"
+              ? "Response Required"
+              : status === "overdue"
+                ? "Overdue"
+                : "Response Submitted"}
+          </span>
         </div>
 
-        <div className="issue-row">
-          <div className="label">Issue</div>
-          <div className="value">{issue.issue}</div>
-        </div>
-
-        <div className="issue-row">
-          <div className="label">Description</div>
-          <div className="value">{issue.issue_description}</div>
-        </div>
-
-        <div className="issue-row">
-          <div className="label">Priority</div>
-          <div className="value">{issue.priority}</div>
-        </div>
-
-        <div className="issue-row">
-          <div className="label">Location</div>
-          <div className="value">{issue.location}</div>
-        </div>
-
-        <div className="issue-row">
-          <div className={`label ${status === "overdue" ? "overdue-text" : ""}`}>
-            Deadline
+        <div className="issue-body">
+          <div className="issue-row">
+            <div className="label">Issue</div>
+            <div className="value">{issue.issue}</div>
           </div>
-          <div className={`value ${status === "overdue" ? "overdue-text" : ""}`}>
-            <span>{issue.deadline}</span>
+          <div className="issue-row">
+            <div className="label">Description</div>
+            <div className="value">{issue.issue_description}</div>
+          </div>
+          <div className="issue-row">
+            <div className="label">Priority</div>
+            <div className="value">{issue.priority}</div>
+          </div>
+
+          <div className="issue-row">
+            <div className="label">Location</div>
+            <div className="value">{issue.location}</div>
+          </div>
+
+          <div className="issue-row">
+            <div className={`label ${status === "overdue" ? "overdue-text" : ""}`}>
+              Deadline
+            </div>
+            <div className={`value ${status === "overdue" ? "overdue-text" : ""}`}>
+              <span>{issue.deadline}</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="issue-footer">
-        <div className="footer-line"></div>
-
-        {/* LOGIC FOR DISPLAYING RESPONSES */}
-        
-        {/* If there are NO responses yet */}
-        {(!issue.response || issue.response.length === 0) && status === "pending" && (
-          <p className="no-response">No response received yet</p>
-        )}
-
-        {/* If status is Overdue */}
-        {status === "overdue" && (
-          <p className="no-response">Response overdue ⚠️</p>
-        )}
-
-        {/* If there ARE responses (Show list) */}
-        {issue.response && issue.response.length > 0 && (
-          <div className="response-container" style={{ marginTop: "10px" }}>
-            {issue.response.map((resText, index) => (
-              <div 
-                key={index} 
-                className="response-received" 
-                style={{ marginBottom: "8px", height: "auto", padding: "10px" }}
-              >
-                <p className="res" style={{ marginLeft: "0" }}>
-                  <strong>Response:</strong> {resText}
-                </p>
-              </div>
-            ))}
-            {/* Optional: Add button only if needed */}
-             {/* <button className="res-button" style={{position:'static', marginTop:'5px'}}>
-               Download Attachment
-             </button> */}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-export default IssueCard;
-</file>
-
-<file path="client/src/pages/DepartmentPage/DepartmentResponsePage.jsx">
-// import axios from "axios";
-import React, { useEffect, useState, useMemo } from "react";
-import axios from "axios";
-import { useParams } from "react-router-dom";
-import Header from "../../components/Department/Header";
-import Tabs from "../../components/Department/Tabs";
-import IssueCard from "../../components/Department/IssueCard";
-import "./DepartmentResponsePage.css";
-import api from "../../api/axios";
-
-function DepartmentResponsePage() {
-  const { dept } = useParams();
-  const [activeTab, setActiveTab] = useState("Pending");
-  const [allIssues, setAllIssues] = useState([]); // Renamed for clarity
-  const [loading, setLoading] = useState(false);
-
-  // 1. OPTIMIZATION: Fetch ONLY when department changes, NOT when tab changes
-  useEffect(() => {
-    if (!dept) return;
-    
-    setLoading(true);
-    // Fetch issues specifically for this department from Django
-    api.get(`/issues/${dept}`)
-      .then((res) => {
-        setAllIssues(res.data);
-      })
-      .catch((err) => console.error("Error fetching department issues:", err))
-      .finally(() => setLoading(false));
-      
-  }, [dept]); // <--- FIX: Removed activeTab from here!
-
-  // 2. OPTIMIZATION: Filter instantly in memory using useMemo
-  const displayedIssues = useMemo(() => {
-    const tabLower = activeTab.toLowerCase();
-
-    return allIssues.filter((i) => {
-      const status = i.status.toLowerCase();
-      
-      // Handle the 'Submitted' vs 'Received' logic if needed
-      if (tabLower === 'submitted') {
-        return status === 'submitted' || status === 'completed';
-      }
-      return status === tabLower;
-    });
-  }, [allIssues, activeTab]); // Re-runs instantly when tab changes
-
-  return (
-    <div className="dpo-container">
-      <Header departmentName={dept} />
-      <div className="content">
-        <h1>{dept?.toUpperCase()} Department Portal</h1>
-        
-        <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
-        
-        <div className="tab-scroll-area">
-          {loading ? (
-            <p>Loading...</p>
-          ) : (
+        <div className="issue-footer">
+          {status === "submitted" && (
             <>
-              {displayedIssues.length > 0 ? (
-                displayedIssues.map((issue) => (
-                  <IssueCard 
-                    // We fixed the serializer to return 'id', so use that
-                    key={issue.id} 
-                    issue={issue} 
-                  />
-                ))
-              ) : (
-                <p className="no-issues">No issues currently in {activeTab}.</p>
-              )}
+              <div className="footer-line"></div>
+              <div className="response-received">
+                <p className="res">
+                  <strong>Your Response:</strong> {issue.response?.text}
+                </p>
+                {issue.response?.attachment && (
+                  <button
+                    className="res-button"
+                    onClick={() => {
+                      const baseUrl = api.defaults.baseURL;
+                      const fullUrl = issue.response.attachment.startsWith("http") ? issue.response.attachment : `${baseUrl}${issue.response.attachment}`;
+                      window.open(fullUrl, "_blank");
+                    }}
+                  >
+                    View Attachment
+                  </button>
+                )}
+              </div>
             </>
+          )}
+
+          {(status === "pending" || status === "overdue") && (
+            <button
+              className={`submit-btn ${status === "pending" ? "pending-btn" : "overdue-btn"
+                }`}
+              onClick={() => setIsModalOpen(true)}
+            >
+              Submit Response
+            </button>
           )}
         </div>
       </div>
-    </div>
+
+      <DepartmentResponseModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        issue={issue}
+        onSubmit={handleSubmit}
+      />
+    </>
   );
 }
 
-export default DepartmentResponsePage;
+export default DepartmentIssueCard;
 </file>
 
-<file path="client/src/pages/DPOPage/DPOIssuePage.jsx">
+<file path="client/src/pages/CollectorPage/CollectorIssuePage.jsx">
 import React, { useEffect, useState, useMemo } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
-import DriveFolderUploadSharpIcon from "@mui/icons-material/DriveFolderUploadSharp";
+import CollectorHeader from "../../components/Collector/CollectorHeader";
+import CollectorTabs from "../../components/Collector/IssuePage/CollectorTabs";
+import CollectorFilterBar from "../../components/Collector/IssuePage/CollectorFilterBar";
+import CollectorIssueCard from "../../components/Collector/IssuePage/CollectorIssueCard";
+import "./CollectorIssuePage.css";
+import api from "../../api/axios"; // Uses your configured axios with Token
 
-// Import your existing components (Old Paths)
-import Header from "../../components/DPO/Header";
-import Tabs from "../../components/DPO/IssuePage/Tabs";
-import FilterBar from "../../components/DPO/IssuePage/FilterBar";
-import IssueCard from "../../components/DPO/IssuePage/IssueCard";
-
-// Import your existing CSS
-import "./DPOIssuePage.css";
-import api from "../../api/axios";
-
-function DPOIssuePage() {
-  // 1. State Management
+function CollectorIssuePage() {
   const [activeTab, setActiveTab] = useState("Pending");
   const [filters, setFilters] = useState({});
-  const [allIssues, setAllIssues] = useState([]); // Stores everything (Fast!)
+  const [allIssues, setAllIssues] = useState([]); 
   const [loading, setLoading] = useState(false);
 
-  // 2. FETCH Logic (Runs only on Load or Date Change)
+  // 1. Fetch Logic: Get ALL issues once (or when Date filter changes)
   useEffect(() => {
     setLoading(true);
-    api
-      .get("/issues")
+    
+    // Use the specific date param if it exists, otherwise fetch all
+    const params = filters.date ? { date: filters.date } : {};
+
+    api.get("/issues", { params })
       .then((res) => {
         setAllIssues(res.data);
       })
       .catch((err) => console.error("Error fetching issues:", err))
       .finally(() => setLoading(false));
-      
-  }, [filters.date]); // <--- CRITICAL: Only re-fetch if DATE changes. Ignore Tab/Search.
 
+  }, [filters.date]); // Only re-fetch from server if the DATE filter changes
 
-  // 3. INSTANT FILTERING (Client-Side)
-  // This replaces the server call for tabs/search
+  // 2. Instant Client-Side Filtering (Same logic as DPO page)
   const displayedIssues = useMemo(() => {
     return allIssues.filter((issue) => {
+        
         // A. Filter by Tab
         const status = issue.status ? issue.status.toLowerCase() : "pending";
         const tab = activeTab.toLowerCase();
         
         let statusMatch = false;
         if (tab === "received") {
-            // UI says "Received", Database says "submitted" or "completed"
+            // "Received" tab shows 'submitted' or 'completed' status
             statusMatch = (status === "submitted" || status === "completed");
         } else {
             statusMatch = (status === tab);
@@ -6160,7 +6503,7 @@ function DPOIssuePage() {
 
         if (!statusMatch) return false;
 
-        // B. Filter by Search Query (Instant Search)
+        // B. Filter by Search Query
         if (filters.searchQuery) {
             const query = filters.searchQuery.toLowerCase();
             const matchesSearch = 
@@ -6171,46 +6514,45 @@ function DPOIssuePage() {
             if (!matchesSearch) return false;
         }
 
-        // C. Filter by Priority (if selected in dropdown)
+        // C. Filter by Dropdown (Priority/Dept)
         if (filters.filterBy && filters.filterBy !== "all") {
              const filterVal = filters.filterBy.toLowerCase();
+             
              // Check Priority
              if (['high', 'medium', 'low'].includes(filterVal)) {
                  if (issue.priority.toLowerCase() !== filterVal) return false;
              }
-             // Check Department (if your dropdown includes departments)
+             // Check Department
              else {
                  if (!issue.department.toLowerCase().includes(filterVal)) return false;
              }
         }
 
+        // D. Sort Logic (Optional client-side sorting)
+        // You can add sort logic here if needed, currently implied by order of array
+
         return true;
     });
-  }, [allIssues, activeTab, filters]); // Re-runs instantly when you click tabs/search
-
+  }, [allIssues, activeTab, filters]);
 
   return (
     <div className="dpo-container">
-      <Header />
+      <CollectorHeader />
 
       <div className="content">
         <div className="page-title">
-          <h1>Issue Tracking & Management</h1>
-          <Link to="/dpo/upload">
-            <DriveFolderUploadSharpIcon className="upload-icon" />
-          </Link>
+          <h1>District Monitor</h1>
         </div>
 
-        {/* Reuse your existing FilterBar */}
-        <FilterBar
+        <CollectorFilterBar
           activeTab={activeTab}
           onFilterChange={(newFilters) => setFilters(prev => ({...prev, ...newFilters}))}
+          // specific date filtering if needed
         />
 
-        {/* Reuse your existing Tabs */}
-        <Tabs
+        <CollectorTabs
           activeTab={activeTab}
-          setActiveTab={(tab) => setActiveTab(tab)}
+          setActiveTab={setActiveTab}
         />
 
         <div className="tab-scroll-area">
@@ -6220,7 +6562,7 @@ function DPOIssuePage() {
             <p className="no-issues">No issues found</p>
           ) : (
             displayedIssues.map((issue) => (
-                <IssueCard key={issue.id} issue={issue} />
+                <CollectorIssueCard key={issue.id} issue={issue} />
             ))
           )}
         </div>
@@ -6229,7 +6571,40 @@ function DPOIssuePage() {
   );
 }
 
-export default DPOIssuePage;
+export default CollectorIssuePage;
+</file>
+
+<file path=".gitignore">
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+node_modules
+/.pnp
+.pnp.js
+venv
+
+# testing
+/coverage
+
+# production
+/build
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+
+repomix-output.xml
+# Python
+__pycache__/
+*.pyc
 </file>
 
 <file path="backend/api/models.py">
@@ -6311,22 +6686,707 @@ class Notification(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 </file>
 
+<file path="client/src/pages/DepartmentPage/DepartmentResponsePage.jsx">
+// import axios from "axios";
+import React, { useEffect, useState, useMemo } from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import DepartmentHeader from "../../components/Department/DepartmentHeader";
+import DepartmentTabs from "../../components/Department/DepartmentTabs";
+import DepartmentIssueCard from "../../components/Department/DepartmentIssueCard";
+import "./DepartmentResponsePage.css";
+import api from "../../api/axios";
+
+function DepartmentResponsePage() {
+  const { dept } = useParams();
+  const [activeTab, setActiveTab] = useState("Pending");
+  const [allIssues, setAllIssues] = useState([]); // Renamed for clarity
+  const [loading, setLoading] = useState(false);
+
+  // 1. OPTIMIZATION: Fetch ONLY when department changes, NOT when tab changes
+  useEffect(() => {
+    if (!dept) return;
+    
+    setLoading(true);
+    // Fetch issues specifically for this department from Django
+    api.get(`/issues/${dept}`)
+      .then((res) => {
+        setAllIssues(res.data);
+      })
+      .catch((err) => console.error("Error fetching department issues:", err))
+      .finally(() => setLoading(false));
+      
+  }, [dept]); // <--- FIX: Removed activeTab from here!
+
+  // 2. OPTIMIZATION: Filter instantly in memory using useMemo
+  const displayedIssues = useMemo(() => {
+    const tabLower = activeTab.toLowerCase();
+
+    return allIssues.filter((i) => {
+      const status = i.status.toLowerCase();
+      
+      // Handle the 'Submitted' vs 'Received' logic if needed
+      if (tabLower === 'submitted') {
+        return status === 'submitted' || status === 'completed';
+      }
+      return status === tabLower;
+    });
+  }, [allIssues, activeTab]); // Re-runs instantly when tab changes
+
+  return (
+    <div className="dpo-container">
+      <DepartmentHeader departmentName={dept} />
+      <div className="content">
+        <h1>{dept?.toUpperCase()} Department Portal</h1>
+        
+        <DepartmentTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+        
+        <div className="tab-scroll-area">
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <>
+              {displayedIssues.length > 0 ? (
+                displayedIssues.map((issue) => (
+                  <DepartmentIssueCard 
+                    // We fixed the serializer to return 'id', so use that
+                    key={issue.id} 
+                    issue={issue} 
+                  />
+                ))
+              ) : (
+                <p className="no-issues">No issues currently in {activeTab}.</p>
+              )}
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default DepartmentResponsePage;
+</file>
+
+<file path="client/src/pages/DepartmentPage/NotificationPage.jsx">
+import React, { useEffect, useState } from "react";
+// import axios from "axios";
+import DepartmentHeader from "../../components/Department/DepartmentHeader";
+import "./NotificationPage.css";
+import api from "../../api/axios";
+
+function DepartmentNotificationPage() {
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      const username = localStorage.getItem("username");
+      try {
+        const res = await api.get("/notifications", {
+          params: { username }
+        });
+        setNotifications(res.data);
+      } catch (err) {
+        console.error("Error fetching notifications:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNotifications();
+  }, []);
+
+  return (
+    <div className="notificationpage-container">
+      <DepartmentHeader activeTab="notifications" />
+
+      <div className="notificationpage-content">
+        <div className="notification-header">
+          <h1>Notifications</h1>
+        </div>
+
+        <div className="notification-list">
+          {loading ? (
+            <p>Loading...</p>
+          ) : notifications.length === 0 ? (
+            <div className="no-notifications">No new notifications</div>
+          ) : (
+            notifications.map((note) => {
+              const safeType = note.type || "general";
+              return (
+                <div key={note.id} className={`notification-card ${safeType}`}>
+                  <div className="notification-icon">
+                    {safeType === "assign" && <span>📝</span>}
+                    {safeType === "deadline" && <span>⏰</span>}
+                    {safeType === "response" && <span>📩</span>}
+                    {safeType === "general" && <span>🔔</span>}
+                  </div>
+
+                  <div className="notification-content">
+                    <h3>{safeType.toUpperCase()}</h3>
+                    <p>{note.message}</p>
+                    <span className="time">{note.time_ago}</span>
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default DepartmentNotificationPage;
+</file>
+
+<file path="client/src/pages/DPOPage/DPOIssuePage.jsx">
+import React, { useEffect, useState, useMemo } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import DriveFolderUploadSharpIcon from "@mui/icons-material/DriveFolderUploadSharp";
+
+// Import your existing components (Old Paths)
+import DPOHeader from "../../components/DPO/DPOHeader";
+import DPOTabs from "../../components/DPO/IssuePage/DPOTabs";
+import DPOFilterBar from "../../components/DPO/IssuePage/DPOFilterBar";
+import DPOIssueCard from "../../components/DPO/IssuePage/DPOIssueCard";
+
+// Import your existing CSS
+import "./DPOIssuePage.css";
+import api from "../../api/axios";
+
+function DPOIssuePage() {
+  // 1. State Management
+  const [activeTab, setActiveTab] = useState("Pending");
+  const [filters, setFilters] = useState({});
+  const [allIssues, setAllIssues] = useState([]); // Stores everything (Fast!)
+  const [loading, setLoading] = useState(false);
+
+  // 2. FETCH Logic (Runs only on Load or Date Change)
+  useEffect(() => {
+    setLoading(true);
+    api
+      .get("/issues")
+      .then((res) => {
+        setAllIssues(res.data);
+      })
+      .catch((err) => console.error("Error fetching issues:", err))
+      .finally(() => setLoading(false));
+      
+  }, [filters.date]); // <--- CRITICAL: Only re-fetch if DATE changes. Ignore Tab/Search.
+
+
+  // 3. INSTANT FILTERING (Client-Side)
+  // This replaces the server call for tabs/search
+  const displayedIssues = useMemo(() => {
+    return allIssues.filter((issue) => {
+        // A. Filter by Tab
+        const status = issue.status ? issue.status.toLowerCase() : "pending";
+        const tab = activeTab.toLowerCase();
+        
+        let statusMatch = false;
+        if (tab === "received") {
+            // UI says "Received", Database says "submitted" or "completed"
+            statusMatch = (status === "submitted" || status === "completed");
+        } else {
+            statusMatch = (status === tab);
+        }
+
+        if (!statusMatch) return false;
+
+        // B. Filter by Search Query (Instant Search)
+        if (filters.searchQuery) {
+            const query = filters.searchQuery.toLowerCase();
+            const matchesSearch = 
+                (issue.issue && issue.issue.toLowerCase().includes(query)) ||
+                (issue.issue_no && issue.issue_no.toString().includes(query)) ||
+                (issue.department && issue.department.toLowerCase().includes(query));
+            
+            if (!matchesSearch) return false;
+        }
+
+        // C. Filter by Priority (if selected in dropdown)
+        if (filters.filterBy && filters.filterBy !== "all") {
+             const filterVal = filters.filterBy.toLowerCase();
+             // Check Priority
+             if (['high', 'medium', 'low'].includes(filterVal)) {
+                 if (issue.priority.toLowerCase() !== filterVal) return false;
+             }
+             // Check Department (if your dropdown includes departments)
+             else {
+                 if (!issue.department.toLowerCase().includes(filterVal)) return false;
+             }
+        }
+
+        return true;
+    });
+  }, [allIssues, activeTab, filters]); // Re-runs instantly when you click tabs/search
+
+
+  return (
+    <div className="dpo-container">
+      <DPOHeader />
+
+      <div className="content">
+        <div className="page-title">
+          <h1>Issue Tracking & Management</h1>
+          <Link to="/dpo/upload">
+            <DriveFolderUploadSharpIcon className="upload-icon" />
+          </Link>
+        </div>
+
+        {/* Reuse your existing FilterBar */}
+        <DPOFilterBar
+          activeTab={activeTab}
+          onFilterChange={(newFilters) => setFilters(prev => ({...prev, ...newFilters}))}
+        />
+
+        {/* Reuse your existing Tabs */}
+        <DPOTabs
+          activeTab={activeTab}
+          setActiveTab={(tab) => setActiveTab(tab)}
+        />
+
+        <div className="tab-scroll-area">
+          {loading ? (
+            <p className="loading-text">Loading...</p>
+          ) : displayedIssues.length === 0 ? (
+            <p className="no-issues">No issues found</p>
+          ) : (
+            displayedIssues.map((issue) => (
+                <DPOIssueCard key={issue.id} issue={issue} />
+            ))
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default DPOIssuePage;
+</file>
+
+<file path="client/src/pages/DPOPage/NotificationPage.jsx">
+import React, { useEffect, useState } from "react";
+// import axios from "axios";
+import DPOHeader from "../../components/DPO/DPOHeader";
+import "./NotificationPage.css";
+import api from "../../api/axios";
+
+function DPONotificationPage() {
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      const username = localStorage.getItem("username");
+      try {
+        const res = await api.get("/notifications", {
+          params: { username }
+        });
+        setNotifications(res.data);
+      } catch (err) {
+        console.error("Error fetching notifications:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNotifications();
+  }, []);
+
+  return (
+    <div className="notificationpage-container">
+      <DPOHeader activeTab="notifications" />
+
+      <div className="notificationpage-content">
+        <div className="notification-header">
+          <h1>Notifications</h1>
+        </div>
+
+        <div className="notification-list">
+          {loading ? (
+            <p>Loading...</p>
+          ) : notifications.length === 0 ? (
+            <div className="no-notifications">No new notifications</div>
+          ) : (
+            notifications.map((note) => {
+              const safeType = note.type || "general";
+              return (
+                <div key={note.id} className={`notification-card ${safeType}`}>
+                  <div className="notification-icon">
+                    {safeType === "response" && <span>📩</span>}
+                    {safeType === "assign" && <span>📝</span>}
+                    {safeType === "deadline" && <span>⏰</span>}
+                    {safeType === "general" && <span>🔔</span>}
+                  </div>
+
+                  <div className="notification-content">
+                    <h3>{safeType.toUpperCase()}</h3>
+                    <p>{note.message}</p>
+                    <span className="time">{note.time_ago}</span>
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default DPONotificationPage;
+</file>
+
+<file path="backend/backend/settings.py">
+from pathlib import Path
+import os
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+SECRET_KEY = 'insecure-dev-key'
+DEBUG = True
+ALLOWED_HOSTS = ['*']
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'rest_framework',
+    'corsheaders',
+    'rest_framework.authtoken',
+    'api',
+
+]
+
+
+MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+
+
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+
+
+ROOT_URLCONF = 'backend.urls'
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
+WSGI_APPLICATION = 'backend.wsgi.application'
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres.oiscsacsglwideokczhm',
+        'PASSWORD': 'agnayarjunibrukeerthi',
+        'HOST': 'aws-1-ap-south-1.pooler.supabase.com',
+        'PORT': '5432',
+        'OPTIONS': {
+            'sslmode': 'require',
+        }
+    }
+}
+
+
+
+LANGUAGE_CODE = 'en-us'
+TIME_ZONE = 'UTC'
+USE_I18N = True
+USE_TZ = True
+STATIC_URL = 'static/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# Point to our custom user model
+AUTH_USER_MODEL = 'api.User'
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
+SESSION_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SECURE = False  # localhost only
+CSRF_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SECURE = False
+</file>
+
+<file path="backend/api/urls.py">
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('login', views.login_view),
+    path('logout', views.logout_view),
+    path('upload-minutes', views.upload_minutes),
+    path('assign-issues', views.get_assign_issues),
+    path('assign-issues/allocate-all', views.allocate_all),
+    path('issues', views.get_all_issues),
+    path('issues/<str:dept_name>', views.get_dept_issues),
+    path('submit-response', views.submit_response),
+    path('notifications', views.get_notifications),
+    path('generate-report', views.generate_report),
+]
+</file>
+
+<file path="backend/api/serializers.py">
+from rest_framework import serializers
+from .models import IssueDepartment, Notification, Issue
+
+class IssueDepartmentSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    issue_no = serializers.CharField(source='issue.id', read_only=True)
+    issue_description = serializers.CharField(source='issue.issue_description', read_only=True)
+    issue = serializers.CharField(source='issue.issue_title', read_only=True)
+    department = serializers.CharField(source='department.dept_name', read_only=True)
+    deadline = serializers.DateField(source='deadline_date', read_only=True, format="%d-%m-%Y")
+    location = serializers.CharField(source='issue.location', read_only=True)
+    priority = serializers.CharField(source='issue.priority', read_only=True)
+    
+    # Custom response field to return both text and the file link
+    response = serializers.SerializerMethodField()
+
+    class Meta:
+        model = IssueDepartment
+        fields = [
+            'id',             
+            'issue_no', 
+            'issue',
+            'issue_description',
+            'department', 
+            'location', 
+            'priority', 
+            'deadline', 
+            'status', 
+            'response'
+        ]
+
+    def get_response(self, obj):
+        # Fetch the latest response record for this specific issue-department link
+        last_response = obj.responses.last()
+        if not last_response:
+            return None
+            
+        return {
+            "text": last_response.response_text,
+            "attachment": last_response.attachment_path.url if last_response.attachment_path else None
+        }
+
+class DPOIssueSerializer(serializers.ModelSerializer):
+    issue_no = serializers.IntegerField(source='id', read_only=True)
+    issue = serializers.CharField(source='issue_title')
+    issue_description = serializers.CharField()
+    location = serializers.CharField()
+    priority = serializers.CharField()
+    
+    # For DPO, we group by departments and collect ALL responses
+    department = serializers.SerializerMethodField()
+    status = serializers.SerializerMethodField()
+    deadline = serializers.SerializerMethodField()
+    response = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Issue
+        fields = [
+            'id', 
+            'issue_no', 
+            'issue', 
+            'issue_description',
+            'location', 
+            'priority', 
+            'department', 
+            'status', 
+            'deadline', 
+            'response'
+        ]
+    
+    def get_department(self, obj):
+        assignments = obj.issuedepartment_set.all()
+        return ", ".join([a.department.dept_name for a in assignments])
+
+    def get_status(self, obj):
+        statuses = [a.status.lower() for a in obj.issuedepartment_set.all()]
+        if not statuses: return "pending"
+        if "overdue" in statuses: return "overdue"
+        if all(s in ["submitted", "completed"] for s in statuses):
+            return "submitted"
+        return "pending"
+
+    def get_deadline(self, obj):
+        deadlines = [a.deadline_date for a in obj.issuedepartment_set.all() if a.deadline_date]
+        if not deadlines: return "N/A"
+        return min(deadlines).strftime("%d-%m-%Y")
+
+    def get_response(self, obj):
+        # Returns a list of response objects from all assigned departments
+        response_list = []
+        for assign in obj.issuedepartment_set.all():
+            latest_resp = assign.responses.last()
+            if latest_resp:
+                response_list.append({
+                    "department": assign.department.dept_name,
+                    "text": latest_resp.response_text or "",
+                    "attachment": latest_resp.attachment_path.url if latest_resp.attachment_path else None
+                })
+        return response_list if response_list else None
+
+class NotificationSerializer(serializers.ModelSerializer):
+    time_ago = serializers.SerializerMethodField()
+    type = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Notification
+        fields = ['id', 'message', 'is_read', 'time_ago', 'created_at', 'type']
+
+    def get_time_ago(self, obj):
+        from django.utils.timesince import timesince
+        return timesince(obj.created_at) + " ago"
+
+    def get_type(self, obj):
+        msg = obj.message.lower()
+        if "response" in msg: return "response"
+        if "assigned" in msg or "action required" in msg: return "assign"
+        if "deadline" in msg or "overdue" in msg: return "deadline"
+        return "general"
+</file>
+
+<file path="backend/api/gemini_utils.py">
+import google.generativeai as genai
+from google.generativeai.types import HarmCategory, HarmBlockThreshold
+import os
+import json
+import time
+
+GOOGLE_API_KEY = "your_api_key_here"
+
+def get_best_model():
+    try:
+        for m in genai.list_models():
+            if 'generateContent' in m.supported_generation_methods and 'flash' in m.name:
+                return m.name
+    except: pass
+    return 'models/gemini-1.5-flash'
+
+def analyze_document_with_gemini(file_path):
+    print(f"--- 🧠 Starting AI Analysis for: {file_path} ---")
+    genai.configure(api_key=GOOGLE_API_KEY)
+    
+    try:
+        uploaded_file = genai.upload_file(path=file_path, display_name="Minutes")
+        while uploaded_file.state.name == "PROCESSING":
+            time.sleep(1)
+            uploaded_file = genai.get_file(uploaded_file.name)
+    except Exception as e:
+        print(f"❌ Upload Error: {e}")
+        return []
+
+    model = genai.GenerativeModel(get_best_model())
+    safety = {cat: HarmBlockThreshold.BLOCK_NONE for cat in [
+        HarmCategory.HARM_CATEGORY_HARASSMENT, HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+        HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT
+    ]}
+    
+    prompt = """
+    Analyze this Malayalam PDF. Extract every actionable issue.
+    
+    FORCE RULES:
+    1. EXTRACT EVERY ISSUE listed. Do not skip any.
+    2. YOU MUST ASSIGN AT LEAST ONE DEPARTMENT. If it is not explicitly mentioned, you MUST INFER it based on these keywords:
+       - 'റോഡ്' (Road), 'പാലം' (Bridge) -> PWD_ROADS
+       - 'കെട്ടിടം' (Building), 'സ്കൂൾ അറ്റകുറ്റപ്പണി' (School repair) -> PWD_BUILDINGS
+       - 'കുടിവെള്ളം' (Drinking water), 'പൈപ്പ്' (Pipe) -> KWA
+       - 'വൈദ്യുതി' (Electricity), 'ലൈൻ' (Line), 'ട്രാൻസ്ഫോർമർ' -> KSEB
+       - 'മാലിന്യം' (Waste), 'പഞ്ചായത്ത്' (Panchayat), 'തെരുവുനായ' (Stray dog) -> LSGD
+       - 'കൃഷി' (Farming), 'കർഷകർ' (Farmers), 'വിളനാശം' (Crop damage) -> AGRICULTURE
+       - 'ക്രമസമാധാനം' (Law & Order), 'ട്രാഫിക്' (Traffic) -> POLICE
+
+    STRICT RULES:
+    1. Do NOT invent dates. If no deadline is explicitly mentioned in the text for an issue, the "deadline" field MUST be an empty string "".
+    2. Do NOT use today's date or any date like '18-12-25'.
+    
+    
+    Return a JSON ARRAY of objects:
+    - issue_no: string
+    - departments: ARRAY of strings (e.g. ["PWD_ROADS", "LSGD"]) should be extracted from text after നടപടി:- only give the dept, not the officer position, and also convert to the english names of the  departments as above.
+    - issue: ONE-LINE Malayalam summary (max 20 words)
+    - issue_description: FULL detailed Malayalam issue description (multiple sentences),dont assume anything not in the document.
+    - location: Malayalam place name (if mentioned) or "".
+    - priority: High/Medium/Low (based on urgency in text, urgency can be inferred from words and high priority for issues that involve MLA/MP/Minister requests)
+    - deadline (DD-MM-YYYY or "")
+    
+    Output ONLY PURE JSON. Do not include any other text.
+    """
+
+    try:
+        response = model.generate_content([uploaded_file, prompt], safety_settings=safety)
+        text = response.text.replace("```json", "").replace("```", "").strip()
+        return json.loads(text)
+    except Exception as e:
+        print(f"❌ Generation Error: {e}")
+        return []
+</file>
+
 <file path="backend/api/views.py">
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from django.db.models import Q
 
 from datetime import datetime, date
 import os
-
+import openpyxl
+from openpyxl.styles import Font, Alignment, Border, Side
+from django.http import HttpResponse
 
 from rest_framework.authtoken.models import Token
-
+from collections import defaultdict
 
 
 from .models import (
@@ -6353,16 +7413,53 @@ TEMP_DATA_CACHE = []
 @api_view(['POST'])
 @permission_classes([AllowAny]) 
 def login_view(request):
-    username = request.data.get('username')
-    password = request.data.get('password')
+    print("\n\n🔥 ================= DIAGNOSTIC LOGIN START ================= 🔥")
+    
+    # 1. Capture what the Frontend sent
+    username_input = request.data.get('username')
+    password_input = request.data.get('password')
+    print(f"🔥 INPUT RECEIVED -> Username: '{username_input}' | Password: '{password_input}'")
 
-    if not username or not password:
+    if not username_input or not password_input:
+        print("🔥 ERROR: Username or Password missing in request body.")
         return Response({"success": False, "message": "Missing credentials"}, status=400)
 
-    user = authenticate(username=username, password=password)
+    # 2. direct Database Check (Bypassing authentication to see if user exists)
+    User = get_user_model()
+    try:
+        # Try finding exact match
+        user_db = User.objects.get(username=username_input)
+        print(f"🔥 DB LOOKUP -> ✅ User '{username_input}' found in database.")
+        print(f"   - ID: {user_db.id}")
+        print(f"   - Role: {user_db.role}")
+        print(f"   - is_active: {user_db.is_active}")
+        print(f"   - Password Valid?: {user_db.check_password(password_input)}")
+        
+        if not user_db.is_active:
+            print("   ⚠️ WARNING: User is INACTIVE. Login will fail.")
+        
+        if not user_db.check_password(password_input):
+            print("   ⚠️ WARNING: Password check FAILED. The password stored does not match the input.")
+
+    except User.DoesNotExist:
+        print(f"🔥 DB LOOKUP -> ❌ User '{username_input}' does NOT exist.")
+        # Check if it exists with different capitalization
+        similar = User.objects.filter(username__iexact=username_input)
+        if similar.exists():
+            print(f"   ⚠️ FOUND MISMATCH: Did you mean '{similar.first().username}'?")
+        else:
+            print(f"   ⚠️ No user found. Available users: {list(User.objects.values_list('username', flat=True))}")
+
+    # 3. Actual Authentication Attempt
+    user = authenticate(username=username_input, password=password_input)
 
     if user is None:
+        print("🔥 FINAL RESULT -> ❌ authenticate() failed.")
+        print("🔥 ================= DIAGNOSTIC LOGIN END ================= 🔥\n\n")
         return Response({"success": False, "message": "Invalid username or password"}, status=401)
+
+    print("🔥 FINAL RESULT -> ✅ Login Successful!")
+    print("🔥 ================= DIAGNOSTIC LOGIN END ================= 🔥\n\n")
 
     token, _ = Token.objects.get_or_create(user=user)
 
@@ -6378,13 +7475,8 @@ def login_view(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def logout_view(request):
-    logout(request)
+    request.user.auth_token.delete()  # Delete the token
     return Response({"success": True})
-# @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
-# def logout_view(request):
-#     request.auth.delete()   # delete token
-#     return Response({"success": True}) #keerthi added this js for verification-didnt check
 
 
 
@@ -6585,55 +7677,47 @@ def get_dept_issues(request, dept_name):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def submit_response(request):
-    # 1. Get the ID safely
+    # 1. Get data safely (handle both JSON and FormData)
     issue_id = request.data.get('issue_id') or request.data.get('id')
     response_text = request.data.get('response')
+    attachment = request.FILES.get('attachment')
 
-    print(f"📝 Submitting response for ID: {issue_id}") # Debug Log
+    print(f"📝 Submitting response for ID: {issue_id}")
 
     if not issue_id or str(issue_id) == "undefined":
         return Response({"error": "Invalid ID provided"}, status=400)
 
     try:
-        # FIX 1: Use 'id' (the database primary key), not 'issue_dept_id'
-
         issue_link = IssueDepartment.objects.get(id=issue_id)
         
-        # FIX 2: Create Response (Using 'issue_department' which matches your model)
-        # We use 'create' instead of update_or_create to allow history of responses
+        # FIX: Create Response with attachment
         ResponseModel.objects.create(
             issue_department=issue_link, 
-            response_text=response_text
+            response_text=response_text or "",
+            attachment_path=attachment
         )
         
-        # FIX 3: Status must be lowercase 'submitted' to match your frontend logic
         issue_link.status = 'submitted'
         issue_link.save()
         
         # --- NOTIFY DPO ---
         dpos = User.objects.filter(Q(role__iexact='DPO') | Q(username__iexact='dpo'))
-        
-        # FIX 4: Use 'issue.id' because 'issue_no' column might not exist
         issue_number = issue_link.issue.id 
         dept_name = issue_link.department.dept_name
 
         for d in dpos:
             Notification.objects.create(
                 user=d, 
-                issue_department=issue_link,  # FIX 5: Field name is 'issue_department'
-                # type='response', # Uncomment only if your Notification model has this field
+                issue_department=issue_link,
                 message=f"Response Received: {dept_name} responded to Issue #{issue_number}"
             )
             
-        print(f"✅ Response success for Issue #{issue_number}")
         return Response({"success": True})
 
     except IssueDepartment.DoesNotExist:
-        print(f"❌ Error: IssueDepartment with ID {issue_id} not found.")
         return Response({"error": "Issue not found"}, status=404)
-        
     except Exception as e:
-        print(f"🔥 CRITICAL SUBMIT ERROR: {str(e)}") # Prints exact error to terminal
+        print(f"🔥 CRITICAL SUBMIT ERROR: {str(e)}")
         import traceback
         traceback.print_exc()
         return Response({"error": str(e)}, status=500)
@@ -6660,195 +7744,127 @@ from django.http import JsonResponse
 def test_view(request):
     print("🔥 TEST VIEW HIT:", request.method)
     return JsonResponse({"ok": True})
-</file>
-
-<file path="backend/backend/settings.py">
-from pathlib import Path
-import os
-
-BASE_DIR = Path(__file__).resolve().parent.parent
-SECRET_KEY = 'insecure-dev-key'
-DEBUG = True
-ALLOWED_HOSTS = ['*']
-
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'rest_framework',
-    'corsheaders',
-    'rest_framework.authtoken',
-    'api',
-
-]
 
 
-MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-]
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def generate_report(request):
+    # 1. Fetch only 'Submitted'/'Received' issues
+    items = IssueDepartment.objects.filter(
+        status__in=['submitted', 'received', 'completed']
+    ).select_related('issue', 'issue__minutes', 'department').prefetch_related('responses')
 
+    # 2. Group by Issue ID
+    # Structure: { issue_id: { 'issue_obj': issue, 'depts': [], 'responses': [] } }
+    grouped_data = defaultdict(lambda: {'issue': None, 'depts': [], 'responses': []})
 
+    for item in items:
+        # Initialize the issue object if not set
+        if grouped_data[item.issue.id]['issue'] is None:
+            grouped_data[item.issue.id]['issue'] = item.issue
+        
+        # Add Department Name
+        grouped_data[item.issue.id]['depts'].append(item.department.dept_name)
+        
+        # Add Response with Dept Prefix
+        last_response = item.responses.last()
+        resp_text = last_response.response_text if last_response else "No status update."
+        formatted_response = f"[{item.department.dept_name}]: {resp_text}"
+        grouped_data[item.issue.id]['responses'].append(formatted_response)
 
+    # 3. Create Workbook
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Follow Up Report"
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-]
+    # Define Styles
+    header_font = Font(bold=True, size=11, name='Calibri')
+    center_align = Alignment(horizontal='center', vertical='center', wrap_text=True)
+    content_align = Alignment(horizontal='left', vertical='center', wrap_text=True, indent=1)
+    thin_border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
 
-CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-]
+    # Set Column Widths (Adjusted for better readability and padding)
+    ws.column_dimensions['A'].width = 10  # Sl No
+    ws.column_dimensions['B'].width = 40  # Date & Subject
+    ws.column_dimensions['C'].width = 30  # Depts
+    ws.column_dimensions['D'].width = 80  # Description
+    ws.column_dimensions['E'].width = 60  # Responses
 
-
-ROOT_URLCONF = 'backend.urls'
-
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-]
-
-WSGI_APPLICATION = 'backend.wsgi.application'
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres.oiscsacsglwideokczhm',
-        'PASSWORD': 'agnayarjunibrukeerthi',
-        'HOST': 'aws-1-ap-south-1.pooler.supabase.com',
-        'PORT': '5432',
-        'OPTIONS': {
-            'sslmode': 'require',
-        }
-    }
-}
-
-
-
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
-USE_I18N = True
-USE_TZ = True
-STATIC_URL = 'static/'
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-# Point to our custom user model
-AUTH_USER_MODEL = 'api.User'
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-]
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-    ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ],
-}
-SESSION_COOKIE_SAMESITE = 'Lax'
-SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_SECURE = False  # localhost only
-CSRF_COOKIE_SAMESITE = 'Lax'
-CSRF_COOKIE_SECURE = False
-</file>
-
-<file path="backend/api/gemini_utils.py">
-import google.generativeai as genai
-from google.generativeai.types import HarmCategory, HarmBlockThreshold
-import os
-import json
-import time
-
-GOOGLE_API_KEY = "AIzaSyD9jlgSN0NpVLvAX7suJvSLPFCSHKGf_rw"
-
-def get_best_model():
-    try:
-        for m in genai.list_models():
-            if 'generateContent' in m.supported_generation_methods and 'flash' in m.name:
-                return m.name
-    except: pass
-    return 'models/gemini-1.5-flash'
-
-def analyze_document_with_gemini(file_path):
-    print(f"--- 🧠 Starting AI Analysis for: {file_path} ---")
-    genai.configure(api_key=GOOGLE_API_KEY)
+    # Create headers
+    headers = [
+        "ക്രമ നമ്പർ", 
+        "ഉന്നയിച്ച തീയതി & വകുപ്പ്/വിഷയം", 
+        "നടപടി സ്വീകരിക്കേണ്ട ഉദ്യോഗസ്ഥൻ",
+        "മുൻ യോഗത്തിൽ ചർച്ച ചെയ്തതും യോഗ നിർദ്ദേശവും", 
+        "നിലവിലെ സ്റ്റാറ്റസ്"
+    ]
     
-    try:
-        uploaded_file = genai.upload_file(path=file_path, display_name="Minutes")
-        while uploaded_file.state.name == "PROCESSING":
-            time.sleep(1)
-            uploaded_file = genai.get_file(uploaded_file.name)
-    except Exception as e:
-        print(f"❌ Upload Error: {e}")
-        return []
+    # 3.5. Determine Meeting Date for Header
+    meeting_date_str = timezone.now().strftime("%d-%m-%Y")
+    for item in items:
+        if item.issue and item.issue.minutes and item.issue.minutes.meeting_date:
+            meeting_date_str = item.issue.minutes.meeting_date.strftime("%d-%m-%Y")
+            break
 
-    model = genai.GenerativeModel(get_best_model())
-    safety = {cat: HarmBlockThreshold.BLOCK_NONE for cat in [
-        HarmCategory.HARM_CATEGORY_HARASSMENT, HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-        HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT
-    ]}
-    
-    prompt = """
-    Analyze this Malayalam PDF. Extract every actionable issue.
-    
-    FORCE RULES:
-    1. EXTRACT EVERY ISSUE listed. Do not skip any.
-    2. YOU MUST ASSIGN AT LEAST ONE DEPARTMENT. If it is not explicitly mentioned, you MUST INFER it based on these keywords:
-       - 'റോഡ്' (Road), 'പാലം' (Bridge) -> PWD_ROADS
-       - 'കെട്ടിടം' (Building), 'സ്കൂൾ അറ്റകുറ്റപ്പണി' (School repair) -> PWD_BUILDINGS
-       - 'കുടിവെള്ളം' (Drinking water), 'പൈപ്പ്' (Pipe) -> KWA
-       - 'വൈദ്യുതി' (Electricity), 'ലൈൻ' (Line), 'ട്രാൻസ്ഫോർമർ' -> KSEB
-       - 'മാലിന്യം' (Waste), 'പഞ്ചായത്ത്' (Panchayat), 'തെരുവുനായ' (Stray dog) -> LSGD
-       - 'കൃഷി' (Farming), 'കർഷകർ' (Farmers), 'വിളനാശം' (Crop damage) -> AGRICULTURE
-       - 'ക്രമസമാധാനം' (Law & Order), 'ട്രാഫിക്' (Traffic) -> POLICE
+    # Main Header Row
+    ws.merge_cells('A1:E1')
+    main_header = ws['A1']
+    main_header.value = f"{meeting_date_str} -ന് ചേർന്ന ജില്ലാ വികസന സമിതി യോഗത്തിന്റെ തുടർ നടപടി റിപ്പോർട്ട്"
+    main_header.font = Font(bold=True, size=12, name='Calibri')
+    main_header.alignment = Alignment(horizontal='center', vertical='center')
+    main_header.border = thin_border
+    ws.row_dimensions[1].height = 30
 
-    STRICT RULES:
-    1. Do NOT invent dates. If no deadline is explicitly mentioned in the text for an issue, the "deadline" field MUST be an empty string "".
-    2. Do NOT use today's date or any date like '18-12-25'.
-    
-    
-    Return a JSON ARRAY of objects:
-    - issue_no: string
-    - departments: ARRAY of strings (e.g. ["PWD_ROADS", "LSGD"]) should be extracted from text after നടപടി:- only give the dept, not the officer position, and also convert to the english names of the  departments as above.
-    - issue: ONE-LINE Malayalam summary (max 20 words)
-    - issue_description: FULL detailed Malayalam issue description (multiple sentences),dont assume anything not in the document.
-    - location: Malayalam place name (if mentioned) or "".
-    - priority: High/Medium/Low (based on urgency in text, urgency can be inferred from words and high priority for issues that involve MLA/MP/Minister requests)
-    - deadline (DD-MM-YYYY or "")
-    
-    Output ONLY PURE JSON. Do not include any other text.
-    """
+    # Table Headers (now on row 2)
+    ws.append(headers)
 
-    try:
-        response = model.generate_content([uploaded_file, prompt], safety_settings=safety)
-        text = response.text.replace("```json", "").replace("```", "").strip()
-        return json.loads(text)
-    except Exception as e:
-        print(f"❌ Generation Error: {e}")
-        return []
+    # Apply Table Header Style
+    for cell in ws[2]:
+        cell.font = header_font
+        cell.alignment = center_align
+        cell.border = thin_border
+        ws.row_dimensions[2].height = 45
+
+    # 4. Write Grouped Data to Excel
+    for index, (issue_id, data) in enumerate(grouped_data.items(), start=1):
+        issue = data['issue']
+        
+        # Join Departments with newlines
+        dept_str = "\n".join(data['depts'])
+        
+        # Join Responses with double newlines for readability
+        response_str = "\n\n".join(data['responses'])
+
+        # Format Date
+        meeting_date = ""
+        if issue.minutes and issue.minutes.meeting_date:
+            meeting_date = issue.minutes.meeting_date.strftime("%d-%m-%Y")
+
+        subject_col_text = f"തീയതി: {meeting_date}\n\n{issue.issue_title}"
+
+        row_data = [
+            index,                  # Sl No
+            subject_col_text,       # Date & Subject
+            dept_str,               # Departments (Combined)
+            issue.issue_description,# Description
+            response_str            # Responses (Combined)
+        ]
+        
+        ws.append(row_data)
+
+        # Apply Styling
+        current_row = ws.max_row
+        for cell in ws[current_row]:
+            cell.alignment = content_align
+            cell.border = thin_border
+
+    # 5. Return File
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = 'attachment; filename="Follow_Up_Report.xlsx"'
+    wb.save(response)
+    return response
 </file>
 
 </files>
