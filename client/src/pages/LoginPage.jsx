@@ -152,7 +152,7 @@ export default function Login() {
         localStorage.setItem("department", department);
       }
 
-      // ✅ Role-based navigation (REQUIRED)
+      // ✅ Role-based navigation (REQUIRED) 
       if (role === "dpo") {
         navigate("/dpo");
       } else if (role === "collector") {
