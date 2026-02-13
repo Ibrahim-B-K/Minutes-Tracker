@@ -1,10 +1,38 @@
 .login-container {
   height: 100vh;
   display: flex;
-  justify-content: center;
-  align-items: center;
   background: #eceff1;
   font-family: Arial, sans-serif;
+}
+
+/* left side gets 2 parts of space, right side 1 part; add gap between panels */
+.login-container {
+  height: 100vh;
+  display: flex;
+  background: #eceff1;
+  font-family: Arial, sans-serif;
+         /* space between left and right areas */
+}
+
+.login-left {
+  flex: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #1565c0;
+  color: white;
+  padding: 40px;
+  
+  max-width: 65vw;        /* prevent it from growing too huge */
+}
+
+.login-right {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* ensure it fills full viewport height so card stays centered vertically */
+  height: 100vh;
 }
 
 .login-card {
@@ -13,6 +41,7 @@
   border-radius: 12px;
   width: 350px;
   box-shadow: 0 6px 25px rgba(0,0,0,0.15);
+  margin: auto; /* center within login-right */
 }
 
 .login-title {
