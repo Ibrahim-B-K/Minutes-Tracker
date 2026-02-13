@@ -173,8 +173,17 @@ export default function Login() {
 
   return (
     <div className="login-container">
-      <form className="login-card" onSubmit={handleSubmit}>
-        <h2 className="login-title">Login</h2>
+      {/* left branding panel (3 parts) */}
+      <div className="login-left">
+        <div className="branding">
+          <h1>Minutes Tracker</h1>
+          <p>Efficiently manage meeting minutes</p>
+        </div>
+      </div>
+      {/* right panel (1 part) with login form */}
+      <div className="login-right">
+        <form className="login-card" onSubmit={handleSubmit}>
+          <h2 className="login-title">Login</h2>
 
         {error && <div className="error-box">{error}</div>}
 
@@ -202,6 +211,8 @@ export default function Login() {
           {loading ? "Logging in..." : "Login"}
         </button>
       </form>
-    </div>
+      
+      </div> 
+    </div> 
   );
 }

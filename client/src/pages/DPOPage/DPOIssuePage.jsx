@@ -85,13 +85,7 @@ const handleAllocateIssue = (issue) => {
       <DPOHeader />
 
       <div className="content">
-        <div className="page-title">
-          <h1>Issue Tracking & Management</h1>
-          <Link to="/dpo/upload">
-            <DriveFolderUploadSharpIcon className="upload-icon" />
-          </Link>
-        </div>
-
+  
         <DPOFilterBar
           activeTab={activeTab}
           onFilterChange={(nf) => setFilters((p) => ({ ...p, ...nf }))}

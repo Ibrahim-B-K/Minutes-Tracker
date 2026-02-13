@@ -4,6 +4,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Link, useNavigate } from "react-router-dom";
 import DescriptionIcon from "@mui/icons-material/Description";
+import DriveFolderUploadSharpIcon from "@mui/icons-material/DriveFolderUploadSharp";
 
 import api from "../../api/axios";
 
@@ -49,17 +50,21 @@ function Header() {
       </div>
 
 <div className="dpo-header-icons" ref={dropdownRef}>
-  {/* Minutes Page */}
+  
+
+  {/* Upload link */}
+  <Link to="/dpo/upload">
+    <DriveFolderUploadSharpIcon className="dpo-icon upload" />
+  </Link>
+    {/* Minutes Page */}
   <Link to="/dpo/minutes">
     <DescriptionIcon className="dpo-icon minutes" />
   </Link>
-
   {/* Notifications */}
   <Link to="/dpo/notifications">
     <NotificationsIcon className="dpo-icon bell" />
   </Link>
 
-  {/* Profile */}
   <div
     className="dpo-icon profile"
     onClick={() => setOpen((prev) => !prev)}
