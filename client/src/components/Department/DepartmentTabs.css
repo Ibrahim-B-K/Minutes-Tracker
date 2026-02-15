@@ -23,14 +23,14 @@
   color: #007bff;
 }
 
-.tab-scroll-area {
+.dept-tab-scroll-area {
   flex: 1;
   overflow-y: auto;
-  max-height: 55vh; /* adjust height as needed */
+  /* max-height removed */
   padding-right: 10px;
   scrollbar-width: thin;
 }
+
 .tab {
   transition: background-color 0.2s ease, color 0.2s ease;
 }
-

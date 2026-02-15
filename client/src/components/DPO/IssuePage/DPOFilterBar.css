@@ -8,7 +8,7 @@
   padding: 15px;
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
 
   position: relative;
   transition: all 0.2s ease;
@@ -72,7 +72,7 @@
 }
 
 .filter-group label {
-  color: #666;
+  color: #f00;
   font-size: 0.9rem;
   min-width: 60px;
 }
@@ -87,7 +87,7 @@
   font-size: 0.9rem;
   width: 160px;
   background: white;
-  color: #333;
+  color: #000;
   cursor: pointer;
   text-align: left;
 }

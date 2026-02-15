@@ -18,7 +18,7 @@ function DepartmentResponsePage() {
   // 1. OPTIMIZATION: Fetch ONLY when department changes, NOT when tab changes
   useEffect(() => {
     if (!dept) return;
-    
+
     setLoading(true);
     // Fetch issues specifically for this department from Django
     api.get(`/issues/${dept}`)
@@ -27,7 +27,7 @@ function DepartmentResponsePage() {
       })
       .catch((err) => console.error("Error fetching department issues:", err))
       .finally(() => setLoading(false));
-      
+
   }, [dept]); // <--- FIX: Removed activeTab from here!
 
   // 2. OPTIMIZATION: Filter instantly in memory using useMemo
@@ -36,7 +36,7 @@ function DepartmentResponsePage() {
 
     return allIssues.filter((i) => {
       const status = i.status.toLowerCase();
-      
+
       // Handle the 'Submitted' vs 'Received' logic if needed
       if (tabLower === 'submitted') {
         return status === 'submitted' || status === 'completed';
@@ -50,20 +50,20 @@ function DepartmentResponsePage() {
       <DepartmentHeader departmentName={dept} />
       <div className="content">
         <h1>{dept?.toUpperCase()} Department Portal</h1>
-        
+
         <DepartmentTabs activeTab={activeTab} setActiveTab={setActiveTab} />
-        
-        <div className="tab-scroll-area">
+
+        <div className="dept-tab-scroll-area">
           {loading ? (
             <p>Loading...</p>
           ) : (
             <>
               {displayedIssues.length > 0 ? (
                 displayedIssues.map((issue) => (
-                  <DepartmentIssueCard 
+                  <DepartmentIssueCard
                     // We fixed the serializer to return 'id', so use that
-                    key={issue.id} 
-                    issue={issue} 
+                    key={issue.id}
+                    issue={issue}
                   />
                 ))
               ) : (

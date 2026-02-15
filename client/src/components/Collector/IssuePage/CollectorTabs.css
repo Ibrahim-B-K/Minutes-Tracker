@@ -15,7 +15,7 @@
   padding: 10px 20px;
   cursor: pointer;
   font-weight: 500;
-  color: #555;
+  color: #000;
 }
 
 .tab.active {
@@ -23,10 +23,10 @@
   color: #007bff;
 }
 
-.tab-scroll-area {
+.collector-tab-scroll-area {
   flex: 1;
   overflow-y: auto;
-  max-height: 55vh; /* adjust height as needed */
+  /* max-height removed */
   padding-right: 10px;
   scrollbar-width: thin;
 }

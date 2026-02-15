@@ -67,30 +67,24 @@ function DPOIssuePage() {
       return true;
     });
   }, [allIssues, activeTab, filters]);
-const handleAllocateIssue = (issue) => {
-  console.log("Allocating issue:", issue);
+  const handleAllocateIssue = (issue) => {
+    console.log("Allocating issue:", issue);
 
-  api.post("/issues/allocate", issue)
-    .then(() => {
-      alert("Issue allocated successfully");
-      setShowAssignModal(false);
-    })
-    .catch(() => {
-      alert("Backend not ready");
-    });
-};
+    api.post("/issues/allocate", issue)
+      .then(() => {
+        alert("Issue allocated successfully");
+        setShowAssignModal(false);
+      })
+      .catch(() => {
+        alert("Backend not ready");
+      });
+  };
 
   return (
     <div className="dpo-container">
       <DPOHeader />
 
       <div className="content">
-        <div className="page-title">
-          <h1>Issue Tracking & Management</h1>
-          <Link to="/dpo/upload">
-            <DriveFolderUploadSharpIcon className="upload-icon" />
-          </Link>
-        </div>
 
         <DPOFilterBar
           activeTab={activeTab}
@@ -107,7 +101,7 @@ const handleAllocateIssue = (issue) => {
           />
         </div>
 
-        <div className="tab-scroll-area">
+        <div className="dpo-tab-scroll-area">
           {loading ? (
             <p className="loading-text">Loading...</p>
           ) : displayedIssues.length === 0 ? (
@@ -130,7 +124,7 @@ const handleAllocateIssue = (issue) => {
 
           <div className="assign-modal">
             <div className="assign-header">
-              <h2>Add / Assign Issue</h2>
+              <h2>Add New Issue</h2>
               <button
                 className="close-btn"
                 onClick={() => setShowAssignModal(false)}
@@ -140,19 +134,19 @@ const handleAllocateIssue = (issue) => {
             </div>
 
             <DPOSingleIssueAssignCard
-  issue={{
-    issue_no: "NEW",
-    department: "",
-    issue: "",
-    issue_description: "",
-    priority: "Medium",
-    location: "",
-    deadline: "",
-  }}
-  index={0}
-  onChange={() => {}}
-  onAllocate={handleAllocateIssue}
-/>
+              issue={{
+                issue_no: "NEW",
+                issue: "",
+                issue_description: "",
+                department: "",
+                priority: "Medium",
+                location: "",
+                deadline: "",
+              }}
+              index={0}
+              onChange={() => { }}
+              onAllocate={handleAllocateIssue}
+            />
 
           </div>
         </div>
