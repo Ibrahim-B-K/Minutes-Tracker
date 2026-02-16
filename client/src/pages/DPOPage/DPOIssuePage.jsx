@@ -21,7 +21,8 @@ function DPOIssuePage() {
   const [filters, setFilters] = useState({});
   const [allIssues, setAllIssues] = useState([]);
   const [loading, setLoading] = useState(false);
-
+  const [emailLoading, setEmailLoading] = useState(false);
+  const [emailStatus, setEmailStatus] = useState(""); // For "sending..." or success message
   const [showAssignModal, setShowAssignModal] = useState(false);
 
   // ===== FETCH =====
@@ -79,6 +80,32 @@ function DPOIssuePage() {
         alert("Backend not ready");
       });
   };
+  const handleSendOverdueEmails = () => {
+    setEmailLoading(true);
+    setEmailStatus("Performing overdue email checks and sending..");
+
+    api.post("/send-overdue-alerts")
+      .then((res) => {
+        if (res.data.sent_count > 0) {
+          setEmailStatus(`All ${res.data.sent_count} Emails sent successfully`);
+        } else {
+          setEmailStatus("Nothing overdue");
+        }
+        // Auto-refresh issues to reflect status changes if any
+        api.get("/issues").then(r => setAllIssues(r.data));
+      })
+      .catch((err) => {
+        console.error(err);
+        setEmailStatus("Error sending emails");
+      })
+      .finally(() => {
+        // Clear status after some time
+        setTimeout(() => {
+          setEmailLoading(false);
+          setEmailStatus("");
+        }, 3000);
+      });
+  };
 
   return (
     <div className="dpo-container">
@@ -89,6 +116,9 @@ function DPOIssuePage() {
         <DPOFilterBar
           activeTab={activeTab}
           onFilterChange={(nf) => setFilters((p) => ({ ...p, ...nf }))}
+          handleSendOverdueEmails={handleSendOverdueEmails}
+          emailLoading={emailLoading}
+          emailStatus={emailStatus}
         />
 
         {/* ✅ Tabs wrapper (DO NOT TOUCH DPOTabs) */}

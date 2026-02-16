@@ -2,7 +2,14 @@ import React, { useEffect, useState, useRef } from "react";
 import "./DPOFilterBar.css";
 import DPOGenerateReports from "./DPOGenerateReports";
 
-function DPOFilterBar({ activeTab, onFilterChange, issue_date }) {
+function DPOFilterBar({
+  activeTab,
+  onFilterChange,
+  issue_date,
+  handleSendOverdueEmails,
+  emailLoading,
+  emailStatus
+}) {
   const [showReportModal, setShowReportModal] = useState(false);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
@@ -188,41 +195,41 @@ function DPOFilterBar({ activeTab, onFilterChange, issue_date }) {
       </div>
 
       {/* Sort */}
-<div className="filter-group custom-filter">
-  <label>Sort:</label>
-  <div className="filter-dropdown">
-    <button className="filter-btn">
-      {sortBy === "priority"
-        ? "Priority"
-        : sortBy === "department"
-        ? "Department"
-        : "Deadline"} ▾
-    </button>
+      <div className="filter-group custom-filter">
+        <label>Sort:</label>
+        <div className="filter-dropdown">
+          <button className="filter-btn">
+            {sortBy === "priority"
+              ? "Priority"
+              : sortBy === "department"
+                ? "Department"
+                : "Deadline"} ▾
+          </button>
 
-    <div className="filter-menu">
-      <div
-        className="filter-item"
-        onClick={() => handleFilterChange("sortBy", "priority")}
-      >
-        Priority
-      </div>
+          <div className="filter-menu">
+            <div
+              className="filter-item"
+              onClick={() => handleFilterChange("sortBy", "priority")}
+            >
+              Priority
+            </div>
 
-      <div
-        className="filter-item"
-        onClick={() => handleFilterChange("sortBy", "department")}
-      >
-        Department
-      </div>
+            <div
+              className="filter-item"
+              onClick={() => handleFilterChange("sortBy", "department")}
+            >
+              Department
+            </div>
 
-      <div
-        className="filter-item"
-        onClick={() => handleFilterChange("sortBy", "deadline")}
-      >
-        Deadline
+            <div
+              className="filter-item"
+              onClick={() => handleFilterChange("sortBy", "deadline")}
+            >
+              Deadline
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</div>
 
 
       {/* Generate */}
@@ -231,6 +238,24 @@ function DPOFilterBar({ activeTab, onFilterChange, issue_date }) {
           Generate Report
         </button>
       )}
+      {activeTab === "Overdue" && (
+        <div style={{ position: 'relative', display: 'flex', alignItems: 'center', marginLeft: 'auto' }}>
+          <button
+            className={`send-email-btn ${emailLoading ? 'loading' : ''}`}
+            onClick={handleSendOverdueEmails}
+            disabled={emailLoading}
+          >
+            {emailLoading ? "Sending..." : "Send Overdue Emails"}
+          </button>
+
+          {emailStatus && (
+            <div className="email-status-popup">
+              {emailStatus}
+            </div>
+          )}
+        </div>
+      )}
+
 
       <DPOGenerateReports
         isOpen={showReportModal}

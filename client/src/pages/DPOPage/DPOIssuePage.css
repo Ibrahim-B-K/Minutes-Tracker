@@ -32,8 +32,27 @@
 }
 
 .dpo-tab-scroll-area {
-  /* changed heigh 380px to 100% */
-  height: 100%;
+  height: calc(100vh - 220px);
+  /* Restricted height to keep header visible */
+  overflow-y: auto;
+  padding-right: 10px;
+  /* Space for scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+/* Custom scrollbar for Webkit browsers */
+.dpo-tab-scroll-area::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dpo-tab-scroll-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dpo-tab-scroll-area::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 20px;
 }
 
 /* ---------- Tabs ---------- */
