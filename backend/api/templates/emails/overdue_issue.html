@@ -1,0 +1,20 @@
+<h2>Overdue Issue Notification</h2>
+
+<p>Hello {{ user.first_name|default:user.username }},</p>
+
+<p>
+An issue assigned to your department 
+<strong>{{ department.dept_name }}</strong> is overdue.
+</p>
+
+<hr>
+
+<p><strong>Issue Title:</strong> {{ issue.issue.issue_title }}</p>
+<p><strong>Description:</strong> {{ issue.issue.issue_description }}</p>
+<p><strong>Location:</strong> {{ issue.issue.location }}</p>
+<p><strong>Priority:</strong> {{ issue.issue.priority }}</p>
+<p><strong>Deadline:</strong> {{ issue.deadline_date }}</p>
+
+<hr>
+
+<p>Please take necessary action immediately.</p>

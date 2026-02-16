@@ -1,0 +1,13 @@
+Overdue Issue Notification
+
+Hello {{ user.first_name|default:user.username }},
+
+An issue assigned to your department {{ department.dept_name }} is overdue.
+
+Title: {{ issue.issue.issue_title }}
+Description: {{ issue.issue.issue_description }}
+Location: {{ issue.issue.location }}
+Priority: {{ issue.issue.priority }}
+Deadline: {{ issue.deadline_date }}
+
+Please take necessary action immediately.
