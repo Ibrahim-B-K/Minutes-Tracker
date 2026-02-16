@@ -109,3 +109,13 @@ SESSION_COOKIE_SECURE = False  # localhost only
 CSRF_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_SECURE = False
 
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+EMAIL_HOST = "smtp-relay.brevo.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = "a27423001@smtp-brevo.com"
+EMAIL_HOST_PASSWORD = "smtp_key_here"
+
+DEFAULT_FROM_EMAIL = "me.openbox@gmail.com"
