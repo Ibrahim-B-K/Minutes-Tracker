@@ -9,13 +9,13 @@ import api from "../../api/axios"; // Uses your configured axios with Token
 function CollectorIssuePage() {
   const [activeTab, setActiveTab] = useState("Pending");
   const [filters, setFilters] = useState({});
-  const [allIssues, setAllIssues] = useState([]); 
+  const [allIssues, setAllIssues] = useState([]);
   const [loading, setLoading] = useState(false);
 
   // 1. Fetch Logic: Get ALL issues once (or when Date filter changes)
   useEffect(() => {
     setLoading(true);
-    
+
     // Use the specific date param if it exists, otherwise fetch all
     const params = filters.date ? { date: filters.date } : {};
 
@@ -31,50 +31,50 @@ function CollectorIssuePage() {
   // 2. Instant Client-Side Filtering (Same logic as DPO page)
   const displayedIssues = useMemo(() => {
     return allIssues.filter((issue) => {
-        
-        // A. Filter by Tab
-        const status = issue.status ? issue.status.toLowerCase() : "pending";
-        const tab = activeTab.toLowerCase();
-        
-        let statusMatch = false;
-        if (tab === "received") {
-            // "Received" tab shows 'submitted' or 'completed' status
-            statusMatch = (status === "submitted" || status === "completed");
-        } else {
-            statusMatch = (status === tab);
+
+      // A. Filter by Tab
+      const status = issue.status ? issue.status.toLowerCase() : "pending";
+      const tab = activeTab.toLowerCase();
+
+      let statusMatch = false;
+      if (tab === "received") {
+        // "Received" tab shows 'submitted' or 'completed' status
+        statusMatch = (status === "submitted" || status === "completed");
+      } else {
+        statusMatch = (status === tab);
+      }
+
+      if (!statusMatch) return false;
+
+      // B. Filter by Search Query
+      if (filters.searchQuery) {
+        const query = filters.searchQuery.toLowerCase();
+        const matchesSearch =
+          (issue.issue && issue.issue.toLowerCase().includes(query)) ||
+          (issue.issue_no && issue.issue_no.toString().includes(query)) ||
+          (issue.department && issue.department.toLowerCase().includes(query));
+
+        if (!matchesSearch) return false;
+      }
+
+      // C. Filter by Dropdown (Priority/Dept)
+      if (filters.filterBy && filters.filterBy !== "all") {
+        const filterVal = filters.filterBy.toLowerCase();
+
+        // Check Priority
+        if (['high', 'medium', 'low'].includes(filterVal)) {
+          if (issue.priority.toLowerCase() !== filterVal) return false;
         }
-
-        if (!statusMatch) return false;
-
-        // B. Filter by Search Query
-        if (filters.searchQuery) {
-            const query = filters.searchQuery.toLowerCase();
-            const matchesSearch = 
-                (issue.issue && issue.issue.toLowerCase().includes(query)) ||
-                (issue.issue_no && issue.issue_no.toString().includes(query)) ||
-                (issue.department && issue.department.toLowerCase().includes(query));
-            
-            if (!matchesSearch) return false;
+        // Check Department
+        else {
+          if (!issue.department.toLowerCase().includes(filterVal)) return false;
         }
+      }
 
-        // C. Filter by Dropdown (Priority/Dept)
-        if (filters.filterBy && filters.filterBy !== "all") {
-             const filterVal = filters.filterBy.toLowerCase();
-             
-             // Check Priority
-             if (['high', 'medium', 'low'].includes(filterVal)) {
-                 if (issue.priority.toLowerCase() !== filterVal) return false;
-             }
-             // Check Department
-             else {
-                 if (!issue.department.toLowerCase().includes(filterVal)) return false;
-             }
-        }
+      // D. Sort Logic (Optional client-side sorting)
+      // You can add sort logic here if needed, currently implied by order of array
 
-        // D. Sort Logic (Optional client-side sorting)
-        // You can add sort logic here if needed, currently implied by order of array
-
-        return true;
+      return true;
     });
   }, [allIssues, activeTab, filters]);
 
@@ -89,8 +89,8 @@ function CollectorIssuePage() {
 
         <CollectorFilterBar
           activeTab={activeTab}
-          onFilterChange={(newFilters) => setFilters(prev => ({...prev, ...newFilters}))}
-          // specific date filtering if needed
+          onFilterChange={(newFilters) => setFilters(prev => ({ ...prev, ...newFilters }))}
+        // specific date filtering if needed
         />
 
         <CollectorTabs
@@ -98,14 +98,14 @@ function CollectorIssuePage() {
           setActiveTab={setActiveTab}
         />
 
-        <div className="tab-scroll-area">
+        <div className="collector-tab-scroll-area">
           {loading ? (
             <p className="loading-text">Loading...</p>
           ) : displayedIssues.length === 0 ? (
             <p className="no-issues">No issues found</p>
           ) : (
             displayedIssues.map((issue) => (
-                <CollectorIssueCard key={issue.id} issue={issue} />
+              <CollectorIssueCard key={issue.id} issue={issue} />
             ))
           )}
         </div>

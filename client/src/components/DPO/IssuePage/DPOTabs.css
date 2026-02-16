@@ -23,10 +23,9 @@
   color: #007bff;
 }
 
-.tab-scroll-area {
+.dpo-tab-scroll-area {
   flex: 1;
   overflow-y: auto;
-  max-height: 55vh; /* adjust height as needed */
   padding-right: 10px;
   scrollbar-width: thin;
 }
