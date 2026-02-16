@@ -2,11 +2,11 @@
   width: 100%;
 }
 
-.content {
+.dpo-container .content {
   padding: 10px 70px;
 }
 
-h1 {
+.dpo-container h1 {
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 20px;

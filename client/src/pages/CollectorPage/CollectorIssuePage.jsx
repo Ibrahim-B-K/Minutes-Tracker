@@ -79,7 +79,7 @@ function CollectorIssuePage() {
   }, [allIssues, activeTab, filters]);
 
   return (
-    <div className="dpo-container">
+    <div className="collector-container">
       <CollectorHeader />
 
       <div className="content">

@@ -1,19 +1,43 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./DPOHeader.css";
+
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { Link, useNavigate } from "react-router-dom";
+import BusinessIcon from "@mui/icons-material/Business";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import DescriptionIcon from "@mui/icons-material/Description";
 import DriveFolderUploadSharpIcon from "@mui/icons-material/DriveFolderUploadSharp";
 
+import { Link, useNavigate } from "react-router-dom";
 import api from "../../api/axios";
 
 function Header() {
+
+  /* =========================
+     ===== STATE SECTION =====
+  ========================== */
+
   const [open, setOpen] = useState(false);
+  const [showDeptModal, setShowDeptModal] = useState(false);
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const [deptData, setDeptData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: ""
+  });
+
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
-  /* Close dropdown when clicking outside */
+  /* =========================
+     ===== EFFECT SECTION =====
+  ========================== */
+
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -25,65 +49,179 @@ function Header() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  /* =========================
+     ===== HANDLERS =====
+  ========================== */
+
   const handleLogout = async () => {
     try {
-      // Call backend logout endpoint
       await api.post("/logout");
     } catch (err) {
       console.error("Logout error:", err);
     } finally {
-      // Clear localStorage regardless of API response
-      localStorage.removeItem("token");
-      localStorage.removeItem("username");
-      localStorage.removeItem("role");
-      localStorage.removeItem("department");
-      // Redirect to login
+      localStorage.clear();
       navigate("/login");
     }
   };
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setDeptData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleCreateDepartment = () => {
+    if (deptData.password !== deptData.confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+
+    console.log("Department Data:", deptData);
+
+    // Backend integration here
+    // api.post("/departments", deptData)
+
+    setShowDeptModal(false);
+    setDeptData({
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: ""
+    });
+  };
+
+  /* =========================
+     ===== JSX SECTION =====
+  ========================== */
+
   return (
-    <header className="dpo-header">
-      <div className="dpo-logo">
-        <div className="dpo-logo-icon"></div>
-        <span>Minutes Tracker System</span>
-      </div>
+    <>
+      {/* ================= HEADER ================= */}
+      <header className="dpo-header">
+        <div className="dpo-logo">
+          <div className="dpo-logo-icon"></div>
+          <span>Minutes Tracker System</span>
+        </div>
 
-<div className="dpo-header-icons" ref={dropdownRef}>
-  
+        <div className="dpo-header-icons" ref={dropdownRef}>
+          <Link to="/dpo/upload">
+            <DriveFolderUploadSharpIcon className="dpo-icon upload" />
+          </Link>
 
-  {/* Upload link */}
-  <Link to="/dpo/upload">
-    <DriveFolderUploadSharpIcon className="dpo-icon upload" />
-  </Link>
-    {/* Minutes Page */}
-  <Link to="/dpo/minutes">
-    <DescriptionIcon className="dpo-icon minutes" />
-  </Link>
-  {/* Notifications */}
-  <Link to="/dpo/notifications">
-    <NotificationsIcon className="dpo-icon bell" />
-  </Link>
+          <Link to="/dpo/minutes">
+            <DescriptionIcon className="dpo-icon minutes" />
+          </Link>
 
-  <div
-    className="dpo-icon profile"
-    onClick={() => setOpen((prev) => !prev)}
-  >
-    D
-  </div>
+          <Link to="/dpo/notifications">
+            <NotificationsIcon className="dpo-icon bell" />
+          </Link>
 
-  {/* Dropdown */}
-  {open && (
-    <div className="dpo-profile-dropdown">
-      <button onClick={handleLogout} className="dpo-logout-btn">
-        <LogoutIcon className="dpo-logout-icon" />
-        Logout
-      </button>
-    </div>
-  )}
-</div>
+          <div
+            className="dpo-icon profile"
+            onClick={() => setOpen((prev) => !prev)}
+          >
+            D
+          </div>
 
-    </header>
+          {open && (
+            <div className="dpo-profile-dropdown">
+              <button
+                className="dpo-logout-btn"
+                onClick={() => {
+                  setOpen(false);
+                  setShowDeptModal(true);
+                }}
+              >
+                <BusinessIcon className="dpo-adddept-icon" />
+                Add Dept
+              </button>
+
+              <button
+                onClick={handleLogout}
+                className="dpo-logout-btn"
+              >
+                <LogoutIcon className="dpo-logout-icon" />
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
+      </header>
+
+      {/* ================= ADD DEPT MODAL ================= */}
+      {showDeptModal && (
+        <div className="dept-modal-overlay">
+          <div className="dept-modal">
+            <h3>Add Department</h3>
+
+            <input
+              type="text"
+              name="name"
+              placeholder="Department Name"
+              value={deptData.name}
+              onChange={handleInputChange}
+            />
+
+            <input
+              type="email"
+              name="email"
+              placeholder="Department Email"
+              value={deptData.email}
+              onChange={handleInputChange}
+            />
+
+            {/* Password */}
+            <div className="password-field">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Create Password"
+                value={deptData.password}
+                onChange={handleInputChange}
+              />
+              <span
+                className="eye-icon"
+                onClick={() => setShowPassword(prev => !prev)}
+              >
+                {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+              </span>
+            </div>
+
+            {/* Confirm Password */}
+            <div className="password-field">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                name="confirmPassword"
+                placeholder="Confirm Password"
+                value={deptData.confirmPassword}
+                onChange={handleInputChange}
+              />
+              <span
+                className="eye-icon"
+                onClick={() => setShowConfirmPassword(prev => !prev)}
+              >
+                {showConfirmPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+              </span>
+            </div>
+
+            <div className="dept-modal-buttons">
+              <button
+                className="cancel-btn"
+                onClick={() => setShowDeptModal(false)}
+              >
+                Cancel
+              </button>
+
+              <button
+                className="save-btn"
+                onClick={handleCreateDepartment}
+              >
+                Create
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 

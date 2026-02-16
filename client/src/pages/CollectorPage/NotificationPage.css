@@ -1,14 +1,14 @@
 /* Base layout similar to Upload and Assign Issues */
-.notificationpage-container {
+.collector-container {
  width: 100%;
 }
 
-.notificationpage-content {
+.collector-container .content {
   padding: 10px 70px;
 }
 
 /* Header inside content */
-h1 {
+.collector-container h1 {
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 20px;
@@ -16,7 +16,7 @@ h1 {
 }
 
 /* Notification List */
-.notification-list {
+.collector-container .notification-list {
   background: #ffffff;
   border-radius: 12px;
   padding: 15px;
@@ -29,7 +29,7 @@ h1 {
 }
 
 /* Notification Card */
-.notification-card {
+.collector-container .notification-card {
   display: flex;
   align-items: flex-start;
   gap: 10px;
@@ -41,26 +41,26 @@ h1 {
   transition: all 0.2s ease;
 }
 
-.notification-card:hover {
+.collector-container .notification-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
 /* Type Accent Colors */
-.notification-card.response {
+.collector-container .notification-card.response {
   border-left-color: #3b82f6;
 }
 
-.notification-card.deadline {
+.collector-container .notification-card.deadline {
   border-left-color: #ef4444;
 }
 
-.notification-card.assign {
+.collector-container .notification-card.assign {
   border-left-color: #22c55e;
 }
 
 /* Icon */
-.notification-icon span {
+.collector-container .notification-icon span {
   font-size: 1.6rem;
   display: flex;
   align-items: center;
@@ -68,20 +68,20 @@ h1 {
 }
 
 /* Text */
-.notification-content h3 {
+.collector-container .notification-content h3 {
   font-size: 1rem;
   font-weight: 600;
   color: #111827;
   margin: 0 0 4px;
 }
 
-.notification-content p {
+.collector-container .notification-content p {
   font-size: 0.9rem;
   color: #4b5563;
   margin: 0;
 }
 
-.notification-content .time {
+.collector-container .notification-content .time {
   display: block;
   font-size: 0.8rem;
   color: #9ca3af;
@@ -89,7 +89,7 @@ h1 {
 }
 
 /* Empty state */
-.no-notifications {
+.collector-container .no-notifications {
   text-align: center;
   padding: 50px 0;
   color: #6b7280;
@@ -98,10 +98,10 @@ h1 {
 
 /* Responsive */
 @media (max-width: 768px) {
-  .notificationpage-content {
+  .collector-container .content {
     padding: 15px 25px;
   }
-  .notification-list {
+  .collector-container .notification-list {
     padding: 18px;
   }
 }

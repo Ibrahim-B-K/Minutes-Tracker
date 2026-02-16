@@ -110,7 +110,7 @@ function DPOIssuePage() {
   return (
     <div className="dpo-container">
       <DPOHeader />
-
+      
       <div className="content">
 
         <DPOFilterBar
