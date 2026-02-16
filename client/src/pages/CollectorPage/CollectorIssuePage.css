@@ -20,7 +20,7 @@ h1 {
   background: white;
   padding: 15px;
   border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   margin-bottom: 20px;
 }
 
@@ -44,10 +44,9 @@ h1 {
 .generate-btn:hover {
   background: #1d4ed8;
 }
+
 .page-title {
   display: flex;
-justify-content: space-between;
+  justify-content: space-between;
 
 }
-
-

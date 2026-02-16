@@ -26,6 +26,7 @@ from .models import (
     Response as ResponseModel,
     Notification
 )
+from .services import check_and_send_overdue_emails
 from .serializers import IssueDepartmentSerializer, NotificationSerializer, DPOIssueSerializer
 from .gemini_utils import analyze_document_with_gemini
 import os
@@ -493,3 +494,16 @@ def generate_report(request):
     response['Content-Disposition'] = 'attachment; filename="Follow_Up_Report.xlsx"'
     wb.save(response)
     return response
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def send_overdue_alerts(request):
+    if request.user.role.lower() != 'dpo':
+        return Response({"error": "Unauthorized"}, status=403)
+    
+    sent_count = check_and_send_overdue_emails()
+    
+    return Response({
+        "success": True,
+        "sent_count": sent_count
+    })

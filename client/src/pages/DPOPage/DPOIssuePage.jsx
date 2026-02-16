@@ -21,7 +21,8 @@ function DPOIssuePage() {
   const [filters, setFilters] = useState({});
   const [allIssues, setAllIssues] = useState([]);
   const [loading, setLoading] = useState(false);
-
+  const [emailLoading, setEmailLoading] = useState(false);
+  const [emailStatus, setEmailStatus] = useState(""); // For "sending..." or success message
   const [showAssignModal, setShowAssignModal] = useState(false);
 
   // ===== FETCH =====
@@ -67,28 +68,57 @@ function DPOIssuePage() {
       return true;
     });
   }, [allIssues, activeTab, filters]);
-const handleAllocateIssue = (issue) => {
-  console.log("Allocating issue:", issue);
+  const handleAllocateIssue = (issue) => {
+    console.log("Allocating issue:", issue);
 
-  api.post("/issues/allocate", issue)
-    .then(() => {
-      alert("Issue allocated successfully");
-      setShowAssignModal(false);
-    })
-    .catch(() => {
-      alert("Backend not ready");
-    });
-};
+    api.post("/issues/allocate", issue)
+      .then(() => {
+        alert("Issue allocated successfully");
+        setShowAssignModal(false);
+      })
+      .catch(() => {
+        alert("Backend not ready");
+      });
+  };
+  const handleSendOverdueEmails = () => {
+    setEmailLoading(true);
+    setEmailStatus("Performing overdue email checks and sending..");
+
+    api.post("/send-overdue-alerts")
+      .then((res) => {
+        if (res.data.sent_count > 0) {
+          setEmailStatus(`All ${res.data.sent_count} Emails sent successfully`);
+        } else {
+          setEmailStatus("Nothing overdue");
+        }
+        // Auto-refresh issues to reflect status changes if any
+        api.get("/issues").then(r => setAllIssues(r.data));
+      })
+      .catch((err) => {
+        console.error(err);
+        setEmailStatus("Error sending emails");
+      })
+      .finally(() => {
+        // Clear status after some time
+        setTimeout(() => {
+          setEmailLoading(false);
+          setEmailStatus("");
+        }, 3000);
+      });
+  };
 
   return (
     <div className="dpo-container">
       <DPOHeader />
 
       <div className="content">
-  
+
         <DPOFilterBar
           activeTab={activeTab}
           onFilterChange={(nf) => setFilters((p) => ({ ...p, ...nf }))}
+          handleSendOverdueEmails={handleSendOverdueEmails}
+          emailLoading={emailLoading}
+          emailStatus={emailStatus}
         />
 
         {/* ✅ Tabs wrapper (DO NOT TOUCH DPOTabs) */}
@@ -101,7 +131,7 @@ const handleAllocateIssue = (issue) => {
           />
         </div>
 
-        <div className="tab-scroll-area">
+        <div className="dpo-tab-scroll-area">
           {loading ? (
             <p className="loading-text">Loading...</p>
           ) : displayedIssues.length === 0 ? (
@@ -124,7 +154,7 @@ const handleAllocateIssue = (issue) => {
 
           <div className="assign-modal">
             <div className="assign-header">
-              <h2>Add / Assign Issue</h2>
+              <h2>Add New Issue</h2>
               <button
                 className="close-btn"
                 onClick={() => setShowAssignModal(false)}
@@ -134,19 +164,19 @@ const handleAllocateIssue = (issue) => {
             </div>
 
             <DPOSingleIssueAssignCard
-  issue={{
-    issue_no: "NEW",
-    department: "",
-    issue: "",
-    issue_description: "",
-    priority: "Medium",
-    location: "",
-    deadline: "",
-  }}
-  index={0}
-  onChange={() => {}}
-  onAllocate={handleAllocateIssue}
-/>
+              issue={{
+                issue_no: "NEW",
+                issue: "",
+                issue_description: "",
+                department: "",
+                priority: "Medium",
+                location: "",
+                deadline: "",
+              }}
+              index={0}
+              onChange={() => { }}
+              onAllocate={handleAllocateIssue}
+            />
 
           </div>
         </div>

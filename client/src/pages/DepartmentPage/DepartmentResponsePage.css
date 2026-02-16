@@ -20,7 +20,7 @@ h1 {
   background: white;
   padding: 15px;
   border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   margin-bottom: 20px;
 }
 
@@ -44,15 +44,17 @@ h1 {
 .generate-btn:hover {
   background: #1d4ed8;
 }
+
 .page-title {
   display: flex;
-justify-content: space-between;
+  justify-content: space-between;
 
 }
 
 .upload-icon {
   color: black;
-  border-radius: 8px; /* keep it slightly rounded, not circular */
+  border-radius: 8px;
+  /* keep it slightly rounded, not circular */
   padding: 2px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   transition: all 0.2s ease;
@@ -66,12 +68,21 @@ justify-content: space-between;
   transform: scale(1.05);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
 }
+
 .upload-icon {
   font-size: 35px !important;
   width: 35px !important;
   height: 35px !important;
 }
+
 @keyframes fadeIn {
-  from { opacity: 0.3; transform: translateY(3px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0.3;
+    transform: translateY(3px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

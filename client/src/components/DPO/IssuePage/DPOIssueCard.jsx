@@ -27,21 +27,21 @@ function IssueCard({ issue }) {
         </span>
       </div>
 
+      <div className="issue-row">
+        <div className="label">Issue</div>
+        <div className="value">{issue.issue}</div>
+      </div>
+
+      <div className="issue-row">
+        <div className="label">Description</div>
+        <div className="value">{issue.issue_description}</div>
+      </div>
+
       <div className="issue-body">
         <div className="issue-row">
           <div className="label">Department</div>
           {/* Now displays "Police, PWD, KWA" */}
           <div className="value">{issue.department}</div>
-        </div>
-
-        <div className="issue-row">
-          <div className="label">Issue</div>
-          <div className="value">{issue.issue}</div>
-        </div>
-
-        <div className="issue-row">
-          <div className="label">Description</div>
-          <div className="value">{issue.issue_description}</div>
         </div>
 
         <div className="issue-row">

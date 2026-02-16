@@ -22,19 +22,18 @@ function IssueCard({ issue }) {
         <span className={`status ${status}`}>{status}</span>
       </div>
 
+      <div className="issue-row">
+        <div className="label">Issue</div>
+        <div className="value">{issue.issue}</div>
+      </div>
+      <div className="issue-row">
+        <div className="label">Description</div>
+        <div className="value">{issue.issue_description}</div>
+      </div>
       <div className="issue-body">
         <div className="issue-row">
           <div className="label">Department</div>
           <div className="value">{issue.department}</div>
-        </div>
-
-        <div className="issue-row">
-          <div className="label">Issue</div>
-          <div className="value">{issue.issue}</div>
-        </div>
-        <div className="issue-row">
-          <div className="label">Description</div>
-          <div className="value">{issue.issue_description}</div>
         </div>
         <div className="issue-row">
           <div className="label">Priority</div>
@@ -48,16 +47,14 @@ function IssueCard({ issue }) {
 
         <div className="issue-row">
           <div
-            className={`label ${
-              status === "overdue" ? "overdue-text" : ""
-            }`}
+            className={`label ${status === "overdue" ? "overdue-text" : ""
+              }`}
           >
             Deadline
           </div>
           <div
-            className={`value ${
-              status === "overdue" ? "overdue-text" : ""
-            }`}
+            className={`value ${status === "overdue" ? "overdue-text" : ""
+              }`}
           >
             <span>{issue.deadline}</span>
           </div>

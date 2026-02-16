@@ -12,4 +12,5 @@ urlpatterns = [
     path('submit-response', views.submit_response),
     path('notifications', views.get_notifications),
     path('generate-report', views.generate_report),
+    path('send-overdue-alerts', views.send_overdue_alerts),
 ]

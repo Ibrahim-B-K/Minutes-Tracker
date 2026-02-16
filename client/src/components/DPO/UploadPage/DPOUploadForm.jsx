@@ -113,7 +113,7 @@ export default function UploadForm({ onProcessed }) {
 
       <div className="form-content">
         {/* DATE */}
-        <label className="field-label">Upload Date</label>
+        <label className="field-label">Date</label>
         <div className="date-input-wrapper">
           <input
             type="text"
@@ -139,7 +139,7 @@ export default function UploadForm({ onProcessed }) {
         </div>
 
         {/* FILE */}
-        <label className="field-label">Upload Minutes File</label>
+        <label className="field-label">Minutes File</label>
         <div
           className={`file-drop ${dragOver ? "drag-over" : ""}`}
           onDragOver={(e) => {

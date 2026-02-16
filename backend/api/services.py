@@ -7,19 +7,19 @@ from .models import IssueDepartment, User
 
 
 def check_and_send_overdue_emails():
-
     today = timezone.now().date()
+    sent_count = 0
 
     # Get only PENDING items that are now overdue
     overdue_entries = IssueDepartment.objects.filter(
         deadline_date__lt=today,
-        status="PENDING"
+        status__iexact="pending"
     )
 
     for entry in overdue_entries:
 
         # 1️⃣ Change status to OVERDUE
-        entry.status = "OVERDUE"
+        entry.status = "overdue"
         entry.save()
 
         # 2️⃣ Get department users
@@ -58,3 +58,6 @@ def check_and_send_overdue_emails():
 
             email.attach_alternative(html_content, "text/html")
             email.send()
+            sent_count += 1
+    
+    return sent_count

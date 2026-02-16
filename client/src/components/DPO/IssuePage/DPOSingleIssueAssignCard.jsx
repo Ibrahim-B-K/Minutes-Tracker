@@ -36,16 +36,6 @@ export default function DPOIssueAssignCard({ issue, onChange, index, onAllocate 
         </button>
       </div>
 
-      <div className="dpo-assign-form">
-        <div className="dpo-assign-field">
-          <label>Department:</label>
-          <input
-            type="text"
-            value={issue.department}
-            onChange={(e) => handleChange("department", e.target.value)}
-          />
-        </div>
-
         <div className="dpo-assign-field">
           <label>Issue title:</label>
           <textarea
@@ -66,6 +56,16 @@ export default function DPOIssueAssignCard({ issue, onChange, index, onAllocate 
           />
         </div>
 
+        <div className="dpo-assign-form">
+        <div className="dpo-assign-field">
+          <label>Department:</label>
+          <input
+            type="text"
+            value={issue.department}
+            onChange={(e) => handleChange("department", e.target.value)}
+          />
+        </div>
+           
         <div className="dpo-assign-field">
           <label>Priority:</label>
           <select
