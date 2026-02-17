@@ -89,7 +89,7 @@ function DPOIssuePage() {
         if (res.data.sent_count > 0) {
           setEmailStatus(`All ${res.data.sent_count} Emails sent successfully`);
         } else {
-          setEmailStatus("Nothing overdue");
+          setEmailStatus("No pending overdue mails to send");
         }
         // Auto-refresh issues to reflect status changes if any
         api.get("/issues").then(r => setAllIssues(r.data));
