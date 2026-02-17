@@ -21,10 +21,10 @@ function CollectorNotificationPage() {
   ];
 
   return (
-    <div className="notificationpage-container">
+    <div className="collector-container">
       <CollectorHeader />
 
-      <div className="notificationpage-content">
+      <div className="content">
         <div className="notification-header">
           <h1>Notifications</h1>
         </div>

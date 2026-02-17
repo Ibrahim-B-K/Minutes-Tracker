@@ -13,11 +13,23 @@ export default function AssignIssues() {
     const fetchIssues = async () => {
       try {
         const res = await api.get("/assign-issues");
-        setIssues(res.data);
+        
+        // Calculate default deadline (14 days from today) if not set
+        const issuesWithDeadlines = res.data.map(issue => {
+          if (!issue.deadline || issue.deadline.trim() === '') {
+            const today = new Date();
+            const deadline = new Date(today.getTime() + (14 * 24 * 60 * 60 * 1000));
+            const day = String(deadline.getDate()).padStart(2, '0');
+            const month = String(deadline.getMonth() + 1).padStart(2, '0');
+            const year = deadline.getFullYear();
+            return { ...issue, deadline: `${day}-${month}-${year}` };
+          }
+          return issue;
+        });
+        
+        setIssues(issuesWithDeadlines);
       } catch (err) {
         console.error("Failed to load issues:", err);
-      } finally {
-        setLoading(false);
       }
     };
 

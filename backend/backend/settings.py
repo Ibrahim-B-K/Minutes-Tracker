@@ -1,10 +1,13 @@
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-SECRET_KEY = 'insecure-dev-key'
-DEBUG = True
-ALLOWED_HOSTS = ['*']
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'insecure-dev-key')
+DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -68,14 +71,14 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres.oiscsacsglwideokczhm',
-        'PASSWORD': 'agnayarjunibrukeerthi',
-        'HOST': 'aws-1-ap-south-1.pooler.supabase.com',
-        'PORT': '5432',
+        'ENGINE': os.getenv('DB_ENGINE', 'django.db.backends.postgresql'),
+        'NAME': os.getenv('DB_NAME', 'postgres'),
+        'USER': os.getenv('DB_USER', 'postgres'),
+        'PASSWORD': os.getenv('DB_PASSWORD', ''),
+        'HOST': os.getenv('DB_HOST', 'localhost'),
+        'PORT': os.getenv('DB_PORT', '5432'),
         'OPTIONS': {
-            'sslmode': 'require',
+            'sslmode': os.getenv('DB_SSL_MODE', 'require'),
         }
     }
 }
@@ -109,13 +112,10 @@ SESSION_COOKIE_SECURE = False  # localhost only
 CSRF_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_SECURE = False
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-
-EMAIL_HOST = "smtp-relay.brevo.com"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-
-EMAIL_HOST_USER = "a27423001@smtp-brevo.com"
-EMAIL_HOST_PASSWORD = "smtp_key_here"
-
-DEFAULT_FROM_EMAIL = "me.openbox@gmail.com"
+EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', "django.core.mail.backends.smtp.EmailBackend")
+EMAIL_HOST = os.getenv('EMAIL_HOST', "smtp-relay.brevo.com")
+EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True').lower() == 'true'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', "")
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', "")
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', "noreply@example.com")

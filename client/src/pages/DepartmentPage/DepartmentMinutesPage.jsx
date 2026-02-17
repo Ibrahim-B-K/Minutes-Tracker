@@ -2,18 +2,16 @@ import React, { useEffect, useState } from "react";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import GetAppIcon from "@mui/icons-material/GetApp";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import DeleteIcon from "@mui/icons-material/Delete";
 
-import DPOHeader from "../../components/DPO/DPOHeader";
+import DepartmentHeader from "../../components/Department/DepartmentHeader";
 import api from "../../api/axios";
 
-import "./DPOMinutesPage.css";
+import "./DepartmentMinutesPage.css";
 
-function DPOMinutesPage() {
+function DepartmentMinutesPage() {
   const [minutes, setMinutes] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [deleting, setDeleting] = useState(null);
 
   useEffect(() => {
     fetchMinutes();
@@ -86,27 +84,9 @@ function DPOMinutesPage() {
     }
   };
 
-  const handleDelete = async (minutesId, fileName) => {
-    if (!window.confirm(`Are you sure you want to delete "${fileName}"? This action cannot be undone.`)) {
-      return;
-    }
-
-    setDeleting(minutesId);
-    try {
-      await api.delete(`/minutes/${minutesId}`);
-      setMinutes(minutes.filter(m => m.id !== minutesId));
-      alert(`Deleted: ${fileName}`);
-    } catch (err) {
-      console.error("Error deleting minutes:", err);
-      alert("Failed to delete minutes. Please try again.");
-    } finally {
-      setDeleting(null);
-    }
-  };
-
   return (
-    <div className="dpo-container">
-      <DPOHeader />
+    <div className="dept-container">
+      <DepartmentHeader />
 
       <div className="minutes-page-content">
         <h1 className="page-title">📄 Meeting Minutes</h1>
@@ -171,16 +151,6 @@ function DPOMinutesPage() {
                     <GetAppIcon className="btn-icon" />
                     Download
                   </button>
-
-                  <button
-                    className="action-btn delete-btn"
-                    onClick={() => handleDelete(m.id, m.originalFileName || m.title)}
-                    disabled={deleting === m.id}
-                    title="Delete minutes"
-                  >
-                    <DeleteIcon className="btn-icon" />
-                    {deleting === m.id ? "Deleting..." : "Delete"}
-                  </button>
                 </div>
               </div>
             ))}
@@ -191,4 +161,4 @@ function DPOMinutesPage() {
   );
 }
 
-export default DPOMinutesPage;
+export default DepartmentMinutesPage;

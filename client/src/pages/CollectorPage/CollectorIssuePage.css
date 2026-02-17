@@ -1,19 +1,20 @@
-.dpo-container {
+.collector-container {
   width: 100%;
 }
 
-.content {
-  padding: 10px 70px;
+.collector-container .content {
+  padding: 0px 70px;
+  position: relative;
 }
 
-h1 {
+.collector-container .page-title h1 {
   font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 20px;
+  font-weight: 500;
+  margin-bottom: -5px;
   color: #111;
 }
 
-.filters {
+.collector-container .filters {
   display: flex;
   gap: 15px;
   align-items: center;
@@ -24,15 +25,15 @@ h1 {
   margin-bottom: 20px;
 }
 
-.filters input,
-.filters select {
+.collector-container .filters input,
+.collector-container .filters select {
   padding: 10px 12px;
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 0.9rem;
 }
 
-.generate-btn {
+.collector-container .generate-btn {
   background: #2563eb;
   color: white;
   border: none;
@@ -41,12 +42,12 @@ h1 {
   cursor: pointer;
 }
 
-.generate-btn:hover {
+.collector-container .generate-btn:hover {
   background: #1d4ed8;
 }
 
-.page-title {
+.collector-container .page-title {
   display: flex;
   justify-content: space-between;
-
+  margin-top: -20px;
 }

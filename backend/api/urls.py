@@ -5,6 +5,8 @@ urlpatterns = [
     path('login', views.login_view),
     path('logout', views.logout_view),
     path('upload-minutes', views.upload_minutes),
+    path('minutes', views.get_minutes),
+    path('minutes/<int:minutes_id>', views.delete_minutes),
     path('assign-issues', views.get_assign_issues),
     path('assign-issues/allocate-all', views.allocate_all),
     path('issues', views.get_all_issues),

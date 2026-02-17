@@ -2,18 +2,18 @@
   width: 100%;
 }
 
-.content {
+.dpo-container .content {
   padding: 10px 70px;
   position: relative;
 }
 
 /* ---------- Title ---------- */
-.page-title {
+.dpo-container .page-title {
   display: flex;
   justify-content: space-between;
 }
 
-.page-title h1 {
+.dpo-container .page-title h1 {
   font-size: 2.1rem;
   font-weight: 700;
 }

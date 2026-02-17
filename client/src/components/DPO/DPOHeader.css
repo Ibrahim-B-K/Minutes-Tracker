@@ -30,7 +30,6 @@
   position: relative;
 }
 
-
 /* standard icon container */
 
 
@@ -150,5 +149,160 @@
   cursor: pointer;
   transition: transform 0.15s ease;
 }
+/* Modal Overlay */
+.dept-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
 
+/* ========================= */
+/* ===== Modal Overlay ===== */
+/* ========================= */
 
+.dept-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  backdrop-filter: blur(3px);
+}
+
+/* ========================= */
+/* ===== Modal Box ===== */
+/* ========================= */
+
+.dept-modal {
+  background: #ffffff;
+  width: 380px;
+  max-width: 90%;
+  padding: 28px;
+  border-radius: 14px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  animation: dpoDropdownFade 0.2s ease;
+}
+
+/* Title */
+.dept-modal h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827;
+  text-align: center;
+}
+
+/* ========================= */
+/* ===== Input Fields ===== */
+/* ========================= */
+
+.dept-modal input {
+  padding: 11px 12px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  background: #f9fafb;
+}
+
+.dept-modal input:focus {
+  outline: none;
+  border-color: #2563eb;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* ========================= */
+/* ===== Password Field ===== */
+/* ========================= */
+
+.password-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-field input {
+  width: 100%;
+  padding-right: 42px;
+}
+
+.eye-icon {
+  position: absolute;
+  right: 12px;
+  cursor: pointer;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s ease;
+}
+
+.eye-icon:hover {
+  color: #2563eb;
+}
+
+.eye-icon svg {
+  font-size: 20px;
+}
+
+/* ========================= */
+/* ===== Buttons ===== */
+/* ========================= */
+
+.dept-modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* Cancel */
+.cancel-btn {
+  background: #f3f4f6;
+  border: none;
+  padding: 9px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.cancel-btn:hover {
+  background: #e5e7eb;
+}
+
+/* Create */
+.save-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 9px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.save-btn:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+/* ========================= */
+/* ===== Add Dept Icon ===== */
+/* ========================= */
+
+.dpo-adddept-icon {
+  font-size: 18px;
+  color: #2563eb;
+}

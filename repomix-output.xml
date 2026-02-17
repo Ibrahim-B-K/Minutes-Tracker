@@ -53,6 +53,9 @@ backend/api/migrations/0003_alter_user_role.py
 backend/api/migrations/0004_alter_issue_issue_title.py
 backend/api/models.py
 backend/api/serializers.py
+backend/api/services.py
+backend/api/templates/emails/overdue_issue.html
+backend/api/templates/emails/overdue_issue.txt
 backend/api/urls.py
 backend/api/views.py
 backend/backend/__init__.py
@@ -67,10 +70,12 @@ backend/media/minutes/1️⃣ USERS TABLE.pdf
 backend/media/minutes/CST424-M1 -Ktunotes.in.pdf
 backend/media/minutes/DDC MINUTES 1-03-2025 Final.docx
 backend/media/minutes/DDC MINUTES 1-03-2025 Final.pdf
+backend/media/minutes/DDC MINUTES 26.07.2025.pdf
 backend/media/minutes/DDC MINUTES 27.09.2025.pdf
 backend/media/minutes/DDC MINUTES keerthi.pdf
 backend/media/minutes/DDC MINUTES small.pdf
 backend/media/minutes/pdf&rendition=1-6 (1).pdf
+backend/media/minutes/small minutes1.pdf
 backend/media/responses/1_USERS_TABLE_3rjgjmz.pdf
 backend/media/responses/1_USERS_TABLE_VxpBP14.pdf
 backend/media/responses/1_USERS_TABLE_Xtb7w0s.pdf
@@ -113,6 +118,8 @@ client/src/components/DPO/IssuePage/DPOGenerateReports.css
 client/src/components/DPO/IssuePage/DPOGenerateReports.jsx
 client/src/components/DPO/IssuePage/DPOIssueCard.css
 client/src/components/DPO/IssuePage/DPOIssueCard.jsx
+client/src/components/DPO/IssuePage/DPOSingleIssueAssignCard.css
+client/src/components/DPO/IssuePage/DPOSingleIssueAssignCard.jsx
 client/src/components/DPO/IssuePage/DPOTabs.css
 client/src/components/DPO/IssuePage/DPOTabs.jsx
 client/src/components/DPO/UploadPage/DPOAssignIssues.css
@@ -126,6 +133,8 @@ client/src/index.css
 client/src/main.jsx
 client/src/pages/CollectorPage/CollectorIssuePage.css
 client/src/pages/CollectorPage/CollectorIssuePage.jsx
+client/src/pages/CollectorPage/CollectorMinutesPage.css
+client/src/pages/CollectorPage/CollectorMinutesPage.jsx
 client/src/pages/CollectorPage/NotificationPage.css
 client/src/pages/CollectorPage/NotificationPage.jsx
 client/src/pages/DepartmentPage/DepartmentResponsePage.css
@@ -134,6 +143,8 @@ client/src/pages/DepartmentPage/NotificationPage.css
 client/src/pages/DepartmentPage/NotificationPage.jsx
 client/src/pages/DPOPage/DPOIssuePage.css
 client/src/pages/DPOPage/DPOIssuePage.jsx
+client/src/pages/DPOPage/DPOMinutesPage.css
+client/src/pages/DPOPage/DPOMinutesPage.jsx
 client/src/pages/DPOPage/NotificationPage.css
 client/src/pages/DPOPage/NotificationPage.jsx
 client/src/pages/DPOPage/UploadPage.css
@@ -230,6 +241,45 @@ class Migration(migrations.Migration):
             field=models.CharField(max_length=300),
         ),
     ]
+</file>
+
+<file path="backend/api/templates/emails/overdue_issue.html">
+<h2>Overdue Issue Notification</h2>
+
+<p>Hello {{ user.first_name|default:user.username }},</p>
+
+<p>
+An issue assigned to your department 
+<strong>{{ department.dept_name }}</strong> is overdue.
+</p>
+
+<hr>
+
+<p><strong>Issue Title:</strong> {{ issue.issue.issue_title }}</p>
+<p><strong>Description:</strong> {{ issue.issue.issue_description }}</p>
+<p><strong>Location:</strong> {{ issue.issue.location }}</p>
+<p><strong>Priority:</strong> {{ issue.issue.priority }}</p>
+<p><strong>Deadline:</strong> {{ issue.deadline_date }}</p>
+
+<hr>
+
+<p>Please take necessary action immediately.</p>
+</file>
+
+<file path="backend/api/templates/emails/overdue_issue.txt">
+Overdue Issue Notification
+
+Hello {{ user.first_name|default:user.username }},
+
+An issue assigned to your department {{ department.dept_name }} is overdue.
+
+Title: {{ issue.issue.issue_title }}
+Description: {{ issue.issue.issue_description }}
+Location: {{ issue.issue.location }}
+Priority: {{ issue.issue.priority }}
+Deadline: {{ issue.deadline_date }}
+
+Please take necessary action immediately.
 </file>
 
 <file path="backend/backend/__init__.py">
@@ -416,46 +466,9 @@ export default api;
 body {
   margin: 0;
   font-family: "Inter", Arial, sans-serif;
-  background-color: #ECF3FF;
-  overflow: hidden; /* Prevent body scrolling */
+  background-color: #E6F3FF;
+  /* overflow: hidden; */
 }
-</file>
-
-<file path="client/src/App.jsx">
-import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import UploadPage from "./pages/DPOPage/UploadPage.jsx";
-import DPOIssuePage from "./pages/DPOPage/DPOIssuePage.jsx";
-import DepartmentResponsePage from "./pages/DepartmentPage/DepartmentResponsePage.jsx";
-import CollectorIssuePage from "./pages/CollectorPage/CollectorIssuePage.jsx";
-import DPONotificationsPage from "./pages/DPOPage/NotificationPage.jsx";
-import DepartmentNotificationPage from "./pages/DepartmentPage/NotificationPage.jsx";
-import CollectorNotificationPage from "./pages/CollectorPage/NotificationPage.jsx";
-import Login from "./pages/LoginPage.jsx";
-import "./App.css";
-
-function App() {
-  return (
-    <Router>
-      <Routes>
-        {/* Default route -> DPO Page */}
-        <Route path="/" element={<Navigate to="/login" />} />
-        {/* DPO Page */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/dpo" element={<DPOIssuePage />} />
-        {/* Upload Page */}
-        <Route path="/dpo/upload" element={<UploadPage />} />
-        <Route path="/dpo/notifications" element={<DPONotificationsPage />} />
-        <Route path="/department/:dept" element={<DepartmentResponsePage />} />
-        <Route path="/department/notifications" element={<DepartmentNotificationPage />} />
-        <Route path="/collector" element={<CollectorIssuePage />} />
-        <Route path="/collector/notifications" element={<CollectorNotificationPage />} />
-      </Routes>
-    </Router>
-  );
-}
-
-export default App;
 </file>
 
 <file path="client/src/components/Collector/IssuePage/CollectorFilterBar.css">
@@ -467,7 +480,7 @@ export default App;
   padding: 15px;
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
   flex-wrap: wrap;
   position: relative; /* positioning context for floating buttons */
 }
@@ -527,7 +540,7 @@ export default App;
 }
 
 .filter-group label {
-  color: #666;
+  color: #000;
   font-size: 0.9rem;
   min-width: 60px;
 }
@@ -538,7 +551,7 @@ export default App;
   border-radius: 6px;
   font-size: 0.9rem;
   width: 160px;
-  color: #333;
+  color: #000;
   background: white;
 }
 
@@ -583,159 +596,6 @@ export default App;
 .upload-btn:hover {
   background: #059669;
 }
-</file>
-
-<file path="client/src/components/Collector/IssuePage/CollectorFilterBar.jsx">
-import React, { useEffect, useState, useRef } from "react";
-import "./CollectorFilterBar.css";
-import CollectorGenerateReports from "./CollectorGenerateReports";
-
-function FilterBar({ activeTab, onFilterChange, issue_date }) {
-  const [showReportModal, setShowReportModal] = useState(false);
-  const [date, setDate] = useState([]);
-  const [filterBy, setFilterBy] = useState("all");
-  const [sortBy, setSortBy] = useState("newest");
-  const [searchQuery, setSearchQuery] = useState("");
-  const datePickerRef = useRef(null);
-
-  const handleGenerate = () => {
-    setShowReportModal(true);
-  };
-
-  // When parent updates issue_date, update local date state
-  useEffect(() => {
-    if (issue_date) {
-      setDate(issue_date);
-    }
-  }, [issue_date]);
-
-  const handleFilterChange = (type, value) => {
-    let updatedFilters = {
-      date,
-      filterBy,
-      sortBy,
-      searchQuery,
-    };
-
-    if (type === "date") {
-      updatedFilters.date = formatDateInput(value);
-      setDate(updatedFilters.date);
-    } else if (type === "filterBy") {
-      updatedFilters.filterBy = value;
-      setFilterBy(value);
-    } else if (type === "sortBy") {
-      updatedFilters.sortBy = value;
-      setSortBy(value);
-    } else if (type === "search") {
-      updatedFilters.searchQuery = value;
-      setSearchQuery(value);
-    }
-
-    onFilterChange(updatedFilters);
-  };
-
-  const handleDatePick = (e) => {
-    const parts = e.target.value.split("-");
-    if (parts.length === 3) {
-      const formatted = `${parts[2]}-${parts[1]}-${parts[0]}`;
-      setDate(formatted);
-      handleFilterChange("date", formatted);
-    }
-  };
-
-  const formatDateInput = (raw) => {
-    const digits = raw.replace(/\D/g, "").slice(0, 8);
-    if (digits.length <= 2) return digits;
-    if (digits.length <= 4) return `${digits.slice(0, 2)}-${digits.slice(2)}`;
-    return `${digits.slice(0, 2)}-${digits.slice(2, 4)}-${digits.slice(4)}`;
-  };
-
-  const handleDateChange = (e) => {
-    const formatted = formatDateInput(e.target.value);
-    setDate(formatted);
-    handleFilterChange("date", formatted);
-  };
-
-  return (
-    <div className="filter-bar">
-      <div className="search-wrapper">
-        <span className="search-icon">🔍</span>
-        <input
-          type="text"
-          placeholder="Search issues..."
-          value={searchQuery}
-          onChange={(e) => handleFilterChange("search", e.target.value)}
-        />
-      </div>
-
-      <div className="date-input-wrapper">
-        <input
-          type="text"
-          placeholder="dd-mm-yyyy"
-          value={date}
-          onChange={handleDateChange}
-        />
-        <span
-          className="calendar-icon"
-          onClick={() => datePickerRef.current.showPicker()}
-        >
-          📅
-        </span>
-
-        {/* hidden actual date picker */}
-        <input
-          type="date"
-          ref={datePickerRef}
-          onChange={handleDatePick}
-          style={{ visibility: "hidden", position: "absolute" }}
-        />
-      </div>
-
-      <div className="filter-group">
-        <label>Filter By:</label>
-        <select
-          value={filterBy}
-          onChange={(e) => handleFilterChange("filterBy", e.target.value)}
-          className="filter-select"
-        >
-          <option value="all">All Issues</option>
-          <option value="high">High Priority</option>
-          <option value="medium">Medium Priority</option>
-          <option value="low">Low Priority</option>
-          <option value="health">Health Dept</option>
-          <option value="education">Education Dept</option>
-          <option value="works">Public Works</option>
-        </select>
-      </div>
-
-      <div className="filter-group">
-        <label>Sort By:</label>
-        <select
-          value={sortBy}
-          onChange={(e) => handleFilterChange("sortBy", e.target.value)}
-          className="filter-select"
-        >
-          <option value="priority">Priority</option>
-          <option value="department">Department</option>
-          <option value="deadline">Deadline</option>
-        </select>
-      </div>
-
-      {activeTab === "Received" && (
-        <button className="generate-btn" onClick={handleGenerate}>
-          Generate Report
-        </button>
-      )}
-
-      <CollectorGenerateReports
-        isOpen={showReportModal}
-        onClose={() => setShowReportModal(false)}
-      />
-    </div>
-  );
-}
-
-export default FilterBar;
 </file>
 
 <file path="client/src/components/Collector/IssuePage/CollectorGenerateReportCard.jsx">
@@ -1048,7 +908,8 @@ export default GenerateReportCard;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
   padding: 20px;
   margin-top: 10px;
-  border-left: 5px solid #facc15; /* default yellow for pending */
+  border-left: 5px solid #facc15;
+  /* default yellow for pending */
 }
 
 .issue-header {
@@ -1073,24 +934,30 @@ export default GenerateReportCard;
 
 /* 🔸 Color Variations */
 .status.pending {
-  background: #fef9c3;  /* light yellow */
-  color: #854d0e;       /* dark yellow text */
+  background: #fef9c3;
+  /* light yellow */
+  color: #854d0e;
+  /* dark yellow text */
 }
 
 .status.overdue {
-  background: #fee2e2;  /* light red */
-  color: #b91c1c;       /* dark red text */
+  background: #fee2e2;
+  /* light red */
+  color: #b91c1c;
+  /* dark red text */
 }
 
 .status.received {
-  background: #dcfce7;  /* light green */
-  color: #166534;       /* dark green text */
+  background: #dcfce7;
+  /* light green */
+  color: #166534;
+  /* dark green text */
 }
 
 .issue-body p {
   margin: 4px 0;
   font-size: 0.9rem;
-  color: #333;
+  color: #000000;
 }
 
 .issue-row {
@@ -1098,14 +965,16 @@ export default GenerateReportCard;
   align-items: flex-start;
   margin: 6px 0;
   font-size: 0.9rem;
-  color: #333;
+  color: #000;
 }
 
 .issue-row .label {
-  width: 120px; /* fixed width for alignment */
+  width: 120px;
+  /* fixed width for alignment */
   font-weight: 600;
-  color: #444;
-  text-align: left; /* left align text */
+  color: #000;
+  text-align: left;
+  /* left align text */
   position: relative;
   padding-right: 8px;
 }
@@ -1123,29 +992,37 @@ export default GenerateReportCard;
   padding-left: 12px;
   margin-top: 6px;
 }
+
 /* 🔴 Overdue text color */
 .overdue-text {
-  color: #b91c1c !important; /* same red as your border */
+  color: #b91c1c !important;
+  /* same red as your border */
   font-weight: 600;
 }
+
 .footer-line {
   height: 1px;
-  background: #eee;
+  /* background: #16a34a; */
+  background: #888;
   margin-top: 30px;
 }
+
 .response-received {
   position: relative;
-  background-color: #F0FDF4;
-  height: 70px;
+  background-color: #dcfce5;
+  height: auto;
 }
+
 .res {
-  margin-left: 20px;
-  padding-top: 10px;
+  margin-left: 5px;
+  /* padding-top: 10px; */
 }
+
 .res-button {
   position: absolute;
   right: 12px;
-  bottom: 12px; /* keep the button a little above the bottom */
+  bottom: 12px;
+  /* keep the button a little above the bottom */
   background: #19A752;
   color: white;
   border: none;
@@ -1154,14 +1031,22 @@ export default GenerateReportCard;
   cursor: pointer;
   transition: background 0.2s ease;
 }
+
 .issue-card {
   opacity: 0;
   animation: fadeInCard 0.3s ease forwards;
 }
 
 @keyframes fadeInCard {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </file>
 
@@ -1190,19 +1075,18 @@ function IssueCard({ issue }) {
         <span className={`status ${status}`}>{status}</span>
       </div>
 
+      <div className="issue-row">
+        <div className="label">Issue</div>
+        <div className="value">{issue.issue}</div>
+      </div>
+      <div className="issue-row">
+        <div className="label">Description</div>
+        <div className="value">{issue.issue_description}</div>
+      </div>
       <div className="issue-body">
         <div className="issue-row">
           <div className="label">Department</div>
           <div className="value">{issue.department}</div>
-        </div>
-
-        <div className="issue-row">
-          <div className="label">Issue</div>
-          <div className="value">{issue.issue}</div>
-        </div>
-        <div className="issue-row">
-          <div className="label">Description</div>
-          <div className="value">{issue.issue_description}</div>
         </div>
         <div className="issue-row">
           <div className="label">Priority</div>
@@ -1216,16 +1100,14 @@ function IssueCard({ issue }) {
 
         <div className="issue-row">
           <div
-            className={`label ${
-              status === "overdue" ? "overdue-text" : ""
-            }`}
+            className={`label ${status === "overdue" ? "overdue-text" : ""
+              }`}
           >
             Deadline
           </div>
           <div
-            className={`value ${
-              status === "overdue" ? "overdue-text" : ""
-            }`}
+            className={`value ${status === "overdue" ? "overdue-text" : ""
+              }`}
           >
             <span>{issue.deadline}</span>
           </div>
@@ -1277,7 +1159,7 @@ export default IssueCard;
   padding: 10px 20px;
   cursor: pointer;
   font-weight: 500;
-  color: #555;
+  color: #000;
 }
 
 .tab.active {
@@ -1285,10 +1167,10 @@ export default IssueCard;
   color: #007bff;
 }
 
-.tab-scroll-area {
+.collector-tab-scroll-area {
   flex: 1;
   overflow-y: auto;
-  max-height: 55vh; /* adjust height as needed */
+  /* max-height removed */
   padding-right: 10px;
   scrollbar-width: thin;
 }
@@ -1372,7 +1254,7 @@ export default Tabs;
 }
 
 .filter-group label {
-  color: #666;
+  color: #000;
   font-size: 0.9rem;
   min-width: 60px;
 }
@@ -1383,7 +1265,7 @@ export default Tabs;
   border-radius: 6px;
   font-size: 0.9rem;
   width: 160px;
-  color: #333;
+  color: #000;
   background: white;
 }
 
@@ -1797,7 +1679,7 @@ export default DepartmentFilterBar;
   display: flex;
   flex-direction: column;
   background-color: #F0FDF4;
-  padding: 8px 12px;
+  padding: 8px;
   border-radius: 8px;
   gap: 4px;
   align-items: flex-start;
@@ -2259,13 +2141,14 @@ export default ResponseModal;
   color: #007bff;
 }
 
-.tab-scroll-area {
+.dept-tab-scroll-area {
   flex: 1;
   overflow-y: auto;
-  max-height: 55vh; /* adjust height as needed */
+  /* max-height removed */
   padding-right: 10px;
   scrollbar-width: thin;
 }
+
 .tab {
   transition: background-color 0.2s ease, color 0.2s ease;
 }
@@ -2296,331 +2179,6 @@ function DepartmentTabs({ activeTab, setActiveTab }) {
 }
 
 export default DepartmentTabs;
-</file>
-
-<file path="client/src/components/DPO/DPOHeader.css">
-.dpo-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: white;
-  padding: 15px 25px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-
-.dpo-logo {
-  display: flex;
-  align-items: center;
-  font-weight: 600;
-  font-size: 1.1rem;
-  color: #1a1a1a;
-}
-
-.dpo-logo-icon {
-  width: 28px;
-  height: 28px;
-  background: #2563eb;
-  border-radius: 5px;
-  margin-right: 10px;
-}
-
-.dpo-header-icons {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  position: relative;
-}
-
-
-/* standard icon container */
-
-
-.dpo-icon.bell {
-  background: white; /* make the circular background white */
-  color: #2563eb; /* bell color */
-  font-size: 32px;
-  margin-right: 15px;
-}
-
-.dpo-icon.profile {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: #2563eb;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-  font-size: 14px;
-  line-height: 30px;
-  text-align: center;
-}
-
-/* Profile dropdown */
-.dpo-profile-dropdown {
-  position: absolute;
-  top: 55px;
-  right: 0;
-  background: #fff;
-  border-radius: 10px;
-  width: 140px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-  padding: 8px 0;
-  animation: dpoDropdownFade 0.2s ease;
-  z-index: 1000;
-}
-
-.dpo-profile-dropdown button {
-  width: 100%;
-  background: none;
-  border: none;
-  padding: 10px 16px;
-  text-align: left;
-  font-size: 14px;
-  cursor: pointer;
-  color: #111827;
-}
-
-.dpo-profile-dropdown button:hover {
-  background: #f3f4f6;
-}
-
-/* Smooth appearance */
-@keyframes dpoDropdownFade {
-  from {
-    opacity: 0;
-    transform: translateY(-6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-.dpo-logout-btn {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-  background: none;
-  border: none;
-  padding: 10px 16px;
-  text-align: left;
-  font-size: 14px;
-  cursor: pointer;
-  color: #111827;
-}
-
-.dpo-logout-btn:hover {
-  background: #f3f4f6;
-}
-
-.dpo-logout-icon {
-  font-size: 18px;
-  color: #ef4444; /* subtle red for logout */
-}
-</file>
-
-<file path="client/src/components/DPO/IssuePage/DPOFilterBar.css">
-.filter-bar {
-  display: flex;
-  gap: 15px;
-  align-items: center;
-  background: white;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  margin-bottom: 20px;
-
-  position: relative;
-  transition: all 0.2s ease;
-}
-
-/* ================= SEARCH ================= */
-
-.search-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  flex: 1;
-  min-width: 200px;
-  max-width: 400px;
-}
-
-.search-wrapper input {
-  padding: 10px 35px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  width: 100%;
-}
-
-.search-icon {
-  position: absolute;
-  left: 10px;
-  user-select: none;
-}
-
-/* ================= DATE INPUT ================= */
-
-.date-input-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.date-input-wrapper input {
-  padding: 10px 35px 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 0.9rem;
-}
-
-.calendar-icon {
-  position: absolute;
-  right: 10px;
-  font-size: 1rem;
-  color: #666;
-  cursor: pointer;
-  user-select: none;
-}
-
-/* ================= FILTER / SORT GROUP ================= */
-
-.filter-group {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.filter-group label {
-  color: #666;
-  font-size: 0.9rem;
-  min-width: 60px;
-}
-
-/* ===== COMMON CONTROL STYLE (Filter & Sort SAME) ===== */
-
-.filter-select,
-.filter-btn {
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  width: 160px;
-  background: white;
-  color: #333;
-  cursor: pointer;
-  text-align: left;
-}
-
-/* ================= GENERATE BUTTON ================= */
-
-.generate-btn {
-  background: #2563eb;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-  margin-left: auto;
-}
-
-.generate-btn:hover {
-  background: #1d4ed8;
-}
-
-/* ================= UPLOAD BUTTON ================= */
-
-.upload-btn {
-  position: absolute;
-  right: 12px;
-  top: -18px;
-  z-index: 20;
-  background: #10b981;
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 8px;
-  box-shadow: 0 6px 12px rgba(16, 185, 129, 0.12);
-  cursor: pointer;
-  font-size: 0.9rem;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.upload-btn img {
-  width: 14px;
-  height: 14px;
-}
-
-.upload-btn:hover {
-  background: #059669;
-}
-
-/* ================= CUSTOM FILTER DROPDOWN ================= */
-
-.custom-filter,
-.filter-dropdown {
-  position: relative;
-
-}
-
-/* Dropdown Menu */
-.filter-menu {
-  display: none;
-  position: absolute;
-  top: 39px;
-  left: 0;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  min-width: 160px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-  z-index: 50;
-}
-
-.filter-dropdown:hover .filter-menu {
-  display: block;
-}
-
-/* Dropdown Items */
-.filter-item {
-  padding: 10px 12px;
-  cursor: pointer;
-  position: relative;
-  white-space: nowrap;
-}
-
-.filter-item:hover {
-  background: #f3f4f6;
-}
-
-/* ================= SUB MENU ================= */
-
-.sub-menu {
-  display: none;
-  position: absolute;
-  top: 0;
-  left: 100%;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  min-width: 160px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-}
-
-.filter-item:hover .sub-menu {
-  display: block;
-}
-
-.sub-menu div {
-  padding: 10px 12px;
-}
-
-.sub-menu div:hover {
-  background: #e5e7eb;
-}
 </file>
 
 <file path="client/src/components/DPO/IssuePage/DPOGenerateReportCard.jsx">
@@ -3019,16 +2577,18 @@ export default GenerateReportCard;
 
 .footer-line {
   height: 1px;
-  background: #eee;
-  margin-top: 30px;
+  background: #000;
+  /* margin-top: 30px;*/
+  margin: 20px 0px 10px
 }
 
 .response-received {
   display: flex;
   flex-direction: column;
-  background-color: #F0FDF4;
-  padding: 8px 12px;
+  background-color: #c9ffd9;
+  padding: 8px;
   border-radius: 8px;
+  margin: 0px 0px 8px 0px; 
   gap: 4px;
   align-items: flex-start;
 }
@@ -3079,6 +2639,269 @@ export default GenerateReportCard;
 }
 </file>
 
+<file path="client/src/components/DPO/IssuePage/DPOSingleIssueAssignCard.css">
+/* ==============================
+   DPO Issue Assign Card
+============================== */
+
+.dpo-assign-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background-color: #f9fafb;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  transition: box-shadow 0.2s ease;
+}
+
+.dpo-assign-card:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+/* ==============================
+   Card Header
+============================== */
+
+.dpo-assign-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 2px;
+}
+
+.dpo-assign-entry-id {
+  font-weight: 600;
+  color: #111827;
+  font-size: 15px;
+}
+
+.dpo-assign-allocate-btn {
+  background-color: #2563eb;
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-bottom:5px;
+}
+
+
+
+/* ==============================
+   Form Section
+============================== */
+
+.dpo-assign-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dpo-assign-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.dpo-assign-field label {
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.dpo-assign-field input,
+.dpo-assign-field select {
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 14px;
+  background-color: #fff;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dpo-assign-field textarea {
+  resize: none;
+  height: 35px;
+  min-height: 35px;
+  padding: 6px 8px;
+  font-size: 13px;
+  line-height: 1.4;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background-color: #fff;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dpo-assign-field input:focus,
+.dpo-assign-field select:focus,
+.dpo-assign-field textarea:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* ==============================
+   Deadline Field
+============================== */
+
+.dpo-assign-deadline {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.dpo-assign-deadline input {
+  width: 100%;
+  padding-right: 38px;
+}
+
+.dpo-assign-calendar {
+  position: absolute;
+  right: 12px;
+  font-size: 18px;
+  color: #4b5563;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.dpo-assign-calendar:hover {
+  color: #2563eb;
+}
+</file>
+
+<file path="client/src/components/DPO/IssuePage/DPOSingleIssueAssignCard.jsx">
+import React, { useRef } from "react";
+import "./DPOSingleIssueAssignCard.css";
+export default function DPOIssueAssignCard({ issue, onChange, index, onAllocate }) {
+  const dateRef = useRef(null);
+
+  const handleChange = (field, value) => onChange(index, field, value);
+
+  const formatDateInput = (text) => {
+    const digits = text.replace(/\D/g, "");
+    let day = digits.substring(0, 2);
+    let month = digits.substring(2, 4);
+    let year = digits.substring(4, 8);
+
+    let formatted = day;
+    if (month) formatted += "-" + month;
+    if (year) formatted += "-" + year;
+
+    return formatted;
+  };
+
+  const convertDatePickerValue = (value) => {
+    const [y, m, d] = value.split("-");
+    return `${d}-${m}-${y}`;
+  };
+
+  return (
+    <div className="dpo-assign-card">
+      <div className="dpo-assign-top">
+        <div className="dpo-assign-entry-id">{issue.issue_no}</div>
+
+        <button
+          className="dpo-assign-allocate-btn"
+          onClick={() => onAllocate(issue)}
+        >
+          Allocate
+        </button>
+      </div>
+
+        <div className="dpo-assign-field">
+          <label>Issue title:</label>
+          <textarea
+            rows="2"
+            value={issue.issue}
+            onChange={(e) => handleChange("issue", e.target.value)}
+          />
+        </div>
+
+        <div className="dpo-assign-field">
+          <label>Description:</label>
+          <textarea
+            rows="2"
+            value={issue.issue_description}
+            onChange={(e) =>
+              handleChange("issue_description", e.target.value)
+            }
+          />
+        </div>
+
+        <div className="dpo-assign-form">
+        <div className="dpo-assign-field">
+          <label>Department:</label>
+          <input
+            type="text"
+            value={issue.department}
+            onChange={(e) => handleChange("department", e.target.value)}
+          />
+        </div>
+           
+        <div className="dpo-assign-field">
+          <label>Priority:</label>
+          <select
+            value={issue.priority}
+            onChange={(e) => handleChange("priority", e.target.value)}
+          >
+            <option>High</option>
+            <option>Medium</option>
+            <option>Low</option>
+          </select>
+        </div>
+
+        <div className="dpo-assign-field">
+          <label>Location:</label>
+          <input
+            type="text"
+            value={issue.location}
+            onChange={(e) => handleChange("location", e.target.value)}
+          />
+        </div>
+
+        <div className="dpo-assign-field">
+          <label>Deadline:</label>
+          <div className="dpo-assign-deadline">
+            <input
+              type="text"
+              placeholder="DD-MM-YYYY"
+              value={issue.deadline}
+              onChange={(e) =>
+                handleChange("deadline", formatDateInput(e.target.value))
+              }
+            />
+
+            <input
+              type="date"
+              ref={dateRef}
+              style={{ display: "none" }}
+              onChange={(e) =>
+                handleChange(
+                  "deadline",
+                  convertDatePickerValue(e.target.value)
+                )
+              }
+            />
+
+            <span
+              className="dpo-assign-calendar"
+              onClick={() => dateRef.current.showPicker()}
+            >
+              📅
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+</file>
+
 <file path="client/src/components/DPO/IssuePage/DPOTabs.css">
 .tabs-container {
   display: flex;
@@ -3105,10 +2928,9 @@ export default GenerateReportCard;
   color: #007bff;
 }
 
-.tab-scroll-area {
+.dpo-tab-scroll-area {
   flex: 1;
   overflow-y: auto;
-  max-height: 55vh; /* adjust height as needed */
   padding-right: 10px;
   scrollbar-width: thin;
 }
@@ -3422,128 +3244,6 @@ export default function AssignIssues() {
             onChange={handleChange}
           />
         ))}
-      </div>
-    </div>
-  );
-}
-</file>
-
-<file path="client/src/components/DPO/UploadPage/DPOIssueAssignCard.jsx">
-// IssueAssignCard.jsx
-import React, { useRef } from "react";
-
-export default function IssueAssignCard({ issue, onChange, index }) {
-  const dateRef = useRef(null);
-
-  const handleChange = (field, value) => onChange(index, field, value);
-
-  // Format text input as DD-MM-YYYY while typing
-  const formatDateInput = (text) => {
-    const digits = text.replace(/\D/g, ""); // keep only numbers
-    let day = digits.substring(0, 2);
-    let month = digits.substring(2, 4);
-    let year = digits.substring(4, 8);
-
-    let formatted = day;
-    if (month) formatted += "-" + month;
-    if (year) formatted += "-" + year;
-
-    return formatted;
-  };
-
-  // Convert date picker value YYYY-MM-DD → DD-MM-YYYY
-  const convertDatePickerValue = (value) => {
-    const [y, m, d] = value.split("-");
-    return `${d}-${m}-${y}`;
-  };
-
-  return (
-    <div className="issue-assign-card">
-      <div className="issue-top">
-        <div className="entry-id">{issue.issue_no}</div>
-        <button className="delete-btn">🗑️</button>
-      </div>
-
-      <div className="issue-form">
-        <div className="form-field">
-          <label>Department:</label>
-          <input
-            type="text"
-            value={issue.department}
-            onChange={(e) => handleChange("department", e.target.value)}
-          />
-        </div>
-
-        <div className="form-field">
-          <label>Issue title:</label>
-          <textarea
-            rows="2"
-            value={issue.issue}
-            onChange={(e) => handleChange("issue", e.target.value)}
-          />
-        </div>
-        <div className="form-field">
-          <label>Description:</label>
-          <textarea
-            rows="2"
-            value={issue.issue_description}
-            onChange={(e) => handleChange("issue_description", e.target.value)}
-          />
-        </div>
-
-        <div className="form-field">
-          <label>Priority:</label>
-          <select
-            value={issue.priority}
-            onChange={(e) => handleChange("priority", e.target.value)}
-          >
-            <option>High</option>
-            <option>Medium</option>
-            <option>Low</option>
-          </select>
-        </div>
-
-        <div className="form-field">
-          <label>Location:</label>
-          <input
-            type="text"
-            value={issue.location}
-            onChange={(e) => handleChange("location", e.target.value)}
-          />
-        </div>
-
-        {/* ----- DEADLINE FIELD WITH DATE PICKER ----- */}
-        <div className="form-field">
-          <label>Deadline:</label>
-          <div className="deadline-input">
-            <input
-              type="text"
-              placeholder="DD-MM-YYYY"
-              value={issue.deadline}
-              onChange={(e) =>
-                handleChange("deadline", formatDateInput(e.target.value))
-              }
-            />
-
-            {/* Hidden date picker */}
-            <input
-              type="date"
-              ref={dateRef}
-              style={{ display: "none" }}
-              onChange={(e) =>
-                handleChange("deadline", convertDatePickerValue(e.target.value))
-              }
-            />
-
-            <span
-              className="calendar-icon"
-              onClick={() => dateRef.current.showPicker()}
-              style={{ cursor: "pointer" }}
-            >
-              📅
-            </span>
-          </div>
-        </div>
       </div>
     </div>
   );
@@ -3978,7 +3678,7 @@ export default function UploadForm({ onProcessed }) {
 
       <div className="form-content">
         {/* DATE */}
-        <label className="field-label">Upload Date</label>
+        <label className="field-label">Date</label>
         <div className="date-input-wrapper">
           <input
             type="text"
@@ -4004,7 +3704,7 @@ export default function UploadForm({ onProcessed }) {
         </div>
 
         {/* FILE */}
-        <label className="field-label">Upload Minutes File</label>
+        <label className="field-label">Minutes File</label>
         <div
           className={`file-drop ${dragOver ? "drag-over" : ""}`}
           onDragOver={(e) => {
@@ -4073,248 +3773,73 @@ root.render(
 );
 </file>
 
-<file path="client/src/pages/CollectorPage/CollectorIssuePage.css">
-.dpo-container {
-  width: 100%;
+<file path="client/src/pages/CollectorPage/CollectorMinutesPage.jsx">
+import React, { useEffect, useState } from "react";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+
+import CollectorHeader from "../../components/Collector/CollectorHeader";
+import api from "../../api/axios";
+
+import "./CollectorMinutesPage.css";
+
+function CollectorMinutesPage() {
+  const [minutes, setMinutes] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    api
+      .get("/minutes")
+      .then((res) => setMinutes(res.data))
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
+
+  return (
+    <div className="collector-container">
+      <CollectorHeader />
+
+      <div className="content">
+        <h1 className="page-title">Meeting Minutes</h1>
+
+        {loading ? (
+          <p className="loading-text">Loading minutes...</p>
+        ) : minutes.length === 0 ? (
+          <p className="no-minutes">No minutes uploaded yet</p>
+        ) : (
+          <div className="minutes-list">
+            {minutes.map((m) => (
+              <div key={m.id} className="minutes-card">
+                <PictureAsPdfIcon className="pdf-icon" />
+
+                <div className="minutes-info">
+                  <h3>{m.title}</h3>
+                  <p>{new Date(m.date).toDateString()}</p>
+                </div>
+
+                <div className="minutes-actions">
+                  <a
+                    href={m.file_url}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    View
+                  </a>
+
+                  <a href={m.file_url} download>
+                    Download
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
 
-.content {
-  padding: 10px 70px;
-}
-
-h1 {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 20px;
-  color: #111;
-}
-
-.filters {
-  display: flex;
-  gap: 15px;
-  align-items: center;
-  background: white;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-  margin-bottom: 20px;
-}
-
-.filters input,
-.filters select {
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 0.9rem;
-}
-
-.generate-btn {
-  background: #2563eb;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.generate-btn:hover {
-  background: #1d4ed8;
-}
-.page-title {
-  display: flex;
-justify-content: space-between;
-
-}
-</file>
-
-<file path="client/src/pages/CollectorPage/NotificationPage.css">
-/* Base layout similar to Upload and Assign Issues */
-.notificationpage-container {
- width: 100%;
-}
-
-.notificationpage-content {
-  padding: 10px 70px;
-}
-
-/* Header inside content */
-h1 {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 20px;
-  color: #111;
-}
-
-/* Notification List */
-.notification-list {
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 15px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  overflow-y: auto;
-  max-height: 75vh;
-}
-
-/* Notification Card */
-.notification-card {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  border-left: 5px solid transparent;
-  background: #f9fafb;
-  padding: 5px 10px;
-  border-radius: 10px;
-  border: 1px solid #e5e7eb;
-  transition: all 0.2s ease;
-}
-
-.notification-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-}
-
-/* Type Accent Colors */
-.notification-card.response {
-  border-left-color: #3b82f6;
-}
-
-.notification-card.deadline {
-  border-left-color: #ef4444;
-}
-
-.notification-card.assign {
-  border-left-color: #22c55e;
-}
-
-/* Icon */
-.notification-icon span {
-  font-size: 1.6rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Text */
-.notification-content h3 {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #111827;
-  margin: 0 0 4px;
-}
-
-.notification-content p {
-  font-size: 0.9rem;
-  color: #4b5563;
-  margin: 0;
-}
-
-.notification-content .time {
-  display: block;
-  font-size: 0.8rem;
-  color: #9ca3af;
-  margin-top: 4px;
-}
-
-/* Empty state */
-.no-notifications {
-  text-align: center;
-  padding: 50px 0;
-  color: #6b7280;
-  font-size: 0.95rem;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .notificationpage-content {
-    padding: 15px 25px;
-  }
-  .notification-list {
-    padding: 18px;
-  }
-}
-</file>
-
-<file path="client/src/pages/DepartmentPage/DepartmentResponsePage.css">
-.dpo-container {
-  width: 100%;
-}
-
-.content {
-  padding: 10px 70px;
-}
-
-h1 {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 20px;
-  color: #111;
-}
-
-.filters {
-  display: flex;
-  gap: 15px;
-  align-items: center;
-  background: white;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-  margin-bottom: 20px;
-}
-
-.filters input,
-.filters select {
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 0.9rem;
-}
-
-.generate-btn {
-  background: #2563eb;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.generate-btn:hover {
-  background: #1d4ed8;
-}
-.page-title {
-  display: flex;
-justify-content: space-between;
-
-}
-
-.upload-icon {
-  color: black;
-  border-radius: 8px; /* keep it slightly rounded, not circular */
-  padding: 2px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  transition: all 0.2s ease;
-  background: transparent;
-  margin-top: 40px;
-  margin-right: 5px;
-}
-
-.upload-icon:hover {
-  color: #1d4ed8;
-  transform: scale(1.05);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
-}
-.upload-icon {
-  font-size: 35px !important;
-  width: 35px !important;
-  height: 35px !important;
-}
-@keyframes fadeIn {
-  from { opacity: 0.3; transform: translateY(3px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+export default CollectorMinutesPage;
 </file>
 
 <file path="client/src/pages/DepartmentPage/NotificationPage.css">
@@ -4425,6 +3950,75 @@ justify-content: space-between;
   color: #6b7280;
   font-size: 1.1rem;
 }
+</file>
+
+<file path="client/src/pages/DPOPage/DPOMinutesPage.jsx">
+import React, { useEffect, useState } from "react";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+
+import DPOHeader from "../../components/DPO/DPOHeader";
+import api from "../../api/axios";
+
+import "./DPOMinutesPage.css";
+
+function DPOMinutesPage() {
+  const [minutes, setMinutes] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    api
+      .get("/minutes")
+      .then((res) => setMinutes(res.data))
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
+
+  return (
+    <div className="dpo-container">
+      <DPOHeader />
+
+      <div className="content">
+        <h1 className="page-title">Meeting Minutes</h1>
+
+        {loading ? (
+          <p className="loading-text">Loading minutes...</p>
+        ) : minutes.length === 0 ? (
+          <p className="no-minutes">No minutes uploaded yet</p>
+        ) : (
+          <div className="minutes-list">
+            {minutes.map((m) => (
+              <div key={m.id} className="minutes-card">
+                <PictureAsPdfIcon className="pdf-icon" />
+
+                <div className="minutes-info">
+                  <h3>{m.title}</h3>
+                  <p>{new Date(m.date).toDateString()}</p>
+                </div>
+
+                <div className="minutes-actions">
+                  <a
+                    href={m.file_url}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    View
+                  </a>
+
+                  <a href={m.file_url} download>
+                    Download
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default DPOMinutesPage;
 </file>
 
 <file path="client/src/pages/DPOPage/NotificationPage.css">
@@ -4558,74 +4152,6 @@ justify-content: space-between;
   .uploadpage-content {
     padding: 10px 20px;
   }
-}
-</file>
-
-<file path="client/src/pages/LoginPage.css">
-.login-container {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #eceff1;
-  font-family: Arial, sans-serif;
-}
-
-.login-card {
-  background: white;
-  padding: 30px;
-  border-radius: 12px;
-  width: 350px;
-  box-shadow: 0 6px 25px rgba(0,0,0,0.15);
-}
-
-.login-title {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.input-field {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 15px;
-}
-
-.input-field label {
-  margin-bottom: 5px;
-  font-weight: 600;
-}
-
-.input-field input {
-  padding: 10px;
-  border: 1px solid #bbb;
-  border-radius: 8px;
-  font-size: 14px;
-}
-
-.login-btn {
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  background: #1565c0;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.login-btn:hover {
-  background: #0d47a1;
-}
-
-.error-box {
-  background: #ffebee;
-  color: #c62828;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 6px;
-  text-align: center;
-  font-size: 14px;
 }
 </file>
 
@@ -4922,6 +4448,72 @@ class Migration(migrations.Migration):
     ]
 </file>
 
+<file path="backend/api/services.py">
+from django.utils import timezone
+from django.template.loader import render_to_string
+from django.core.mail import EmailMultiAlternatives
+from django.conf import settings
+
+from .models import IssueDepartment, User
+
+
+def check_and_send_overdue_emails():
+    today = timezone.now().date()
+    sent_count = 0
+
+    # Get only PENDING items that are now overdue
+    overdue_entries = IssueDepartment.objects.filter(
+        deadline_date__lt=today,
+        status__iexact="pending"
+    )
+
+    for entry in overdue_entries:
+
+        # 1️⃣ Change status to OVERDUE
+        entry.status = "overdue"
+        entry.save()
+
+        # 2️⃣ Get department users
+        users = User.objects.filter(
+            department=entry.department,
+            role="department"
+        )
+
+        # 3️⃣ Send one email per user for THIS IssueDepartment
+        for user in users:
+
+            subject = f"Overdue Issue: {entry.issue.issue_title}"
+
+            context = {
+                "user": user,
+                "department": entry.department,
+                "issue": entry,
+            }
+
+            text_content = render_to_string(
+                "emails/overdue_issue.txt",
+                context
+            )
+
+            html_content = render_to_string(
+                "emails/overdue_issue.html",
+                context
+            )
+
+            email = EmailMultiAlternatives(
+                subject,
+                text_content,
+                settings.DEFAULT_FROM_EMAIL,
+                [user.email],
+            )
+
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+            sent_count += 1
+    
+    return sent_count
+</file>
+
 <file path="client/index.html">
 <!DOCTYPE html>
 <html lang="en">
@@ -4937,418 +4529,54 @@ class Migration(migrations.Migration):
 </html>
 </file>
 
-<file path="client/src/components/Collector/CollectorHeader.css">
-.collector-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: white;
-  padding: 15px 25px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
+<file path="client/src/App.jsx">
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import UploadPage from "./pages/DPOPage/UploadPage.jsx";
+import DPOIssuePage from "./pages/DPOPage/DPOIssuePage.jsx";
+import DepartmentResponsePage from "./pages/DepartmentPage/DepartmentResponsePage.jsx";
+import CollectorIssuePage from "./pages/CollectorPage/CollectorIssuePage.jsx";
+import DPONotificationsPage from "./pages/DPOPage/NotificationPage.jsx";
+import DPOMinutesPage from "./pages/DPOPage/DPOMinutesPage.jsx"
+import DepartmentNotificationPage from "./pages/DepartmentPage/NotificationPage.jsx";
+import CollectorNotificationPage from "./pages/CollectorPage/NotificationPage.jsx";
+import CollectorMinutesPage from "./pages/CollectorPage/CollectorMinutesPage.jsx"
+import Login from "./pages/LoginPage.jsx";
+import "./App.css";
 
-.collector-logo {
-  display: flex;
-  align-items: center;
-  font-weight: 600;
-  font-size: 1.1rem;
-  color: #1a1a1a;
-}
-
-.collector-logo-icon {
-  width: 28px;
-  height: 28px;
-  background: #2563eb;
-  border-radius: 5px;
-  margin-right: 10px;
-}
-
-.collector-header-icons {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-
-/* standard icon container */
-
-
-.collector-icon.bell {
-  background: white; /* make the circular background white */
-  color: #2563eb; /* bell color */
-  font-size: 32px;
-  margin-right: 15px;
-}
-
-.collector-icon.profile {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: #2563eb;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-  font-size: 14px;
-  line-height: 36px;
-  text-align: center;
-}
-
-/* Profile dropdown */
-.collector-profile-dropdown {
-  position: absolute;
-  top: 55px;
-  right: 0;
-  background: #fff;
-  border-radius: 10px;
-  width: 140px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-  padding: 8px 0;
-  animation: collectorDropdownFade 0.2s ease;
-  z-index: 1000;
-}
-
-.collector-profile-dropdown button {
-  width: 100%;
-  background: none;
-  border: none;
-  padding: 10px 16px;
-  text-align: left;
-  font-size: 14px;
-  cursor: pointer;
-  color: #111827;
-}
-
-.collector-profile-dropdown button:hover {
-  background: #f3f4f6;
-}
-
-/* Smooth appearance */
-@keyframes collectorDropdownFade {
-  from {
-    opacity: 0;
-    transform: translateY(-6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-.collector-icon.profile {
-  cursor: pointer;
-}
-.collector-logout-btn {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-  background: none;
-  border: none;
-  padding: 10px 16px;
-  text-align: left;
-  font-size: 14px;
-  cursor: pointer;
-  color: #111827;
-}
-
-.collector-logout-btn:hover {
-  background: #f3f4f6;
-}
-
-.collector-logout-icon {
-  font-size: 18px;
-  color: #ef4444; /* subtle red for logout */
-}
-</file>
-
-<file path="client/src/components/Collector/IssuePage/CollectorGenerateReports.jsx">
-import React, { useState, useEffect, useCallback } from "react";
-import "./CollectorGenerateReports.css";
-import CollectorGenerateReportCard from "./CollectorGenerateReportCard";
-import api from "../../../api/axios";
-
-export default function GenerateReports({ isOpen, onClose }) {
-  const [format, setFormat] = useState("pdf");
-  const [reports, setReports] = useState([]);
-
-  const handleDownload = async () => {
-    try {
-      const res = await fetch(`${api.defaults.baseURL}/generate-report`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          format,
-          reports
-        })
-      });
-
-      if (!res.ok) {
-        alert("Failed to generate file");
-        return;
-      }
-
-      const blob = await res.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = format === "pdf" ? "report.pdf" : "report.xlsx";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      window.URL.revokeObjectURL(url);
-
-      onClose();
-    } catch (err) {
-      console.error("Download error:", err);
-    }
-  };
-
-  useEffect(() => {
-    if (!isOpen) return;
-
-    fetch(`${api.defaults.baseURL}/issues/received`)
-      .then((res) => res.json())
-      .then((data) => setReports(data))
-      .catch((err) => console.error("Error fetching reports:", err));
-  }, [isOpen]);
-
-  const handleChange = useCallback((index, field, value) => {
-    setReports((prev) => {
-      const updated = [...prev];
-      updated[index] = { ...updated[index], [field]: value };
-      return updated;
-    });
-  }, []);
-
-  const removeCard = useCallback((index) => {
-    setReports((prev) => prev.filter((_, i) => i !== index));
-  }, []);
-
-  if (!isOpen) return null;
-
+function App() {
   return (
-    <div className="modal-overlay">
-      <div
-        className="generate-reports-container"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="generate-header">
-          <div className="format-toggle">
-            <button
-              className={`format-btn ${format === "pdf" ? "active" : ""}`}
-              onClick={() => setFormat("pdf")}
-            >
-              PDF
-            </button>
-            <button
-              className={`format-btn ${format === "excel" ? "active" : ""}`}
-              onClick={() => setFormat("excel")}
-            >
-              Excel
-            </button>
-          </div>
-
-          <button className="close" onClick={onClose}>
-            &times;
-          </button>
-        </div>
-
-        <div className="report-list">
-          {reports.length === 0 ? (
-            <p>No received issues available</p>
-          ) : (
-            reports.map((report, index) => (
-              <CollectorGenerateReportCard
-                key={report.id || index}
-                report={report}
-                index={index}
-                handleChange={handleChange}
-                removeCard={removeCard}
-              />
-            ))
-          )}
-        </div>
-
-        <div className="download-section">
-          <button className="generate-download-btn" onClick={handleDownload}>
-            Download Report
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-</file>
-
-<file path="client/src/components/Department/DepartmentHeader.jsx">
-import React, { useState, useRef, useEffect } from "react";
-import "./DepartmentHeader.css";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import LogoutIcon from "@mui/icons-material/Logout";
-import { Link, useNavigate } from "react-router-dom";
-import api from "../../api/axios";
-
-function Header() {
-  const [open, setOpen] = useState(false);
-  const dropdownRef = useRef(null);
-  const navigate = useNavigate();
-
-  /* Close dropdown when clicking outside */
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  const handleLogout = async () => {
-    try {
-      // Call backend logout endpoint
-      await api.post("/logout");
-    } catch (err) {
-      console.error("Logout error:", err);
-    } finally {
-      // Clear localStorage regardless of API response
-      localStorage.removeItem("token");
-      localStorage.removeItem("username");
-      localStorage.removeItem("role");
-      localStorage.removeItem("department");
-      // Redirect to login
-      navigate("/login");
-    }
-  };
-
-  return (
-    <header className="dept-header">
-      <div className="dept-logo">
-        <div className="dept-logo-icon"></div>
-        <span>Minutes Tracker System</span>
-      </div>
-
-      <div className="dept-header-icons" ref={dropdownRef}>
-        {/* Notifications */}
-        <Link to="/department/notifications">
-          <NotificationsIcon className="dept-icon bell" />
-        </Link>
-
-        {/* Profile */}
-        <div
-          className="dept-icon profile"
-          onClick={() => setOpen((prev) => !prev)}
-        >
-          D
-        </div>
-
-        {/* Dropdown */}
-        {open && (
-          <div className="dept-profile-dropdown">
-            <button onClick={handleLogout} className="dept-logout-btn">
-              <LogoutIcon className="dept-logout-icon" />
-                Logout
-            </button>
-
-          </div>
-        )}
-      </div>
-    </header>
+    <Router>
+      <Routes>
+        {/* Default route -> DPO Page */}
+        <Route path="/" element={<Navigate to="/login" />} />
+        {/* DPO Page */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/dpo" element={<DPOIssuePage />} />
+        {/* Upload Page */}
+        <Route path="/dpo/upload" element={<UploadPage />} />
+        <Route path="/dpo/notifications" element={<DPONotificationsPage />} />
+        <Route path="/dpo/minutes" element={<DPOMinutesPage />} />
+        <Route path="/department/:dept" element={<DepartmentResponsePage />} />
+        <Route path="/department/notifications" element={<DepartmentNotificationPage />} />
+        <Route path="/collector" element={<CollectorIssuePage />} />
+        <Route path="/collector/notifications" element={<CollectorNotificationPage />} />
+        <Route path="/collector/minutes" element={<CollectorMinutesPage />} />
+      </Routes>
+    </Router>
   );
 }
 
-export default Header;
+export default App;
 </file>
 
-<file path="client/src/components/DPO/DPOHeader.jsx">
-import React, { useState, useRef, useEffect } from "react";
-import "./DPOHeader.css";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import LogoutIcon from "@mui/icons-material/Logout";
-import { Link, useNavigate } from "react-router-dom";
-import api from "../../api/axios";
-
-function Header() {
-  const [open, setOpen] = useState(false);
-  const dropdownRef = useRef(null);
-  const navigate = useNavigate();
-
-  /* Close dropdown when clicking outside */
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  const handleLogout = async () => {
-    try {
-      // Call backend logout endpoint
-      await api.post("/logout");
-    } catch (err) {
-      console.error("Logout error:", err);
-    } finally {
-      // Clear localStorage regardless of API response
-      localStorage.removeItem("token");
-      localStorage.removeItem("username");
-      localStorage.removeItem("role");
-      localStorage.removeItem("department");
-      // Redirect to login
-      navigate("/login");
-    }
-  };
-
-  return (
-    <header className="dpo-header">
-      <div className="dpo-logo">
-        <div className="dpo-logo-icon"></div>
-        <span>Minutes Tracker System</span>
-      </div>
-
-      <div className="dpo-header-icons" ref={dropdownRef}>
-        {/* Notifications */}
-        <Link to="/dpo/notifications">
-          <NotificationsIcon className="dpo-icon bell" />
-        </Link>
-
-        {/* Profile */}
-        <div
-          className="dpo-icon profile"
-          onClick={() => setOpen((prev) => !prev)}
-        >
-          D
-        </div>
-
-        {/* Dropdown */}
-        {open && (
-          <div className="dpo-profile-dropdown">
-            <button onClick={handleLogout} className="dpo-logout-btn">
-              <LogoutIcon className="dpo-logout-icon" />
-                Logout
-            </button>
-
-          </div>
-        )}
-      </div>
-    </header>
-  );
-}
-
-export default Header;
-</file>
-
-<file path="client/src/components/DPO/IssuePage/DPOFilterBar.jsx">
+<file path="client/src/components/Collector/IssuePage/CollectorFilterBar.jsx">
 import React, { useEffect, useState, useRef } from "react";
-import "./DPOFilterBar.css";
-import DPOGenerateReports from "./DPOGenerateReports";
+import "./CollectorFilterBar.css";
+import CollectorGenerateReports from "./CollectorGenerateReports";
 
-function DPOFilterBar({ activeTab, onFilterChange, issue_date }) {
+
+function CollectorFilterBar({ activeTab, onFilterChange, issue_date }) {
   const [showReportModal, setShowReportModal] = useState(false);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
@@ -5578,7 +4806,7 @@ function DPOFilterBar({ activeTab, onFilterChange, issue_date }) {
         </button>
       )}
 
-      <DPOGenerateReports
+      <CollectorGenerateReports
         isOpen={showReportModal}
         onClose={() => setShowReportModal(false)}
       />
@@ -5586,7 +4814,455 @@ function DPOFilterBar({ activeTab, onFilterChange, issue_date }) {
   );
 }
 
-export default DPOFilterBar;
+export default CollectorFilterBar;
+</file>
+
+<file path="client/src/components/Collector/IssuePage/CollectorGenerateReports.jsx">
+import React, { useState, useEffect, useCallback } from "react";
+import "./CollectorGenerateReports.css";
+import CollectorGenerateReportCard from "./CollectorGenerateReportCard";
+import api from "../../../api/axios";
+
+export default function GenerateReports({ isOpen, onClose }) {
+  const [format, setFormat] = useState("pdf");
+  const [reports, setReports] = useState([]);
+
+  const handleDownload = async () => {
+    try {
+      const res = await fetch(`${api.defaults.baseURL}/generate-report`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          format,
+          reports
+        })
+      });
+
+      if (!res.ok) {
+        alert("Failed to generate file");
+        return;
+      }
+
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = format === "pdf" ? "report.pdf" : "report.xlsx";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+
+      onClose();
+    } catch (err) {
+      console.error("Download error:", err);
+    }
+  };
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    fetch(`${api.defaults.baseURL}/issues/received`)
+      .then((res) => res.json())
+      .then((data) => setReports(data))
+      .catch((err) => console.error("Error fetching reports:", err));
+  }, [isOpen]);
+
+  const handleChange = useCallback((index, field, value) => {
+    setReports((prev) => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], [field]: value };
+      return updated;
+    });
+  }, []);
+
+  const removeCard = useCallback((index) => {
+    setReports((prev) => prev.filter((_, i) => i !== index));
+  }, []);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="modal-overlay">
+      <div
+        className="generate-reports-container"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="generate-header">
+          <div className="format-toggle">
+            <button
+              className={`format-btn ${format === "pdf" ? "active" : ""}`}
+              onClick={() => setFormat("pdf")}
+            >
+              PDF
+            </button>
+            <button
+              className={`format-btn ${format === "excel" ? "active" : ""}`}
+              onClick={() => setFormat("excel")}
+            >
+              Excel
+            </button>
+          </div>
+
+          <button className="close" onClick={onClose}>
+            &times;
+          </button>
+        </div>
+
+        <div className="report-list">
+          {reports.length === 0 ? (
+            <p>No received issues available</p>
+          ) : (
+            reports.map((report, index) => (
+              <CollectorGenerateReportCard
+                key={report.id || index}
+                report={report}
+                index={index}
+                handleChange={handleChange}
+                removeCard={removeCard}
+              />
+            ))
+          )}
+        </div>
+
+        <div className="download-section">
+          <button className="generate-download-btn" onClick={handleDownload}>
+            Download Report
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="client/src/components/Department/DepartmentHeader.jsx">
+import React, { useState, useRef, useEffect } from "react";
+import "./DepartmentHeader.css";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../../api/axios";
+
+function Header() {
+  const [open, setOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  const navigate = useNavigate();
+
+  /* Close dropdown when clicking outside */
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      // Call backend logout endpoint
+      await api.post("/logout");
+    } catch (err) {
+      console.error("Logout error:", err);
+    } finally {
+      // Clear localStorage regardless of API response
+      localStorage.removeItem("token");
+      localStorage.removeItem("username");
+      localStorage.removeItem("role");
+      localStorage.removeItem("department");
+      // Redirect to login
+      navigate("/login");
+    }
+  };
+
+  return (
+    <header className="dept-header">
+      <div className="dept-logo">
+        <div className="dept-logo-icon"></div>
+        <span>Minutes Tracker System</span>
+      </div>
+
+      <div className="dept-header-icons" ref={dropdownRef}>
+        {/* Notifications */}
+        <Link to="/department/notifications">
+          <NotificationsIcon className="dept-icon bell" />
+        </Link>
+
+        {/* Profile */}
+        <div
+          className="dept-icon profile"
+          onClick={() => setOpen((prev) => !prev)}
+        >
+          D
+        </div>
+
+        {/* Dropdown */}
+        {open && (
+          <div className="dept-profile-dropdown">
+            <button onClick={handleLogout} className="dept-logout-btn">
+              <LogoutIcon className="dept-logout-icon" />
+                Logout
+            </button>
+
+          </div>
+        )}
+      </div>
+    </header>
+  );
+}
+
+export default Header;
+</file>
+
+<file path="client/src/components/DPO/IssuePage/DPOFilterBar.css">
+.filter-bar {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  /* margin-bottom: 20px; */
+
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+/* ================= SEARCH ================= */
+
+.search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 200px;
+  max-width: 400px;
+}
+
+.search-wrapper input {
+  padding: 10px 35px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  width: 100%;
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  user-select: none;
+}
+
+/* ================= DATE INPUT ================= */
+
+.date-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.date-input-wrapper input {
+  padding: 10px 35px 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.calendar-icon {
+  position: absolute;
+  right: 10px;
+  font-size: 1rem;
+  color: #666;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* ================= FILTER / SORT GROUP ================= */
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.filter-group label {
+  color: #f00;
+  font-size: 0.9rem;
+  min-width: 60px;
+}
+
+/* ===== COMMON CONTROL STYLE (Filter & Sort SAME) ===== */
+
+.filter-select,
+.filter-btn {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  width: 160px;
+  background: white;
+  color: #000;
+  cursor: pointer;
+  text-align: left;
+}
+
+/* ================= GENERATE BUTTON ================= */
+
+.generate-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  margin-left: auto;
+}
+
+.generate-btn:hover {
+  background: #1d4ed8;
+}
+
+/* ---------- Send Email Button ---------- */
+.send-email-btn {
+  background: #af381a;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: auto;
+  font-weight: 600;
+}
+
+.send-email-btn:hover:not(:disabled) {
+  background: #992d13;
+  transform: scale(1.02);
+}
+
+.send-email-btn:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+
+
+.email-status-popup {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 10px;
+  background: #1f2937;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  animation: fadeIn 0.3s ease;
+  z-index: 100;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  white-space: nowrap;
+}
+
+/* ================= UPLOAD BUTTON ================= */
+
+.upload-btn {
+  position: absolute;
+  right: 12px;
+  top: -18px;
+  z-index: 20;
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  box-shadow: 0 6px 12px rgba(16, 185, 129, 0.12);
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.upload-btn img {
+  width: 14px;
+  height: 14px;
+}
+
+.upload-btn:hover {
+  background: #059669;
+}
+
+/* ================= CUSTOM FILTER DROPDOWN ================= */
+
+.custom-filter,
+.filter-dropdown {
+  position: relative;
+
+}
+
+/* Dropdown Menu */
+.filter-menu {
+  display: none;
+  position: absolute;
+  top: 39px;
+  left: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  min-width: 160px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  z-index: 50;
+}
+
+.filter-dropdown:hover .filter-menu {
+  display: block;
+}
+
+/* Dropdown Items */
+.filter-item {
+  padding: 10px 12px;
+  cursor: pointer;
+  position: relative;
+  white-space: nowrap;
+}
+
+.filter-item:hover {
+  background: #f3f4f6;
+}
+
+/* ================= SUB MENU ================= */
+
+.sub-menu {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 100%;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  min-width: 160px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.filter-item:hover .sub-menu {
+  display: block;
+}
+
+.sub-menu div {
+  padding: 10px 12px;
+}
+
+.sub-menu div:hover {
+  background: #e5e7eb;
+}
 </file>
 
 <file path="client/src/components/DPO/IssuePage/DPOGenerateReports.jsx">
@@ -5742,21 +5418,21 @@ function IssueCard({ issue }) {
         </span>
       </div>
 
+      <div className="issue-row">
+        <div className="label">Issue</div>
+        <div className="value">{issue.issue}</div>
+      </div>
+
+      <div className="issue-row">
+        <div className="label">Description</div>
+        <div className="value">{issue.issue_description}</div>
+      </div>
+
       <div className="issue-body">
         <div className="issue-row">
           <div className="label">Department</div>
           {/* Now displays "Police, PWD, KWA" */}
           <div className="value">{issue.department}</div>
-        </div>
-
-        <div className="issue-row">
-          <div className="label">Issue</div>
-          <div className="value">{issue.issue}</div>
-        </div>
-
-        <div className="issue-row">
-          <div className="label">Description</div>
-          <div className="value">{issue.issue_description}</div>
         </div>
 
         <div className="issue-row">
@@ -5827,82 +5503,423 @@ function IssueCard({ issue }) {
 export default IssueCard;
 </file>
 
-<file path="client/src/pages/CollectorPage/NotificationPage.jsx">
-import React from "react";
-import CollectorHeader from "../../components/Collector/CollectorHeader";
-import "./NotificationPage.css";
+<file path="client/src/components/DPO/UploadPage/DPOIssueAssignCard.jsx">
+// IssueAssignCard.jsx
+import React, { useRef } from "react";
 
-function CollectorNotificationPage() {
-  const notifications = [
-    {
-      id: 1,
-      title: "Response Received",
-      message: "A response has been submitted for Issue #1023.",
-      time: "10 minutes ago",
-      type: "response",
-    },
-    {
-      id: 2,
-      title: "Deadline Exceeded",
-      message: "Issue #1009 has exceeded its deadline. Immediate attention required.",
-      time: "1 hour ago",
-      type: "deadline",
-    },
-  ];
+export default function IssueAssignCard({ issue, onChange, index, onAllocate }) {
+  const dateRef = useRef(null);
+
+  const handleChange = (field, value) => onChange(index, field, value);
+
+  const formatDateInput = (text) => {
+    const digits = text.replace(/\D/g, "");
+    let day = digits.substring(0, 2);
+    let month = digits.substring(2, 4);
+    let year = digits.substring(4, 8);
+
+    let formatted = day;
+    if (month) formatted += "-" + month;
+    if (year) formatted += "-" + year;
+
+    return formatted;
+  };
+
+  const convertDatePickerValue = (value) => {
+    const [y, m, d] = value.split("-");
+    return `${d}-${m}-${y}`;
+  };
 
   return (
-    <div className="notificationpage-container">
-      <CollectorHeader />
+    <div className="issue-assign-card">
+      <div className="issue-top">
+        <div className="entry-id">{issue.issue_no}</div>
 
-      <div className="notificationpage-content">
-        <div className="notification-header">
-          <h1>Notifications</h1>
+        {/* 🔹 ACTION BUTTONS */}
+<div
+  style={{
+    display: "flex",
+    alignItems: "center",
+    gap: "20px",
+    marginTop: "-10px",   // 👈 move buttons up
+  }}
+>
+
+  <button
+    style={{
+      background: "none",
+      border: "none",
+      color: "#b91c1c",
+      fontSize: "18px",
+      cursor: "pointer",
+    }}
+  >
+    🗑️
+  </button>
+  {/* Allocate Button */}
+  <button
+    onClick={() => onAllocate(issue)}
+    style={{
+      backgroundColor: "#2563eb",
+      color: "#fff",
+      border: "none",
+      padding: "4px 10px",
+      borderRadius: "4px",
+      cursor: "pointer",
+      fontWeight: "400",
+    }}
+  >
+    Allocate
+  </button>
+
+  {/* Delete Button */}
+  
+</div>
+
+      </div>
+
+      <div className="issue-form">
+        <div className="form-field">
+          <label>Department:</label>
+          <input
+            type="text"
+            value={issue.department}
+            onChange={(e) => handleChange("department", e.target.value)}
+          />
         </div>
 
-        <div className="notification-list">
-          {notifications.map((note) => (
-                <div key={note.id} className={`notification-card ${note.type}`}>
-              <div className="notification-icon">
-                {note.type === "response" && <span>📩</span>}
-                {note.type === "deadline" && <span>⏰</span>}
-              </div>
+        <div className="form-field">
+          <label>Issue title:</label>
+          <textarea
+            rows="2"
+            value={issue.issue}
+            onChange={(e) => handleChange("issue", e.target.value)}
+          />
+        </div>
 
-              <div className="notification-content">
-                <h3>{note.title}</h3>
-                <p>{note.message}</p>
-                <span className="time">{note.time}</span>
-              </div>
-            </div>
-          ))}
+        <div className="form-field">
+          <label>Description:</label>
+          <textarea
+            rows="2"
+            value={issue.issue_description}
+            onChange={(e) =>
+              handleChange("issue_description", e.target.value)
+            }
+          />
+        </div>
 
-          {notifications.length === 0 && (
-            <div className="no-notifications">No new notifications</div>
-          )}
+        <div className="form-field">
+          <label>Priority:</label>
+          <select
+            value={issue.priority}
+            onChange={(e) => handleChange("priority", e.target.value)}
+          >
+            <option>High</option>
+            <option>Medium</option>
+            <option>Low</option>
+          </select>
+        </div>
+
+        <div className="form-field">
+          <label>Location:</label>
+          <input
+            type="text"
+            value={issue.location}
+            onChange={(e) => handleChange("location", e.target.value)}
+          />
+        </div>
+
+        <div className="form-field">
+          <label>Deadline:</label>
+          <div className="deadline-input">
+            <input
+              type="text"
+              placeholder="DD-MM-YYYY"
+              value={issue.deadline}
+              onChange={(e) =>
+                handleChange("deadline", formatDateInput(e.target.value))
+              }
+            />
+
+            <input
+              type="date"
+              ref={dateRef}
+              style={{ display: "none" }}
+              onChange={(e) =>
+                handleChange(
+                  "deadline",
+                  convertDatePickerValue(e.target.value)
+                )
+              }
+            />
+
+            <span
+              className="calendar-icon"
+              onClick={() => dateRef.current.showPicker()}
+            >
+              📅
+            </span>
+          </div>
         </div>
       </div>
     </div>
   );
 }
-
-export default CollectorNotificationPage;
 </file>
 
-<file path="client/src/pages/DPOPage/DPOIssuePage.css">
+<file path="client/src/pages/CollectorPage/CollectorIssuePage.css">
+.collector-container {
+  width: 100%;
+}
+
+.collector-container .content {
+  padding: 0px 70px;
+  position: relative;
+}
+
+.collector-container .page-title h1 {
+  font-size: 2.5rem;
+  font-weight: 500;
+  margin-bottom: -5px;
+  color: #111;
+}
+
+.collector-container .filters {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+}
+
+.collector-container .filters input,
+.collector-container .filters select {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.collector-container .generate-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.collector-container .generate-btn:hover {
+  background: #1d4ed8;
+}
+
+.collector-container .page-title {
+  display: flex;
+  justify-content: space-between;
+  margin-top: -20px;
+}
+</file>
+
+<file path="client/src/pages/CollectorPage/CollectorMinutesPage.css">
+.collector-container .page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 25px;
+}
+
+.collector-container .minutes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.collector-container .minutes-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: #fff;
+  padding: 16px 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.collector-container .pdf-icon {
+  font-size: 40px;
+  color: #dc2626;
+}
+
+.collector-container .minutes-info {
+  flex: 1;
+}
+
+.collector-container .minutes-info h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.collector-container .minutes-info p {
+  margin: 4px 0 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.collector-container .minutes-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.collector-container .minutes-actions a {
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  background: #2563eb;
+  color: white;
+}
+
+.collector-container .minutes-actions a:last-child {
+  background: #374151;
+}
+
+.collector-container .no-minutes {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #6b7280;
+}
+
+.collector-container .loading-text {
+  opacity: 0.7;
+}
+</file>
+
+<file path="client/src/pages/CollectorPage/NotificationPage.css">
+/* Base layout similar to Upload and Assign Issues */
+.collector-container {
+ width: 100%;
+}
+
+.collector-container .content {
+  padding: 10px 70px;
+}
+
+/* Header inside content */
+.collector-container h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #111;
+}
+
+/* Notification List */
+.collector-container .notification-list {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  max-height: 75vh;
+}
+
+/* Notification Card */
+.collector-container .notification-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  border-left: 5px solid transparent;
+  background: #f9fafb;
+  padding: 5px 10px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+}
+
+.collector-container .notification-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Type Accent Colors */
+.collector-container .notification-card.response {
+  border-left-color: #3b82f6;
+}
+
+.collector-container .notification-card.deadline {
+  border-left-color: #ef4444;
+}
+
+.collector-container .notification-card.assign {
+  border-left-color: #22c55e;
+}
+
+/* Icon */
+.collector-container .notification-icon span {
+  font-size: 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Text */
+.collector-container .notification-content h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 4px;
+}
+
+.collector-container .notification-content p {
+  font-size: 0.9rem;
+  color: #4b5563;
+  margin: 0;
+}
+
+.collector-container .notification-content .time {
+  display: block;
+  font-size: 0.8rem;
+  color: #9ca3af;
+  margin-top: 4px;
+}
+
+/* Empty state */
+.collector-container .no-notifications {
+  text-align: center;
+  padding: 50px 0;
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .collector-container .content {
+    padding: 15px 25px;
+  }
+  .collector-container .notification-list {
+    padding: 18px;
+  }
+}
+</file>
+
+<file path="client/src/pages/DepartmentPage/DepartmentResponsePage.css">
 .dpo-container {
   width: 100%;
 }
 
-.content {
+.dpo-container .content {
   padding: 10px 70px;
 }
 
-.page-title h1 {
-  font-size: 2.1rem;
+.dpo-container h1 {
+  font-size: 2.5rem;
   font-weight: 700;
-  color: #111;
   margin-bottom: 20px;
+  color: #111;
 }
-
 
 .filters {
   display: flex;
@@ -5911,7 +5928,7 @@ export default CollectorNotificationPage;
   background: white;
   padding: 15px;
   border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   margin-bottom: 20px;
 }
 
@@ -5935,15 +5952,17 @@ export default CollectorNotificationPage;
 .generate-btn:hover {
   background: #1d4ed8;
 }
+
 .page-title {
   display: flex;
-justify-content: space-between;
+  justify-content: space-between;
 
 }
 
 .upload-icon {
   color: black;
-  border-radius: 8px; /* keep it slightly rounded, not circular */
+  border-radius: 8px;
+  /* keep it slightly rounded, not circular */
   padding: 2px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   transition: all 0.2s ease;
@@ -5957,36 +5976,95 @@ justify-content: space-between;
   transform: scale(1.05);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
 }
+
 .upload-icon {
   font-size: 35px !important;
   width: 35px !important;
   height: 35px !important;
 }
-.no-issues {
-  font-size: 1.6rem;        /* Bigger text */
-  font-weight: 600;         /* Slightly bold */
-  text-align: center;       /* Center text */
-  color: #6b7280;           /* Soft gray (Tailwind gray-500) */
-  margin-top: 40px;         /* Add spacing from top */
-  padding: 20px;            /* Smooth breathing room */
-  background: #f3f4f6;      /* Light gray background */
-  border-radius: 12px;      /* Rounded corners */
-  width: 80%;               /* Not too wide */
-  margin-left: auto;
-  margin-right: auto;       /* Center block */
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08); /* Soft shadow */
-}
-.loading-text {
-  font-size: 18px;
-  opacity: 0.7;
-}
-.tab-scroll-area {
-  animation: fadeIn 0.25s ease;
-}
 
 @keyframes fadeIn {
-  from { opacity: 0.3; transform: translateY(3px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0.3;
+    transform: translateY(3px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</file>
+
+<file path="client/src/pages/DPOPage/DPOMinutesPage.css">
+.dpo-container .page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 25px;
+}
+
+.dpo-container .minutes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.dpo-container .minutes-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: #fff;
+  padding: 16px 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.dpo-container .pdf-icon {
+  font-size: 40px;
+  color: #dc2626;
+}
+
+.dpo-container .minutes-info {
+  flex: 1;
+}
+
+.dpo-container .minutes-info h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.dpo-container .minutes-info p {
+  margin: 4px 0 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.dpo-container .minutes-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.dpo-container .minutes-actions a {
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  background: #2563eb;
+  color: white;
+}
+
+.dpo-container .minutes-actions a:last-child {
+  background: #374151;
+}
+
+.dpo-container .no-minutes {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #6b7280;
+}
+
+.dpo-container .loading-text {
+  opacity: 0.7;
 }
 </file>
 
@@ -6030,6 +6108,1939 @@ function UploadPage() {
 }
 
 export default UploadPage;
+</file>
+
+<file path="client/src/pages/LoginPage.css">
+.login-container {
+  height: 100vh;
+  display: flex;
+  background: #eceff1;
+  font-family: Arial, sans-serif;
+}
+
+/* left side gets 2 parts of space, right side 1 part; add gap between panels */
+.login-container {
+  height: 100vh;
+  display: flex;
+  background: #eceff1;
+  font-family: Arial, sans-serif;
+         /* space between left and right areas */
+}
+
+.login-left {
+  flex: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #1565c0;
+  color: white;
+  padding: 40px;
+  
+  max-width: 65vw;        /* prevent it from growing too huge */
+}
+
+.login-right {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* ensure it fills full viewport height so card stays centered vertically */
+  height: 100vh;
+}
+
+.login-card {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  width: 350px;
+  box-shadow: 0 6px 25px rgba(0,0,0,0.15);
+  margin: auto; /* center within login-right */
+}
+
+.login-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.input-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.input-field label {
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.input-field input {
+  padding: 10px;
+  border: 1px solid #bbb;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  background: #1565c0;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.login-btn:hover {
+  background: #0d47a1;
+}
+
+.error-box {
+  background: #ffebee;
+  color: #c62828;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 14px;
+}
+</file>
+
+<file path="backend/requirements.txt">
+django
+djangorestframework
+django-cors-headers
+google-generativeai
+python-dotenv
+psycopg2-binary
+openpyxl
+</file>
+
+<file path="client/src/components/Collector/CollectorHeader.css">
+.collector-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 15px 25px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.collector-logo {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #1a1a1a;
+}
+
+.collector-logo-icon {
+  width: 28px;
+  height: 28px;
+  background: #2563eb;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.collector-header-icons {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  position: relative;
+}
+
+
+/* standard icon container */
+
+
+.collector-icon.bell {
+  background: white; /* make the circular background white */
+  color: #2563eb; /* bell color */
+  font-size: 32px;
+}
+
+.collector-icon.profile {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #2563eb;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 30px;
+  text-align: center;
+}
+
+/* Profile dropdown */
+.collector-profile-dropdown {
+  position: absolute;
+  top: 55px;
+  right: 0;
+  background: #fff;
+  border-radius: 10px;
+  width: 140px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  padding: 8px 0;
+  animation: collectorDropdownFade 0.2s ease;
+  z-index: 1000;
+}
+
+.collector-profile-dropdown button {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+  color: #111827;
+}
+
+.collector-profile-dropdown button:hover {
+  background: #f3f4f6;
+}
+
+/* Smooth appearance */
+@keyframes collectorDropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.collector-logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+  color: #111827;
+}
+
+.collector-logout-btn:hover {
+  background: #f3f4f6;
+}
+
+.collector-logout-icon {
+  font-size: 18px;
+  color: #ef4444; /* subtle red for logout */
+}
+
+.collector-icon.minutes {
+  background: white;
+  color: #2563eb;
+  font-size: 28px;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+</file>
+
+<file path="client/src/components/Department/DepartmentIssueCard.jsx">
+import React, { useState } from "react";
+import DepartmentResponseModal from "./DepartmentResponseModal";
+import "./DepartmentIssueCard.css";
+import api from "../../api/axios";
+
+function DepartmentIssueCard({ issue }) {
+  // Normalize backend status: "received" → "submitted"
+  const normalizedStatus = issue.status === "received" ? "submitted" : issue.status;
+  const status = normalizedStatus || "pending";
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleSubmit = () => {
+    setIsModalOpen(false);
+    alert("Response submitted successfully!");
+  };
+
+  const getStatusStyle = () => {
+    switch (status) {
+      case "overdue":
+        return { borderColor: "#b91c1c" };
+      case "submitted":
+        return { borderColor: "#16a34a" };
+      default:
+        return { borderColor: "#facc15" };
+    }
+  };
+
+  return (
+    <>
+      <div className="issue-card" style={getStatusStyle()}>
+        <div className="issue-header">
+          <span className="issue-id">{issue.issue_no}</span>
+          <span className={`status ${status}`}>
+            {status === "pending"
+              ? "Response Required"
+              : status === "overdue"
+                ? "Overdue"
+                : "Response Submitted"}
+          </span>
+        </div>
+
+        <div className="issue-body">
+          <div className="issue-row">
+            <div className="label">Issue</div>
+            <div className="value">{issue.issue}</div>
+          </div>
+          <div className="issue-row">
+            <div className="label">Description</div>
+            <div className="value">{issue.issue_description}</div>
+          </div>
+          <div className="issue-row">
+            <div className="label">Priority</div>
+            <div className="value">{issue.priority}</div>
+          </div>
+
+          <div className="issue-row">
+            <div className="label">Location</div>
+            <div className="value">{issue.location}</div>
+          </div>
+
+          <div className="issue-row">
+            <div className={`label ${status === "overdue" ? "overdue-text" : ""}`}>
+              Deadline
+            </div>
+            <div className={`value ${status === "overdue" ? "overdue-text" : ""}`}>
+              <span>{issue.deadline}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="issue-footer">
+          {status === "submitted" && (
+            <>
+              <div className="footer-line"></div>
+              <div className="response-received">
+                <p className="res">
+                  <strong>Your Response:</strong> {issue.response?.text}
+                </p>
+                {issue.response?.attachment && (
+                  <button
+                    className="res-button"
+                    onClick={() => {
+                      const baseUrl = api.defaults.baseURL;
+                      const fullUrl = issue.response.attachment.startsWith("http") ? issue.response.attachment : `${baseUrl}${issue.response.attachment}`;
+                      window.open(fullUrl, "_blank");
+                    }}
+                  >
+                    View Attachment
+                  </button>
+                )}
+              </div>
+            </>
+          )}
+
+          {(status === "pending" || status === "overdue") && (
+            <button
+              className={`submit-btn ${status === "pending" ? "pending-btn" : "overdue-btn"
+                }`}
+              onClick={() => setIsModalOpen(true)}
+            >
+              Submit Response
+            </button>
+          )}
+        </div>
+      </div>
+
+      <DepartmentResponseModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        issue={issue}
+        onSubmit={handleSubmit}
+      />
+    </>
+  );
+}
+
+export default DepartmentIssueCard;
+</file>
+
+<file path="client/src/components/DPO/IssuePage/DPOFilterBar.jsx">
+import React, { useEffect, useState, useRef } from "react";
+import "./DPOFilterBar.css";
+import DPOGenerateReports from "./DPOGenerateReports";
+
+function DPOFilterBar({
+  activeTab,
+  onFilterChange,
+  issue_date,
+  handleSendOverdueEmails,
+  emailLoading,
+  emailStatus
+}) {
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [filterBy, setFilterBy] = useState("all"); // ✅ default All Issues
+  const [sortBy, setSortBy] = useState("newest");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeDateField, setActiveDateField] = useState(null);
+
+  const fromDatePickerRef = useRef(null);
+  const toDatePickerRef = useRef(null);
+
+  const handleGenerate = () => {
+    setShowReportModal(true);
+  };
+
+  // Sync dates from parent
+  useEffect(() => {
+    if (issue_date?.fromDate) setFromDate(issue_date.fromDate);
+    if (issue_date?.toDate) setToDate(issue_date.toDate);
+  }, [issue_date]);
+
+  const formatDateInput = (raw) => {
+    const digits = raw.replace(/\D/g, "").slice(0, 8);
+    if (digits.length <= 2) return digits;
+    if (digits.length <= 4) return `${digits.slice(0, 2)}-${digits.slice(2)}`;
+    return `${digits.slice(0, 2)}-${digits.slice(2, 4)}-${digits.slice(4)}`;
+  };
+
+  const handleFilterChange = (type, value) => {
+    let updatedFilters = {
+      fromDate,
+      toDate,
+      filterBy,
+      sortBy,
+      searchQuery
+    };
+
+    if (type === "fromDate") {
+      const v = formatDateInput(value);
+      setFromDate(v);
+      updatedFilters.fromDate = v;
+    } else if (type === "toDate") {
+      const v = formatDateInput(value);
+      setToDate(v);
+      updatedFilters.toDate = v;
+    } else if (type === "filterBy") {
+      setFilterBy(value);
+      updatedFilters.filterBy = value;
+    } else if (type === "sortBy") {
+      setSortBy(value);
+      updatedFilters.sortBy = value;
+    } else if (type === "search") {
+      setSearchQuery(value);
+      updatedFilters.searchQuery = value;
+    }
+
+    onFilterChange(updatedFilters);
+  };
+
+  const handleDatePick = (e) => {
+    const parts = e.target.value.split("-");
+    if (parts.length === 3) {
+      const formatted = `${parts[2]}-${parts[1]}-${parts[0]}`;
+
+      if (activeDateField === "from") {
+        setFromDate(formatted);
+        handleFilterChange("fromDate", formatted);
+      } else if (activeDateField === "to") {
+        setToDate(formatted);
+        handleFilterChange("toDate", formatted);
+      }
+    }
+  };
+
+  const filterLabel = {
+    all: "All Issues",
+    high: "High Priority",
+    medium: "Medium Priority",
+    low: "Low Priority",
+    health: "Health Dept",
+    education: "Education Dept",
+    works: "Public Works"
+  };
+
+  return (
+    <div className="filter-bar">
+      {/* Search */}
+      <div className="search-wrapper">
+        <span className="search-icon">🔍</span>
+        <input
+          type="text"
+          placeholder="Search issues..."
+          value={searchQuery}
+          onChange={(e) => handleFilterChange("search", e.target.value)}
+        />
+      </div>
+
+      {/* From Date */}
+      <div className="date-input-wrapper">
+        <input
+          type="text"
+          placeholder="From: (dd-mm-yyyy)"
+          value={fromDate}
+          onChange={(e) => handleFilterChange("fromDate", e.target.value)}
+        />
+        <span
+          className="calendar-icon"
+          onClick={() => {
+            setActiveDateField("from");
+            fromDatePickerRef.current.showPicker();
+          }}
+        >
+          📅
+        </span>
+        <input
+          type="date"
+          ref={fromDatePickerRef}
+          onChange={handleDatePick}
+          style={{ visibility: "hidden", position: "absolute" }}
+        />
+      </div>
+
+      {/* To Date */}
+      <div className="date-input-wrapper">
+        <input
+          type="text"
+          placeholder="To: (dd-mm-yyyy)"
+          value={toDate}
+          onChange={(e) => handleFilterChange("toDate", e.target.value)}
+        />
+        <span
+          className="calendar-icon"
+          onClick={() => {
+            setActiveDateField("to");
+            toDatePickerRef.current.showPicker();
+          }}
+        >
+          📅
+        </span>
+        <input
+          type="date"
+          ref={toDatePickerRef}
+          onChange={handleDatePick}
+          style={{ visibility: "hidden", position: "absolute" }}
+        />
+      </div>
+
+      {/* Filter (Nested) */}
+      <div className="filter-group custom-filter">
+        <label>Filter:</label>
+        <div className="filter-dropdown">
+          <button className="filter-btn">
+            {filterLabel[filterBy]} ▾
+          </button>
+
+          <div className="filter-menu">
+            <div className="filter-item">
+              Priority ▸
+              <div className="sub-menu">
+                <div onClick={() => handleFilterChange("filterBy", "high")}>High</div>
+                <div onClick={() => handleFilterChange("filterBy", "medium")}>Medium</div>
+                <div onClick={() => handleFilterChange("filterBy", "low")}>Low</div>
+              </div>
+            </div>
+
+            <div className="filter-item">
+              Department ▸
+              <div className="sub-menu">
+                <div onClick={() => handleFilterChange("filterBy", "health")}>Health</div>
+                <div onClick={() => handleFilterChange("filterBy", "education")}>Education</div>
+                <div onClick={() => handleFilterChange("filterBy", "works")}>Public Works</div>
+              </div>
+            </div>
+
+            <div
+              className="filter-item"
+              onClick={() => handleFilterChange("filterBy", "all")}
+            >
+              All Issues
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Sort */}
+      <div className="filter-group custom-filter">
+        <label>Sort:</label>
+        <div className="filter-dropdown">
+          <button className="filter-btn">
+            {sortBy === "priority"
+              ? "Priority"
+              : sortBy === "department"
+                ? "Department"
+                : "Deadline"} ▾
+          </button>
+
+          <div className="filter-menu">
+            <div
+              className="filter-item"
+              onClick={() => handleFilterChange("sortBy", "priority")}
+            >
+              Priority
+            </div>
+
+            <div
+              className="filter-item"
+              onClick={() => handleFilterChange("sortBy", "department")}
+            >
+              Department
+            </div>
+
+            <div
+              className="filter-item"
+              onClick={() => handleFilterChange("sortBy", "deadline")}
+            >
+              Deadline
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      {/* Generate */}
+      {activeTab === "Received" && (
+        <button className="generate-btn" onClick={handleGenerate}>
+          Generate Report
+        </button>
+      )}
+      {activeTab === "Overdue" && (
+        <div style={{ position: 'relative', display: 'flex', alignItems: 'center', marginLeft: 'auto' }}>
+          <button
+            className={`send-email-btn ${emailLoading ? 'loading' : ''}`}
+            onClick={handleSendOverdueEmails}
+            disabled={emailLoading}
+          >
+            {emailLoading ? "Sending..." : "Send Overdue Emails"}
+          </button>
+
+          {emailStatus && (
+            <div className="email-status-popup">
+              {emailStatus}
+            </div>
+          )}
+        </div>
+      )}
+
+
+      <DPOGenerateReports
+        isOpen={showReportModal}
+        onClose={() => setShowReportModal(false)}
+      />
+    </div>
+  );
+}
+
+export default DPOFilterBar;
+</file>
+
+<file path="client/src/pages/CollectorPage/NotificationPage.jsx">
+import React from "react";
+import CollectorHeader from "../../components/Collector/CollectorHeader";
+import "./NotificationPage.css";
+
+function CollectorNotificationPage() {
+  const notifications = [
+    {
+      id: 1,
+      title: "Response Received",
+      message: "A response has been submitted for Issue #1023.",
+      time: "10 minutes ago",
+      type: "response",
+    },
+    {
+      id: 2,
+      title: "Deadline Exceeded",
+      message: "Issue #1009 has exceeded its deadline. Immediate attention required.",
+      time: "1 hour ago",
+      type: "deadline",
+    },
+  ];
+
+  return (
+    <div className="collector-container">
+      <CollectorHeader />
+
+      <div className="content">
+        <div className="notification-header">
+          <h1>Notifications</h1>
+        </div>
+
+        <div className="notification-list">
+          {notifications.map((note) => (
+                <div key={note.id} className={`notification-card ${note.type}`}>
+              <div className="notification-icon">
+                {note.type === "response" && <span>📩</span>}
+                {note.type === "deadline" && <span>⏰</span>}
+              </div>
+
+              <div className="notification-content">
+                <h3>{note.title}</h3>
+                <p>{note.message}</p>
+                <span className="time">{note.time}</span>
+              </div>
+            </div>
+          ))}
+
+          {notifications.length === 0 && (
+            <div className="no-notifications">No new notifications</div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default CollectorNotificationPage;
+</file>
+
+<file path=".gitignore">
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+node_modules
+/.pnp
+.pnp.js
+venv
+
+# testing
+/coverage
+
+# production
+/build
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+
+repomix-output.xml
+# Python
+__pycache__/
+*.pyc
+</file>
+
+<file path="backend/api/models.py">
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+
+class User(AbstractUser):
+    ROLE_CHOICES = [
+        ('dpo', 'dpo'),
+        ('collector', 'collector'),
+        ('department', 'department'),
+    ]
+
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+    department = models.ForeignKey(
+        'Department',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+class Department(models.Model):
+    dept_name = models.CharField(max_length=100, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.dept_name
+class Minutes(models.Model):
+    title = models.CharField(max_length=200)
+    meeting_date = models.DateField()
+    uploaded_by = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='uploaded_minutes'
+    )
+    file_path = models.FileField(upload_to='minutes/')
+    created_at = models.DateTimeField(auto_now_add=True)
+class Issue(models.Model):
+    PRIORITY_CHOICES = [
+        ('LOW', 'Low'),
+        ('MEDIUM', 'Medium'),
+        ('HIGH', 'High'),
+    ]
+
+    minutes = models.ForeignKey(
+        Minutes,
+        on_delete=models.CASCADE,
+        related_name='issues'
+    )
+    issue_title = models.CharField(max_length=300)
+    issue_description = models.TextField(default="")
+    location = models.CharField(max_length=200)
+    priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES)
+    created_at = models.DateTimeField(auto_now_add=True)
+class IssueDepartment(models.Model):
+    STATUS_CHOICES = [
+        ('PENDING', 'Pending'),
+        ('COMPLETED', 'Completed'),
+        ('OVERDUE', 'Overdue'),
+    ]
+
+    issue = models.ForeignKey(Issue, on_delete=models.CASCADE)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE)
+    deadline_date = models.DateField()
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
+class Response(models.Model):
+    issue_department = models.ForeignKey(
+        IssueDepartment,
+        on_delete=models.CASCADE,
+        related_name='responses'
+    )
+    response_text = models.TextField()
+    attachment_path = models.FileField(upload_to='responses/', null=True, blank=True)
+    submitted_at = models.DateTimeField(auto_now_add=True)
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    issue_department = models.ForeignKey(IssueDepartment, on_delete=models.CASCADE)
+    message = models.TextField()
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+</file>
+
+<file path="client/src/components/DPO/DPOHeader.css">
+.dpo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 15px 25px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.dpo-logo {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #1a1a1a;
+}
+
+.dpo-logo-icon {
+  width: 28px;
+  height: 28px;
+  background: #2563eb;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.dpo-header-icons {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  position: relative;
+}
+
+/* standard icon container */
+
+
+.dpo-icon.bell {
+  background: white; /* make the circular background white */
+  color: #2563eb; /* bell color */
+  font-size: 20px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.dpo-icon.profile {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #2563eb;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 30px;
+  text-align: center;
+}
+
+/* Profile dropdown */
+.dpo-profile-dropdown {
+  position: absolute;
+  top: 55px;
+  right: 0;
+  background: #fff;
+  border-radius: 10px;
+  width: 140px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  padding: 8px 0;
+  animation: dpoDropdownFade 0.2s ease;
+  z-index: 1000;
+}
+
+.dpo-profile-dropdown button {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+  color: #111827;
+}
+
+.dpo-profile-dropdown button:hover {
+  background: #f3f4f6;
+}
+
+/* Smooth appearance */
+@keyframes dpoDropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.dpo-logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+  color: #111827;
+}
+
+.dpo-logout-btn:hover {
+  background: #f3f4f6;
+}
+
+.dpo-logout-icon {
+  font-size: 18px;
+  color: #ef4444; /* subtle red for logout */
+}
+
+.dpo-icon.minutes {
+  background: white;
+  color: #2563eb;
+  font-size: 20px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.dpo-icon.upload {
+  background: white;
+  color: #2563eb;
+  font-size: 20px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+/* Modal Overlay */
+.dept-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+/* ========================= */
+/* ===== Modal Overlay ===== */
+/* ========================= */
+
+.dept-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  backdrop-filter: blur(3px);
+}
+
+/* ========================= */
+/* ===== Modal Box ===== */
+/* ========================= */
+
+.dept-modal {
+  background: #ffffff;
+  width: 380px;
+  max-width: 90%;
+  padding: 28px;
+  border-radius: 14px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  animation: dpoDropdownFade 0.2s ease;
+}
+
+/* Title */
+.dept-modal h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827;
+  text-align: center;
+}
+
+/* ========================= */
+/* ===== Input Fields ===== */
+/* ========================= */
+
+.dept-modal input {
+  padding: 11px 12px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  background: #f9fafb;
+}
+
+.dept-modal input:focus {
+  outline: none;
+  border-color: #2563eb;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* ========================= */
+/* ===== Password Field ===== */
+/* ========================= */
+
+.password-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-field input {
+  width: 100%;
+  padding-right: 42px;
+}
+
+.eye-icon {
+  position: absolute;
+  right: 12px;
+  cursor: pointer;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s ease;
+}
+
+.eye-icon:hover {
+  color: #2563eb;
+}
+
+.eye-icon svg {
+  font-size: 20px;
+}
+
+/* ========================= */
+/* ===== Buttons ===== */
+/* ========================= */
+
+.dept-modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* Cancel */
+.cancel-btn {
+  background: #f3f4f6;
+  border: none;
+  padding: 9px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.cancel-btn:hover {
+  background: #e5e7eb;
+}
+
+/* Create */
+.save-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 9px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.save-btn:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+/* ========================= */
+/* ===== Add Dept Icon ===== */
+/* ========================= */
+
+.dpo-adddept-icon {
+  font-size: 18px;
+  color: #2563eb;
+}
+</file>
+
+<file path="client/src/pages/CollectorPage/CollectorIssuePage.jsx">
+import React, { useEffect, useState, useMemo } from "react";
+import CollectorHeader from "../../components/Collector/CollectorHeader";
+import CollectorTabs from "../../components/Collector/IssuePage/CollectorTabs";
+import CollectorFilterBar from "../../components/Collector/IssuePage/CollectorFilterBar";
+import CollectorIssueCard from "../../components/Collector/IssuePage/CollectorIssueCard";
+import "./CollectorIssuePage.css";
+import api from "../../api/axios"; // Uses your configured axios with Token
+
+function CollectorIssuePage() {
+  const [activeTab, setActiveTab] = useState("Pending");
+  const [filters, setFilters] = useState({});
+  const [allIssues, setAllIssues] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  // 1. Fetch Logic: Get ALL issues once (or when Date filter changes)
+  useEffect(() => {
+    setLoading(true);
+
+    // Use the specific date param if it exists, otherwise fetch all
+    const params = filters.date ? { date: filters.date } : {};
+
+    api.get("/issues", { params })
+      .then((res) => {
+        setAllIssues(res.data);
+      })
+      .catch((err) => console.error("Error fetching issues:", err))
+      .finally(() => setLoading(false));
+
+  }, [filters.date]); // Only re-fetch from server if the DATE filter changes
+
+  // 2. Instant Client-Side Filtering (Same logic as DPO page)
+  const displayedIssues = useMemo(() => {
+    return allIssues.filter((issue) => {
+
+      // A. Filter by Tab
+      const status = issue.status ? issue.status.toLowerCase() : "pending";
+      const tab = activeTab.toLowerCase();
+
+      let statusMatch = false;
+      if (tab === "received") {
+        // "Received" tab shows 'submitted' or 'completed' status
+        statusMatch = (status === "submitted" || status === "completed");
+      } else {
+        statusMatch = (status === tab);
+      }
+
+      if (!statusMatch) return false;
+
+      // B. Filter by Search Query
+      if (filters.searchQuery) {
+        const query = filters.searchQuery.toLowerCase();
+        const matchesSearch =
+          (issue.issue && issue.issue.toLowerCase().includes(query)) ||
+          (issue.issue_no && issue.issue_no.toString().includes(query)) ||
+          (issue.department && issue.department.toLowerCase().includes(query));
+
+        if (!matchesSearch) return false;
+      }
+
+      // C. Filter by Dropdown (Priority/Dept)
+      if (filters.filterBy && filters.filterBy !== "all") {
+        const filterVal = filters.filterBy.toLowerCase();
+
+        // Check Priority
+        if (['high', 'medium', 'low'].includes(filterVal)) {
+          if (issue.priority.toLowerCase() !== filterVal) return false;
+        }
+        // Check Department
+        else {
+          if (!issue.department.toLowerCase().includes(filterVal)) return false;
+        }
+      }
+
+      // D. Sort Logic (Optional client-side sorting)
+      // You can add sort logic here if needed, currently implied by order of array
+
+      return true;
+    });
+  }, [allIssues, activeTab, filters]);
+
+  return (
+    <div className="collector-container">
+      <CollectorHeader />
+
+      <div className="content">
+        <div className="page-title">
+          <h1>District Monitor</h1>
+        </div>
+
+        <CollectorFilterBar
+          activeTab={activeTab}
+          onFilterChange={(newFilters) => setFilters(prev => ({ ...prev, ...newFilters }))}
+        // specific date filtering if needed
+        />
+
+        <CollectorTabs
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+        />
+
+        <div className="collector-tab-scroll-area">
+          {loading ? (
+            <p className="loading-text">Loading...</p>
+          ) : displayedIssues.length === 0 ? (
+            <p className="no-issues">No issues found</p>
+          ) : (
+            displayedIssues.map((issue) => (
+              <CollectorIssueCard key={issue.id} issue={issue} />
+            ))
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default CollectorIssuePage;
+</file>
+
+<file path="client/src/pages/DepartmentPage/DepartmentResponsePage.jsx">
+// import axios from "axios";
+import React, { useEffect, useState, useMemo } from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import DepartmentHeader from "../../components/Department/DepartmentHeader";
+import DepartmentTabs from "../../components/Department/DepartmentTabs";
+import DepartmentIssueCard from "../../components/Department/DepartmentIssueCard";
+import "./DepartmentResponsePage.css";
+import api from "../../api/axios";
+
+function DepartmentResponsePage() {
+  const { dept } = useParams();
+  const [activeTab, setActiveTab] = useState("Pending");
+  const [allIssues, setAllIssues] = useState([]); // Renamed for clarity
+  const [loading, setLoading] = useState(false);
+
+  // 1. OPTIMIZATION: Fetch ONLY when department changes, NOT when tab changes
+  useEffect(() => {
+    if (!dept) return;
+
+    setLoading(true);
+    // Fetch issues specifically for this department from Django
+    api.get(`/issues/${dept}`)
+      .then((res) => {
+        setAllIssues(res.data);
+      })
+      .catch((err) => console.error("Error fetching department issues:", err))
+      .finally(() => setLoading(false));
+
+  }, [dept]); // <--- FIX: Removed activeTab from here!
+
+  // 2. OPTIMIZATION: Filter instantly in memory using useMemo
+  const displayedIssues = useMemo(() => {
+    const tabLower = activeTab.toLowerCase();
+
+    return allIssues.filter((i) => {
+      const status = i.status.toLowerCase();
+
+      // Handle the 'Submitted' vs 'Received' logic if needed
+      if (tabLower === 'submitted') {
+        return status === 'submitted' || status === 'completed';
+      }
+      return status === tabLower;
+    });
+  }, [allIssues, activeTab]); // Re-runs instantly when tab changes
+
+  return (
+    <div className="dpo-container">
+      <DepartmentHeader departmentName={dept} />
+      <div className="content">
+        <h1>{dept?.toUpperCase()} Department Portal</h1>
+
+        <DepartmentTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+
+        <div className="dept-tab-scroll-area">
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <>
+              {displayedIssues.length > 0 ? (
+                displayedIssues.map((issue) => (
+                  <DepartmentIssueCard
+                    // We fixed the serializer to return 'id', so use that
+                    key={issue.id}
+                    issue={issue}
+                  />
+                ))
+              ) : (
+                <p className="no-issues">No issues currently in {activeTab}.</p>
+              )}
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default DepartmentResponsePage;
+</file>
+
+<file path="client/src/components/Collector/CollectorHeader.jsx">
+import React, { useState, useRef, useEffect } from "react";
+import "./CollectorHeader.css";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { Link, useNavigate } from "react-router-dom";
+import DescriptionIcon from "@mui/icons-material/Description";
+
+import api from "../../api/axios";
+
+function Header() {
+  const [open, setOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  const navigate = useNavigate();
+
+  /* Close dropdown when clicking outside */
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      // Call backend logout endpoint
+      await api.post("/logout");
+    } catch (err) {
+      console.error("Logout error:", err);
+    } finally {
+      // Clear localStorage regardless of API response
+      localStorage.removeItem("token");
+      localStorage.removeItem("username");
+      localStorage.removeItem("role");
+      localStorage.removeItem("department");
+      // Redirect to login
+      navigate("/login");
+    }
+  };
+
+  return (
+    <header className="collector-header">
+      <div className="collector-logo">
+        <div className="collector-logo-icon"></div>
+        <span>Minutes Tracker System</span>
+      </div>
+
+<div className="collector-header-icons" ref={dropdownRef}>
+  {/* Minutes Page */}
+  <Link to="/collector/minutes">
+    <DescriptionIcon className="collector-icon minutes" />
+  </Link>
+
+  {/* Notifications */}
+  <Link to="/dpo/notifications">
+    <NotificationsIcon className="collector-icon bell" />
+  </Link>
+
+  {/* Profile */}
+  <div
+    className="collector-icon profile"
+    onClick={() => setOpen((prev) => !prev)}
+  >
+    C
+  </div>
+
+  {/* Dropdown */}
+  {open && (
+    <div className="collector-profile-dropdown">
+      <button onClick={handleLogout} className="collector-logout-btn">
+        <LogoutIcon className="collector-logout-icon" />
+        Logout
+      </button>
+    </div>
+  )}
+</div>
+
+    </header>
+  );
+}
+
+export default Header;
+</file>
+
+<file path="client/src/components/DPO/DPOHeader.jsx">
+import React, { useState, useRef, useEffect } from "react";
+import "./DPOHeader.css";
+
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import LogoutIcon from "@mui/icons-material/Logout";
+import BusinessIcon from "@mui/icons-material/Business";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import DescriptionIcon from "@mui/icons-material/Description";
+import DriveFolderUploadSharpIcon from "@mui/icons-material/DriveFolderUploadSharp";
+
+import { Link, useNavigate } from "react-router-dom";
+import api from "../../api/axios";
+
+function Header() {
+
+  /* =========================
+     ===== STATE SECTION =====
+  ========================== */
+
+  const [open, setOpen] = useState(false);
+  const [showDeptModal, setShowDeptModal] = useState(false);
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const [deptData, setDeptData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: ""
+  });
+
+  const dropdownRef = useRef(null);
+  const navigate = useNavigate();
+
+  /* =========================
+     ===== EFFECT SECTION =====
+  ========================== */
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  /* =========================
+     ===== HANDLERS =====
+  ========================== */
+
+  const handleLogout = async () => {
+    try {
+      await api.post("/logout");
+    } catch (err) {
+      console.error("Logout error:", err);
+    } finally {
+      localStorage.clear();
+      navigate("/login");
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setDeptData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleCreateDepartment = () => {
+    if (deptData.password !== deptData.confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+
+    console.log("Department Data:", deptData);
+
+    // Backend integration here
+    // api.post("/departments", deptData)
+
+    setShowDeptModal(false);
+    setDeptData({
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: ""
+    });
+  };
+
+  /* =========================
+     ===== JSX SECTION =====
+  ========================== */
+
+  return (
+    <>
+      {/* ================= HEADER ================= */}
+      <header className="dpo-header">
+        <div className="dpo-logo">
+          <div className="dpo-logo-icon"></div>
+          <span>Minutes Tracker System</span>
+        </div>
+
+        <div className="dpo-header-icons" ref={dropdownRef}>
+          <Link to="/dpo/upload">
+            <DriveFolderUploadSharpIcon className="dpo-icon upload" />
+          </Link>
+
+          <Link to="/dpo/minutes">
+            <DescriptionIcon className="dpo-icon minutes" />
+          </Link>
+
+          <Link to="/dpo/notifications">
+            <NotificationsIcon className="dpo-icon bell" />
+          </Link>
+
+          <div
+            className="dpo-icon profile"
+            onClick={() => setOpen((prev) => !prev)}
+          >
+            D
+          </div>
+
+          {open && (
+            <div className="dpo-profile-dropdown">
+              <button
+                className="dpo-logout-btn"
+                onClick={() => {
+                  setOpen(false);
+                  setShowDeptModal(true);
+                }}
+              >
+                <BusinessIcon className="dpo-adddept-icon" />
+                Add Dept
+              </button>
+
+              <button
+                onClick={handleLogout}
+                className="dpo-logout-btn"
+              >
+                <LogoutIcon className="dpo-logout-icon" />
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
+      </header>
+
+      {/* ================= ADD DEPT MODAL ================= */}
+      {showDeptModal && (
+        <div className="dept-modal-overlay">
+          <div className="dept-modal">
+            <h3>Add Department</h3>
+
+            <input
+              type="text"
+              name="name"
+              placeholder="Department Name"
+              value={deptData.name}
+              onChange={handleInputChange}
+            />
+
+            <input
+              type="email"
+              name="email"
+              placeholder="Department Email"
+              value={deptData.email}
+              onChange={handleInputChange}
+            />
+
+            {/* Password */}
+            <div className="password-field">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Create Password"
+                value={deptData.password}
+                onChange={handleInputChange}
+              />
+              <span
+                className="eye-icon"
+                onClick={() => setShowPassword(prev => !prev)}
+              >
+                {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+              </span>
+            </div>
+
+            {/* Confirm Password */}
+            <div className="password-field">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                name="confirmPassword"
+                placeholder="Confirm Password"
+                value={deptData.confirmPassword}
+                onChange={handleInputChange}
+              />
+              <span
+                className="eye-icon"
+                onClick={() => setShowConfirmPassword(prev => !prev)}
+              >
+                {showConfirmPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+              </span>
+            </div>
+
+            <div className="dept-modal-buttons">
+              <button
+                className="cancel-btn"
+                onClick={() => setShowDeptModal(false)}
+              >
+                Cancel
+              </button>
+
+              <button
+                className="save-btn"
+                onClick={handleCreateDepartment}
+              >
+                Create
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+export default Header;
+</file>
+
+<file path="client/src/pages/DepartmentPage/NotificationPage.jsx">
+import React, { useEffect, useState } from "react";
+// import axios from "axios";
+import DepartmentHeader from "../../components/Department/DepartmentHeader";
+import "./NotificationPage.css";
+import api from "../../api/axios";
+
+function DepartmentNotificationPage() {
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      const username = localStorage.getItem("username");
+      try {
+        const res = await api.get("/notifications", {
+          params: { username }
+        });
+        setNotifications(res.data);
+      } catch (err) {
+        console.error("Error fetching notifications:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNotifications();
+  }, []);
+
+  return (
+    <div className="notificationpage-container">
+      <DepartmentHeader activeTab="notifications" />
+
+      <div className="notificationpage-content">
+        <div className="notification-header">
+          <h1>Notifications</h1>
+        </div>
+
+        <div className="notification-list">
+          {loading ? (
+            <p>Loading...</p>
+          ) : notifications.length === 0 ? (
+            <div className="no-notifications">No new notifications</div>
+          ) : (
+            notifications.map((note) => {
+              const safeType = note.type || "general";
+              return (
+                <div key={note.id} className={`notification-card ${safeType}`}>
+                  <div className="notification-icon">
+                    {safeType === "assign" && <span>📝</span>}
+                    {safeType === "deadline" && <span>⏰</span>}
+                    {safeType === "response" && <span>📩</span>}
+                    {safeType === "general" && <span>🔔</span>}
+                  </div>
+
+                  <div className="notification-content">
+                    <h3>{safeType.toUpperCase()}</h3>
+                    <p>{note.message}</p>
+                    <span className="time">{note.time_ago}</span>
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default DepartmentNotificationPage;
+</file>
+
+<file path="client/src/pages/DPOPage/DPOIssuePage.css">
+.dpo-container {
+  width: 100%;
+}
+
+.dpo-container .content {
+  padding: 10px 70px;
+  position: relative;
+}
+
+/* ---------- Title ---------- */
+.dpo-container .page-title {
+  display: flex;
+  justify-content: space-between;
+}
+
+.dpo-container .page-title h1 {
+  font-size: 2.1rem;
+  font-weight: 700;
+}
+
+/* ---------- Upload Icon ---------- */
+.upload-icon {
+  font-size: 35px !important;
+  margin-top: 40px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.upload-icon:hover {
+  color: #1d4ed8;
+  transform: scale(1.05);
+}
+
+.dpo-tab-scroll-area {
+  height: calc(100vh - 220px);
+  /* Restricted height to keep header visible */
+  overflow-y: auto;
+  padding-right: 10px;
+  /* Space for scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+/* Custom scrollbar for Webkit browsers */
+.dpo-tab-scroll-area::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dpo-tab-scroll-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dpo-tab-scroll-area::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 20px;
+}
+
+/* ---------- Tabs ---------- */
+.tabs-wrapper {
+  position: relative;
+  margin-top: 10px;
+}
+
+/* Add icon anchored to tabs (NO layout impact) */
+.tabs-add-icon {
+  position: absolute;
+  right: -2px;
+  top: 60%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #555;
+  transition: 0.2s;
+}
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0.3;
+    transform: translateY(3px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.no-issues {
+  text-align: center;
+  margin-top: 40px;
+  padding: 20px;
+  background: #f3f4f6;
+  border-radius: 12px;
+}
+
+.loading-text {
+  opacity: 0.7;
+}
+
+/* ---------- MODAL ---------- */
+.assign-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.assign-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(6px);
+}
+
+.assign-modal {
+  position: relative;
+  width: 720px;
+  max-height: 85vh;
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  overflow-y: auto;
+  z-index: 10000;
+}
+
+.assign-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.allocate-btn {
+  background: #1d4ed8;
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  margin-bottom: 4px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.allocate-btn:hover {
+  background: #1e40af;
+}
+</file>
+
+<file path="client/src/pages/DPOPage/NotificationPage.jsx">
+import React, { useEffect, useState } from "react";
+// import axios from "axios";
+import DPOHeader from "../../components/DPO/DPOHeader";
+import "./NotificationPage.css";
+import api from "../../api/axios";
+
+function DPONotificationPage() {
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      const username = localStorage.getItem("username");
+      try {
+        const res = await api.get("/notifications", {
+          params: { username }
+        });
+        setNotifications(res.data);
+      } catch (err) {
+        console.error("Error fetching notifications:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNotifications();
+  }, []);
+
+  return (
+    <div className="notificationpage-container">
+      <DPOHeader activeTab="notifications" />
+
+      <div className="notificationpage-content">
+        <div className="notification-header">
+          <h1>Notifications</h1>
+        </div>
+
+        <div className="notification-list">
+          {loading ? (
+            <p>Loading...</p>
+          ) : notifications.length === 0 ? (
+            <div className="no-notifications">No new notifications</div>
+          ) : (
+            notifications.map((note) => {
+              const safeType = note.type || "general";
+              return (
+                <div key={note.id} className={`notification-card ${safeType}`}>
+                  <div className="notification-icon">
+                    {safeType === "response" && <span>📩</span>}
+                    {safeType === "assign" && <span>📝</span>}
+                    {safeType === "deadline" && <span>⏰</span>}
+                    {safeType === "general" && <span>🔔</span>}
+                  </div>
+
+                  <div className="notification-content">
+                    <h3>{safeType.toUpperCase()}</h3>
+                    <p>{note.message}</p>
+                    <span className="time">{note.time_ago}</span>
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default DPONotificationPage;
 </file>
 
 <file path="client/src/pages/LoginPage.jsx">
@@ -6187,7 +8198,7 @@ export default function Login() {
         localStorage.setItem("department", department);
       }
 
-      // ✅ Role-based navigation (REQUIRED)
+      // ✅ Role-based navigation (REQUIRED) 
       if (role === "dpo") {
         navigate("/dpo");
       } else if (role === "collector") {
@@ -6208,8 +8219,17 @@ export default function Login() {
 
   return (
     <div className="login-container">
-      <form className="login-card" onSubmit={handleSubmit}>
-        <h2 className="login-title">Login</h2>
+      {/* left branding panel (3 parts) */}
+      <div className="login-left">
+        <div className="branding">
+          <h1>Minutes Tracker</h1>
+          <p>Efficiently manage meeting minutes</p>
+        </div>
+      </div>
+      {/* right panel (1 part) with login form */}
+      <div className="login-right">
+        <form className="login-card" onSubmit={handleSubmit}>
+          <h2 className="login-title">Login</h2>
 
         {error && <div className="error-box">{error}</div>}
 
@@ -6237,808 +8257,11 @@ export default function Login() {
           {loading ? "Logging in..." : "Login"}
         </button>
       </form>
-    </div>
-  );
-}
-</file>
-
-<file path="backend/requirements.txt">
-django
-djangorestframework
-django-cors-headers
-google-generativeai
-python-dotenv
-psycopg2-binary
-openpyxl
-</file>
-
-<file path="client/src/components/Collector/CollectorHeader.jsx">
-import React, { useState, useRef, useEffect } from "react";
-import "./CollectorHeader.css";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import LogoutIcon from "@mui/icons-material/Logout";
-import { Link, useNavigate } from "react-router-dom";
-import api from "../../api/axios";
-
-function CollectorHeader() {
-  const [open, setOpen] = useState(false);
-  const dropdownRef = useRef(null);
-  const navigate = useNavigate();
-
-  /* Close dropdown when clicking outside */
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  const handleLogout = async () => {
-    try {
-      // Call backend logout endpoint
-      await api.post("/logout");
-    } catch (err) {
-      console.error("Logout error:", err);
-    } finally {
-      // Clear localStorage regardless of API response
-      localStorage.removeItem("token");
-      localStorage.removeItem("username");
-      localStorage.removeItem("role");
-      localStorage.removeItem("department");
-      // Redirect to login
-      navigate("/login");
-    }
-  };
-
-  return (
-    <header className="collector-header">
-      <div className="collector-logo">
-        <div className="collector-logo-icon"></div>
-        <span>Minutes Tracker System</span>
-      </div>
-
-      <div className="collector-header-icons" ref={dropdownRef}>
-        {/* Notifications */}
-        <Link to="/collector/notifications">
-          <NotificationsIcon className="collector-icon bell" />
-        </Link>
-
-        {/* Profile */}
-        <div
-          className="collector-icon profile"
-          onClick={() => setOpen((prev) => !prev)}
-        >
-          C
-        </div>
-
-        {/* Dropdown */}
-        {open && (
-          <div className="collector-profile-dropdown">
-            <button onClick={handleLogout} className="collector-logout-btn">
-              <LogoutIcon className="collector-logout-icon" />
-                Logout
-            </button>
-
-          </div>
-        )}
-      </div>
-    </header>
-  );
-}
-
-export default CollectorHeader;
-</file>
-
-<file path="client/src/components/Department/DepartmentIssueCard.jsx">
-import React, { useState } from "react";
-import DepartmentResponseModal from "./DepartmentResponseModal";
-import "./DepartmentIssueCard.css";
-import api from "../../api/axios";
-
-function DepartmentIssueCard({ issue }) {
-  // Normalize backend status: "received" → "submitted"
-  const normalizedStatus = issue.status === "received" ? "submitted" : issue.status;
-  const status = normalizedStatus || "pending";
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleSubmit = () => {
-    setIsModalOpen(false);
-    alert("Response submitted successfully!");
-  };
-
-  const getStatusStyle = () => {
-    switch (status) {
-      case "overdue":
-        return { borderColor: "#b91c1c" };
-      case "submitted":
-        return { borderColor: "#16a34a" };
-      default:
-        return { borderColor: "#facc15" };
-    }
-  };
-
-  return (
-    <>
-      <div className="issue-card" style={getStatusStyle()}>
-        <div className="issue-header">
-          <span className="issue-id">{issue.issue_no}</span>
-          <span className={`status ${status}`}>
-            {status === "pending"
-              ? "Response Required"
-              : status === "overdue"
-                ? "Overdue"
-                : "Response Submitted"}
-          </span>
-        </div>
-
-        <div className="issue-body">
-          <div className="issue-row">
-            <div className="label">Issue</div>
-            <div className="value">{issue.issue}</div>
-          </div>
-          <div className="issue-row">
-            <div className="label">Description</div>
-            <div className="value">{issue.issue_description}</div>
-          </div>
-          <div className="issue-row">
-            <div className="label">Priority</div>
-            <div className="value">{issue.priority}</div>
-          </div>
-
-          <div className="issue-row">
-            <div className="label">Location</div>
-            <div className="value">{issue.location}</div>
-          </div>
-
-          <div className="issue-row">
-            <div className={`label ${status === "overdue" ? "overdue-text" : ""}`}>
-              Deadline
-            </div>
-            <div className={`value ${status === "overdue" ? "overdue-text" : ""}`}>
-              <span>{issue.deadline}</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="issue-footer">
-          {status === "submitted" && (
-            <>
-              <div className="footer-line"></div>
-              <div className="response-received">
-                <p className="res">
-                  <strong>Your Response:</strong> {issue.response?.text}
-                </p>
-                {issue.response?.attachment && (
-                  <button
-                    className="res-button"
-                    onClick={() => {
-                      const baseUrl = api.defaults.baseURL;
-                      const fullUrl = issue.response.attachment.startsWith("http") ? issue.response.attachment : `${baseUrl}${issue.response.attachment}`;
-                      window.open(fullUrl, "_blank");
-                    }}
-                  >
-                    View Attachment
-                  </button>
-                )}
-              </div>
-            </>
-          )}
-
-          {(status === "pending" || status === "overdue") && (
-            <button
-              className={`submit-btn ${status === "pending" ? "pending-btn" : "overdue-btn"
-                }`}
-              onClick={() => setIsModalOpen(true)}
-            >
-              Submit Response
-            </button>
-          )}
-        </div>
-      </div>
-
-      <DepartmentResponseModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        issue={issue}
-        onSubmit={handleSubmit}
-      />
-    </>
-  );
-}
-
-export default DepartmentIssueCard;
-</file>
-
-<file path="client/src/pages/CollectorPage/CollectorIssuePage.jsx">
-import React, { useEffect, useState, useMemo } from "react";
-import CollectorHeader from "../../components/Collector/CollectorHeader";
-import CollectorTabs from "../../components/Collector/IssuePage/CollectorTabs";
-import CollectorFilterBar from "../../components/Collector/IssuePage/CollectorFilterBar";
-import CollectorIssueCard from "../../components/Collector/IssuePage/CollectorIssueCard";
-import "./CollectorIssuePage.css";
-import api from "../../api/axios"; // Uses your configured axios with Token
-
-function CollectorIssuePage() {
-  const [activeTab, setActiveTab] = useState("Pending");
-  const [filters, setFilters] = useState({});
-  const [allIssues, setAllIssues] = useState([]); 
-  const [loading, setLoading] = useState(false);
-
-  // 1. Fetch Logic: Get ALL issues once (or when Date filter changes)
-  useEffect(() => {
-    setLoading(true);
-    
-    // Use the specific date param if it exists, otherwise fetch all
-    const params = filters.date ? { date: filters.date } : {};
-
-    api.get("/issues", { params })
-      .then((res) => {
-        setAllIssues(res.data);
-      })
-      .catch((err) => console.error("Error fetching issues:", err))
-      .finally(() => setLoading(false));
-
-  }, [filters.date]); // Only re-fetch from server if the DATE filter changes
-
-  // 2. Instant Client-Side Filtering (Same logic as DPO page)
-  const displayedIssues = useMemo(() => {
-    return allIssues.filter((issue) => {
-        
-        // A. Filter by Tab
-        const status = issue.status ? issue.status.toLowerCase() : "pending";
-        const tab = activeTab.toLowerCase();
-        
-        let statusMatch = false;
-        if (tab === "received") {
-            // "Received" tab shows 'submitted' or 'completed' status
-            statusMatch = (status === "submitted" || status === "completed");
-        } else {
-            statusMatch = (status === tab);
-        }
-
-        if (!statusMatch) return false;
-
-        // B. Filter by Search Query
-        if (filters.searchQuery) {
-            const query = filters.searchQuery.toLowerCase();
-            const matchesSearch = 
-                (issue.issue && issue.issue.toLowerCase().includes(query)) ||
-                (issue.issue_no && issue.issue_no.toString().includes(query)) ||
-                (issue.department && issue.department.toLowerCase().includes(query));
-            
-            if (!matchesSearch) return false;
-        }
-
-        // C. Filter by Dropdown (Priority/Dept)
-        if (filters.filterBy && filters.filterBy !== "all") {
-             const filterVal = filters.filterBy.toLowerCase();
-             
-             // Check Priority
-             if (['high', 'medium', 'low'].includes(filterVal)) {
-                 if (issue.priority.toLowerCase() !== filterVal) return false;
-             }
-             // Check Department
-             else {
-                 if (!issue.department.toLowerCase().includes(filterVal)) return false;
-             }
-        }
-
-        // D. Sort Logic (Optional client-side sorting)
-        // You can add sort logic here if needed, currently implied by order of array
-
-        return true;
-    });
-  }, [allIssues, activeTab, filters]);
-
-  return (
-    <div className="dpo-container">
-      <CollectorHeader />
-
-      <div className="content">
-        <div className="page-title">
-          <h1>District Monitor</h1>
-        </div>
-
-        <CollectorFilterBar
-          activeTab={activeTab}
-          onFilterChange={(newFilters) => setFilters(prev => ({...prev, ...newFilters}))}
-          // specific date filtering if needed
-        />
-
-        <CollectorTabs
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-        />
-
-        <div className="tab-scroll-area">
-          {loading ? (
-            <p className="loading-text">Loading...</p>
-          ) : displayedIssues.length === 0 ? (
-            <p className="no-issues">No issues found</p>
-          ) : (
-            displayedIssues.map((issue) => (
-                <CollectorIssueCard key={issue.id} issue={issue} />
-            ))
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default CollectorIssuePage;
-</file>
-
-<file path=".gitignore">
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
-node_modules
-/.pnp
-.pnp.js
-venv
-
-# testing
-/coverage
-
-# production
-/build
-
-# misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-
-repomix-output.xml
-# Python
-__pycache__/
-*.pyc
-</file>
-
-<file path="backend/api/models.py">
-from django.contrib.auth.models import AbstractUser
-from django.db import models
-
-class User(AbstractUser):
-    ROLE_CHOICES = [
-        ('dpo', 'dpo'),
-        ('collector', 'collector'),
-        ('department', 'department'),
-    ]
-
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
-    department = models.ForeignKey(
-        'Department',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True
-    )
-class Department(models.Model):
-    dept_name = models.CharField(max_length=100, unique=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.dept_name
-class Minutes(models.Model):
-    title = models.CharField(max_length=200)
-    meeting_date = models.DateField()
-    uploaded_by = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='uploaded_minutes'
-    )
-    file_path = models.FileField(upload_to='minutes/')
-    created_at = models.DateTimeField(auto_now_add=True)
-class Issue(models.Model):
-    PRIORITY_CHOICES = [
-        ('LOW', 'Low'),
-        ('MEDIUM', 'Medium'),
-        ('HIGH', 'High'),
-    ]
-
-    minutes = models.ForeignKey(
-        Minutes,
-        on_delete=models.CASCADE,
-        related_name='issues'
-    )
-    issue_title = models.CharField(max_length=300)
-    issue_description = models.TextField(default="")
-    location = models.CharField(max_length=200)
-    priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES)
-    created_at = models.DateTimeField(auto_now_add=True)
-class IssueDepartment(models.Model):
-    STATUS_CHOICES = [
-        ('PENDING', 'Pending'),
-        ('COMPLETED', 'Completed'),
-        ('OVERDUE', 'Overdue'),
-    ]
-
-    issue = models.ForeignKey(Issue, on_delete=models.CASCADE)
-    department = models.ForeignKey(Department, on_delete=models.CASCADE)
-    deadline_date = models.DateField()
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
-class Response(models.Model):
-    issue_department = models.ForeignKey(
-        IssueDepartment,
-        on_delete=models.CASCADE,
-        related_name='responses'
-    )
-    response_text = models.TextField()
-    attachment_path = models.FileField(upload_to='responses/', null=True, blank=True)
-    submitted_at = models.DateTimeField(auto_now_add=True)
-class Notification(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    issue_department = models.ForeignKey(IssueDepartment, on_delete=models.CASCADE)
-    message = models.TextField()
-    is_read = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-</file>
-
-<file path="client/src/pages/DepartmentPage/DepartmentResponsePage.jsx">
-// import axios from "axios";
-import React, { useEffect, useState, useMemo } from "react";
-import axios from "axios";
-import { useParams } from "react-router-dom";
-import DepartmentHeader from "../../components/Department/DepartmentHeader";
-import DepartmentTabs from "../../components/Department/DepartmentTabs";
-import DepartmentIssueCard from "../../components/Department/DepartmentIssueCard";
-import "./DepartmentResponsePage.css";
-import api from "../../api/axios";
-
-function DepartmentResponsePage() {
-  const { dept } = useParams();
-  const [activeTab, setActiveTab] = useState("Pending");
-  const [allIssues, setAllIssues] = useState([]); // Renamed for clarity
-  const [loading, setLoading] = useState(false);
-
-  // 1. OPTIMIZATION: Fetch ONLY when department changes, NOT when tab changes
-  useEffect(() => {
-    if (!dept) return;
-    
-    setLoading(true);
-    // Fetch issues specifically for this department from Django
-    api.get(`/issues/${dept}`)
-      .then((res) => {
-        setAllIssues(res.data);
-      })
-      .catch((err) => console.error("Error fetching department issues:", err))
-      .finally(() => setLoading(false));
       
-  }, [dept]); // <--- FIX: Removed activeTab from here!
-
-  // 2. OPTIMIZATION: Filter instantly in memory using useMemo
-  const displayedIssues = useMemo(() => {
-    const tabLower = activeTab.toLowerCase();
-
-    return allIssues.filter((i) => {
-      const status = i.status.toLowerCase();
-      
-      // Handle the 'Submitted' vs 'Received' logic if needed
-      if (tabLower === 'submitted') {
-        return status === 'submitted' || status === 'completed';
-      }
-      return status === tabLower;
-    });
-  }, [allIssues, activeTab]); // Re-runs instantly when tab changes
-
-  return (
-    <div className="dpo-container">
-      <DepartmentHeader departmentName={dept} />
-      <div className="content">
-        <h1>{dept?.toUpperCase()} Department Portal</h1>
-        
-        <DepartmentTabs activeTab={activeTab} setActiveTab={setActiveTab} />
-        
-        <div className="tab-scroll-area">
-          {loading ? (
-            <p>Loading...</p>
-          ) : (
-            <>
-              {displayedIssues.length > 0 ? (
-                displayedIssues.map((issue) => (
-                  <DepartmentIssueCard 
-                    // We fixed the serializer to return 'id', so use that
-                    key={issue.id} 
-                    issue={issue} 
-                  />
-                ))
-              ) : (
-                <p className="no-issues">No issues currently in {activeTab}.</p>
-              )}
-            </>
-          )}
-        </div>
-      </div>
-    </div>
+      </div> 
+    </div> 
   );
 }
-
-export default DepartmentResponsePage;
-</file>
-
-<file path="client/src/pages/DepartmentPage/NotificationPage.jsx">
-import React, { useEffect, useState } from "react";
-// import axios from "axios";
-import DepartmentHeader from "../../components/Department/DepartmentHeader";
-import "./NotificationPage.css";
-import api from "../../api/axios";
-
-function DepartmentNotificationPage() {
-  const [notifications, setNotifications] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      const username = localStorage.getItem("username");
-      try {
-        const res = await api.get("/notifications", {
-          params: { username }
-        });
-        setNotifications(res.data);
-      } catch (err) {
-        console.error("Error fetching notifications:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchNotifications();
-  }, []);
-
-  return (
-    <div className="notificationpage-container">
-      <DepartmentHeader activeTab="notifications" />
-
-      <div className="notificationpage-content">
-        <div className="notification-header">
-          <h1>Notifications</h1>
-        </div>
-
-        <div className="notification-list">
-          {loading ? (
-            <p>Loading...</p>
-          ) : notifications.length === 0 ? (
-            <div className="no-notifications">No new notifications</div>
-          ) : (
-            notifications.map((note) => {
-              const safeType = note.type || "general";
-              return (
-                <div key={note.id} className={`notification-card ${safeType}`}>
-                  <div className="notification-icon">
-                    {safeType === "assign" && <span>📝</span>}
-                    {safeType === "deadline" && <span>⏰</span>}
-                    {safeType === "response" && <span>📩</span>}
-                    {safeType === "general" && <span>🔔</span>}
-                  </div>
-
-                  <div className="notification-content">
-                    <h3>{safeType.toUpperCase()}</h3>
-                    <p>{note.message}</p>
-                    <span className="time">{note.time_ago}</span>
-                  </div>
-                </div>
-              );
-            })
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default DepartmentNotificationPage;
-</file>
-
-<file path="client/src/pages/DPOPage/DPOIssuePage.jsx">
-import React, { useEffect, useState, useMemo } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
-import DriveFolderUploadSharpIcon from "@mui/icons-material/DriveFolderUploadSharp";
-
-// Import your existing components (Old Paths)
-import DPOHeader from "../../components/DPO/DPOHeader";
-import DPOTabs from "../../components/DPO/IssuePage/DPOTabs";
-import DPOFilterBar from "../../components/DPO/IssuePage/DPOFilterBar";
-import DPOIssueCard from "../../components/DPO/IssuePage/DPOIssueCard";
-
-// Import your existing CSS
-import "./DPOIssuePage.css";
-import api from "../../api/axios";
-
-function DPOIssuePage() {
-  // 1. State Management
-  const [activeTab, setActiveTab] = useState("Pending");
-  const [filters, setFilters] = useState({});
-  const [allIssues, setAllIssues] = useState([]); // Stores everything (Fast!)
-  const [loading, setLoading] = useState(false);
-
-  // 2. FETCH Logic (Runs only on Load or Date Change)
-  useEffect(() => {
-    setLoading(true);
-    api
-      .get("/issues")
-      .then((res) => {
-        setAllIssues(res.data);
-      })
-      .catch((err) => console.error("Error fetching issues:", err))
-      .finally(() => setLoading(false));
-      
-  }, [filters.date]); // <--- CRITICAL: Only re-fetch if DATE changes. Ignore Tab/Search.
-
-
-  // 3. INSTANT FILTERING (Client-Side)
-  // This replaces the server call for tabs/search
-  const displayedIssues = useMemo(() => {
-    return allIssues.filter((issue) => {
-        // A. Filter by Tab
-        const status = issue.status ? issue.status.toLowerCase() : "pending";
-        const tab = activeTab.toLowerCase();
-        
-        let statusMatch = false;
-        if (tab === "received") {
-            // UI says "Received", Database says "submitted" or "completed"
-            statusMatch = (status === "submitted" || status === "completed");
-        } else {
-            statusMatch = (status === tab);
-        }
-
-        if (!statusMatch) return false;
-
-        // B. Filter by Search Query (Instant Search)
-        if (filters.searchQuery) {
-            const query = filters.searchQuery.toLowerCase();
-            const matchesSearch = 
-                (issue.issue && issue.issue.toLowerCase().includes(query)) ||
-                (issue.issue_no && issue.issue_no.toString().includes(query)) ||
-                (issue.department && issue.department.toLowerCase().includes(query));
-            
-            if (!matchesSearch) return false;
-        }
-
-        // C. Filter by Priority (if selected in dropdown)
-        if (filters.filterBy && filters.filterBy !== "all") {
-             const filterVal = filters.filterBy.toLowerCase();
-             // Check Priority
-             if (['high', 'medium', 'low'].includes(filterVal)) {
-                 if (issue.priority.toLowerCase() !== filterVal) return false;
-             }
-             // Check Department (if your dropdown includes departments)
-             else {
-                 if (!issue.department.toLowerCase().includes(filterVal)) return false;
-             }
-        }
-
-        return true;
-    });
-  }, [allIssues, activeTab, filters]); // Re-runs instantly when you click tabs/search
-
-
-  return (
-    <div className="dpo-container">
-      <DPOHeader />
-
-      <div className="content">
-        <div className="page-title">
-          <h1>Issue Tracking & Management</h1>
-          <Link to="/dpo/upload">
-            <DriveFolderUploadSharpIcon className="upload-icon" />
-          </Link>
-        </div>
-
-        {/* Reuse your existing FilterBar */}
-        <DPOFilterBar
-          activeTab={activeTab}
-          onFilterChange={(newFilters) => setFilters(prev => ({...prev, ...newFilters}))}
-        />
-
-        {/* Reuse your existing Tabs */}
-        <DPOTabs
-          activeTab={activeTab}
-          setActiveTab={(tab) => setActiveTab(tab)}
-        />
-
-        <div className="tab-scroll-area">
-          {loading ? (
-            <p className="loading-text">Loading...</p>
-          ) : displayedIssues.length === 0 ? (
-            <p className="no-issues">No issues found</p>
-          ) : (
-            displayedIssues.map((issue) => (
-                <DPOIssueCard key={issue.id} issue={issue} />
-            ))
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default DPOIssuePage;
-</file>
-
-<file path="client/src/pages/DPOPage/NotificationPage.jsx">
-import React, { useEffect, useState } from "react";
-// import axios from "axios";
-import DPOHeader from "../../components/DPO/DPOHeader";
-import "./NotificationPage.css";
-import api from "../../api/axios";
-
-function DPONotificationPage() {
-  const [notifications, setNotifications] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      const username = localStorage.getItem("username");
-      try {
-        const res = await api.get("/notifications", {
-          params: { username }
-        });
-        setNotifications(res.data);
-      } catch (err) {
-        console.error("Error fetching notifications:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchNotifications();
-  }, []);
-
-  return (
-    <div className="notificationpage-container">
-      <DPOHeader activeTab="notifications" />
-
-      <div className="notificationpage-content">
-        <div className="notification-header">
-          <h1>Notifications</h1>
-        </div>
-
-        <div className="notification-list">
-          {loading ? (
-            <p>Loading...</p>
-          ) : notifications.length === 0 ? (
-            <div className="no-notifications">No new notifications</div>
-          ) : (
-            notifications.map((note) => {
-              const safeType = note.type || "general";
-              return (
-                <div key={note.id} className={`notification-card ${safeType}`}>
-                  <div className="notification-icon">
-                    {safeType === "response" && <span>📩</span>}
-                    {safeType === "assign" && <span>📝</span>}
-                    {safeType === "deadline" && <span>⏰</span>}
-                    {safeType === "general" && <span>🔔</span>}
-                  </div>
-
-                  <div className="notification-content">
-                    <h3>{safeType.toUpperCase()}</h3>
-                    <p>{note.message}</p>
-                    <span className="time">{note.time_ago}</span>
-                  </div>
-                </div>
-              );
-            })
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default DPONotificationPage;
 </file>
 
 <file path="backend/backend/settings.py">
@@ -7152,24 +8375,17 @@ SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SECURE = False  # localhost only
 CSRF_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_SECURE = False
-</file>
 
-<file path="backend/api/urls.py">
-from django.urls import path
-from . import views
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
-urlpatterns = [
-    path('login', views.login_view),
-    path('logout', views.logout_view),
-    path('upload-minutes', views.upload_minutes),
-    path('assign-issues', views.get_assign_issues),
-    path('assign-issues/allocate-all', views.allocate_all),
-    path('issues', views.get_all_issues),
-    path('issues/<str:dept_name>', views.get_dept_issues),
-    path('submit-response', views.submit_response),
-    path('notifications', views.get_notifications),
-    path('generate-report', views.generate_report),
-]
+EMAIL_HOST = "smtp-relay.brevo.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = "a27423001@smtp-brevo.com"
+EMAIL_HOST_PASSWORD = "smtp_key_here"
+
+DEFAULT_FROM_EMAIL = "me.openbox@gmail.com"
 </file>
 
 <file path="backend/api/serializers.py">
@@ -7293,6 +8509,216 @@ class NotificationSerializer(serializers.ModelSerializer):
         return "general"
 </file>
 
+<file path="backend/api/urls.py">
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('login', views.login_view),
+    path('logout', views.logout_view),
+    path('upload-minutes', views.upload_minutes),
+    path('assign-issues', views.get_assign_issues),
+    path('assign-issues/allocate-all', views.allocate_all),
+    path('issues', views.get_all_issues),
+    path('issues/<str:dept_name>', views.get_dept_issues),
+    path('submit-response', views.submit_response),
+    path('notifications', views.get_notifications),
+    path('generate-report', views.generate_report),
+    path('send-overdue-alerts', views.send_overdue_alerts),
+]
+</file>
+
+<file path="client/src/pages/DPOPage/DPOIssuePage.jsx">
+import React, { useEffect, useState, useMemo } from "react";
+import { Link } from "react-router-dom";
+import DriveFolderUploadSharpIcon from "@mui/icons-material/DriveFolderUploadSharp";
+import AddBoxIcon from "@mui/icons-material/AddBox";
+
+// Components
+import DPOHeader from "../../components/DPO/DPOHeader";
+import DPOTabs from "../../components/DPO/IssuePage/DPOTabs";
+import DPOFilterBar from "../../components/DPO/IssuePage/DPOFilterBar";
+import DPOIssueCard from "../../components/DPO/IssuePage/DPOIssueCard";
+import DPOSingleIssueAssignCard from "../../components/DPO/IssuePage/DPOSingleIssueAssignCard";
+
+// CSS
+import "./DPOIssuePage.css";
+
+// API
+import api from "../../api/axios";
+
+function DPOIssuePage() {
+  const [activeTab, setActiveTab] = useState("Pending");
+  const [filters, setFilters] = useState({});
+  const [allIssues, setAllIssues] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [emailLoading, setEmailLoading] = useState(false);
+  const [emailStatus, setEmailStatus] = useState(""); // For "sending..." or success message
+  const [showAssignModal, setShowAssignModal] = useState(false);
+
+  // ===== FETCH =====
+  useEffect(() => {
+    setLoading(true);
+    api
+      .get("/issues")
+      .then((res) => setAllIssues(res.data))
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, [filters.date]);
+
+  // ===== FILTER =====
+  const displayedIssues = useMemo(() => {
+    return allIssues.filter((issue) => {
+      const status = issue.status?.toLowerCase() || "pending";
+      const tab = activeTab.toLowerCase();
+
+      if (
+        tab === "received"
+          ? !["submitted", "completed"].includes(status)
+          : status !== tab
+      )
+        return false;
+
+      if (filters.searchQuery) {
+        const q = filters.searchQuery.toLowerCase();
+        if (
+          !issue.issue?.toLowerCase().includes(q) &&
+          !issue.issue_no?.toString().includes(q) &&
+          !issue.department?.toLowerCase().includes(q)
+        )
+          return false;
+      }
+
+      if (filters.filterBy && filters.filterBy !== "all") {
+        const f = filters.filterBy.toLowerCase();
+        if (["high", "medium", "low"].includes(f)) {
+          if (issue.priority?.toLowerCase() !== f) return false;
+        } else if (!issue.department?.toLowerCase().includes(f)) return false;
+      }
+
+      return true;
+    });
+  }, [allIssues, activeTab, filters]);
+  const handleAllocateIssue = (issue) => {
+    console.log("Allocating issue:", issue);
+
+    api.post("/issues/allocate", issue)
+      .then(() => {
+        alert("Issue allocated successfully");
+        setShowAssignModal(false);
+      })
+      .catch(() => {
+        alert("Backend not ready");
+      });
+  };
+  const handleSendOverdueEmails = () => {
+    setEmailLoading(true);
+    setEmailStatus("Performing overdue email checks and sending..");
+
+    api.post("/send-overdue-alerts")
+      .then((res) => {
+        if (res.data.sent_count > 0) {
+          setEmailStatus(`All ${res.data.sent_count} Emails sent successfully`);
+        } else {
+          setEmailStatus("Nothing overdue");
+        }
+        // Auto-refresh issues to reflect status changes if any
+        api.get("/issues").then(r => setAllIssues(r.data));
+      })
+      .catch((err) => {
+        console.error(err);
+        setEmailStatus("Error sending emails");
+      })
+      .finally(() => {
+        // Clear status after some time
+        setTimeout(() => {
+          setEmailLoading(false);
+          setEmailStatus("");
+        }, 3000);
+      });
+  };
+
+  return (
+    <div className="dpo-container">
+      <DPOHeader />
+      
+      <div className="content">
+
+        <DPOFilterBar
+          activeTab={activeTab}
+          onFilterChange={(nf) => setFilters((p) => ({ ...p, ...nf }))}
+          handleSendOverdueEmails={handleSendOverdueEmails}
+          emailLoading={emailLoading}
+          emailStatus={emailStatus}
+        />
+
+        {/* ✅ Tabs wrapper (DO NOT TOUCH DPOTabs) */}
+        <div className="tabs-wrapper">
+          <DPOTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+
+          <AddBoxIcon
+            className="tabs-add-icon"
+            onClick={() => setShowAssignModal(true)}
+          />
+        </div>
+
+        <div className="dpo-tab-scroll-area">
+          {loading ? (
+            <p className="loading-text">Loading...</p>
+          ) : displayedIssues.length === 0 ? (
+            <p className="no-issues">No issues found</p>
+          ) : (
+            displayedIssues.map((issue) => (
+              <DPOIssueCard key={issue.id} issue={issue} />
+            ))
+          )}
+        </div>
+      </div>
+
+      {/* ===== MODAL ===== */}
+      {showAssignModal && (
+        <div className="assign-overlay">
+          <div
+            className="assign-backdrop"
+            onClick={() => setShowAssignModal(false)}
+          />
+
+          <div className="assign-modal">
+            <div className="assign-header">
+              <h2>Add New Issue</h2>
+              <button
+                className="close-btn"
+                onClick={() => setShowAssignModal(false)}
+              >
+                ✕
+              </button>
+            </div>
+
+            <DPOSingleIssueAssignCard
+              issue={{
+                issue_no: "NEW",
+                issue: "",
+                issue_description: "",
+                department: "",
+                priority: "Medium",
+                location: "",
+                deadline: "",
+              }}
+              index={0}
+              onChange={() => { }}
+              onAllocate={handleAllocateIssue}
+            />
+
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default DPOIssuePage;
+</file>
+
 <file path="backend/api/gemini_utils.py">
 import google.generativeai as genai
 from google.generativeai.types import HarmCategory, HarmBlockThreshold
@@ -7300,7 +8726,7 @@ import os
 import json
 import time
 
-GOOGLE_API_KEY = "your_api_key_here"
+GOOGLE_API_KEY = ""
 
 def get_best_model():
     try:
@@ -7398,6 +8824,7 @@ from .models import (
     Response as ResponseModel,
     Notification
 )
+from .services import check_and_send_overdue_emails
 from .serializers import IssueDepartmentSerializer, NotificationSerializer, DPOIssueSerializer
 from .gemini_utils import analyze_document_with_gemini
 import os
@@ -7485,7 +8912,7 @@ def logout_view(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def upload_minutes(request):
-    if request.user.role != 'dpo':
+    if request.user.role.lower() != 'dpo':
         return Response({"error": "Only DPO can upload minutes"}, status=403)
 
     global TEMP_DATA_CACHE
@@ -7519,7 +8946,7 @@ def upload_minutes(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_assign_issues(request):
-    if request.user.role != 'dpo':
+    if request.user.role.lower() != 'dpo':
         return Response({"error": "Unauthorized"}, status=403)
     return Response(TEMP_DATA_CACHE)
 
@@ -7529,7 +8956,7 @@ def get_assign_issues(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def allocate_all(request):
-    if request.user.role != 'dpo':
+    if request.user.role.lower() != 'dpo':
         return Response({"error": "Only DPO can allocate"}, status=403)
 
     global TEMP_DATA_CACHE
@@ -7617,7 +9044,7 @@ def allocate_all(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_all_issues(request):
-    if request.user.role not in ['dpo', 'collector']:
+    if request.user.role.lower() not in ['dpo', 'collector']:
         return Response({"error": "Unauthorized"}, status=403)
 
     today = date.today()
@@ -7653,7 +9080,7 @@ def get_all_issues(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_dept_issues(request, dept_name):
-    if request.user.role != 'department':
+    if request.user.role.lower() != 'department':
         return Response({"error": "Unauthorized"}, status=403)
 
     today = date.today()
@@ -7865,6 +9292,19 @@ def generate_report(request):
     response['Content-Disposition'] = 'attachment; filename="Follow_Up_Report.xlsx"'
     wb.save(response)
     return response
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def send_overdue_alerts(request):
+    if request.user.role.lower() != 'dpo':
+        return Response({"error": "Unauthorized"}, status=403)
+    
+    sent_count = check_and_send_overdue_emails()
+    
+    return Response({
+        "success": True,
+        "sent_count": sent_count
+    })
 </file>
 
 </files>

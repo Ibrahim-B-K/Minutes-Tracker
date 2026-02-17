@@ -64,7 +64,7 @@ function Header() {
     className="collector-icon profile"
     onClick={() => setOpen((prev) => !prev)}
   >
-    D
+    C
   </div>
 
   {/* Dropdown */}

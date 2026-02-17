@@ -15,7 +15,10 @@ from django.http import HttpResponse
 
 from rest_framework.authtoken.models import Token
 from collections import defaultdict
-
+import httpx
+import requests
+import uuid
+from urllib.parse import quote
 
 from .models import (
     User,
@@ -31,6 +34,11 @@ from .serializers import IssueDepartmentSerializer, NotificationSerializer, DPOI
 from .gemini_utils import analyze_document_with_gemini
 import os
 from datetime import datetime, date, timedelta
+
+# ================= SUPABASE STORAGE CONFIG ================= #
+SUPABASE_URL = os.getenv('SUPABASE_URL', '')
+SUPABASE_KEY = os.getenv('SUPABASE_KEY', '')
+SUPABASE_BUCKET = os.getenv('SUPABASE_BUCKET_NAME', 'Mnutes')
 
 # ================= TEMP CACHE (ONLY FOR NOW) ================= #
 TEMP_DATA_CACHE = []
@@ -120,17 +128,61 @@ def upload_minutes(request):
     global TEMP_DATA_CACHE
 
     file = request.FILES.get('file')
+    meeting_date_str = request.POST.get('meeting_date')
+    
     if not file:
         return Response({"error": "File required"}, status=400)
 
+    # Save file locally temporarily for Gemini analysis
     os.makedirs('media/minutes', exist_ok=True)
-    file_path = f"media/minutes/{file.name}"
+    local_file_path = f"media/minutes/{file.name}"
 
-    with open(file_path, 'wb+') as dest:
+    with open(local_file_path, 'wb+') as dest:
         for chunk in file.chunks():
             dest.write(chunk)
 
-    raw_data = analyze_document_with_gemini(file_path)
+    # Analyze with Gemini
+    raw_data = analyze_document_with_gemini(local_file_path)
+
+    # Upload to Supabase Storage
+    supabase_file_path = None
+    if SUPABASE_URL and SUPABASE_KEY:
+        try:
+            with open(local_file_path, 'rb') as f:
+                file_data = f.read()
+            
+            # Generate unique filename to avoid collisions
+            file_name = f"{uuid.uuid4()}_{file.name}"
+            # Upload to public/ folder (required by RLS policy)
+            supabase_file_path = f"public/{file_name}"
+            
+            # URL-encode the file path to handle spaces and special characters
+            encoded_file_path = quote(supabase_file_path, safe='/')
+            
+            # Supabase Storage REST API endpoint
+            upload_url = f"{SUPABASE_URL}/storage/v1/object/{SUPABASE_BUCKET}/{encoded_file_path}"
+            
+            # Use apikey header instead of Bearer token
+            headers = {
+                'apikey': SUPABASE_KEY,
+                'Content-Type': 'application/octet-stream'
+            }
+            
+            print(f"📤 Uploading to Supabase: {upload_url}")
+            response = requests.post(upload_url, data=file_data, headers=headers, timeout=30)
+            
+            if response.status_code in [200, 201]:
+                # Generate public URL for viewing/downloading
+                public_url = f"{SUPABASE_URL}/storage/v1/object/public/{SUPABASE_BUCKET}/{encoded_file_path}"
+                print(f"✅ File uploaded to Supabase successfully!")
+                print(f"   Public URL: {public_url}")
+            else:
+                print(f"⚠️ Supabase upload failed: {response.status_code}")
+                print(f"   Response: {response.text}")
+                supabase_file_path = None
+        except Exception as e:
+            print(f"⚠️ Supabase upload exception: {e}")
+            supabase_file_path = None
 
     clean_data = []
     for item in raw_data:
@@ -141,8 +193,54 @@ def upload_minutes(request):
         item['department'] = ", ".join(d.upper() for d in depts if d)
         clean_data.append(item)
 
-    TEMP_DATA_CACHE = clean_data
-    return Response({"success": True, "data": clean_data})
+    # ===== CREATE MINUTES RECORD NOW (not waiting for allocate_all) ===== #
+    # Get or create DPO user
+    u_by = User.objects.filter(role='DPO').first()
+    if not u_by:
+        u_by = User.objects.first()
+    if not u_by:
+        u_by = User.objects.create_user(username='dpo', password='dpo', role='DPO')
+    
+    # Parse meeting date if provided
+    try:
+        if meeting_date_str:
+            # Handle dd-mm-yyyy format
+            parts = meeting_date_str.split('-')
+            if len(parts) == 3:
+                meeting_date_obj = datetime.strptime(meeting_date_str, '%d-%m-%Y').date()
+            else:
+                meeting_date_obj = timezone.now().date()
+        else:
+            meeting_date_obj = timezone.now().date()
+    except:
+        meeting_date_obj = timezone.now().date()
+    
+    # Create file_path for database (full URL if Supabase, local path if not)
+    if supabase_file_path:
+        file_path_for_db = f"{SUPABASE_URL}/storage/v1/object/public/{SUPABASE_BUCKET}/{supabase_file_path}"
+    else:
+        file_path_for_db = local_file_path
+    
+    # Create Minutes record IMMEDIATELY
+    minute_obj = Minutes.objects.create(
+        title=file.name,  # Use actual filename as title
+        meeting_date=meeting_date_obj,
+        uploaded_by=u_by,
+        file_path=file_path_for_db
+    )
+    
+    print(f"✅ Minutes record created: ID {minute_obj.id}, Title: {file.name}")
+    # ===== END NEW ===== #
+
+    # Store file path and minutes ID in TEMP_DATA_CACHE for the allocate step
+    TEMP_DATA_CACHE = {
+        'file_path': supabase_file_path or local_file_path,
+        'is_supabase': supabase_file_path is not None,
+        'issues': clean_data,
+        'minutes_id': minute_obj.id  # Store the minutes ID
+    }
+    
+    return Response({"success": True, "data": clean_data, "minutes_id": minute_obj.id})
 
 
 @api_view(['GET'])
@@ -150,6 +248,9 @@ def upload_minutes(request):
 def get_assign_issues(request):
     if request.user.role.lower() != 'dpo':
         return Response({"error": "Unauthorized"}, status=403)
+    # Return only issues, not the file_path
+    if isinstance(TEMP_DATA_CACHE, dict) and 'issues' in TEMP_DATA_CACHE:
+        return Response(TEMP_DATA_CACHE['issues'])
     return Response(TEMP_DATA_CACHE)
 
 
@@ -163,22 +264,36 @@ def allocate_all(request):
 
     global TEMP_DATA_CACHE
     issues_data = request.data.get('issues', [])
-    if not issues_data: issues_data = TEMP_DATA_CACHE 
     
-    # 1. User Safety Check
-    u_by = User.objects.filter(role='DPO').first()
-    if not u_by:
-        u_by = User.objects.first()
-    if not u_by:
-        u_by = User.objects.create_user(username='dpo', password='dpo', role='DPO')
-
-    # 2. Create Minutes
-    minute_obj = Minutes.objects.create(
-        title="Uploaded Minutes", 
-        meeting_date=timezone.now(), 
-        uploaded_by=u_by, 
-        file_path="dummy"
-    )
+    # Extract minutes_id and issues from TEMP_DATA_CACHE
+    minutes_id = None
+    if isinstance(TEMP_DATA_CACHE, dict) and 'minutes_id' in TEMP_DATA_CACHE:
+        minutes_id = TEMP_DATA_CACHE['minutes_id']
+        if not issues_data:
+            issues_data = TEMP_DATA_CACHE.get('issues', [])
+    elif not issues_data:
+        issues_data = TEMP_DATA_CACHE if isinstance(TEMP_DATA_CACHE, list) else []
+    
+    # Get the Minutes object (should already exist from upload_minutes)
+    if minutes_id:
+        try:
+            minute_obj = Minutes.objects.get(id=minutes_id)
+        except Minutes.DoesNotExist:
+            return Response({"error": "Minutes record not found. Please upload file again."}, status=400)
+    else:
+        # Fallback: Create a new one if somehow not found (shouldn't happen)
+        u_by = User.objects.filter(role='DPO').first()
+        if not u_by:
+            u_by = User.objects.first()
+        if not u_by:
+            u_by = User.objects.create_user(username='dpo', password='dpo', role='DPO')
+        
+        minute_obj = Minutes.objects.create(
+            title="Uploaded Minutes", 
+            meeting_date=timezone.now(), 
+            uploaded_by=u_by, 
+            file_path="unknown"
+        )
     
     dept_counts = {}
 
@@ -209,17 +324,8 @@ def allocate_all(request):
             
             dept_counts[dept] = dept_counts.get(dept, 0) + 1
             
-            d_str = item.get('deadline')
-            d_date = None
-            if d_str:
-                try: 
-                    d_date = datetime.strptime(str(d_str), '%d-%m-%Y').date()
-                except: 
-                    d_date = None
-            
-            # Default to 7 days if date missing
-            if d_date is None:
-                d_date = date.today() + timedelta(days=7) 
+            # Always set deadline to 14 days from today (ignore any deadline from PDF)
+            d_date = date.today() + timedelta(days=14)
 
             IssueDepartment.objects.create(
                 issue=issue, 
@@ -507,3 +613,83 @@ def send_overdue_alerts(request):
         "success": True,
         "sent_count": sent_count
     })
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_minutes(request):
+    """Fetch all uploaded minutes - accessible to DPO and Department users"""
+    # Allow both DPO and department users to view
+    if request.user.role.lower() not in ['dpo', 'department']:
+        return Response({"error": "Unauthorized to view minutes"}, status=403)
+    
+    minutes = Minutes.objects.all().order_by('-created_at')
+    
+    minutes_data = []
+    for m in minutes:
+        # Convert FieldFile to string
+        file_path_str = str(m.file_path) if m.file_path else None
+        
+        # file_path is already a full URL if from Supabase, or a local path if not
+        file_url = file_path_str
+        if file_url and not file_url.startswith('http'):
+            # Local file - add /media/ prefix
+            file_url = f"/media/{file_url}"
+        
+        # Extract original filename from the file path
+        # For Supabase files: "public/uuid_filename.pdf" -> "filename.pdf"
+        # For local files: "media/minutes/filename.pdf" -> "filename.pdf"
+        original_filename = file_path_str
+        if original_filename and '_' in original_filename:
+            # Extract filename after UUID prefix
+            original_filename = original_filename.split('_', 1)[1]
+        elif original_filename:
+            # Extract just the filename from path
+            original_filename = original_filename.split('/')[-1]
+        
+        minutes_data.append({
+            'id': m.id,
+            'title': m.title,
+            'originalFileName': original_filename,
+            'uploadedDate': m.created_at.isoformat(),
+            'meetingDate': m.meeting_date.isoformat() if m.meeting_date else None,
+            'fileUrl': file_url,
+            'uploadedBy': m.uploaded_by.username if m.uploaded_by else 'Unknown'
+        })
+    
+    return Response(minutes_data)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_minutes(request, minutes_id):
+    """Delete a Minutes record"""
+    if request.user.role.lower() != 'dpo':
+        return Response({"error": "Only DPO can delete minutes"}, status=403)
+    
+    try:
+        minute = Minutes.objects.get(id=minutes_id)
+        
+        # Get original filename for response
+        file_path_str = str(minute.file_path) if minute.file_path else "Unknown"
+        original_filename = file_path_str
+        if original_filename and '_' in original_filename:
+            original_filename = original_filename.split('_', 1)[1]
+        elif original_filename:
+            original_filename = original_filename.split('/')[-1]
+        
+        print(f"🗑️  Deleting Minutes: {original_filename} (ID: {minutes_id})")
+        
+        # Delete the minute and associated issues
+        minute.delete()
+        
+        return Response({
+            "success": True,
+            "message": f"Deleted: {original_filename}"
+        })
+    
+    except Minutes.DoesNotExist:
+        return Response({"error": "Minutes record not found"}, status=404)
+    except Exception as e:
+        print(f"❌ Error deleting minutes: {e}")
+        return Response({"error": str(e)}, status=500)
