@@ -6,6 +6,7 @@ import DepartmentResponsePage from "./pages/DepartmentPage/DepartmentResponsePag
 import CollectorIssuePage from "./pages/CollectorPage/CollectorIssuePage.jsx";
 import DPONotificationsPage from "./pages/DPOPage/NotificationPage.jsx";
 import DPOMinutesPage from "./pages/DPOPage/DPOMinutesPage.jsx"
+import DepartmentMinutesPage from "./pages/DepartmentPage/DepartmentMinutesPage.jsx"
 import DepartmentNotificationPage from "./pages/DepartmentPage/NotificationPage.jsx";
 import CollectorNotificationPage from "./pages/CollectorPage/NotificationPage.jsx";
 import CollectorMinutesPage from "./pages/CollectorPage/CollectorMinutesPage.jsx"
@@ -26,6 +27,7 @@ function App() {
         <Route path="/dpo/notifications" element={<DPONotificationsPage />} />
         <Route path="/dpo/minutes" element={<DPOMinutesPage />} />
         <Route path="/department/:dept" element={<DepartmentResponsePage />} />
+        <Route path="/department/:dept/minutes" element={<DepartmentMinutesPage />} />
         <Route path="/department/notifications" element={<DepartmentNotificationPage />} />
         <Route path="/collector" element={<CollectorIssuePage />} />
         <Route path="/collector/notifications" element={<CollectorNotificationPage />} />

@@ -47,6 +47,11 @@ function Header() {
       </div>
 
       <div className="dept-header-icons" ref={dropdownRef}>
+        {/* Minutes */}
+        <Link to={`/department/${localStorage.getItem("department")}/minutes`} title="View Minutes">
+          <span className="dept-icon minutes">📄</span>
+        </Link>
+
         {/* Notifications */}
         <Link to="/department/notifications">
           <NotificationsIcon className="dept-icon bell" />
