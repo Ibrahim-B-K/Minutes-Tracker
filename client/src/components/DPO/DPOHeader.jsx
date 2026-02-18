@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./DPOHeader.css";
-
+import HomeIcon from "@mui/icons-material/Home";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import LogoutIcon from "@mui/icons-material/Logout";
 import BusinessIcon from "@mui/icons-material/Business";
@@ -9,7 +9,7 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import DescriptionIcon from "@mui/icons-material/Description";
 import DriveFolderUploadSharpIcon from "@mui/icons-material/DriveFolderUploadSharp";
 
-import { Link, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import api from "../../api/axios";
 
 function Header() {
@@ -103,18 +103,21 @@ function Header() {
         </div>
 
         <div className="dpo-header-icons" ref={dropdownRef}>
-          <Link to="/dpo/upload">
-            <DriveFolderUploadSharpIcon className="dpo-icon upload" />
-          </Link>
+          <NavLink to="/dpo/home" className="dpo-nav-link">
+  <HomeIcon className="dpo-icon home" />
+</NavLink>
 
-          <Link to="/dpo/minutes">
-            <DescriptionIcon className="dpo-icon minutes" />
-          </Link>
+<NavLink to="/dpo/upload" className="dpo-nav-link">
+  <DriveFolderUploadSharpIcon className="dpo-icon upload" />
+</NavLink>
 
-          <Link to="/dpo/notifications">
-            <NotificationsIcon className="dpo-icon bell" />
-          </Link>
+<NavLink to="/dpo/minutes" className="dpo-nav-link">
+  <DescriptionIcon className="dpo-icon minutes" />
+</NavLink>
 
+<NavLink to="/dpo/notifications" className="dpo-nav-link">
+  <NotificationsIcon className="dpo-icon bell" />
+</NavLink>
           <div
             className="dpo-icon profile"
             onClick={() => setOpen((prev) => !prev)}
@@ -132,7 +135,7 @@ function Header() {
                 }}
               >
                 <BusinessIcon className="dpo-adddept-icon" />
-                Add Dept
+                Add User
               </button>
 
               <button

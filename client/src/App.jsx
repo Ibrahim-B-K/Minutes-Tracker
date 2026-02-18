@@ -4,10 +4,10 @@ import UploadPage from "./pages/DPOPage/UploadPage.jsx";
 import DPOIssuePage from "./pages/DPOPage/DPOIssuePage.jsx";
 import DepartmentResponsePage from "./pages/DepartmentPage/DepartmentResponsePage.jsx";
 import CollectorIssuePage from "./pages/CollectorPage/CollectorIssuePage.jsx";
-import DPONotificationsPage from "./pages/DPOPage/NotificationPage.jsx";
+import DPONotificationsPage from "./pages/DPOPage/DPONotificationPage.jsx";
 import DPOMinutesPage from "./pages/DPOPage/DPOMinutesPage.jsx"
 import DepartmentMinutesPage from "./pages/DepartmentPage/DepartmentMinutesPage.jsx"
-import DepartmentNotificationPage from "./pages/DepartmentPage/NotificationPage.jsx";
+import DepartmentNotificationPage from "./pages/DepartmentPage/DepartmentNotificationPage.jsx";
 import CollectorNotificationPage from "./pages/CollectorPage/NotificationPage.jsx";
 import CollectorMinutesPage from "./pages/CollectorPage/CollectorMinutesPage.jsx"
 import Login from "./pages/LoginPage.jsx";
@@ -21,7 +21,7 @@ function App() {
         <Route path="/" element={<Navigate to="/login" />} />
         {/* DPO Page */}
         <Route path="/login" element={<Login />} />
-        <Route path="/dpo" element={<DPOIssuePage />} />
+        <Route path="/dpo/home" element={<DPOIssuePage />} />
         {/* Upload Page */}
         <Route path="/dpo/upload" element={<UploadPage />} />
         <Route path="/dpo/notifications" element={<DPONotificationsPage />} />

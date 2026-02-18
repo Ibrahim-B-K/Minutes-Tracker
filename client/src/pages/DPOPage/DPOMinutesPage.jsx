@@ -109,7 +109,7 @@ function DPOMinutesPage() {
       <DPOHeader />
 
       <div className="minutes-page-content">
-        <h1 className="page-title">📄 Meeting Minutes</h1>
+        <h1 className="page-title">Meeting Minutes</h1>
 
         {error && <div className="error-message">{error}</div>}
 

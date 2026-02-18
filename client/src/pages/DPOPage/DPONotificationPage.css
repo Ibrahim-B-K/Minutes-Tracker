@@ -1,11 +1,11 @@
-.notificationpage-container {
+.DPO-notificationpage-container {
   width: 100%;
   height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-.notificationpage-content {
+.DPO-notificationpage-content {
   padding: 20px 70px;
   flex: 1;
   display: flex;
@@ -13,14 +13,14 @@
   overflow: hidden; /* Prevent page scroll, keep list scroll */
 }
 
-.notification-header h1 {
+.DPO-notification-header h1 {
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 20px;
   color: #111;
 }
 
-.notification-list {
+.DPO-notification-list {
   background: #ffffff;
   border-radius: 12px;
   padding: 20px;
@@ -37,46 +37,41 @@
 }
 
 /* Scrollbar styling */
-.notification-list::-webkit-scrollbar {
+.DPO-notification-list::-webkit-scrollbar {
   width: 8px;
 }
-.notification-list::-webkit-scrollbar-thumb {
+.DPO-notification-list::-webkit-scrollbar-thumb {
   background: #cbd5e1;
   border-radius: 6px;
 }
 
-.notification-card {
+.DPO-notification-card {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 5px;
   border-left: 5px solid transparent;
   background: #f9fafb;
-  padding: 15px;
   border-radius: 10px;
   border: 1px solid #e5e7eb;
   transition: all 0.2s ease;
   min-height: 80px; /* Ensure consistency */
 }
 
-.notification-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-}
 
-.notification-card.assign { border-left-color: #22c55e; }
-.notification-card.response { border-left-color: #3b82f6; }
-.notification-card.deadline { border-left-color: #ef4444; }
+.DPO-notification-card.assign { border-left-color: #22c55e; }
+.DPO-notification-card.response { border-left-color: #3b82f6; }
+.DPO-notification-card.deadline { border-left-color: #ef4444; }
 
-.notification-icon span {
+.DPO-notification-icon span {
   font-size: 1.8rem;
 }
 
-.notification-content {
-  flex: 1;
+.DPO-notification-content {
+  
 }
 
-.notification-content h3 {
-  font-size: 0.9rem;
+.DPO-notification-content h3 {
+  font-size: 0.95rem;
   font-weight: 700;
   color: #111827;
   margin: 0 0 4px;
@@ -84,14 +79,14 @@
   letter-spacing: 0.5px;
 }
 
-.notification-content p {
-  font-size: 0.95rem;
+.DPO-notification-content p {
+  font-size: 0.9rem;
   color: #4b5563;
   margin: 0;
   line-height: 1.4;
 }
 
-.notification-content .time {
+.DPO-notification-content .DPO-time {
   display: block;
   font-size: 0.8rem;
   color: #9ca3af;
@@ -99,7 +94,7 @@
   font-style: italic;
 }
 
-.no-notifications {
+.DPO-no-notifications {
   text-align: center;
   padding: 50px 0;
   color: #6b7280;

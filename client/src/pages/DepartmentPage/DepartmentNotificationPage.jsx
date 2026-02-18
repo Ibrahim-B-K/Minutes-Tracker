@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 // import axios from "axios";
-import DPOHeader from "../../components/DPO/DPOHeader";
-import "./NotificationPage.css";
+import DepartmentHeader from "../../components/Department/DepartmentHeader";
+import "./DepartmentNotificationPage.css";
 import api from "../../api/axios";
 
-function DPONotificationPage() {
+function DepartmentNotificationPage() {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -28,7 +28,7 @@ function DPONotificationPage() {
 
   return (
     <div className="notificationpage-container">
-      <DPOHeader activeTab="notifications" />
+      <DepartmentHeader activeTab="notifications" />
 
       <div className="notificationpage-content">
         <div className="notification-header">
@@ -46,9 +46,9 @@ function DPONotificationPage() {
               return (
                 <div key={note.id} className={`notification-card ${safeType}`}>
                   <div className="notification-icon">
-                    {safeType === "response" && <span>📩</span>}
                     {safeType === "assign" && <span>📝</span>}
                     {safeType === "deadline" && <span>⏰</span>}
+                    {safeType === "response" && <span>📩</span>}
                     {safeType === "general" && <span>🔔</span>}
                   </div>
 
@@ -67,4 +67,4 @@ function DPONotificationPage() {
   );
 }
 
-export default DPONotificationPage;
+export default DepartmentNotificationPage;

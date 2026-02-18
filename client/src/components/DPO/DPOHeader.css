@@ -1,3 +1,27 @@
+/* NavLink wrapper */
+.dpo-nav-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Active icon pop */
+.dpo-nav-link.active .dpo-icon {
+  transform: scale(1.15);
+}
+
+/* Underline */
+.dpo-nav-link.active::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 3px;
+  background: #2563eb;
+  border-radius: 4px;
+}
 .dpo-header {
   display: flex;
   justify-content: space-between;
@@ -31,6 +55,20 @@
 }
 
 /* standard icon container */
+
+.dpo-icon.home {
+  background: white;
+  color: #2563eb;
+  font-size: 20px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
 
 
 .dpo-icon.bell {
@@ -125,9 +163,8 @@
 .dpo-icon.minutes {
   background: white;
   color: #2563eb;
-  font-size: 20px;
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -135,6 +172,7 @@
   cursor: pointer;
   transition: transform 0.15s ease;
 }
+
 
 .dpo-icon.upload {
   background: white;

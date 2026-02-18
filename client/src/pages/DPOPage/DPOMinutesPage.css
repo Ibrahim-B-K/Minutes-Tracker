@@ -6,7 +6,7 @@
 }
 
 .dpo-container .minutes-page-content {
-  padding: 20px;
+  padding: 10px 70px;
 }
 
 /* Loading State */
@@ -74,7 +74,6 @@
 .dpo-container .minutes-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 20px;
 }
 
 /* Card Styling */
@@ -87,10 +86,7 @@
   border: 1px solid #e5e7eb;
 }
 
-.dpo-container .minutes-card:hover {
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
-  transform: translateY(-2px);
-}
+
 
 /* Card Header */
 .dpo-container .card-header {
