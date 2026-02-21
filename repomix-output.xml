@@ -67,6 +67,7 @@ backend/backend/urls.py
 backend/backend/wsgi.py
 backend/fix_db.py
 backend/fix_wsgi.py
+backend/font/NotoSansMalayalam-Regular.ttf
 backend/manage.py
 backend/media/minutes/DDC MINUTES 1-03-2025 Final.pdf
 backend/media/minutes/DDC MINUTES 26.07.2025.pdf
@@ -473,14 +474,15 @@ if __name__ == '__main__':
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "axios": "^1.6.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.20.0",
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.15.0",
     "@mui/material": "^5.15.0",
-    "@emotion/react": "^11.11.0",
-    "@emotion/styled": "^11.11.0"
+    "axios": "^1.6.0",
+    "html2pdf.js": "^0.14.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.20.0"
   },
   "scripts": {
     "dev": "vite",
@@ -489,7 +491,7 @@ if __name__ == '__main__':
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.2.0",
-    "vite": "^5.0.0"
+    "vite": "^7.3.1"
   }
 }
 </file>
@@ -7102,6 +7104,7 @@ export default function GenerateReports({ isOpen, onClose }) {
 
 <file path="client/src/components/DPO/IssuePage/DPOGenerateReports.jsx">
 import React, { useState, useEffect, useCallback } from "react";
+import html2pdf from "html2pdf.js";
 import "./DPOGenerateReports.css";
 import DPOGenerateReportCard from "./DPOGenerateReportCard";
 import EmptyStateCard from "../../common/EmptyStateCard";
@@ -7115,14 +7118,41 @@ export default function GenerateReports({ isOpen, onClose }) {
   const [loadingReports, setLoadingReports] = useState(false);
 
   const handleDownload = async () => {
+    // ==========================================
+    // FRONTEND PDF GENERATION (Perfect Malayalam)
+    // ==========================================
+    if (format === "pdf") {
+      const element = document.getElementById("pdf-presentation-content");
+      
+      const opt = {
+        margin: 0,
+        filename: "DDC_Presentation.pdf",
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: "in", format: "a4", orientation: "landscape" },
+        pagebreak: { mode: 'legacy' } // <--- THIS FIXES THE BLANK PAGE ISSUE
+      };
+
+      html2pdf().set(opt).from(element).save();
+      onClose();
+      return;
+    }
+    // ==========================================
+    // BACKEND EXCEL GENERATION
+    // ==========================================
     try {
-      // 1. Request the blob (file) from backend
-      // Note: We don't need to send 'reports' body anymore, the backend fetches fresh data.
+      const payload = {
+        format: "excel",
+        reports: reports, 
+      };
+
       const response = await fetch(`${api.defaults.baseURL}/generate-report`, {
         method: "POST",
         headers: {
-          "Authorization": `Token ${getAuthValue("token")}`, // Auth is important!
+          Authorization: `Token ${getAuthValue("token")}`,
+          "Content-Type": "application/json",
         },
+        body: JSON.stringify(payload)
       });
 
       if (!response.ok) {
@@ -7130,20 +7160,17 @@ export default function GenerateReports({ isOpen, onClose }) {
         return;
       }
 
-      // 2. Convert response to a downloadable file
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "Follow_Up_Report.xlsx"; // The file name
+      a.download = "Follow_Up_Report.xlsx";
       document.body.appendChild(a);
       a.click();
 
-      // 3. Cleanup
       a.remove();
       window.URL.revokeObjectURL(url);
       onClose();
-
     } catch (err) {
       console.error("Download error:", err);
       alert("Error downloading file.");
@@ -7163,7 +7190,6 @@ export default function GenerateReports({ isOpen, onClose }) {
           return ["received", "submitted", "completed"].includes(status);
         });
 
-        // Normalize modal card shape and flatten response objects to readable text
         const normalized = receivedLike.map((issue) => ({
           id: issue.id,
           issue_no: issue.issue_no,
@@ -7198,61 +7224,96 @@ export default function GenerateReports({ isOpen, onClose }) {
   if (!isOpen) return null;
 
   return (
-    <div className="dpo-modal-overlay">
-      <div
-        className="dpo-generate-reports-container"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="dpo-generate-header">
-          <div className="dpo-format-toggle">
-            <button
-              className={`dpo-format-btn ${format === "pdf" ? "dpo-active" : ""}`}
-              onClick={() => setFormat("pdf")}
-            >
-              PDF
-            </button>
-            <button
-              className={`dpo-format-btn ${format === "excel" ? "dpo-active" : ""}`}
-              onClick={() => setFormat("excel")}
-            >
-              Excel
-            </button>
+    <>
+      <div className="dpo-modal-overlay">
+        <div className="dpo-generate-reports-container" onClick={(e) => e.stopPropagation()}>
+          <div className="dpo-generate-header">
+            <div className="dpo-format-toggle">
+              <button
+                className={`dpo-format-btn ${format === "pdf" ? "dpo-active" : ""}`}
+                onClick={() => setFormat("pdf")}
+              >
+                PDF
+              </button>
+              <button
+                className={`dpo-format-btn ${format === "excel" ? "dpo-active" : ""}`}
+                onClick={() => setFormat("excel")}
+              >
+                Excel
+              </button>
+            </div>
+            <button className="dpo-close" onClick={onClose}>&times;</button>
           </div>
 
-          <button className="dpo-close" onClick={onClose}>
-            &times;
-          </button>
-        </div>
+          <div className="dpo-report-list">
+            {loadingReports ? (
+              <LoadingState compact text="Loading received issues..." />
+            ) : reports.length === 0 ? (
+              <EmptyStateCard compact title="No received issues" description="Received issues will appear here for report generation." />
+            ) : (
+              reports.map((report, index) => (
+                <DPOGenerateReportCard
+                  key={report.id || index}
+                  report={report}
+                  index={index}
+                  handleChange={handleChange}
+                  removeCard={removeCard}
+                />
+              ))
+            )}
+          </div>
 
-        <div className="dpo-report-list">
-          {loadingReports ? (
-            <LoadingState compact text="Loading received issues..." />
-          ) : reports.length === 0 ? (
-            <EmptyStateCard
-              compact
-              title="No received issues"
-              description="Received issues will appear here for report generation."
-            />
-          ) : (
-            reports.map((report, index) => (
-              <DPOGenerateReportCard
-                key={report.id || index}
-                report={report}
-                index={index}
-                handleChange={handleChange}
-                removeCard={removeCard}
-              />
-            ))
-          )}
-        </div>
-
-        <div className="dpo-download-section">
-          <button className="dpo-generate-download-btn" onClick={handleDownload}>
-            Download Report
-          </button>
+          <div className="dpo-download-section">
+            <button className="dpo-generate-download-btn" onClick={handleDownload}>
+              Download Report
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+
+      {/* ===============================================================
+          HIDDEN PDF TEMPLATE (This renders off-screen for html2pdf)
+          =============================================================== */}
+      <div style={{ position: "absolute", left: "-9999px", top: "-9999px" }}>
+        <div id="pdf-presentation-content" style={{ width: "1122px", fontFamily: "sans-serif" }}>
+          {reports.map((report, index) => (
+            <React.Fragment key={index}>
+              {/* SLIDE 1: THE ISSUE */}
+              <div style={{ width: "100%", height: "785px", padding: "60px", backgroundColor: "white", position: "relative", boxSizing: "border-box" }}>
+                <div style={{ backgroundColor: "#1e3a8a", color: "white", padding: "12px 24px", fontSize: "28px", fontWeight: "bold", marginBottom: "40px", display: "inline-block" }}>
+                  Issue: {report.issue_no}
+                </div>
+                <div style={{ fontSize: "32px", lineHeight: "1.6", color: "#000" }}>
+                  {report.issue}
+                </div>
+                {/* Department tag at bottom right */}
+                <div style={{ position: "absolute", bottom: "60px", right: "60px", color: "#dc2626", fontSize: "28px", fontWeight: "bold" }}>
+                  {report.department}
+                </div>
+              </div>
+
+              {/* Force Page Break Between Issue and Response using html2pdf class */}
+              <div className="html2pdf__page-break"></div>
+
+              {/* SLIDE 2: THE RESPONSE */}
+              <div style={{ width: "100%", height: "785px", padding: "60px", backgroundColor: "white", position: "relative", boxSizing: "border-box" }}>
+                <div style={{ backgroundColor: "#0284c7", color: "white", padding: "12px 24px", fontSize: "28px", fontWeight: "bold", marginBottom: "40px", display: "inline-block" }}>
+                  നിലവിലെ അവസ്ഥ / Action Taken
+                </div>
+                <div style={{ fontSize: "30px", lineHeight: "1.6", color: "#000", whiteSpace: "pre-wrap" }}>
+                  {report.response || "No response yet."}
+                </div>
+              </div>
+
+              {/* Force Page Break Before Next Issue (Except for the very last slide) */}
+              {index !== reports.length - 1 && (
+                <div className="html2pdf__page-break"></div>
+              )}
+            </React.Fragment>
+          ))}
+        </div>
+      </div>
+    </>
   );
 }
 </file>
@@ -8733,6 +8794,7 @@ typing_extensions==4.15.0
 tzdata==2025.3
 uritemplate==4.2.0
 urllib3==2.6.2
+reportlab
 </file>
 
 <file path="client/src/components/Collector/CollectorHeader.css">
@@ -12358,6 +12420,13 @@ from .serializers import IssueDepartmentSerializer, NotificationSerializer, DPOI
 from .gemini_utils import analyze_document_with_gemini
 import os
 from datetime import datetime, date, timedelta
+import io
+from reportlab.lib.pagesizes import landscape, A4
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, PageBreak
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib import colors
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 
 # ================= SUPABASE STORAGE CONFIG ================= #
 SUPABASE_URL = os.getenv('SUPABASE_URL', '')
@@ -12828,122 +12897,164 @@ def test_view(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def generate_report(request):
-    # 1. Fetch only 'Submitted'/'Received' issues
-    items = IssueDepartment.objects.filter(
-        status__in=['submitted', 'received', 'completed']
-    ).select_related('issue', 'issue__minutes', 'department').prefetch_related('responses')
+    # 1. Parse request data sent from the frontend modal
+    req_format = request.data.get('format', 'excel')
+    reports_data = request.data.get('reports', [])
 
-    # 2. Group by Issue ID
-    # Structure: { issue_id: { 'issue_obj': issue, 'depts': [], 'responses': [] } }
-    grouped_data = defaultdict(lambda: {'issue': None, 'depts': [], 'responses': []})
+    # Fallback just in case no data was sent (backward compatibility)
+    if not reports_data:
+        return Response({"error": "No report data provided."}, status=400)
 
-    for item in items:
-        # Initialize the issue object if not set
-        if grouped_data[item.issue.id]['issue'] is None:
-            grouped_data[item.issue.id]['issue'] = item.issue
+    # ==========================================
+    #             PDF GENERATION
+    # ==========================================
+    if req_format == 'pdf':
+        buffer = io.BytesIO()
+        # Set to Landscape A4 for TV Presentation
+        doc = SimpleDocTemplate(buffer, pagesize=landscape(A4), rightMargin=40, leftMargin=40, topMargin=40, bottomMargin=40)
+        elements = []
+        styles = getSampleStyleSheet()
         
-        # Add Department Name
-        grouped_data[item.issue.id]['depts'].append(item.department.dept_name)
+        # --- REGISTER MALAYALAM FONT ---
+        import os
+        from django.conf import settings
         
-        # Add Response with Dept Prefix
-        last_response = item.responses.last()
-        resp_text = last_response.response_text if last_response else "No status update."
-        formatted_response = f"[{item.department.dept_name}]: {resp_text}"
-        grouped_data[item.issue.id]['responses'].append(formatted_response)
-
-    # 3. Create Workbook
-    wb = openpyxl.Workbook()
-    ws = wb.active
-    ws.title = "Follow Up Report"
-
-    # Define Styles
-    header_font = Font(bold=True, size=11, name='Calibri')
-    center_align = Alignment(horizontal='center', vertical='center', wrap_text=True)
-    content_align = Alignment(horizontal='left', vertical='center', wrap_text=True, indent=1)
-    thin_border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
-
-    # Set Column Widths (Adjusted for better readability and padding)
-    ws.column_dimensions['A'].width = 10  # Sl No
-    ws.column_dimensions['B'].width = 40  # Date & Subject
-    ws.column_dimensions['C'].width = 30  # Depts
-    ws.column_dimensions['D'].width = 80  # Description
-    ws.column_dimensions['E'].width = 60  # Responses
-
-    # Create headers
-    headers = [
-        "ക്രമ നമ്പർ", 
-        "ഉന്നയിച്ച തീയതി & വകുപ്പ്/വിഷയം", 
-        "നടപടി സ്വീകരിക്കേണ്ട ഉദ്യോഗസ്ഥൻ",
-        "മുൻ യോഗത്തിൽ ചർച്ച ചെയ്തതും യോഗ നിർദ്ദേശവും", 
-        "നിലവിലെ സ്റ്റാറ്റസ്"
-    ]
-    
-    # 3.5. Determine Meeting Date for Header
-    meeting_date_str = timezone.now().strftime("%d-%m-%Y")
-    for item in items:
-        if item.issue and item.issue.minutes and item.issue.minutes.meeting_date:
-            meeting_date_str = item.issue.minutes.meeting_date.strftime("%d-%m-%Y")
-            break
-
-    # Main Header Row
-    ws.merge_cells('A1:E1')
-    main_header = ws['A1']
-    main_header.value = f"{meeting_date_str} -ന് ചേർന്ന ജില്ലാ വികസന സമിതി യോഗത്തിന്റെ തുടർ നടപടി റിപ്പോർട്ട്"
-    main_header.font = Font(bold=True, size=12, name='Calibri')
-    main_header.alignment = Alignment(horizontal='center', vertical='center')
-    main_header.border = thin_border
-    ws.row_dimensions[1].height = 30
-
-    # Table Headers (now on row 2)
-    ws.append(headers)
-
-    # Apply Table Header Style
-    for cell in ws[2]:
-        cell.font = header_font
-        cell.alignment = center_align
-        cell.border = thin_border
-        ws.row_dimensions[2].height = 45
-
-    # 4. Write Grouped Data to Excel
-    for index, (issue_id, data) in enumerate(grouped_data.items(), start=1):
-        issue = data['issue']
+        # Adjust path if you placed the font somewhere else
+        font_path = os.path.join(settings.BASE_DIR, 'font', 'NotoSansMalayalam-Regular.ttf') 
         
-        # Join Departments with newlines
-        dept_str = "\n".join(data['depts'])
+        try:
+            pdfmetrics.registerFont(TTFont('MalayalamFont', font_path))
+            font_name = 'MalayalamFont'
+        except Exception as e:
+            print(f"Font loading error: {e}")
+            font_name = 'Helvetica' # Fallback if font isn't found
+
+        # Presentation Styles
+        issue_no_style = ParagraphStyle(
+            'IssueNo', parent=styles['Normal'], fontName=font_name, fontSize=18,
+            textColor=colors.white, backColor=colors.HexColor('#1E3A8A'),
+            borderPadding=8, spaceAfter=20
+        )
+        issue_text_style = ParagraphStyle(
+            'IssueText', parent=styles['Normal'], fontName=font_name, fontSize=24,
+            leading=34, spaceAfter=40
+        )
+        dept_style = ParagraphStyle(
+            'DeptText', parent=styles['Normal'], fontName=font_name, fontSize=18,
+            textColor=colors.red, alignment=2 # 2 = Right aligned
+        )
+        response_header_style = ParagraphStyle(
+            'ResponseHeader', parent=styles['Normal'], fontName=font_name, fontSize=22,
+            textColor=colors.white, backColor=colors.HexColor('#0284c7'), # Lighter blue
+            borderPadding=10, spaceAfter=20
+        )
+        response_text_style = ParagraphStyle(
+            'ResponseText', parent=styles['Normal'], fontName=font_name, fontSize=22,
+            leading=32, spaceAfter=20
+        )
+
+        for report in reports_data:
+            # --- SLIDE 1: THE ISSUE ---
+            issue_title = report.get('issue_no', 'Unknown Issue')
+            elements.append(Paragraph(f"Issue: {issue_title}", issue_no_style))
+            
+            issue_desc = report.get('issue', '')
+            elements.append(Paragraph(issue_desc, issue_text_style))
+            
+            dept_name = report.get('department', '')
+            elements.append(Paragraph(f"{dept_name}", dept_style))
+            
+            # --- SLIDE 2: THE RESPONSE ---
+            elements.append(PageBreak()) 
+            
+            elements.append(Paragraph("നിലവിലെ അവസ്ഥ / Action Taken", response_header_style))
+            
+            response_text = report.get('response', 'No response yet')
+            # Split response by newlines so it formats nicely
+            for para in response_text.split('\n'):
+                if para.strip():
+                    elements.append(Paragraph(para.strip(), response_text_style))
+                    elements.append(Spacer(1, 10))
+
+            # Move to next issue
+            elements.append(PageBreak())
+
+        doc.build(elements)
+        pdf = buffer.getvalue()
+        buffer.close()
         
-        # Join Responses with double newlines for readability
-        response_str = "\n\n".join(data['responses'])
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="DDC_Presentation.pdf"'
+        response.write(pdf)
+        return response
 
-        # Format Date
-        meeting_date = ""
-        if issue.minutes and issue.minutes.meeting_date:
-            meeting_date = issue.minutes.meeting_date.strftime("%d-%m-%Y")
+    # ==========================================
+    #            EXCEL GENERATION
+    # ==========================================
+    else:
+        wb = openpyxl.Workbook()
+        ws = wb.active
+        ws.title = "Follow Up Report"
 
-        subject_col_text = f"തീയതി: {meeting_date}\n\n{issue.issue_title}"
+        header_font = Font(bold=True, size=11, name='Calibri')
+        center_align = Alignment(horizontal='center', vertical='center', wrap_text=True)
+        content_align = Alignment(horizontal='left', vertical='center', wrap_text=True, indent=1)
+        thin_border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
 
-        row_data = [
-            index,                  # Sl No
-            subject_col_text,       # Date & Subject
-            dept_str,               # Departments (Combined)
-            issue.issue_description,# Description
-            response_str            # Responses (Combined)
+        ws.column_dimensions['A'].width = 10  
+        ws.column_dimensions['B'].width = 40  
+        ws.column_dimensions['C'].width = 30  
+        ws.column_dimensions['D'].width = 80  
+        ws.column_dimensions['E'].width = 60  
+
+        headers = [
+            "ക്രമ നമ്പർ", 
+            "ഉന്നയിച്ച തീയതി & വകുപ്പ്/വിഷയം", 
+            "നടപടി സ്വീകരിക്കേണ്ട ഉദ്യോഗസ്ഥൻ",
+            "മുൻ യോഗത്തിൽ ചർച്ച ചെയ്തതും യോഗ നിർദ്ദേശവും", 
+            "നിലവിലെ സ്റ്റാറ്റസ്"
         ]
         
-        ws.append(row_data)
+        meeting_date_str = timezone.now().strftime("%d-%m-%Y")
 
-        # Apply Styling
-        current_row = ws.max_row
-        for cell in ws[current_row]:
-            cell.alignment = content_align
+        ws.merge_cells('A1:E1')
+        main_header = ws['A1']
+        main_header.value = f"{meeting_date_str} -ന് ചേർന്ന ജില്ലാ വികസന സമിതി യോഗത്തിന്റെ തുടർ നടപടി റിപ്പോർട്ട്"
+        main_header.font = Font(bold=True, size=12, name='Calibri')
+        main_header.alignment = Alignment(horizontal='center', vertical='center')
+        main_header.border = thin_border
+        ws.row_dimensions[1].height = 30
+
+        ws.append(headers)
+
+        for cell in ws[2]:
+            cell.font = header_font
+            cell.alignment = center_align
             cell.border = thin_border
+            ws.row_dimensions[2].height = 45
 
-    # 5. Return File
-    response = HttpResponse(
-        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    )
-    response['Content-Disposition'] = 'attachment; filename="Follow_Up_Report.xlsx"'
-    wb.save(response)
-    return response
+        # Populate Excel with the EDITED data from the frontend
+        for index, report in enumerate(reports_data, start=1):
+            subject_col_text = f"തീയതി: {meeting_date_str}\n\n{report.get('issue_no', '')}"
+
+            row_data = [
+                index,
+                subject_col_text,
+                report.get('department', ''),
+                report.get('issue', ''),
+                report.get('response', '')
+            ]
+            ws.append(row_data)
+
+            current_row = ws.max_row
+            for cell in ws[current_row]:
+                cell.alignment = content_align
+                cell.border = thin_border
+
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename="Follow_Up_Report.xlsx"'
+        wb.save(response)
+        return response
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -12964,7 +13075,7 @@ def send_overdue_alerts(request):
 def get_minutes(request):
     """Fetch all uploaded minutes - accessible to DPO and Department users"""
     # Allow both DPO and department users to view
-    if request.user.role.lower() not in ['dpo', 'department']:
+    if request.user.role.lower() not in ['dpo', 'department', 'collector']:
         return Response({"error": "Unauthorized to view minutes"}, status=403)
     
     minutes = Minutes.objects.all().order_by('-created_at').prefetch_related('issues')
