@@ -640,7 +640,7 @@ def send_overdue_alerts(request):
 def get_minutes(request):
     """Fetch all uploaded minutes - accessible to DPO and Department users"""
     # Allow both DPO and department users to view
-    if request.user.role.lower() not in ['dpo', 'department']:
+    if request.user.role.lower() not in ['dpo', 'department', 'collector']:
         return Response({"error": "Unauthorized to view minutes"}, status=403)
     
     minutes = Minutes.objects.all().order_by('-created_at').prefetch_related('issues')
