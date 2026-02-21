@@ -9,6 +9,7 @@ urlpatterns = [
     path('minutes/<int:minutes_id>', views.delete_minutes),
     path('assign-issues', views.get_assign_issues),
     path('assign-issues/allocate-all', views.allocate_all),
+    path('assign-issues/allocate-single', views.allocate_single),
     path('issues', views.get_all_issues),
     path('issues/<str:dept_name>', views.get_dept_issues),
     path('submit-response', views.submit_response),
@@ -16,3 +17,4 @@ urlpatterns = [
     path('generate-report', views.generate_report),
     path('send-overdue-alerts', views.send_overdue_alerts),
 ]
+

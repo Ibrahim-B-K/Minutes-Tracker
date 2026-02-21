@@ -7,16 +7,16 @@ const GenerateReportCard = React.memo(function GenerateReportCard({
   removeCard,
 }) {
   return (
-    <div className="generate-report-card">
-      <div className="report-top">
-        <div className="report-id">{report.issue_no}</div>
-        <button className="report-delete-btn" onClick={() => removeCard(index)}>
+    <div className="dpo-generate-report-card">
+      <div className="dpo-report-top">
+        <div className="dpo-report-id">{report.issue_no}</div>
+        <button className="dpo-report-delete-btn" onClick={() => removeCard(index)}>
           🗑️
         </button>
       </div>
 
-      <div className="report-form">
-        <div className="form-field">
+      <div className="dpo-report-form">
+        <div className="dpo-form-field">
           <label>Department:</label>
           <input
             type="text"
@@ -25,7 +25,7 @@ const GenerateReportCard = React.memo(function GenerateReportCard({
           />
         </div>
 
-        <div className="form-field">
+        <div className="dpo-form-field">
           <label>Issue:</label>
           <textarea
             value={report.issue}
@@ -34,7 +34,7 @@ const GenerateReportCard = React.memo(function GenerateReportCard({
           />
         </div>
 
-        <div className="form-field">
+        <div className="dpo-form-field">
           <label>Response:</label>
           <textarea
             value={report.response || ""}
@@ -43,7 +43,7 @@ const GenerateReportCard = React.memo(function GenerateReportCard({
           />
         </div>
 
-        <div className="form-field">
+        <div className="dpo-form-field">
           <label>Location:</label>
           <input
             type="text"

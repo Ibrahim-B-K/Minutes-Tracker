@@ -162,16 +162,16 @@ def upload_minutes(request):
             # Supabase Storage REST API endpoint
             upload_url = f"{SUPABASE_URL}/storage/v1/object/{SUPABASE_BUCKET}/{encoded_file_path}"
             
-            # Use apikey header instead of Bearer token
+            # Use apikey header for Supabase Storage API
             headers = {
                 'apikey': SUPABASE_KEY,
                 'Content-Type': 'application/octet-stream'
             }
             
             print(f"📤 Uploading to Supabase: {upload_url}")
-            response = requests.post(upload_url, data=file_data, headers=headers, timeout=30)
+            response = requests.put(upload_url, data=file_data, headers=headers, timeout=30)
             
-            if response.status_code in [200, 201]:
+            if response.status_code == 200:
                 # Generate public URL for viewing/downloading
                 public_url = f"{SUPABASE_URL}/storage/v1/object/public/{SUPABASE_BUCKET}/{encoded_file_path}"
                 print(f"✅ File uploaded to Supabase successfully!")
@@ -200,7 +200,6 @@ def upload_minutes(request):
         u_by = User.objects.first()
     if not u_by:
         u_by = User.objects.create_user(username='dpo', password='dpo', role='DPO')
-    
     # Parse meeting date if provided
     try:
         if meeting_date_str:
@@ -256,59 +255,39 @@ def get_assign_issues(request):
 
 # ================= ISSUE ALLOCATION ================= #
 
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def allocate_all(request):
-    if request.user.role.lower() != 'dpo':
-        return Response({"error": "Only DPO can allocate"}, status=403)
+def _resolve_minutes_id(request):
+    request_minutes_id = request.data.get('minutes_id') or request.data.get('minutesId')
+    try:
+        minutes_id = int(request_minutes_id) if request_minutes_id not in [None, '', 'null', 'undefined'] else None
+    except (TypeError, ValueError):
+        minutes_id = None
 
-    global TEMP_DATA_CACHE
-    issues_data = request.data.get('issues', [])
-    
-    # Extract minutes_id and issues from TEMP_DATA_CACHE
-    minutes_id = None
-    if isinstance(TEMP_DATA_CACHE, dict) and 'minutes_id' in TEMP_DATA_CACHE:
-        minutes_id = TEMP_DATA_CACHE['minutes_id']
-        if not issues_data:
-            issues_data = TEMP_DATA_CACHE.get('issues', [])
-    elif not issues_data:
-        issues_data = TEMP_DATA_CACHE if isinstance(TEMP_DATA_CACHE, list) else []
-    
-    # Get the Minutes object (should already exist from upload_minutes)
-    if minutes_id:
-        try:
-            minute_obj = Minutes.objects.get(id=minutes_id)
-        except Minutes.DoesNotExist:
-            return Response({"error": "Minutes record not found. Please upload file again."}, status=400)
-    else:
-        # Fallback: Create a new one if somehow not found (shouldn't happen)
-        u_by = User.objects.filter(role='DPO').first()
-        if not u_by:
-            u_by = User.objects.first()
-        if not u_by:
-            u_by = User.objects.create_user(username='dpo', password='dpo', role='DPO')
-        
-        minute_obj = Minutes.objects.create(
-            title="Uploaded Minutes", 
-            meeting_date=timezone.now(), 
-            uploaded_by=u_by, 
-            file_path="unknown"
-        )
-    
+    if minutes_id is None and isinstance(TEMP_DATA_CACHE, dict):
+        minutes_id = TEMP_DATA_CACHE.get('minutes_id')
+
+    return minutes_id
+
+
+def _resolve_minutes_obj(minutes_id):
+    if not minutes_id:
+        return None, Response({"error": "minutes_id is required for allocation."}, status=400)
+
+    try:
+        minute_obj = Minutes.objects.get(id=minutes_id)
+        return minute_obj, None
+    except Minutes.DoesNotExist:
+        return None, Response({"error": "Minutes record not found. Please upload file again."}, status=400)
+
+
+def _create_issues_for_minutes(minute_obj, issues_data):
     dept_counts = {}
 
     for item in issues_data:
-        raw_title = item.get('issue', 'No Title') or ""
-        safe_title = str(raw_title).strip()[:200]
-
-        raw_location = item.get('location', '') or ""
-        safe_location = str(raw_location).strip()[:200]
-
         issue = Issue.objects.create(
-            minutes=minute_obj, 
+            minutes=minute_obj,
             issue_title=item.get('issue', 'No Title'),
             issue_description=item.get('issue_description', ''),
-            location=item.get('location', ''), 
+            location=item.get('location', ''),
             priority=item.get('priority', 'Medium')
         )
 
@@ -321,30 +300,71 @@ def allocate_all(request):
         for dept_name in dept_list:
             safe_dept_name = dept_name[:100]
             dept, _ = Department.objects.get_or_create(dept_name=safe_dept_name)
-            
             dept_counts[dept] = dept_counts.get(dept, 0) + 1
-            
-            # Always set deadline to 14 days from today (ignore any deadline from PDF)
-            d_date = date.today() + timedelta(days=14)
 
+            d_date = date.today() + timedelta(days=14)
             IssueDepartment.objects.create(
-                issue=issue, 
-                department=dept, 
+                issue=issue,
+                department=dept,
                 deadline_date=d_date,
-                status='pending'  # <--- FIX: MUST BE LOWERCASE 'pending'
+                status='pending'
             )
 
     for dept, count in dept_counts.items():
         users = User.objects.filter(department=dept).exclude(role__in=['DPO', 'COLLECTOR'])
         for u in users:
             Notification.objects.create(
-                user=u, 
-                issue_department=None, 
+                user=u,
+                issue_department=None,
                 message=f"ACTION REQUIRED: {count} new issues have been assigned to your department."
             )
 
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def allocate_single(request):
+    if request.user.role.lower() != 'dpo':
+        return Response({"error": "Only DPO can allocate"}, status=403)
+
+    issue_item = request.data.get('issue')
+    if not isinstance(issue_item, dict):
+        return Response({"error": "issue payload is required."}, status=400)
+
+    minutes_id = _resolve_minutes_id(request)
+    minute_obj, err = _resolve_minutes_obj(minutes_id)
+    if err:
+        return err
+
+    _create_issues_for_minutes(minute_obj, [issue_item])
+    return Response({"success": True, "allocated": 1})
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def allocate_all(request):
+    if request.user.role.lower() != 'dpo':
+        return Response({"error": "Only DPO can allocate"}, status=403)
+
+    global TEMP_DATA_CACHE
+
+    issues_data = request.data.get('issues', [])
+    if not issues_data and isinstance(TEMP_DATA_CACHE, dict):
+        issues_data = TEMP_DATA_CACHE.get('issues', [])
+    elif not issues_data and isinstance(TEMP_DATA_CACHE, list):
+        issues_data = TEMP_DATA_CACHE
+
+    if not isinstance(issues_data, list) or len(issues_data) == 0:
+        return Response({"error": "No issues provided for allocation."}, status=400)
+
+    minutes_id = _resolve_minutes_id(request)
+    minute_obj, err = _resolve_minutes_obj(minutes_id)
+    if err:
+        return err
+
+    _create_issues_for_minutes(minute_obj, issues_data)
+
     TEMP_DATA_CACHE = []
-    return Response({"success": True})
+    return Response({"success": True, "allocated": len(issues_data)})
 
 
 # ================= ISSUES ================= #
@@ -623,7 +643,7 @@ def get_minutes(request):
     if request.user.role.lower() not in ['dpo', 'department']:
         return Response({"error": "Unauthorized to view minutes"}, status=403)
     
-    minutes = Minutes.objects.all().order_by('-created_at')
+    minutes = Minutes.objects.all().order_by('-created_at').prefetch_related('issues')
     
     minutes_data = []
     for m in minutes:
@@ -654,7 +674,8 @@ def get_minutes(request):
             'uploadedDate': m.created_at.isoformat(),
             'meetingDate': m.meeting_date.isoformat() if m.meeting_date else None,
             'fileUrl': file_url,
-            'uploadedBy': m.uploaded_by.username if m.uploaded_by else 'Unknown'
+            'uploadedBy': m.uploaded_by.username if m.uploaded_by else 'Unknown',
+            'issueCount': m.issues.count()
         })
     
     return Response(minutes_data)
@@ -693,3 +714,18 @@ def delete_minutes(request, minutes_id):
     except Exception as e:
         print(f"❌ Error deleting minutes: {e}")
         return Response({"error": str(e)}, status=500)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -38,6 +38,13 @@ function DPOFilterBar({
     return `${digits.slice(0, 2)}-${digits.slice(2, 4)}-${digits.slice(4)}`;
   };
 
+  const dateKey = (value) => {
+    if (!value || typeof value !== "string") return null;
+    const [dd, mm, yyyy] = value.split("-");
+    if (!dd || !mm || !yyyy || dd.length < 2 || mm.length < 2 || yyyy.length < 4) return null;
+    return Number(`${yyyy}${mm}${dd}`);
+  };
+
   const handleFilterChange = (type, value) => {
     let updatedFilters = {
       fromDate,
@@ -51,10 +58,22 @@ function DPOFilterBar({
       const v = formatDateInput(value);
       setFromDate(v);
       updatedFilters.fromDate = v;
+      const fromK = dateKey(v);
+      const toK = dateKey(updatedFilters.toDate);
+      if (fromK && toK && fromK > toK) {
+        setToDate(v);
+        updatedFilters.toDate = v;
+      }
     } else if (type === "toDate") {
       const v = formatDateInput(value);
       setToDate(v);
       updatedFilters.toDate = v;
+      const fromK = dateKey(updatedFilters.fromDate);
+      const toK = dateKey(v);
+      if (fromK && toK && toK < fromK) {
+        setFromDate(v);
+        updatedFilters.fromDate = v;
+      }
     } else if (type === "filterBy") {
       setFilterBy(value);
       updatedFilters.filterBy = value;
@@ -95,10 +114,10 @@ function DPOFilterBar({
   };
 
   return (
-    <div className="filter-bar">
+    <div className="dpo-filter-bar">
       {/* Search */}
-      <div className="search-wrapper">
-        <span className="search-icon">🔍</span>
+      <div className="dpo-search-wrapper">
+        <span className="dpo-search-icon">🔍</span>
         <input
           type="text"
           placeholder="Search issues..."
@@ -108,7 +127,7 @@ function DPOFilterBar({
       </div>
 
       {/* From Date */}
-      <div className="date-input-wrapper">
+      <div className="dpo-date-input-wrapper">
         <input
           type="text"
           placeholder="From: (dd-mm-yyyy)"
@@ -116,7 +135,7 @@ function DPOFilterBar({
           onChange={(e) => handleFilterChange("fromDate", e.target.value)}
         />
         <span
-          className="calendar-icon"
+          className="dpo-calendar-icon"
           onClick={() => {
             setActiveDateField("from");
             fromDatePickerRef.current.showPicker();
@@ -133,7 +152,7 @@ function DPOFilterBar({
       </div>
 
       {/* To Date */}
-      <div className="date-input-wrapper">
+      <div className="dpo-date-input-wrapper">
         <input
           type="text"
           placeholder="To: (dd-mm-yyyy)"
@@ -141,7 +160,7 @@ function DPOFilterBar({
           onChange={(e) => handleFilterChange("toDate", e.target.value)}
         />
         <span
-          className="calendar-icon"
+          className="dpo-calendar-icon"
           onClick={() => {
             setActiveDateField("to");
             toDatePickerRef.current.showPicker();
@@ -158,26 +177,26 @@ function DPOFilterBar({
       </div>
 
       {/* Filter (Nested) */}
-      <div className="filter-group custom-filter">
+      <div className="dpo-filter-group dpo-custom-filter">
         <label>Filter:</label>
-        <div className="filter-dropdown">
-          <button className="filter-btn">
+        <div className="dpo-filter-dropdown">
+          <button className="dpo-filter-btn">
             {filterLabel[filterBy]} ▾
           </button>
 
-          <div className="filter-menu">
-            <div className="filter-item">
+          <div className="dpo-filter-menu">
+            <div className="dpo-filter-item">
               Priority ▸
-              <div className="sub-menu">
+              <div className="dpo-sub-menu">
                 <div onClick={() => handleFilterChange("filterBy", "high")}>High</div>
                 <div onClick={() => handleFilterChange("filterBy", "medium")}>Medium</div>
                 <div onClick={() => handleFilterChange("filterBy", "low")}>Low</div>
               </div>
             </div>
 
-            <div className="filter-item">
+            <div className="dpo-filter-item">
               Department ▸
-              <div className="sub-menu">
+              <div className="dpo-sub-menu">
                 <div onClick={() => handleFilterChange("filterBy", "health")}>Health</div>
                 <div onClick={() => handleFilterChange("filterBy", "education")}>Education</div>
                 <div onClick={() => handleFilterChange("filterBy", "works")}>Public Works</div>
@@ -185,7 +204,7 @@ function DPOFilterBar({
             </div>
 
             <div
-              className="filter-item"
+              className="dpo-filter-item"
               onClick={() => handleFilterChange("filterBy", "all")}
             >
               All Issues
@@ -195,10 +214,10 @@ function DPOFilterBar({
       </div>
 
       {/* Sort */}
-      <div className="filter-group custom-filter">
+      <div className="dpo-filter-group dpo-custom-filter">
         <label>Sort:</label>
-        <div className="filter-dropdown">
-          <button className="filter-btn">
+        <div className="dpo-filter-dropdown">
+          <button className="dpo-filter-btn">
             {sortBy === "priority"
               ? "Priority"
               : sortBy === "department"
@@ -206,23 +225,23 @@ function DPOFilterBar({
                 : "Deadline"} ▾
           </button>
 
-          <div className="filter-menu">
+          <div className="dpo-filter-menu">
             <div
-              className="filter-item"
+              className="dpo-filter-item"
               onClick={() => handleFilterChange("sortBy", "priority")}
             >
               Priority
             </div>
 
             <div
-              className="filter-item"
+              className="dpo-filter-item"
               onClick={() => handleFilterChange("sortBy", "department")}
             >
               Department
             </div>
 
             <div
-              className="filter-item"
+              className="dpo-filter-item"
               onClick={() => handleFilterChange("sortBy", "deadline")}
             >
               Deadline
@@ -234,14 +253,14 @@ function DPOFilterBar({
 
       {/* Generate */}
       {activeTab === "Received" && (
-        <button className="generate-btn" onClick={handleGenerate}>
+        <button className="dpo-generate-btn" onClick={handleGenerate}>
           Generate Report
         </button>
       )}
       {activeTab === "Overdue" && (
         <div style={{ position: 'relative', display: 'flex', alignItems: 'center', marginLeft: 'auto' }}>
           <button
-            className={`send-email-btn ${emailLoading ? 'loading' : ''}`}
+            className={`dpo-send-email-btn ${emailLoading ? 'dpo-loading' : ''}`}
             onClick={handleSendOverdueEmails}
             disabled={emailLoading}
           >
@@ -249,7 +268,7 @@ function DPOFilterBar({
           </button>
 
           {emailStatus && (
-            <div className="email-status-popup">
+            <div className="dpo-email-status-popup">
               {emailStatus}
             </div>
           )}

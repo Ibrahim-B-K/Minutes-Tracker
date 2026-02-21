@@ -1,4 +1,4 @@
-.filter-bar {
+.collector-filter-bar {
   display: flex;
   gap: 15px;
   align-items: center;
@@ -10,11 +10,11 @@
   flex-wrap: wrap;
   position: relative; /* positioning context for floating buttons */
 }
-.filter-bar {
+.collector-filter-bar {
   transition: all 0.2s ease;
 }
 
-.search-wrapper {
+.collector-search-wrapper {
   position: relative;
   display: flex;
   align-items: center;
@@ -23,7 +23,7 @@
   max-width: 400px;
 }
 
-.search-wrapper input {
+.collector-search-wrapper input {
   padding: 10px 35px 10px 35px;
   border: 1px solid #ccc;
   border-radius: 6px;
@@ -31,19 +31,19 @@
   width: 100%;
 }
 
-.search-icon {
+.collector-search-icon {
   position: absolute;
   left: 10px;
   user-select: none;
 }
 
-.date-input-wrapper {
+.collector-date-input-wrapper {
   position: relative;
   display: flex;
   align-items: center;
 }
 
-.date-input-wrapper input {
+.collector-date-input-wrapper input {
   padding: 10px 35px 10px 12px;
   border: 1px solid #ccc;
   border-radius: 6px;
@@ -51,7 +51,8 @@
   width: 160px;
 }
 
-.calendar-icon {
+.collector-calendar-icon {
+  position: absolute;
   right: 10px;
   font-size: 1rem;
   color: #666;
@@ -59,19 +60,19 @@
   user-select: none;
 }
 
-.filter-group {
+.collector-filter-group {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.filter-group label {
+.collector-filter-group label {
   color: #000;
   font-size: 0.9rem;
   min-width: 60px;
 }
 
-.filter-select {
+.collector-filter-select {
   padding: 10px 12px;
   border: 1px solid #ccc;
   border-radius: 6px;
@@ -81,7 +82,19 @@
   background: white;
 }
 
-.generate-btn {
+.collector-filter-btn {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  width: 160px;
+  background: white;
+  color: #000;
+  cursor: pointer;
+  text-align: left;
+}
+
+.collector-generate-btn {
   background: #2563eb;
   color: white;
   border: none;
@@ -92,11 +105,11 @@
   margin-left: auto;
 }
 
-.generate-btn:hover {
+.collector-generate-btn:hover {
   background: #1d4ed8;
 }
 
-.upload-btn {
+.collector-upload-btn {
   position: absolute;
   right: 12px;
   top: -18px;
@@ -114,11 +127,75 @@
   gap: 6px;
 }
 
-.upload-btn img {
+.collector-upload-btn img {
   width: 14px;
   height: 14px;
 }
 
-.upload-btn:hover {
+.collector-upload-btn:hover {
   background: #059669;
+}
+
+/* ================= CUSTOM FILTER DROPDOWN ================= */
+
+.collector-custom-filter,
+.collector-filter-dropdown {
+  position: relative;
+}
+
+/* Dropdown Menu */
+.collector-filter-menu {
+  display: none;
+  position: absolute;
+  top: 39px;
+  left: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  min-width: 160px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  z-index: 50;
+}
+
+.collector-filter-dropdown:hover .collector-filter-menu {
+  display: block;
+}
+
+/* Dropdown Items */
+.collector-filter-item {
+  padding: 10px 12px;
+  cursor: pointer;
+  position: relative;
+  white-space: nowrap;
+}
+
+.collector-filter-item:hover {
+  background: #f3f4f6;
+}
+
+/* ================= SUB MENU ================= */
+
+.collector-sub-menu {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 100%;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  min-width: 160px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.collector-filter-item:hover .collector-sub-menu {
+  display: block;
+}
+
+.collector-sub-menu div {
+  padding: 10px 12px;
+  cursor: pointer;
+}
+
+.collector-sub-menu div:hover {
+  background: #e5e7eb;
 }

@@ -1,4 +1,4 @@
-.issue-card {
+.department-issue-card {
   position: relative;
   /* Needed for absolute positioning */
   background: white;
@@ -10,19 +10,19 @@
 }
 
 
-.issue-header {
+.department-issue-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 15px;
 }
 
-.issue-id {
+.department-issue-id {
   font-weight: 600;
   font-size: 1rem;
 }
 
-.status {
+.department-status {
   font-size: 0.8rem;
   padding: 5px 10px;
   border-radius: 12px;
@@ -31,34 +31,34 @@
 }
 
 /* 🔸 Color Variations */
-.status.pending {
+.department-status.department-pending {
   background: #fef9c3;
   /* light yellow */
   color: #854d0e;
   /* dark yellow text */
 }
 
-.status.overdue {
+.department-status.department-overdue {
   background: #fee2e2;
   /* light red */
   color: #b91c1c;
   /* dark red text */
 }
 
-.status.submitted {
+.department-status.department-submitted {
   background: #dcfce7;
   /* light green */
   color: #166534;
   /* dark green text */
 }
 
-.issue-body p {
+.department-issue-body p {
   margin: 4px 0;
   font-size: 0.9rem;
   color: #333;
 }
 
-.issue-row {
+.department-issue-row {
   display: flex;
   align-items: flex-start;
   margin: 6px 0;
@@ -66,7 +66,7 @@
   color: #333;
 }
 
-.issue-row .label {
+.department-issue-row .department-label {
   width: 120px;
   /* fixed width for alignment */
   font-weight: 600;
@@ -78,33 +78,37 @@
 }
 
 /* Adds colon after label, spaced properly */
-.issue-row .label::after {
+.department-issue-row .department-label::after {
   content: ":";
   position: absolute;
   right: 0;
 }
 
 /* value text starts right after colon */
-.issue-row .value {
+.department-issue-row .department-value {
   flex: 1;
   padding-left: 12px;
   margin-top: 6px;
 }
 
 /* 🔴 Overdue text color */
-.overdue-text {
+.department-overdue-text {
   color: #b91c1c !important;
   /* same red as your border */
   font-weight: 600;
 }
 
-.footer-line {
+.department-footer-line {
   height: 1px;
   background: #eee;
   margin-top: 30px;
 }
 
-.response-received {
+.department-issue-footer {
+  margin-top: 12px;
+}
+
+.department-response-received {
   display: flex;
   flex-direction: column;
   background-color: #F0FDF4;
@@ -114,7 +118,7 @@
   align-items: flex-start;
 }
 
-.res {
+.department-res {
   margin: 0;
   font-size: 0.9rem;
   line-height: 1.4;
@@ -123,12 +127,12 @@
   width: 100%;
 }
 
-.res strong {
+.department-res strong {
   color: #000;
   margin-right: 4px;
 }
 
-.res-button {
+.department-res-button {
   align-self: flex-end;
   background: #19A752;
   color: white;
@@ -141,7 +145,7 @@
   transition: background 0.2s ease;
 }
 
-.submit-btn {
+.department-submit-btn {
   position: absolute;
   right: 12px;
   bottom: 12px;
@@ -156,27 +160,27 @@
 }
 
 /* 🟡 Pending – Yellow button */
-.pending-btn {
+.department-pending-btn {
   background-color: #d7b838;
   color: white;
 }
 
-.pending-btn:hover {
+.department-pending-btn:hover {
   background: #d7b016;
   transform: scale(1.05);
 }
 
 /* 🔴 Overdue – Red button */
-.overdue-btn {
+.department-overdue-btn {
   background: #b91c1c;
 }
 
-.overdue-btn:hover {
+.department-overdue-btn:hover {
   background: #991b1b;
   transform: scale(1.05);
 }
 
-.issue-card {
+.department-issue-card {
   opacity: 0;
   animation: fadeInCard 0.3s ease forwards;
 }

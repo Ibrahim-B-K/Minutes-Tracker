@@ -1,7 +1,7 @@
 /* ==============================
    Main Container
 ============================== */
-.generate-reports-container { 
+.dpo-generate-reports-container { 
   background: #fff; 
   border-radius: 14px; 
   padding: 30px;
@@ -18,14 +18,14 @@
 /* ==============================
    Header
 ============================== */
-.generate-header { 
+.dpo-generate-header { 
   display: flex; 
   justify-content: space-between; 
   align-items: center; 
   margin-bottom: 15px; 
 }
 
-.close-btn {
+.dpo-close-btn {
   margin-left: auto;
   background: none;
   border: none;
@@ -35,14 +35,14 @@
   transition: color 0.2s ease;
 }
 
-.close-btn:hover {
+.dpo-close-btn:hover {
   color: #000;
 }
 
 /* ==============================
    Report List
 ============================== */
-.report-list { 
+.dpo-report-list { 
   flex: 1; 
   overflow-y: auto; 
   display: flex; 
@@ -51,23 +51,23 @@
   padding-right: 4px; 
 }
 
-.report-list::-webkit-scrollbar { 
+.dpo-report-list::-webkit-scrollbar { 
   width: 8px; 
 }
 
-.report-list::-webkit-scrollbar-thumb { 
+.dpo-report-list::-webkit-scrollbar-thumb { 
   background: #cbd5e1; 
   border-radius: 6px; 
 }
 
-.report-list::-webkit-scrollbar-thumb:hover { 
+.dpo-report-list::-webkit-scrollbar-thumb:hover { 
   background: #94a3b8; 
 }
 
 /* ==============================
    Report Card Layout
 ============================== */
-.generate-report-card {
+.dpo-generate-report-card {
   border: 1px solid #e5e7eb;
   border-radius: 12px;
   background-color: #f9fafb;
@@ -79,14 +79,14 @@
   transition: box-shadow 0.2s ease;
 }
 
-.generate-report-card:hover {
+.dpo-generate-report-card:hover {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
 }
 
 /* ==============================
    Report Top Section
 ============================== */
-.report-top {
+.dpo-report-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -94,13 +94,13 @@
   padding-bottom: 2px;
 }
 
-.report-id {
+.dpo-report-id {
   font-weight: 600;
   color: #111827;
   font-size: 15px;
 }
 
-.report-delete-btn {
+.dpo-report-delete-btn {
   background: none;
   border: none;
   color: #b91c1c;
@@ -109,7 +109,7 @@
   transition: transform 0.2s ease, color 0.2s ease;
 }
 
-.report-delete-btn:hover {
+.dpo-report-delete-btn:hover {
   color: #991b1b;
   transform: scale(1.15);
 }
@@ -117,26 +117,26 @@
 /* ==============================
    Report Form
 ============================== */
-.report-form {
+.dpo-report-form {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.form-field {
+.dpo-form-field {
   display: flex;
   flex-direction: column;
 }
 
-.form-field label {
+.dpo-form-field label {
   color: #374151;
   font-size: 14px;
   font-weight: 500;
   margin-bottom: 4px;
 }
 
-.form-field input,
-.form-field select {
+.dpo-form-field input,
+.dpo-form-field select {
   border: 1px solid #d1d5db;
   border-radius: 8px;
   padding: 8px 10px;
@@ -146,7 +146,7 @@
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.form-field textarea {
+.dpo-form-field textarea {
   resize: none;
   height: 70px;
   min-height: 70px;
@@ -160,9 +160,9 @@
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.form-field input:focus,
-.form-field select:focus,
-.form-field textarea:focus {
+.dpo-form-field input:focus,
+.dpo-form-field select:focus,
+.dpo-form-field textarea:focus {
   border-color: #2563eb;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
@@ -170,12 +170,12 @@
 /* ==============================
    Format Toggle
 ============================== */
-.format-toggle {
+.dpo-format-toggle {
   display: flex;
   gap: 10px;
 }
 
-.format-btn {
+.dpo-format-btn {
   padding: 6px 14px;
   border-radius: 8px;
   border: 1px solid #d1d5db;
@@ -185,11 +185,11 @@
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-.format-btn:hover {
+.dpo-format-btn:hover {
   background-color: #e5e7eb;
 }
 
-.format-btn.active {
+.dpo-format-btn.dpo-active {
   background-color: #2563eb;
   color: #fff;
   border-color: #2563eb;
@@ -198,7 +198,7 @@
 /* ==============================
    Download Button Section
 ============================== */
-.download-section {
+.dpo-download-section {
   display: flex;
   align-items: center; 
   justify-content: flex-end; 
@@ -207,7 +207,7 @@
   margin-right: 10px;
 }
 
-.generate-download-btn {
+.dpo-generate-download-btn {
   background-color: #2563eb;
   color: white;
   border: none;
@@ -218,10 +218,10 @@
   transition: background-color 0.2s ease;
 }
 
-.generate-download-btn:hover {
+.dpo-generate-download-btn:hover {
   background-color: #1d4ed8;
 }
-.close{
+.dpo-close{
     background: none;
   border: none;
   font-size: 22px;

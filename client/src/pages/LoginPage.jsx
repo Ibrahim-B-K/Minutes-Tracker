@@ -99,6 +99,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./LoginPage.css";
+import { clearAuthValues, setAuthValue } from "../utils/authStorage";
 
 // Backend base URL
 // const API_BASE_URL = "http://localhost:8000";
@@ -143,18 +144,19 @@ export default function Login() {
 
       const { token, role, department, username: loggedUser } = response.data;
 
-      // ✅ Store token for future API calls
-      localStorage.setItem("token", token);
-      localStorage.setItem("username", loggedUser);
-      localStorage.setItem("role", role);
+      // ✅ Store auth in tab-scoped storage to support multi-role multi-tab.
+      clearAuthValues();
+      setAuthValue("token", token);
+      setAuthValue("username", loggedUser);
+      setAuthValue("role", role);
 
       if (department) {
-        localStorage.setItem("department", department);
+        setAuthValue("department", department);
       }
 
       // ✅ Role-based navigation (REQUIRED) 
       if (role === "dpo") {
-        navigate("/dpo");
+        navigate("/dpo/home");
       } else if (role === "collector") {
         navigate("/collector");
       } else if (role === "department") {

@@ -3,25 +3,66 @@
   position: relative;
   display: flex;
   align-items: center;
+  text-decoration: none;
+}
+
+.dpo-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  width: 62px;
+
+}
+
+.dpo-nav-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: #2563eb;
+  line-height: 1.1;
+  text-align: center;
+  white-space: nowrap;
+  transition: transform 0.15s ease;
+}
+
+.dpo-bell-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dpo-notification-dot {
+  position: absolute;
+  top: -2px;
+  right: -1px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #ef4444;
+  border: 2px solid #fff;
 }
 
 /* Active icon pop */
+.dpo-nav-link.dpo-active .dpo-icon,
 .dpo-nav-link.active .dpo-icon {
-  transform: scale(1.15);
+  transform: none;
+}
+
+.dpo-nav-link.dpo-active .dpo-nav-item,
+.dpo-nav-link.active .dpo-nav-item {
+  transform: scale(1.1);
+}
+
+.dpo-nav-link.dpo-active .dpo-nav-text,
+.dpo-nav-link.active .dpo-nav-text {
+  transform: none;
+  font-weight: 700;
 }
 
 /* Underline */
-.dpo-nav-link.active::after {
-  content: "";
-  position: absolute;
-  bottom: -8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 20px;
-  height: 3px;
-  background: #2563eb;
-  border-radius: 4px;
-}
+
 .dpo-header {
   display: flex;
   justify-content: space-between;
@@ -49,19 +90,18 @@
 
 .dpo-header-icons {
   display: flex;
-  align-items: center;
-  gap: 30px;
+  align-items: flex-end;
+  gap: 35px;
   position: relative;
 }
 
 /* standard icon container */
 
-.dpo-icon.home {
+.dpo-icon.dpo-home {
   background: white;
   color: #2563eb;
-  font-size: 20px;
-  width: 30px;
-  height: 30px;
+  font-size: 28px;
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -71,12 +111,10 @@
 }
 
 
-.dpo-icon.bell {
+.dpo-icon.dpo-bell {
   background: white; /* make the circular background white */
   color: #2563eb; /* bell color */
-  font-size: 20px;
-  width: 30px;
-  height: 30px;
+  font-size: 25px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -84,17 +122,18 @@
   cursor: pointer;
 }
 
-.dpo-icon.profile {
+.dpo-icon.dpo-profile {
   width: 30px;
   height: 30px;
   border-radius: 50%;
   background: #2563eb;
   color: white;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
   font-size: 16px;
   line-height: 30px;
   text-align: center;
+  margin-bottom:6px;
 }
 
 /* Profile dropdown */
@@ -115,16 +154,14 @@
   width: 100%;
   background: none;
   border: none;
-  padding: 10px 16px;
+
   text-align: left;
   font-size: 14px;
   cursor: pointer;
   color: #111827;
 }
 
-.dpo-profile-dropdown button:hover {
-  background: #f3f4f6;
-}
+
 
 /* Smooth appearance */
 @keyframes dpoDropdownFade {
@@ -160,11 +197,10 @@
   color: #ef4444; /* subtle red for logout */
 }
 
-.dpo-icon.minutes {
+.dpo-icon.dpo-minutes {
   background: white;
   color: #2563eb;
-  width: 25px;
-  height: 25px;
+  font-size: 25px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -174,12 +210,11 @@
 }
 
 
-.dpo-icon.upload {
-  background: white;
+
+.dpo-icon.dpo-drafts {
+    background: white;
   color: #2563eb;
-  font-size: 20px;
-  width: 30px;
-  height: 30px;
+  font-size: 25px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -188,7 +223,7 @@
   transition: transform 0.15s ease;
 }
 /* Modal Overlay */
-.dept-modal-overlay {
+.dpo-modal-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.4);
@@ -202,7 +237,7 @@
 /* ===== Modal Overlay ===== */
 /* ========================= */
 
-.dept-modal-overlay {
+.dpo-modal-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.45);
@@ -217,7 +252,7 @@
 /* ===== Modal Box ===== */
 /* ========================= */
 
-.dept-modal {
+.dpo-modal {
   background: #ffffff;
   width: 380px;
   max-width: 90%;
@@ -231,7 +266,7 @@
 }
 
 /* Title */
-.dept-modal h3 {
+.dpo-modal h3 {
   margin: 0;
   font-size: 20px;
   font-weight: 600;
@@ -243,7 +278,7 @@
 /* ===== Input Fields ===== */
 /* ========================= */
 
-.dept-modal input {
+.dpo-modal input {
   padding: 11px 12px;
   border-radius: 8px;
   border: 1px solid #e5e7eb;
@@ -252,7 +287,7 @@
   background: #f9fafb;
 }
 
-.dept-modal input:focus {
+.dpo-modal input:focus {
   outline: none;
   border-color: #2563eb;
   background: #ffffff;
@@ -263,18 +298,18 @@
 /* ===== Password Field ===== */
 /* ========================= */
 
-.password-field {
+.dpo-password-field {
   position: relative;
   display: flex;
   align-items: center;
 }
 
-.password-field input {
+.dpo-password-field input {
   width: 100%;
   padding-right: 42px;
 }
 
-.eye-icon {
+.dpo-eye-icon {
   position: absolute;
   right: 12px;
   cursor: pointer;
@@ -284,11 +319,11 @@
   transition: color 0.2s ease;
 }
 
-.eye-icon:hover {
+.dpo-eye-icon:hover {
   color: #2563eb;
 }
 
-.eye-icon svg {
+.dpo-eye-icon svg {
   font-size: 20px;
 }
 
@@ -296,7 +331,7 @@
 /* ===== Buttons ===== */
 /* ========================= */
 
-.dept-modal-buttons {
+.dpo-modal-buttons {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
@@ -304,7 +339,7 @@
 }
 
 /* Cancel */
-.cancel-btn {
+.dpo-cancel-btn {
   background: #f3f4f6;
   border: none;
   padding: 9px 16px;
@@ -314,12 +349,12 @@
   transition: all 0.2s ease;
 }
 
-.cancel-btn:hover {
+.dpo-cancel-btn:hover {
   background: #e5e7eb;
 }
 
 /* Create */
-.save-btn {
+.dpo-save-btn {
   background: #2563eb;
   color: white;
   border: none;
@@ -331,7 +366,7 @@
   transition: all 0.2s ease;
 }
 
-.save-btn:hover {
+.dpo-save-btn:hover {
   background: #1d4ed8;
   transform: translateY(-1px);
 }
@@ -344,3 +379,11 @@
   font-size: 18px;
   color: #2563eb;
 }
+
+
+
+
+
+
+
+

@@ -1,30 +1,28 @@
-.DPO-notificationpage-container {
+.dpo-notificationpage-container {
   width: 100%;
   height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-.DPO-notificationpage-content {
-  padding: 20px 70px;
+.dpo-notificationpage-content {
+  padding: 10px 70px;
   flex: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden; /* Prevent page scroll, keep list scroll */
 }
 
-.DPO-notification-header h1 {
+.dpo-notification-header h1 {
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 20px;
   color: #111;
 }
 
-.DPO-notification-list {
-  background: #ffffff;
+.dpo-notification-list {
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -32,20 +30,20 @@
   /* CRITICAL FIX FOR SCROLLING */
   overflow-y: auto;
   flex: 1; /* Fill remaining space */
-  max-height: calc(100vh - 150px); /* Leave room for header */
+  max-height: none; /* Leave room for header */
   padding-bottom: 40px; /* Extra space at bottom so last item isn't hidden */
 }
 
 /* Scrollbar styling */
-.DPO-notification-list::-webkit-scrollbar {
+.dpo-notification-list::-webkit-scrollbar {
   width: 8px;
 }
-.DPO-notification-list::-webkit-scrollbar-thumb {
+.dpo-notification-list::-webkit-scrollbar-thumb {
   background: #cbd5e1;
   border-radius: 6px;
 }
 
-.DPO-notification-card {
+.dpo-notification-card {
   display: flex;
   align-items: center;
   gap: 5px;
@@ -58,19 +56,19 @@
 }
 
 
-.DPO-notification-card.assign { border-left-color: #22c55e; }
-.DPO-notification-card.response { border-left-color: #3b82f6; }
-.DPO-notification-card.deadline { border-left-color: #ef4444; }
+.dpo-notification-card.dpo-assign { border-left-color: #22c55e; }
+.dpo-notification-card.dpo-response { border-left-color: #3b82f6; }
+.dpo-notification-card.dpo-deadline { border-left-color: #ef4444; }
 
-.DPO-notification-icon span {
+.dpo-notification-icon span {
   font-size: 1.8rem;
 }
 
-.DPO-notification-content {
+.dpo-notification-content {
   
 }
 
-.DPO-notification-content h3 {
+.dpo-notification-content h3 {
   font-size: 0.95rem;
   font-weight: 700;
   color: #111827;
@@ -79,14 +77,14 @@
   letter-spacing: 0.5px;
 }
 
-.DPO-notification-content p {
+.dpo-notification-content p {
   font-size: 0.9rem;
   color: #4b5563;
   margin: 0;
   line-height: 1.4;
 }
 
-.DPO-notification-content .DPO-time {
+.dpo-notification-content .dpo-time {
   display: block;
   font-size: 0.8rem;
   color: #9ca3af;
@@ -94,9 +92,15 @@
   font-style: italic;
 }
 
-.DPO-no-notifications {
+.dpo-no-notifications {
   text-align: center;
   padding: 50px 0;
   color: #6b7280;
   font-size: 1.1rem;
 }
+.dpo-notification-list > .empty-state-card,
+.dpo-notification-list > .loading-state {
+  margin-top: 0;
+  min-height: 100%;
+}
+

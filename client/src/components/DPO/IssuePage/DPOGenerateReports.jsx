@@ -1,11 +1,15 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "./DPOGenerateReports.css";
 import DPOGenerateReportCard from "./DPOGenerateReportCard";
+import EmptyStateCard from "../../common/EmptyStateCard";
+import LoadingState from "../../common/LoadingState";
 import api from "../../../api/axios";
+import { getAuthValue } from "../../../utils/authStorage";
 
 export default function GenerateReports({ isOpen, onClose }) {
   const [format, setFormat] = useState("pdf");
   const [reports, setReports] = useState([]);
+  const [loadingReports, setLoadingReports] = useState(false);
 
   const handleDownload = async () => {
     try {
@@ -14,7 +18,7 @@ export default function GenerateReports({ isOpen, onClose }) {
       const response = await fetch(`${api.defaults.baseURL}/generate-report`, {
         method: "POST",
         headers: {
-          "Authorization": `Token ${localStorage.getItem("token")}`, // Auth is important!
+          "Authorization": `Token ${getAuthValue("token")}`, // Auth is important!
         },
       });
 
@@ -45,11 +49,35 @@ export default function GenerateReports({ isOpen, onClose }) {
 
   useEffect(() => {
     if (!isOpen) return;
+    setLoadingReports(true);
+    setReports([]);
 
-    fetch("http://localhost:5000/issues/received")
-      .then((res) => res.json())
-      .then((data) => setReports(data))
-      .catch((err) => console.error("Error fetching reports:", err));
+    api
+      .get("/issues")
+      .then((res) => {
+        const receivedLike = (res.data || []).filter((issue) => {
+          const status = String(issue.status || "").toLowerCase();
+          return ["received", "submitted", "completed"].includes(status);
+        });
+
+        // Normalize modal card shape and flatten response objects to readable text
+        const normalized = receivedLike.map((issue) => ({
+          id: issue.id,
+          issue_no: issue.issue_no,
+          department: issue.department || "",
+          issue: issue.issue || "",
+          location: issue.location || "",
+          response: Array.isArray(issue.response)
+            ? issue.response
+                .map((r) => `[${r.department || "Department"}] ${r.text || ""}`.trim())
+                .join("\n")
+            : issue.response || "",
+        }));
+
+        setReports(normalized);
+      })
+      .catch((err) => console.error("Error fetching reports:", err))
+      .finally(() => setLoadingReports(false));
   }, [isOpen]);
 
   const handleChange = useCallback((index, field, value) => {
@@ -67,35 +95,41 @@ export default function GenerateReports({ isOpen, onClose }) {
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay">
+    <div className="dpo-modal-overlay">
       <div
-        className="generate-reports-container"
+        className="dpo-generate-reports-container"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="generate-header">
-          <div className="format-toggle">
+        <div className="dpo-generate-header">
+          <div className="dpo-format-toggle">
             <button
-              className={`format-btn ${format === "pdf" ? "active" : ""}`}
+              className={`dpo-format-btn ${format === "pdf" ? "dpo-active" : ""}`}
               onClick={() => setFormat("pdf")}
             >
               PDF
             </button>
             <button
-              className={`format-btn ${format === "excel" ? "active" : ""}`}
+              className={`dpo-format-btn ${format === "excel" ? "dpo-active" : ""}`}
               onClick={() => setFormat("excel")}
             >
               Excel
             </button>
           </div>
 
-          <button className="close" onClick={onClose}>
+          <button className="dpo-close" onClick={onClose}>
             &times;
           </button>
         </div>
 
-        <div className="report-list">
-          {reports.length === 0 ? (
-            <p>No received issues available</p>
+        <div className="dpo-report-list">
+          {loadingReports ? (
+            <LoadingState compact text="Loading received issues..." />
+          ) : reports.length === 0 ? (
+            <EmptyStateCard
+              compact
+              title="No received issues"
+              description="Received issues will appear here for report generation."
+            />
           ) : (
             reports.map((report, index) => (
               <DPOGenerateReportCard
@@ -109,8 +143,8 @@ export default function GenerateReports({ isOpen, onClose }) {
           )}
         </div>
 
-        <div className="download-section">
-          <button className="generate-download-btn" onClick={handleDownload}>
+        <div className="dpo-download-section">
+          <button className="dpo-generate-download-btn" onClick={handleDownload}>
             Download Report
           </button>
         </div>

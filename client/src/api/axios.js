@@ -1,13 +1,17 @@
 import axios from "axios";
+import { getAuthValue, migrateLocalAuthToSession } from "../utils/authStorage";
 
 const api = axios.create({
   baseURL: "http://127.0.0.1:8000",
 });
 
+// Backward compatibility for already logged-in users from older builds.
+migrateLocalAuthToSession();
+
 // Automatically attach token to every request
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token");
+    const token = getAuthValue("token");
     if (token) {
       config.headers.Authorization = `Token ${token}`;
     }

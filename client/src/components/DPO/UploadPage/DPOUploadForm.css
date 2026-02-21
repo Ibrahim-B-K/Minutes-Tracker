@@ -1,26 +1,24 @@
-/* src/components/Upload/UploadForm.css */
+/* src/components/Upload/UploadForm.dpo-css */
 
-.upload-form {
-  
-   background: #fff;
+.dpo-upload-form {
+  background: #fff;
   border-radius: 14px;
   padding: 28px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
   max-width: 800px;
   margin: 0 auto;
   font-family: "Inter", sans-serif;
-  margin-top: -20px;
+  margin-top: 24px;
 }
 
-.upload-title {
+.dpo-upload-title {
   font-size: 1.4rem;
   font-weight: 700;
   color: #111;
   margin-bottom: 10px;
 }
 
-
-.field-label {
+.dpo-field-label {
   display: block;
   font-size: 14px;
   font-weight: 600;
@@ -29,8 +27,7 @@
   margin-bottom: 6px;
 }
 
-
-.date-input-wrapper input[type="text"] {
+.dpo-date-input-wrapper input[type="text"] {
   width: 100%;
   padding: 10px 40px 10px 12px;
   border: 1.5px solid #d1d5db;
@@ -40,7 +37,7 @@
   outline: none;
 }
 
-.calendar-icon {
+.dpo-calendar-icon {
   position: absolute;
   right: 12px;
   cursor: pointer;
@@ -48,7 +45,7 @@
   color: #374151;
 }
 
-.file-drop {
+.dpo-file-drop {
   border: 2px dashed #d1d5db;
   border-radius: 10px;
   height: 140px;
@@ -61,36 +58,34 @@
   background: #fafafa;
 }
 
-.file-drop.drag-over {
+.dpo-file-drop.dpo-drag-over {
   border-color: #3b82f6;
   background-color: #eff6ff;
 }
 
-.file-drop-inner {
+.dpo-file-drop-inner {
   text-align: center;
   cursor: pointer;
 }
 
-.file-icon {
+.dpo-file-icon {
   font-size: 32px;
   margin-bottom: 8px;
 }
 
-.file-text {
+.dpo-file-text {
   font-size: 14px;
   color: #6b7280;
 }
 
-.file-input {
+.dpo-file-input {
   position: absolute;
   inset: 0;
   opacity: 0;
   cursor: pointer;
 }
 
-/* Upload & Process Button */
-/* Upload & Process Button */
-.up {
+.dpo-up {
   display: block;
   width: 100%;
   margin-top: 25px;
@@ -106,39 +101,39 @@
   transition: background-color 0.25s ease, transform 0.1s ease;
 }
 
-
-
-.form-content {
+.dpo-form-content {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
-.loading-card {
-   background: #fff;
+
+.dpo-loading-card {
+  background: #fff;
   border-radius: 14px;
   padding: 28px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
   max-width: 550px;
   margin: 0 auto;
   font-family: "Inter", sans-serif;
-  margin-top: -20px;
+  margin-top: 24px;
 }
 
 /* ================= EXTRACTION ANIMATION ================= */
-.extract-wrapper {
+.dpo-extract-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 14px;
   font-family: system-ui, sans-serif;
 }
-h4{
-   color:#2563eb;
-  align-items:center;
-  justify-content:center
+
+.dpo-extract-wrapper h4 {
+  color: #2563eb;
+  margin: 0;
+  text-align: center;
 }
 
-.document {
+.dpo-document {
   position: relative;
   width: 220px;
   height: 240px;
@@ -149,8 +144,7 @@ h4{
   overflow: hidden;
 }
 
-/* Document fill effect */
-.document::after {
+.dpo-document::after {
   content: "";
   position: absolute;
   bottom: 0;
@@ -162,8 +156,7 @@ h4{
   z-index: 0;
 }
 
-/* Scanning line */
-.scan-line {
+.dpo-scan-line {
   position: absolute;
   top: 0;
   left: 0;
@@ -174,8 +167,7 @@ h4{
   z-index: 2;
 }
 
-/* Fake extracted fields */
-.field {
+.dpo-field {
   height: 14px;
   background: #cfe0ff;
   border-radius: 4px;
@@ -185,33 +177,53 @@ h4{
   z-index: 1;
 }
 
-.field.short { width: 60%; }
-.field.medium { width: 80%; }
-
-/* Status text */
-.status {
-  font-size: 1px;
-  color: #2979ff;
-  letter-spacing: 0.3px;
-
+.dpo-field.dpo-short {
+  width: 60%;
 }
 
-/* Animations */
+.dpo-field.dpo-medium {
+  width: 80%;
+}
+
+.dpo-status {
+  font-size: 14px;
+  color: #2979ff;
+  letter-spacing: 0.3px;
+  text-align: center;
+}
+
 @keyframes scan {
-  0% { top: 0; opacity: 0; }
-  10% { opacity: 1; }
-  50% { opacity: 1; }
-  100% { top: 100%; opacity: 0; }
+  0% {
+    top: 0;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
 }
 
 @keyframes fillDoc {
-  0% { height: 0%; }
-  100% { height: 100%; }
+  0% {
+    height: 0%;
+  }
+  100% {
+    height: 100%;
+  }
 }
 
 @keyframes highlight {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
 }
-
-

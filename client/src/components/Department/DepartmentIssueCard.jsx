@@ -4,9 +4,10 @@ import "./DepartmentIssueCard.css";
 import api from "../../api/axios";
 
 function DepartmentIssueCard({ issue }) {
-  // Normalize backend status: "received" → "submitted"
-  const normalizedStatus = issue.status === "received" ? "submitted" : issue.status;
-  const status = normalizedStatus || "pending";
+  // Normalize backend status variants for stable rendering.
+  const rawStatus = String(issue?.status || "pending").toLowerCase().trim();
+  const status =
+    rawStatus === "received" || rawStatus === "completed" ? "submitted" : rawStatus;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -28,10 +29,10 @@ function DepartmentIssueCard({ issue }) {
 
   return (
     <>
-      <div className="issue-card" style={getStatusStyle()}>
-        <div className="issue-header">
-          <span className="issue-id">{issue.issue_no}</span>
-          <span className={`status ${status}`}>
+      <div className="department-issue-card" style={getStatusStyle()}>
+        <div className="department-issue-header">
+          <span className="department-issue-id">{issue.issue_no}</span>
+          <span className={`department-status department-${status}`}>
             {status === "pending"
               ? "Response Required"
               : status === "overdue"
@@ -40,49 +41,51 @@ function DepartmentIssueCard({ issue }) {
           </span>
         </div>
 
-        <div className="issue-body">
-          <div className="issue-row">
-            <div className="label">Issue</div>
-            <div className="value">{issue.issue}</div>
+        <div className="department-issue-body">
+          <div className="department-issue-row">
+            <div className="department-label">Issue</div>
+            <div className="department-value">{issue.issue}</div>
           </div>
-          <div className="issue-row">
-            <div className="label">Description</div>
-            <div className="value">{issue.issue_description}</div>
+          <div className="department-issue-row">
+            <div className="department-label">Description</div>
+            <div className="department-value">{issue.issue_description}</div>
           </div>
-          <div className="issue-row">
-            <div className="label">Priority</div>
-            <div className="value">{issue.priority}</div>
-          </div>
-
-          <div className="issue-row">
-            <div className="label">Location</div>
-            <div className="value">{issue.location}</div>
+          <div className="department-issue-row">
+            <div className="department-label">Priority</div>
+            <div className="department-value">{issue.priority}</div>
           </div>
 
-          <div className="issue-row">
-            <div className={`label ${status === "overdue" ? "overdue-text" : ""}`}>
+          <div className="department-issue-row">
+            <div className="department-label">Location</div>
+            <div className="department-value">{issue.location}</div>
+          </div>
+
+          <div className="department-issue-row">
+            <div className={`department-label ${status === "overdue" ? "department-overdue-text" : ""}`}>
               Deadline
             </div>
-            <div className={`value ${status === "overdue" ? "overdue-text" : ""}`}>
+            <div className={`department-value ${status === "overdue" ? "department-overdue-text" : ""}`}>
               <span>{issue.deadline}</span>
             </div>
           </div>
         </div>
 
-        <div className="issue-footer">
+        <div className="department-issue-footer">
           {status === "submitted" && (
             <>
-              <div className="footer-line"></div>
-              <div className="response-received">
-                <p className="res">
+              <div className="department-footer-line"></div>
+              <div className="department-response-received">
+                <p className="department-res">
                   <strong>Your Response:</strong> {issue.response?.text}
                 </p>
                 {issue.response?.attachment && (
                   <button
-                    className="res-button"
+                    className="department-res-button"
                     onClick={() => {
                       const baseUrl = api.defaults.baseURL;
-                      const fullUrl = issue.response.attachment.startsWith("http") ? issue.response.attachment : `${baseUrl}${issue.response.attachment}`;
+                      const fullUrl = issue.response.attachment.startsWith("http")
+                        ? issue.response.attachment
+                        : `${baseUrl}${issue.response.attachment}`;
                       window.open(fullUrl, "_blank");
                     }}
                   >
@@ -95,7 +98,7 @@ function DepartmentIssueCard({ issue }) {
 
           {(status === "pending" || status === "overdue") && (
             <button
-              className={`submit-btn ${status === "pending" ? "pending-btn" : "overdue-btn"
+              className={`department-submit-btn ${status === "pending" ? "department-pending-btn" : "department-overdue-btn"
                 }`}
               onClick={() => setIsModalOpen(true)}
             >

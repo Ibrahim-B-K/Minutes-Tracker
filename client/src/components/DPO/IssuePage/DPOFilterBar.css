@@ -1,4 +1,4 @@
-.filter-bar {
+.dpo-filter-bar {
   display: flex;
   gap: 15px;
   align-items: center;
@@ -14,7 +14,7 @@
 
 /* ================= SEARCH ================= */
 
-.search-wrapper {
+.dpo-search-wrapper {
   position: relative;
   display: flex;
   align-items: center;
@@ -23,7 +23,7 @@
   max-width: 400px;
 }
 
-.search-wrapper input {
+.dpo-search-wrapper input {
   padding: 10px 35px;
   border: 1px solid #ccc;
   border-radius: 6px;
@@ -31,7 +31,7 @@
   width: 100%;
 }
 
-.search-icon {
+.dpo-search-icon {
   position: absolute;
   left: 10px;
   user-select: none;
@@ -39,20 +39,20 @@
 
 /* ================= DATE INPUT ================= */
 
-.date-input-wrapper {
+.dpo-date-input-wrapper {
   position: relative;
   display: flex;
   align-items: center;
 }
 
-.date-input-wrapper input {
+.dpo-date-input-wrapper input {
   padding: 10px 35px 10px 12px;
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 0.9rem;
 }
 
-.calendar-icon {
+.dpo-calendar-icon {
   position: absolute;
   right: 10px;
   font-size: 1rem;
@@ -63,13 +63,13 @@
 
 /* ================= FILTER / SORT GROUP ================= */
 
-.filter-group {
+.dpo-filter-group {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.filter-group label {
+.dpo-filter-group label {
   color: #f00;
   font-size: 0.9rem;
   min-width: 60px;
@@ -77,8 +77,8 @@
 
 /* ===== COMMON CONTROL STYLE (Filter & Sort SAME) ===== */
 
-.filter-select,
-.filter-btn {
+.dpo-filter-select,
+.dpo-filter-btn {
   padding: 10px 12px;
   border: 1px solid #ccc;
   border-radius: 6px;
@@ -92,7 +92,7 @@
 
 /* ================= GENERATE BUTTON ================= */
 
-.generate-btn {
+.dpo-generate-btn {
   background: #2563eb;
   color: white;
   border: none;
@@ -103,12 +103,12 @@
   margin-left: auto;
 }
 
-.generate-btn:hover {
+.dpo-generate-btn:hover {
   background: #1d4ed8;
 }
 
 /* ---------- Send Email Button ---------- */
-.send-email-btn {
+.dpo-send-email-btn {
   background: #af381a;
   color: white;
   border: none;
@@ -120,20 +120,25 @@
   font-weight: 600;
 }
 
-.send-email-btn:hover:not(:disabled) {
+.dpo-send-email-btn:hover:not(:disabled) {
   background: #992d13;
   transform: scale(1.02);
 }
 
-.send-email-btn:disabled {
+.dpo-send-email-btn:disabled {
   background: #9ca3af;
   cursor: not-allowed;
   opacity: 0.7;
 }
 
+.dpo-send-email-btn.dpo-loading {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
 
 
-.email-status-popup {
+
+.dpo-email-status-popup {
   position: absolute;
   right: 0;
   top: 100%;
@@ -151,7 +156,7 @@
 
 /* ================= UPLOAD BUTTON ================= */
 
-.upload-btn {
+.dpo-upload-btn {
   position: absolute;
   right: 12px;
   top: -18px;
@@ -169,25 +174,25 @@
   gap: 6px;
 }
 
-.upload-btn img {
+.dpo-upload-btn img {
   width: 14px;
   height: 14px;
 }
 
-.upload-btn:hover {
+.dpo-upload-btn:hover {
   background: #059669;
 }
 
 /* ================= CUSTOM FILTER DROPDOWN ================= */
 
-.custom-filter,
-.filter-dropdown {
+.dpo-custom-filter,
+.dpo-filter-dropdown {
   position: relative;
 
 }
 
 /* Dropdown Menu */
-.filter-menu {
+.dpo-filter-menu {
   display: none;
   position: absolute;
   top: 39px;
@@ -200,25 +205,25 @@
   z-index: 50;
 }
 
-.filter-dropdown:hover .filter-menu {
+.dpo-filter-dropdown:hover .dpo-filter-menu {
   display: block;
 }
 
 /* Dropdown Items */
-.filter-item {
+.dpo-filter-item {
   padding: 10px 12px;
   cursor: pointer;
   position: relative;
   white-space: nowrap;
 }
 
-.filter-item:hover {
+.dpo-filter-item:hover {
   background: #f3f4f6;
 }
 
 /* ================= SUB MENU ================= */
 
-.sub-menu {
+.dpo-sub-menu {
   display: none;
   position: absolute;
   top: 0;
@@ -230,14 +235,14 @@
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
 }
 
-.filter-item:hover .sub-menu {
+.dpo-filter-item:hover .dpo-sub-menu {
   display: block;
 }
 
-.sub-menu div {
+.dpo-sub-menu div {
   padding: 10px 12px;
 }
 
-.sub-menu div:hover {
+.dpo-sub-menu div:hover {
   background: #e5e7eb;
 }

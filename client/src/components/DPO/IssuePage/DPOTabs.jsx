@@ -5,12 +5,12 @@ function Tabs({ activeTab, setActiveTab }) {
   const tabs = ["Pending", "Overdue", "Received"];
 
   return (
-    <div className="tabs-container">
-      <div className="tabs">
+    <div className="dpo-tabs-container">
+      <div className="dpo-tabs">
         {tabs.map((tab) => (
           <div
             key={tab}
-            className={`tab ${activeTab === tab ? "active" : ""}`}
+            className={`dpo-tab ${activeTab === tab ? "dpo-active" : ""}`}
             onClick={() => setActiveTab(tab)}
           >
             {tab}

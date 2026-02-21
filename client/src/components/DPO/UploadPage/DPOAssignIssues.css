@@ -1,82 +1,85 @@
 /* ==============================
    Main Container
 ============================== */
-.assign-issues-container { 
-  max-height: 465px;
-  background: #fff; 
-  border-radius: 14px; 
+.dpo-assign-issues-container {
+  height: 100%;
+  min-height: 0;
+  background: #fff;
+  border-radius: 14px;
   padding: 28px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06); 
-  max-width: 800px; 
-  margin: -20px auto 0; 
-  font-family: "Inter", sans-serif; 
-  display: flex; 
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  display: flex;
   flex-direction: column;
-
+  overflow: hidden;
 }
 
 /* ==============================
    Header
 ============================== */
-.assign-header { 
-  display: flex; 
-  justify-content: space-between; 
-  align-items: center; 
-  margin-bottom: 15px; 
+.dpo-assign-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
 }
 
-.assign-header h2 { 
-  font-size: 20px; 
-  font-weight: 600; 
-  color: #111827; 
-  margin: 0; 
+.dpo-assign-header h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
 }
 
-.allocate-btn { 
-  background-color: #16a34a; 
-  color: #fff; 
-  border: none; 
-  padding: 8px 18px; 
-  border-radius: 8px; 
-  cursor: pointer; 
-  font-weight: 600; 
-  transition: background-color 0.2s ease; 
-  box-shadow: 0 3px 8px rgba(22, 163, 74, 0.2); 
+.dpo-allocate-btn {
+  background-color: #16a34a;
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+  box-shadow: 0 3px 8px rgba(22, 163, 74, 0.2);
 }
 
-.allocate-btn:hover { 
-  background-color: #15803d; 
+.dpo-allocate-btn:hover {
+  background-color: #15803d;
 }
 
 /* ==============================
    Issue Cards List
 ============================== */
-.issue-cards { 
-  flex: 1; 
-  overflow-y: auto; 
-  display: flex; 
-  flex-direction: column; 
-  gap: 20px; 
-  padding-right: 4px; 
+.dpo-issue-cards {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-right: 4px;
 }
 
-.issue-cards::-webkit-scrollbar { 
-  width: 8px; 
+.dpo-issue-cards::-webkit-scrollbar {
+  width: 8px;
 }
 
-.issue-cards::-webkit-scrollbar-thumb { 
-  background: #cbd5e1; 
-  border-radius: 6px; 
+.dpo-issue-cards::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 6px;
 }
 
-.issue-cards::-webkit-scrollbar-thumb:hover { 
-  background: #94a3b8; 
+.dpo-issue-cards::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
 /* ==============================
    Card Layout
 ============================== */
-.issue-assign-card {
+.dpo-assign-issues-container .dpo-issue-assign-card {
   border: 1px solid #e5e7eb;
   border-radius: 12px;
   background-color: #f9fafb;
@@ -88,64 +91,114 @@
   transition: box-shadow 0.2s ease;
 }
 
-.issue-assign-card:hover {
+.dpo-assign-issues-container .dpo-issue-assign-card:hover {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
 }
 
 /* ==============================
    Card Header (Top Row)
 ============================== */
-.issue-top {
+.dpo-assign-issues-container .dpo-issue-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #e5e7eb;
-  padding-bottom: 2px;
+  padding-bottom: 6px;
 }
 
-.entry-id {
+.dpo-assign-issues-container .dpo-entry-id {
   font-weight: 600;
   color: #111827;
   font-size: 15px;
 }
 
-.delete-btn {
+.dpo-assign-issues-container .dpo-delete-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: none;
   border: none;
-  color: #b91c1c;
-  font-size: 18px;
+  color: #dc2626;
+  font-size: 22px;
   cursor: pointer;
   transition: transform 0.2s ease, color 0.2s ease;
 }
 
-.delete-btn:hover {
-  color: #991b1b;
+.dpo-assign-issues-container .dpo-delete-btn:hover {
+  color: #b91c1c;
   transform: scale(1.15);
+}
+
+.dpo-assign-issues-container .dpo-flag-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #475569;
+  cursor: pointer;
+}
+
+.dpo-assign-issues-container .dpo-flag-btn-mapped {
+  border-color: #2563eb;
+  color: #2563eb;
+  background: #eff6ff;
+}
+
+.dpo-assign-issues-container .dpo-unresolved-panel {
+  border: 1px solid #dbeafe;
+  background: #f8fbff;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.dpo-assign-issues-container .dpo-unresolved-title {
+  margin: 0 0 8px 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e3a8a;
+}
+
+.dpo-assign-issues-container .dpo-unresolved-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dpo-assign-issues-container .dpo-unresolved-item {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  font-size: 13px;
+  color: #1f2937;
 }
 
 /* ==============================
    Form Section
 ============================== */
-.issue-form {
+.dpo-assign-issues-container .dpo-issue-form {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.form-field {
+.dpo-assign-issues-container .dpo-form-field {
   display: flex;
   flex-direction: column;
 }
 
-.form-field label {
+.dpo-assign-issues-container .dpo-form-field label {
   color: #374151;
   font-size: 14px;
   font-weight: 500;
   margin-bottom: 4px;
 }
 
-.form-field input,
-.form-field select {
+.dpo-assign-issues-container .dpo-form-field input,
+.dpo-assign-issues-container .dpo-form-field select {
   border: 1px solid #d1d5db;
   border-radius: 8px;
   padding: 8px 10px;
@@ -155,7 +208,7 @@
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.form-field textarea {
+.dpo-assign-issues-container .dpo-form-field textarea {
   resize: none;
   height: 35px;
   min-height: 35px;
@@ -169,9 +222,14 @@
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.form-field input:focus,
-.form-field select:focus,
-.form-field textarea:focus {
+.dpo-assign-issues-container .dpo-form-field .dpo-description-textarea {
+  height: 86px;
+  min-height: 86px;
+}
+
+.dpo-assign-issues-container .dpo-form-field input:focus,
+.dpo-assign-issues-container .dpo-form-field select:focus,
+.dpo-assign-issues-container .dpo-form-field textarea:focus {
   border-color: #2563eb;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
@@ -179,18 +237,18 @@
 /* ==============================
    Deadline Field
 ============================== */
-.deadline-input {
+.dpo-assign-issues-container .dpo-deadline-input {
   position: relative;
   display: flex;
   align-items: center;
 }
 
-.deadline-input input {
+.dpo-assign-issues-container .dpo-deadline-input input {
   width: 100%;
   padding-right: 38px;
 }
 
-.calendar-icon {
+.dpo-assign-issues-container .dpo-calendar-icon {
   position: absolute;
   right: 12px;
   font-size: 18px;
@@ -199,6 +257,36 @@
   transition: color 0.2s ease;
 }
 
-.calendar-icon:hover {
+.dpo-assign-issues-container .dpo-calendar-icon:hover {
   color: #2563eb;
+}
+
+.dpo-assign-issues-container .dpo-assign-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dpo-assign-issues-container .dpo-card-bottom-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 10px;
+}
+
+.dpo-assign-issues-container .dpo-inline-allocate-btn {
+  background-color: #2563eb;
+  color: #fff;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.dpo-assign-issues-container .dpo-inline-allocate-btn:hover {
+  background-color: #1d4ed8;
 }

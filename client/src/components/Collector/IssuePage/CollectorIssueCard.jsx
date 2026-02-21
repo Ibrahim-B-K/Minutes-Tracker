@@ -1,11 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import "./CollectorIssueCard.css";
+import api from "../../../api/axios";
 
 function IssueCard({ issue }) {
-  const status = issue.status || "pending";
+  const [showLog, setShowLog] = useState(false);
+
+  const rawStatus = issue.status || "pending";
+  const normalizedStatus =
+    rawStatus === "submitted" ? "received" : rawStatus;
+
+  const responses = Array.isArray(issue.response)
+    ? issue.response
+    : [];
 
   const getStatusStyle = () => {
-    switch (status) {
+    switch (normalizedStatus) {
       case "overdue":
         return { borderColor: "#b91c1c" };
       case "received":
@@ -15,73 +24,247 @@ function IssueCard({ issue }) {
     }
   };
 
+  // 🔹 BUILD TIMELINE
+  const buildTimeline = () => {
+    let timeline = [];
+
+    // Issue Created
+    if (issue.created_at) {
+      timeline.push({
+        type: "Created",
+        text: "Issue Raised",
+        date: issue.created_at,
+      });
+    }
+
+    // Reuploads
+    if (issue.reuploads && issue.reuploads.length > 0) {
+      issue.reuploads.forEach((item) => {
+        timeline.push({
+          type: "Reupload",
+          text: "Issue Re-uploaded",
+          date: item.date,
+        });
+      });
+    }
+
+    // Responses
+    if (responses.length > 0) {
+      responses.forEach((resObj) => {
+        timeline.push({
+          type: "Response",
+          text: `${resObj.department} responded`,
+          date: resObj.date,
+          message: resObj.text,
+        });
+      });
+    }
+
+    // Sort by date
+    timeline.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    return timeline;
+  };
+
+  const timeline = buildTimeline();
+
   return (
-    <div className="issue-card" style={getStatusStyle()}>
-      <div className="issue-header">
-        <span className="issue-id">{issue.issue_no}</span>
-        <span className={`status ${status}`}>{status}</span>
-      </div>
-
-      <div className="issue-row">
-        <div className="label">Issue</div>
-        <div className="value">{issue.issue}</div>
-      </div>
-      <div className="issue-row">
-        <div className="label">Description</div>
-        <div className="value">{issue.issue_description}</div>
-      </div>
-      <div className="issue-body">
-        <div className="issue-row">
-          <div className="label">Department</div>
-          <div className="value">{issue.department}</div>
-        </div>
-        <div className="issue-row">
-          <div className="label">Priority</div>
-          <div className="value">{issue.priority}</div>
-        </div>
-
-        <div className="issue-row">
-          <div className="label">Location</div>
-          <div className="value">{issue.location}</div>
-        </div>
-
-        <div className="issue-row">
-          <div
-            className={`label ${status === "overdue" ? "overdue-text" : ""
-              }`}
+    <>
+      <div
+        className="collector-issue-card"
+        style={getStatusStyle()}
+      >
+        <div className="collector-issue-header">
+          <span className="collector-issue-id">
+            {issue.issue_no}
+          </span>
+          <span
+            className={`collector-status collector-${normalizedStatus}`}
           >
-            Deadline
-          </div>
-          <div
-            className={`value ${status === "overdue" ? "overdue-text" : ""
-              }`}
-          >
-            <span>{issue.deadline}</span>
+            {normalizedStatus}
+          </span>
+        </div>
+
+        <div className="collector-issue-row">
+          <div className="collector-label">Issue</div>
+          <div className="collector-value">
+            {issue.issue}
           </div>
         </div>
-      </div>
 
-      <div className="issue-footer">
-        <div className="footer-line"></div>
+        <div className="collector-issue-row">
+          <div className="collector-label">
+            Description
+          </div>
+          <div className="collector-value">
+            {issue.issue_description}
+          </div>
+        </div>
 
-        {status === "pending" && (
-          <p className="no-response">No response received yet</p>
-        )}
+        <div className="collector-issue-body">
+          <div className="collector-issue-row">
+            <div className="collector-label">
+              Department
+            </div>
+            <div className="collector-value">
+              {issue.department}
+            </div>
+          </div>
 
-        {status === "overdue" && (
-          <p className="no-response">Response overdue ⚠️</p>
-        )}
+          <div className="collector-issue-row">
+            <div className="collector-label">
+              Priority
+            </div>
+            <div className="collector-value">
+              {issue.priority}
+            </div>
+          </div>
 
-        {status === "received" && (
-          <div className="response-received">
-            <p className="res">
-              <strong>Department Response:</strong> {issue.response}
+          <div className="collector-issue-row">
+            <div className="collector-label">
+              Location
+            </div>
+            <div className="collector-value">
+              {issue.location}
+            </div>
+          </div>
+
+          <div className="collector-issue-row">
+            <div
+              className={`collector-label ${
+                normalizedStatus === "overdue"
+                  ? "collector-overdue-text"
+                  : ""
+              }`}
+            >
+              Deadline
+            </div>
+            <div
+              className={`collector-value ${
+                normalizedStatus === "overdue"
+                  ? "collector-overdue-text"
+                  : ""
+              }`}
+            >
+              {issue.deadline}
+            </div>
+          </div>
+        </div>
+
+        <div className="collector-issue-footer">
+          <div className="collector-footer-line"></div>
+
+          {normalizedStatus === "pending" &&
+            responses.length === 0 && (
+              <p className="collector-no-response">
+                No response received yet
+              </p>
+            )}
+
+          {normalizedStatus === "overdue" && (
+            <p className="collector-no-response">
+              Response overdue ⚠️
             </p>
-            <button className="res-button">Download Attachment</button>
-          </div>
-        )}
+          )}
+
+          {responses.length > 0 && (
+            <div
+              className="collector-response-container"
+              style={{ marginTop: "10px" }}
+            >
+              {responses.map((resObj, index) => (
+                <div
+                  key={index}
+                  className="collector-response-received"
+                >
+                  <p className="collector-res">
+                    <strong>
+                      {resObj.department}:
+                    </strong>{" "}
+                    {resObj.text}
+                  </p>
+
+                  {resObj.attachment && (
+                    <button
+                      className="collector-res-button"
+                      onClick={() => {
+                        const baseUrl =
+                          api.defaults.baseURL;
+                        const fullUrl =
+                          resObj.attachment.startsWith(
+                            "http"
+                          )
+                            ? resObj.attachment
+                            : `${baseUrl}${resObj.attachment}`;
+                        window.open(fullUrl, "_blank");
+                      }}
+                    >
+                      Download Attachment
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* 🔹 LOG BUTTON BOTTOM RIGHT */}
+          <button
+            className="collector-log-btn"
+            onClick={() => setShowLog(true)}
+          >
+            Log
+          </button>
+        </div>
       </div>
-    </div>
+
+      {/* 🔹 LOG MODAL */}
+      {showLog && (
+        <div className="collector-log-overlay">
+          <div
+            className="collector-log-backdrop"
+            onClick={() => setShowLog(false)}
+          ></div>
+
+          <div className="collector-log-modal">
+            <div className="collector-log-header">
+              <h3>
+                Issue Log - {issue.issue_no}
+              </h3>
+              <button
+                className="collector-log-close"
+                onClick={() => setShowLog(false)}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="collector-log-body">
+              {timeline.length === 0 ? (
+                <p>No log history available</p>
+              ) : (
+                timeline.map((item, index) => (
+                  <div
+                    key={index}
+                    className="collector-log-entry"
+                  >
+                    <div className="collector-log-dot"></div>
+                    <div>
+                      <strong>{item.text}</strong>
+                      <p>{item.date}</p>
+                      {item.message && (
+                        <p className="collector-log-msg">
+                          {item.message}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 

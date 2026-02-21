@@ -7,16 +7,16 @@ const GenerateReportCard = React.memo(function GenerateReportCard({
   removeCard,
 }) {
   return (
-    <div className="generate-report-card">
-      <div className="report-top">
-        <div className="report-id">{report.issue_no}</div>
-        <button className="report-delete-btn" onClick={() => removeCard(index)}>
+    <div className="collector-generate-report-card">
+      <div className="collector-report-top">
+        <div className="collector-report-id">{report.issue_no}</div>
+        <button className="collector-report-delete-btn" onClick={() => removeCard(index)}>
           🗑️
         </button>
       </div>
 
-      <div className="report-form">
-        <div className="form-field">
+      <div className="collector-report-form">
+        <div className="collector-form-field">
           <label>Department:</label>
           <input
             type="text"
@@ -25,7 +25,7 @@ const GenerateReportCard = React.memo(function GenerateReportCard({
           />
         </div>
 
-        <div className="form-field">
+        <div className="collector-form-field">
           <label>Issue:</label>
           <textarea
             value={report.issue}
@@ -33,16 +33,16 @@ const GenerateReportCard = React.memo(function GenerateReportCard({
             rows="3"
           />
         </div>
-        <div className="form-field">
+        <div className="collector-form-field">
           <label>Description:</label>
           <textarea
             rows="2"
             value={report.issue_description}
-            onChange={(e) => handleChange("issue_description", e.target.value)}
+            onChange={(e) => handleChange(index, "issue_description", e.target.value)}
           />
         </div>
 
-        <div className="form-field">
+        <div className="collector-form-field">
           <label>Response:</label>
           <textarea
             value={report.response || ""}
@@ -51,7 +51,7 @@ const GenerateReportCard = React.memo(function GenerateReportCard({
           />
         </div>
 
-        <div className="form-field">
+        <div className="collector-form-field">
           <label>Location:</label>
           <input
             type="text"

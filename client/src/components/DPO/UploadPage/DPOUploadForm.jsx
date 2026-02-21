@@ -2,6 +2,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import "./DPOUploadForm.css";
 import api from "../../../api/axios";
+import { saveDraft } from "../../../utils/dpoDrafts";
 
 export default function UploadForm({ onProcessed }) {
   /* ================= REFS ================= */
@@ -72,11 +73,23 @@ export default function UploadForm({ onProcessed }) {
       formData.append("meeting_date", date);
       formData.append("file", selectedFile);
 
-      await api.post("/upload-minutes", formData, {
+      const res = await api.post("/upload-minutes", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      onProcessed();
+      const extractedIssues = Array.isArray(res?.data?.data) ? res.data.data : [];
+      const minutesId = res?.data?.minutes_id || null;
+      const draftId = `draft_${Date.now()}`;
+
+      saveDraft({
+        id: draftId,
+        title: fileName || "Untitled Draft",
+        meetingDate: date,
+        minutesId,
+        issues: extractedIssues,
+      });
+
+      onProcessed(draftId);
     } catch (err) {
       console.error("Upload error:", err);
       alert("Failed to upload file.");
@@ -87,20 +100,20 @@ export default function UploadForm({ onProcessed }) {
   /* ================= LOADING UI ================= */
   if (uploading) {
     return (
-      <div className="upload-form loading-card">
+      <div className="dpo-upload-form dpo-loading-card">
         <h4>Extracting fields from document…</h4>
 
-        <div className="extract-wrapper">
-          <div className="document">
-            <div className="scan-line"></div>
+        <div className="dpo-extract-wrapper">
+          <div className="dpo-document">
+            <div className="dpo-scan-line"></div>
 
-            <div className="field"></div>
-            <div className="field short"></div>
-            <div className="field"></div>
-            <div className="field medium"></div>
+            <div className="dpo-field"></div>
+            <div className="dpo-field dpo-short"></div>
+            <div className="dpo-field"></div>
+            <div className="dpo-field dpo-medium"></div>
           </div>
 
-          <p className="status">{statusMessages[statusIndex]}</p>
+          <p className="dpo-status">{statusMessages[statusIndex]}</p>
         </div>
       </div>
     );
@@ -108,13 +121,13 @@ export default function UploadForm({ onProcessed }) {
 
   /* ================= FORM UI ================= */
   return (
-    <div className="upload-form">
-      <h2 className="upload-title">Upload Meeting Minutes</h2>
+    <div className="dpo-upload-form">
+      <h2 className="dpo-upload-title">Upload Meeting Minutes</h2>
 
-      <div className="form-content">
+      <div className="dpo-form-content">
         {/* DATE */}
-        <label className="field-label">Date</label>
-        <div className="date-input-wrapper">
+        <label className="dpo-field-label">Date</label>
+        <div className="dpo-date-input-wrapper">
           <input
             type="text"
             placeholder="dd-mm-yyyy"
@@ -124,7 +137,7 @@ export default function UploadForm({ onProcessed }) {
           />
 
           <span
-            className="calendar-icon"
+            className="dpo-calendar-icon"
             onClick={() => datePickerRef.current?.showPicker()}
           >
             📅
@@ -139,9 +152,9 @@ export default function UploadForm({ onProcessed }) {
         </div>
 
         {/* FILE */}
-        <label className="field-label">Minutes File</label>
+        <label className="dpo-field-label">Minutes File</label>
         <div
-          className={`file-drop ${dragOver ? "drag-over" : ""}`}
+          className={`dpo-file-drop ${dragOver ? "dpo-drag-over" : ""}`}
           onDragOver={(e) => {
             e.preventDefault();
             setDragOver(true);
@@ -153,15 +166,15 @@ export default function UploadForm({ onProcessed }) {
             handleFileSelect(e.dataTransfer.files?.[0]);
           }}
         >
-          <div className="file-drop-inner">
-            <div className="file-icon">📄</div>
-            <div className="file-text">
+          <div className="dpo-file-drop-inner">
+            <div className="dpo-file-icon">📄</div>
+            <div className="dpo-file-text">
               {fileName || "Click to upload or drag and drop"}
             </div>
 
             <input
               type="file"
-              className="file-input"
+              className="dpo-file-input"
               accept=".pdf,.doc,.docx"
               onChange={(e) => handleFileSelect(e.target.files?.[0])}
             />
@@ -169,7 +182,7 @@ export default function UploadForm({ onProcessed }) {
         </div>
 
         {/* SUBMIT */}
-        <button className="up" onClick={handleUploadAndProcess}>
+        <button className="dpo-up" onClick={handleUploadAndProcess}>
           Upload & Continue
         </button>
       </div>

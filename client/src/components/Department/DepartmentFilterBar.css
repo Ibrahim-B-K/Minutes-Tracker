@@ -1,4 +1,4 @@
-.filter-bar {
+.department-filter-bar {
   display: flex;
   gap: 15px;
   align-items: center;
@@ -11,17 +11,40 @@
   position: relative; /* positioning context for floating buttons */
 }
 
-.filter-bar {
+.department-filter-bar {
   transition: all 0.2s ease;
 }
 
-.date-input-wrapper {
+.department-search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 200px;
+  max-width: 400px;
+}
+
+.department-search-wrapper input {
+  padding: 10px 35px 10px 35px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  width: 100%;
+}
+
+.department-search-icon {
+  position: absolute;
+  left: 10px;
+  user-select: none;
+}
+
+.department-date-input-wrapper {
   position: relative;
   display: flex;
   align-items: center;
 }
 
-.date-input-wrapper input {
+.department-date-input-wrapper input {
   padding: 10px 35px 10px 12px;
   border: 1px solid #ccc;
   border-radius: 6px;
@@ -29,7 +52,8 @@
   width: 160px;
 }
 
-.calendar-icon {
+.department-calendar-icon {
+  position: absolute;
   right: 10px;
   font-size: 1rem;
   color: #666;
@@ -37,19 +61,19 @@
   user-select: none;
 }
 
-.filter-group {
+.department-filter-group {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.filter-group label {
+.department-filter-group label {
   color: #000;
   font-size: 0.9rem;
   min-width: 60px;
 }
 
-.filter-select {
+.department-filter-select {
   padding: 10px 12px;
   border: 1px solid #ccc;
   border-radius: 6px;
@@ -59,7 +83,19 @@
   background: white;
 }
 
-.generate-btn {
+.department-filter-btn {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  width: 160px;
+  background: white;
+  color: #000;
+  cursor: pointer;
+  text-align: left;
+}
+
+.department-generate-btn {
   background: #2563eb;
   color: white;
   border: none;
@@ -70,11 +106,11 @@
   margin-left: auto;
 }
 
-.generate-btn:hover {
+.department-generate-btn:hover {
   background: #1d4ed8;
 }
 
-.upload-btn {
+.department-upload-btn {
   position: absolute;
   right: 12px;
   top: -18px;
@@ -92,11 +128,75 @@
   gap: 6px;
 }
 
-.upload-btn img {
+.department-upload-btn img {
   width: 14px;
   height: 14px;
 }
 
-.upload-btn:hover {
+.department-upload-btn:hover {
   background: #059669;
+}
+
+/* ================= CUSTOM FILTER DROPDOWN ================= */
+
+.department-custom-filter,
+.department-filter-dropdown {
+  position: relative;
+}
+
+/* Dropdown Menu */
+.department-filter-menu {
+  display: none;
+  position: absolute;
+  top: 39px;
+  left: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  min-width: 160px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  z-index: 50;
+}
+
+.department-filter-dropdown:hover .department-filter-menu {
+  display: block;
+}
+
+/* Dropdown Items */
+.department-filter-item {
+  padding: 10px 12px;
+  cursor: pointer;
+  position: relative;
+  white-space: nowrap;
+}
+
+.department-filter-item:hover {
+  background: #f3f4f6;
+}
+
+/* ================= SUB MENU ================= */
+
+.department-sub-menu {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 100%;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  min-width: 160px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.department-filter-item:hover .department-sub-menu {
+  display: block;
+}
+
+.department-sub-menu div {
+  padding: 10px 12px;
+  cursor: pointer;
+}
+
+.department-sub-menu div:hover {
+  background: #e5e7eb;
 }

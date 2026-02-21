@@ -1,10 +1,70 @@
+.collector-nav-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.collector-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  width: 62px;
+}
+
+.collector-nav-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: #2563eb;
+  line-height: 1.1;
+  text-align: center;
+  white-space: nowrap;
+  transition: transform 0.15s ease;
+}
+
+.collector-bell-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.collector-notification-dot {
+  position: absolute;
+  top: -2px;
+  right: -1px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #ef4444;
+  border: 2px solid #fff;
+}
+
+.collector-nav-link.collector-active .collector-icon,
+.collector-nav-link.active .collector-icon {
+  transform: none;
+}
+
+.collector-nav-link.collector-active .collector-nav-item,
+.collector-nav-link.active .collector-nav-item {
+  transform: scale(1.1);
+}
+
+.collector-nav-link.collector-active .collector-nav-text,
+.collector-nav-link.active .collector-nav-text {
+  transform: none;
+  font-weight: 700;
+}
+
 .collector-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   background: white;
   padding: 15px 25px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .collector-logo {
@@ -25,35 +85,60 @@
 
 .collector-header-icons {
   display: flex;
-  align-items: center;
-  gap: 30px;
+  align-items: flex-end;
+  gap: 35px;
   position: relative;
 }
 
-
-/* standard icon container */
-
-
-.collector-icon.bell {
-  background: white; /* make the circular background white */
-  color: #2563eb; /* bell color */
-  font-size: 32px;
+.collector-icon.collector-home {
+  background: white;
+  color: #2563eb;
+  font-size: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.15s ease;
 }
 
-.collector-icon.profile {
+.collector-icon.collector-bell {
+  background: white;
+  color: #2563eb;
+  font-size: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.collector-icon.collector-minutes {
+  background: white;
+  color: #2563eb;
+  font-size: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.collector-icon.collector-profile {
   width: 30px;
   height: 30px;
   border-radius: 50%;
   background: #2563eb;
   color: white;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 30px;
   text-align: center;
+  margin-bottom: 6px;
 }
 
-/* Profile dropdown */
 .collector-profile-dropdown {
   position: absolute;
   top: 55px;
@@ -71,7 +156,6 @@
   width: 100%;
   background: none;
   border: none;
-  padding: 10px 16px;
   text-align: left;
   font-size: 14px;
   cursor: pointer;
@@ -82,7 +166,6 @@
   background: #f3f4f6;
 }
 
-/* Smooth appearance */
 @keyframes collectorDropdownFade {
   from {
     opacity: 0;
@@ -93,6 +176,7 @@
     transform: translateY(0);
   }
 }
+
 .collector-logout-btn {
   display: flex;
   align-items: center;
@@ -113,15 +197,5 @@
 
 .collector-logout-icon {
   font-size: 18px;
-  color: #ef4444; /* subtle red for logout */
+  color: #ef4444;
 }
-
-.collector-icon.minutes {
-  background: white;
-  color: #2563eb;
-  font-size: 28px;
-  cursor: pointer;
-  transition: transform 0.15s ease;
-}
-
-

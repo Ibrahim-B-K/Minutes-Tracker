@@ -1,26 +1,32 @@
-.issue-card {
+/* =========================
+   ISSUE CARD
+========================= */
+
+.dpo-issue-card {
+  position: relative; /* Needed for bottom-right log button */
   background: white;
   border-radius: 10px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
   padding: 20px;
   margin-top: 10px;
   border-left: 5px solid #facc15;
-  /* default yellow for pending */
+  opacity: 0;
+  animation: fadeInCard 0.3s ease forwards;
 }
 
-.issue-header {
+.dpo-issue-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 15px;
 }
 
-.issue-id {
+.dpo-issue-id {
   font-weight: 600;
   font-size: 1rem;
 }
 
-.status {
+.dpo-status {
   font-size: 0.8rem;
   padding: 5px 10px;
   border-radius: 12px;
@@ -28,35 +34,28 @@
   text-transform: capitalize;
 }
 
-/* 🔸 Color Variations */
-.status.pending {
+/* Status Colors */
+
+.dpo-status.dpo-pending {
   background: #fef9c3;
-  /* light yellow */
   color: #854d0e;
-  /* dark yellow text */
 }
 
-.status.overdue {
+.dpo-status.dpo-overdue {
   background: #fee2e2;
-  /* light red */
   color: #b91c1c;
-  /* dark red text */
 }
 
-.status.received {
+.dpo-status.dpo-received {
   background: #dcfce7;
-  /* light green */
   color: #166534;
-  /* dark green text */
 }
 
-.issue-body p {
-  margin: 4px 0;
-  font-size: 0.9rem;
-  color: #333;
-}
+/* =========================
+   BODY ROWS
+========================= */
 
-.issue-row {
+.dpo-issue-row {
   display: flex;
   align-items: flex-start;
   margin: 6px 0;
@@ -64,73 +63,75 @@
   color: #333;
 }
 
-.issue-row .label {
+.dpo-issue-row .dpo-label {
   width: 120px;
-  /* fixed width for alignment */
   font-weight: 600;
   color: #444;
-  text-align: left;
-  /* left align text */
   position: relative;
   padding-right: 8px;
 }
 
-/* Adds colon after label, spaced properly */
-.issue-row .label::after {
+.dpo-issue-row .dpo-label::after {
   content: ":";
   position: absolute;
   right: 0;
 }
 
-/* value text starts right after colon */
-.issue-row .value {
+.dpo-issue-row .dpo-value {
   flex: 1;
   padding-left: 12px;
   margin-top: 6px;
 }
 
-/* 🔴 Overdue text color */
-.overdue-text {
+.dpo-overdue-text {
   color: #b91c1c !important;
-  /* same red as your border */
   font-weight: 600;
 }
 
-.footer-line {
+/* =========================
+   FOOTER
+========================= */
+
+.dpo-footer-line {
   height: 1px;
   background: #000;
-  /* margin-top: 30px;*/
-  margin: 20px 0px 10px
+  margin: 20px 0px 10px;
 }
 
-.response-received {
+.dpo-issue-footer {
+  padding-bottom: 40px; /* Space for bottom-right log button */
+}
+
+/* =========================
+   RESPONSES
+========================= */
+
+.dpo-response-received {
   display: flex;
   flex-direction: column;
   background-color: #c9ffd9;
   padding: 8px;
   border-radius: 8px;
-  margin: 0px 0px 8px 0px; 
+  margin: 0px 0px 8px 0px;
   gap: 4px;
   align-items: flex-start;
 }
 
-.res {
+.dpo-res {
   margin: 0;
   font-size: 0.9rem;
   line-height: 1.4;
   color: #333;
-  text-align: left;
   width: 100%;
 }
 
-.res strong {
+.dpo-res strong {
   color: #000;
   margin-right: 4px;
 }
 
-.res-button {
+.dpo-res-button {
   align-self: flex-end;
-  /* Align button to the right */
   background: #19A752;
   color: white;
   border: none;
@@ -142,17 +143,106 @@
   transition: background 0.2s ease;
 }
 
-.issue-card {
-  opacity: 0;
-  animation: fadeInCard 0.3s ease forwards;
+/* =========================
+   LOG BUTTON (Bottom Right)
+========================= */
+
+.dpo-log-btn {
+  position: absolute;
+  bottom: 12px;
+  right: 15px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background 0.2s ease;
 }
+
+.dpo-log-btn:hover {
+  background: #1d4ed8;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.dpo-log-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+}
+
+.dpo-log-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.dpo-log-modal {
+  position: relative;
+  background: white;
+  width: 550px;
+  max-height: 80vh;
+  overflow-y: auto;
+  margin: 70px auto;
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 3001;
+  animation: fadeInCard 0.2s ease forwards;
+}
+
+.dpo-log-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dpo-log-close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.dpo-log-entry {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.dpo-log-dot {
+  width: 10px;
+  height: 10px;
+  background: #2563eb;
+  border-radius: 50%;
+  margin-top: 6px;
+}
+
+.dpo-log-msg {
+  background: #f3f4f6;
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+.dpo-log-date {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+/* =========================
+   ANIMATION
+========================= */
 
 @keyframes fadeInCard {
   from {
     opacity: 0;
     transform: translateY(4px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);

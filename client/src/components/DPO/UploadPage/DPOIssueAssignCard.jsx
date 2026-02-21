@@ -1,21 +1,33 @@
-// IssueAssignCard.jsx
 import React, { useRef } from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
+import OutlinedFlagIcon from "@mui/icons-material/OutlinedFlag";
+import FlagIcon from "@mui/icons-material/Flag";
 
-export default function IssueAssignCard({ issue, onChange, index, onAllocate }) {
+export default function IssueAssignCard({
+  issue,
+  onChange,
+  index,
+  onAllocate,
+  onDelete,
+  unresolvedIssues = [],
+  isFlagPanelOpen = false,
+  mappedUnresolvedId = null,
+  onToggleFlagPanel,
+  onMapIssue,
+}) {
   const dateRef = useRef(null);
 
   const handleChange = (field, value) => onChange(index, field, value);
 
   const formatDateInput = (text) => {
     const digits = text.replace(/\D/g, "");
-    let day = digits.substring(0, 2);
-    let month = digits.substring(2, 4);
-    let year = digits.substring(4, 8);
+    const day = digits.substring(0, 2);
+    const month = digits.substring(2, 4);
+    const year = digits.substring(4, 8);
 
     let formatted = day;
-    if (month) formatted += "-" + month;
-    if (year) formatted += "-" + year;
-
+    if (month) formatted += `-${month}`;
+    if (year) formatted += `-${year}`;
     return formatted;
   };
 
@@ -25,55 +37,39 @@ export default function IssueAssignCard({ issue, onChange, index, onAllocate }) 
   };
 
   return (
-    <div className="issue-assign-card">
-      <div className="issue-top">
-        <div className="entry-id">{issue.issue_no}</div>
-
-        {/* 🔹 ACTION BUTTONS */}
-<div
-  style={{
-    display: "flex",
-    alignItems: "center",
-    gap: "20px",
-    marginTop: "-10px",   // 👈 move buttons up
-  }}
->
-
-  <button
-    style={{
-      background: "none",
-      border: "none",
-      color: "#b91c1c",
-      fontSize: "18px",
-      cursor: "pointer",
-    }}
-  >
-    🗑️
-  </button>
-  {/* Allocate Button */}
-  <button
-    onClick={() => onAllocate(issue)}
-    style={{
-      backgroundColor: "#2563eb",
-      color: "#fff",
-      border: "none",
-      padding: "4px 10px",
-      borderRadius: "4px",
-      cursor: "pointer",
-      fontWeight: "400",
-    }}
-  >
-    Allocate
-  </button>
-
-  {/* Delete Button */}
-  
-</div>
-
+    <div className="dpo-issue-assign-card">
+      <div className="dpo-issue-top">
+        <div className="dpo-entry-id">{issue.issue_no}</div>
+        <button
+          className={`dpo-flag-btn ${mappedUnresolvedId ? "dpo-flag-btn-mapped" : ""}`}
+          onClick={onToggleFlagPanel}
+          title="Map with unresolved issue"
+        >
+          {mappedUnresolvedId ? <FlagIcon fontSize="small" /> : <OutlinedFlagIcon fontSize="small" />}
+        </button>
       </div>
 
-      <div className="issue-form">
-        <div className="form-field">
+      {isFlagPanelOpen && (
+        <div className="dpo-unresolved-panel">
+          <p className="dpo-unresolved-title">Map to unresolved issue</p>
+          <div className="dpo-unresolved-list">
+            {unresolvedIssues.map((item) => (
+              <label key={item.id} className="dpo-unresolved-item">
+                <input
+                  type="radio"
+                  name={`unresolved-map-${index}`}
+                  checked={mappedUnresolvedId === item.id}
+                  onChange={() => onMapIssue?.(item.id)}
+                />
+                <span>{item.title}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div className="dpo-issue-form">
+        <div className="dpo-form-field">
           <label>Department:</label>
           <input
             type="text"
@@ -82,39 +78,31 @@ export default function IssueAssignCard({ issue, onChange, index, onAllocate }) 
           />
         </div>
 
-        <div className="form-field">
+        <div className="dpo-form-field">
           <label>Issue title:</label>
-          <textarea
-            rows="2"
-            value={issue.issue}
-            onChange={(e) => handleChange("issue", e.target.value)}
-          />
+          <textarea rows="2" value={issue.issue} onChange={(e) => handleChange("issue", e.target.value)} />
         </div>
 
-        <div className="form-field">
+        <div className="dpo-form-field">
           <label>Description:</label>
           <textarea
-            rows="2"
+            className="dpo-description-textarea"
+            rows="4"
             value={issue.issue_description}
-            onChange={(e) =>
-              handleChange("issue_description", e.target.value)
-            }
+            onChange={(e) => handleChange("issue_description", e.target.value)}
           />
         </div>
 
-        <div className="form-field">
+        <div className="dpo-form-field">
           <label>Priority:</label>
-          <select
-            value={issue.priority}
-            onChange={(e) => handleChange("priority", e.target.value)}
-          >
+          <select value={issue.priority} onChange={(e) => handleChange("priority", e.target.value)}>
             <option>High</option>
             <option>Medium</option>
             <option>Low</option>
           </select>
         </div>
 
-        <div className="form-field">
+        <div className="dpo-form-field">
           <label>Location:</label>
           <input
             type="text"
@@ -123,38 +111,41 @@ export default function IssueAssignCard({ issue, onChange, index, onAllocate }) 
           />
         </div>
 
-        <div className="form-field">
+        <div className="dpo-form-field">
           <label>Deadline:</label>
-          <div className="deadline-input">
+          <div className="dpo-deadline-input">
             <input
               type="text"
               placeholder="DD-MM-YYYY"
               value={issue.deadline}
-              onChange={(e) =>
-                handleChange("deadline", formatDateInput(e.target.value))
-              }
+              onChange={(e) => handleChange("deadline", formatDateInput(e.target.value))}
             />
 
             <input
               type="date"
               ref={dateRef}
               style={{ display: "none" }}
-              onChange={(e) =>
-                handleChange(
-                  "deadline",
-                  convertDatePickerValue(e.target.value)
-                )
-              }
+              onChange={(e) => handleChange("deadline", convertDatePickerValue(e.target.value))}
             />
 
-            <span
-              className="calendar-icon"
-              onClick={() => dateRef.current.showPicker()}
-            >
+            <span className="dpo-calendar-icon" onClick={() => dateRef.current?.showPicker?.()}>
               📅
             </span>
           </div>
         </div>
+      </div>
+
+      <div className="dpo-card-bottom-actions">
+        {typeof onDelete === "function" && (
+          <button className="dpo-delete-btn" onClick={() => onDelete(index)} title="Delete issue">
+            <DeleteIcon fontSize="medium" />
+          </button>
+        )}
+        {typeof onAllocate === "function" && (
+          <button className="dpo-inline-allocate-btn" onClick={() => onAllocate(issue, index)}>
+            Allocate
+          </button>
+        )}
       </div>
     </div>
   );

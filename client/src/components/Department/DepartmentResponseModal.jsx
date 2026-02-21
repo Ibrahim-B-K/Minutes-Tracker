@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
-import axios from "axios"; // THIS WAS MISSING
 import "./DepartmentResponseModal.css";
 import api from "../../api/axios";
+import { emitIssuesUpdated, emitNotificationsUpdated } from "../../utils/liveUpdates";
 
 function ResponseModal({ isOpen, onClose, issue }) {
   const fileInputRef = useRef(null);
@@ -55,7 +55,8 @@ function ResponseModal({ isOpen, onClose, issue }) {
       if (res.data.success) {
         alert("Submitted successfully!");
         onClose();
-        window.location.reload();
+        emitIssuesUpdated({ source: "department-response", department: issue.department });
+        emitNotificationsUpdated({ source: "department-response" });
       }
     } catch (error) {
       console.error("Submission error:", error.response?.data || error.message);
@@ -64,36 +65,36 @@ function ResponseModal({ isOpen, onClose, issue }) {
   };
 
   return (
-    <div className="modal-overlay" >
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <button className="close-btn" onClick={onClose}>
+    <div className="department-modal-overlay" >
+      <div className="department-modal-content" onClick={(e) => e.stopPropagation()}>
+        <button className="department-close-btn" onClick={onClose}>
           &times;
         </button>
 
-        <h2 className="issue-title">Issue #{issue.issue_no}</h2>
+        <h2 className="department-issue-title">Issue #{issue.issue_no}</h2>
 
-        <div className="modal-fields">
-          <div className="modal-row">
+        <div className="department-modal-fields">
+          <div className="department-modal-row">
             <label>Issue</label>
             <input type="text" value={issue.issue} readOnly />
           </div>
 
-          <div className="modal-row">
+          <div className="department-modal-row">
             <label>Priority</label>
             <input type="text" value={issue.priority} readOnly />
           </div>
 
-          <div className="modal-row">
+          <div className="department-modal-row">
             <label>Location</label>
             <input type="text" value={issue.location} readOnly />
           </div>
 
-          <div className="modal-row">
+          <div className="department-modal-row">
             <label>Deadline</label>
             <input type="text" value={issue.deadline} readOnly />
           </div>
 
-          <div className="modal-row">
+          <div className="department-modal-row">
             <label>Your Response</label>
             <textarea
               placeholder="Type your response here..."
@@ -102,17 +103,17 @@ function ResponseModal({ isOpen, onClose, issue }) {
             />
           </div>
 
-          <div className="modal-row">
+          <div className="department-modal-row">
             <label>Upload File</label>
 
             <div
-              className="upload-area"
+              className="department-upload-area"
               onClick={() => fileInputRef.current.click()}
               onDrop={handleDrop}
               onDragOver={handleDragOver}
             >
               {fileName ? (
-                <p className="file-name">{fileName}</p>
+                <p className="department-file-name">{fileName}</p>
               ) : (
                 <p>
                   <strong>Click to upload</strong> or drag and drop file here
@@ -129,7 +130,7 @@ function ResponseModal({ isOpen, onClose, issue }) {
           </div>
         </div>
 
-        <button className="su" onClick={handleSubmit}>
+        <button className="department-submit-btn" onClick={handleSubmit}>
           Submit
         </button>
       </div>

@@ -1,13 +1,73 @@
-.dept-header {
+.department-nav-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.department-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  width: 62px;
+}
+
+.department-nav-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: #2563eb;
+  line-height: 1.1;
+  text-align: center;
+  white-space: nowrap;
+  transition: transform 0.15s ease;
+}
+
+.department-bell-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.department-notification-dot {
+  position: absolute;
+  top: -2px;
+  right: -1px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #ef4444;
+  border: 2px solid #fff;
+}
+
+.department-nav-link.department-active .department-icon,
+.department-nav-link.active .department-icon {
+  transform: none;
+}
+
+.department-nav-link.department-active .department-nav-item,
+.department-nav-link.active .department-nav-item {
+  transform: scale(1.1);
+}
+
+.department-nav-link.department-active .department-nav-text,
+.department-nav-link.active .department-nav-text {
+  transform: none;
+  font-weight: 700;
+}
+
+.department-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   background: white;
   padding: 15px 25px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.dept-logo {
+.department-logo {
   display: flex;
   align-items: center;
   font-weight: 600;
@@ -15,7 +75,7 @@
   color: #1a1a1a;
 }
 
-.dept-logo-icon {
+.department-logo-icon {
   width: 28px;
   height: 28px;
   background: #2563eb;
@@ -23,39 +83,63 @@
   margin-right: 10px;
 }
 
-.dept-header-icons {
+.department-header-icons {
   display: flex;
-  align-items: center;
-  gap: 15px;
+  align-items: flex-end;
+  gap: 35px;
   position: relative;
 }
 
-
-/* standard icon container */
-
-
-.dept-icon.bell {
-  background: white; /* make the circular background white */
-  color: #2563eb; /* bell color */
-  font-size: 32px;
-  margin-right: 15px;
+.department-icon.department-home {
+  background: white;
+  color: #2563eb;
+  font-size: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.15s ease;
 }
 
-.dept-icon.profile {
-  width: 36px;
-  height: 36px;
+.department-icon.department-bell {
+  background: white;
+  color: #2563eb;
+  font-size: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.department-icon.department-minutes {
+  background: white;
+  color: #2563eb;
+  font-size: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.department-icon.department-profile {
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   background: #2563eb;
   color: white;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
-  font-size: 13px;
-  line-height: 36px;
+  font-size: 16px;
+  line-height: 30px;
   text-align: center;
+  margin-bottom: 6px;
 }
 
-/* Profile dropdown */
-.dept-profile-dropdown {
+.department-profile-dropdown {
   position: absolute;
   top: 55px;
   right: 0;
@@ -64,27 +148,25 @@
   width: 140px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
   padding: 8px 0;
-  animation: deptDropdownFade 0.2s ease;
+  animation: departmentDropdownFade 0.2s ease;
   z-index: 1000;
 }
 
-.dept-profile-dropdown button {
+.department-profile-dropdown button {
   width: 100%;
   background: none;
   border: none;
-  padding: 10px 16px;
   text-align: left;
   font-size: 14px;
   cursor: pointer;
   color: #111827;
 }
 
-.dept-profile-dropdown button:hover {
+.department-profile-dropdown button:hover {
   background: #f3f4f6;
 }
 
-/* Smooth appearance */
-@keyframes deptDropdownFade {
+@keyframes departmentDropdownFade {
   from {
     opacity: 0;
     transform: translateY(-6px);
@@ -94,7 +176,8 @@
     transform: translateY(0);
   }
 }
-.dept-logout-btn {
+
+.department-logout-btn {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -108,12 +191,11 @@
   color: #111827;
 }
 
-.dept-logout-btn:hover {
+.department-logout-btn:hover {
   background: #f3f4f6;
 }
 
-.dept-logout-icon {
+.department-logout-icon {
   font-size: 18px;
-  color: #ef4444; /* subtle red for logout */
+  color: #ef4444;
 }
-

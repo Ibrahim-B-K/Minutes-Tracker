@@ -52,6 +52,9 @@ class DPOIssueSerializer(serializers.ModelSerializer):
     status = serializers.SerializerMethodField()
     deadline = serializers.SerializerMethodField()
     response = serializers.SerializerMethodField()
+    meeting_date = serializers.SerializerMethodField()
+    minutes_uploaded_date = serializers.SerializerMethodField()
+    created_at = serializers.DateTimeField(read_only=True)
 
     class Meta:
         model = Issue
@@ -65,7 +68,10 @@ class DPOIssueSerializer(serializers.ModelSerializer):
             'department', 
             'status', 
             'deadline', 
-            'response'
+            'response',
+            'meeting_date',
+            'minutes_uploaded_date',
+            'created_at',
         ]
     
     def get_department(self, obj):
@@ -76,7 +82,7 @@ class DPOIssueSerializer(serializers.ModelSerializer):
         statuses = [a.status.lower() for a in obj.issuedepartment_set.all()]
         if not statuses: return "pending"
         if "overdue" in statuses: return "overdue"
-        if all(s in ["submitted", "completed"] for s in statuses):
+        if any(s in ["submitted", "completed"] for s in statuses):
             return "submitted"
         return "pending"
 
@@ -97,6 +103,16 @@ class DPOIssueSerializer(serializers.ModelSerializer):
                     "attachment": latest_resp.attachment_path.url if latest_resp.attachment_path else None
                 })
         return response_list if response_list else None
+
+    def get_meeting_date(self, obj):
+        if obj.minutes and obj.minutes.meeting_date:
+            return obj.minutes.meeting_date.isoformat()
+        return None
+
+    def get_minutes_uploaded_date(self, obj):
+        if obj.minutes and obj.minutes.created_at:
+            return obj.minutes.created_at.date().isoformat()
+        return None
 
 class NotificationSerializer(serializers.ModelSerializer):
     time_ago = serializers.SerializerMethodField()

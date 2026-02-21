@@ -1,24 +1,24 @@
-.tabs-container {
+.collector-tabs-container {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  flex-shrink: 0;
 }
 
-.tabs {
+.collector-tabs {
   display: flex;
   gap: 15px;
   border-bottom: 1px solid #ddd;
   margin-bottom: 10px;
 }
 
-.tab {
+.collector-tab {
   padding: 10px 20px;
   cursor: pointer;
   font-weight: 500;
   color: #000;
 }
 
-.tab.active {
+.collector-tab.collector-active {
   border-bottom: 3px solid #007bff;
   color: #007bff;
 }
@@ -31,6 +31,6 @@
   scrollbar-width: thin;
 }
 
-.tab {
+.collector-tab {
   transition: background-color 0.2s ease, color 0.2s ease;
 }

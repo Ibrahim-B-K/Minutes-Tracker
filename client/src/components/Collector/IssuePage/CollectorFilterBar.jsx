@@ -32,6 +32,13 @@ function CollectorFilterBar({ activeTab, onFilterChange, issue_date }) {
     return `${digits.slice(0, 2)}-${digits.slice(2, 4)}-${digits.slice(4)}`;
   };
 
+  const dateKey = (value) => {
+    if (!value || typeof value !== "string") return null;
+    const [dd, mm, yyyy] = value.split("-");
+    if (!dd || !mm || !yyyy || dd.length < 2 || mm.length < 2 || yyyy.length < 4) return null;
+    return Number(`${yyyy}${mm}${dd}`);
+  };
+
   const handleFilterChange = (type, value) => {
     let updatedFilters = {
       fromDate,
@@ -45,10 +52,22 @@ function CollectorFilterBar({ activeTab, onFilterChange, issue_date }) {
       const v = formatDateInput(value);
       setFromDate(v);
       updatedFilters.fromDate = v;
+      const fromK = dateKey(v);
+      const toK = dateKey(updatedFilters.toDate);
+      if (fromK && toK && fromK > toK) {
+        setToDate(v);
+        updatedFilters.toDate = v;
+      }
     } else if (type === "toDate") {
       const v = formatDateInput(value);
       setToDate(v);
       updatedFilters.toDate = v;
+      const fromK = dateKey(updatedFilters.fromDate);
+      const toK = dateKey(v);
+      if (fromK && toK && toK < fromK) {
+        setFromDate(v);
+        updatedFilters.fromDate = v;
+      }
     } else if (type === "filterBy") {
       setFilterBy(value);
       updatedFilters.filterBy = value;
@@ -89,10 +108,10 @@ function CollectorFilterBar({ activeTab, onFilterChange, issue_date }) {
   };
 
   return (
-    <div className="filter-bar">
+    <div className="collector-filter-bar">
       {/* Search */}
-      <div className="search-wrapper">
-        <span className="search-icon">🔍</span>
+      <div className="collector-search-wrapper">
+        <span className="collector-search-icon">🔍</span>
         <input
           type="text"
           placeholder="Search issues..."
@@ -102,7 +121,7 @@ function CollectorFilterBar({ activeTab, onFilterChange, issue_date }) {
       </div>
 
       {/* From Date */}
-      <div className="date-input-wrapper">
+      <div className="collector-date-input-wrapper">
         <input
           type="text"
           placeholder="From: (dd-mm-yyyy)"
@@ -110,7 +129,7 @@ function CollectorFilterBar({ activeTab, onFilterChange, issue_date }) {
           onChange={(e) => handleFilterChange("fromDate", e.target.value)}
         />
         <span
-          className="calendar-icon"
+          className="collector-calendar-icon"
           onClick={() => {
             setActiveDateField("from");
             fromDatePickerRef.current.showPicker();
@@ -127,7 +146,7 @@ function CollectorFilterBar({ activeTab, onFilterChange, issue_date }) {
       </div>
 
       {/* To Date */}
-      <div className="date-input-wrapper">
+      <div className="collector-date-input-wrapper">
         <input
           type="text"
           placeholder="To: (dd-mm-yyyy)"
@@ -135,7 +154,7 @@ function CollectorFilterBar({ activeTab, onFilterChange, issue_date }) {
           onChange={(e) => handleFilterChange("toDate", e.target.value)}
         />
         <span
-          className="calendar-icon"
+          className="collector-calendar-icon"
           onClick={() => {
             setActiveDateField("to");
             toDatePickerRef.current.showPicker();
@@ -152,26 +171,26 @@ function CollectorFilterBar({ activeTab, onFilterChange, issue_date }) {
       </div>
 
       {/* Filter (Nested) */}
-      <div className="filter-group custom-filter">
+      <div className="collector-filter-group collector-custom-filter">
         <label>Filter:</label>
-        <div className="filter-dropdown">
-          <button className="filter-btn">
+        <div className="collector-filter-dropdown">
+          <button className="collector-filter-btn">
             {filterLabel[filterBy]} ▾
           </button>
 
-          <div className="filter-menu">
-            <div className="filter-item">
+          <div className="collector-filter-menu">
+            <div className="collector-filter-item">
               Priority ▸
-              <div className="sub-menu">
+              <div className="collector-sub-menu">
                 <div onClick={() => handleFilterChange("filterBy", "high")}>High</div>
                 <div onClick={() => handleFilterChange("filterBy", "medium")}>Medium</div>
                 <div onClick={() => handleFilterChange("filterBy", "low")}>Low</div>
               </div>
             </div>
 
-            <div className="filter-item">
+            <div className="collector-filter-item">
               Department ▸
-              <div className="sub-menu">
+              <div className="collector-sub-menu">
                 <div onClick={() => handleFilterChange("filterBy", "health")}>Health</div>
                 <div onClick={() => handleFilterChange("filterBy", "education")}>Education</div>
                 <div onClick={() => handleFilterChange("filterBy", "works")}>Public Works</div>
@@ -179,7 +198,7 @@ function CollectorFilterBar({ activeTab, onFilterChange, issue_date }) {
             </div>
 
             <div
-              className="filter-item"
+              className="collector-filter-item"
               onClick={() => handleFilterChange("filterBy", "all")}
             >
               All Issues
@@ -189,10 +208,10 @@ function CollectorFilterBar({ activeTab, onFilterChange, issue_date }) {
       </div>
 
       {/* Sort */}
-<div className="filter-group custom-filter">
+<div className="collector-filter-group collector-custom-filter">
   <label>Sort:</label>
-  <div className="filter-dropdown">
-    <button className="filter-btn">
+  <div className="collector-filter-dropdown">
+    <button className="collector-filter-btn">
       {sortBy === "priority"
         ? "Priority"
         : sortBy === "department"
@@ -200,23 +219,23 @@ function CollectorFilterBar({ activeTab, onFilterChange, issue_date }) {
         : "Deadline"} ▾
     </button>
 
-    <div className="filter-menu">
+    <div className="collector-filter-menu">
       <div
-        className="filter-item"
+        className="collector-filter-item"
         onClick={() => handleFilterChange("sortBy", "priority")}
       >
         Priority
       </div>
 
       <div
-        className="filter-item"
+        className="collector-filter-item"
         onClick={() => handleFilterChange("sortBy", "department")}
       >
         Department
       </div>
 
       <div
-        className="filter-item"
+        className="collector-filter-item"
         onClick={() => handleFilterChange("sortBy", "deadline")}
       >
         Deadline
@@ -228,7 +247,7 @@ function CollectorFilterBar({ activeTab, onFilterChange, issue_date }) {
 
       {/* Generate */}
       {activeTab === "Received" && (
-        <button className="generate-btn" onClick={handleGenerate}>
+        <button className="collector-generate-btn" onClick={handleGenerate}>
           Generate Report
         </button>
       )}

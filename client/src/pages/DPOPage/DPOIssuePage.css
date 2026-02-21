@@ -1,42 +1,54 @@
 .dpo-container {
   width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-.dpo-container .content {
+.dpo-container .dpo-content {
   padding: 10px 70px;
   position: relative;
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 /* ---------- Title ---------- */
-.dpo-container .page-title {
+.dpo-container .dpo-page-title {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
 }
 
-.dpo-container .page-title h1 {
-  font-size: 2.1rem;
+.dpo-container .dpo-page-title h1 {
+  font-size: 2rem;
   font-weight: 700;
+  margin: 0;
 }
 
 /* ---------- Upload Icon ---------- */
-.upload-icon {
+.dpo-upload-icon {
   font-size: 35px !important;
   margin-top: 40px;
   cursor: pointer;
   transition: 0.2s;
 }
 
-.upload-icon:hover {
+.dpo-upload-icon:hover {
   color: #1d4ed8;
   transform: scale(1.05);
 }
 
 .dpo-tab-scroll-area {
-  height: calc(100vh - 220px);
-  /* Restricted height to keep header visible */
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
   padding-right: 10px;
-  /* Space for scrollbar */
   scrollbar-width: thin;
   scrollbar-color: #cbd5e1 transparent;
 }
@@ -56,13 +68,13 @@
 }
 
 /* ---------- Tabs ---------- */
-.tabs-wrapper {
+.dpo-tabs-wrapper {
   position: relative;
   margin-top: 10px;
 }
 
 /* Add icon anchored to tabs (NO layout impact) */
-.tabs-add-icon {
+.dpo-tabs-add-icon {
   position: absolute;
   right: -2px;
   top: 60%;
@@ -85,7 +97,7 @@
   }
 }
 
-.no-issues {
+.dpo-no-issues {
   text-align: center;
   margin-top: 40px;
   padding: 20px;
@@ -93,12 +105,12 @@
   border-radius: 12px;
 }
 
-.loading-text {
+.dpo-loading-text {
   opacity: 0.7;
 }
 
 /* ---------- MODAL ---------- */
-.assign-overlay {
+.dpo-assign-overlay {
   position: fixed;
   inset: 0;
   z-index: 9999;
@@ -107,14 +119,14 @@
   justify-content: center;
 }
 
-.assign-backdrop {
+.dpo-assign-backdrop {
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(6px);
 }
 
-.assign-modal {
+.dpo-assign-modal {
   position: relative;
   width: 720px;
   max-height: 85vh;
@@ -125,20 +137,20 @@
   z-index: 10000;
 }
 
-.assign-header {
+.dpo-assign-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.close-btn {
+.dpo-close-btn {
   background: none;
   border: none;
   font-size: 20px;
   cursor: pointer;
 }
 
-.allocate-btn {
+.dpo-allocate-btn {
   background: #1d4ed8;
   color: #fff;
   border: none;
@@ -148,6 +160,12 @@
   cursor: pointer;
 }
 
-.allocate-btn:hover {
+.dpo-allocate-btn:hover {
   background: #1e40af;
 }
+.dpo-tab-scroll-area > .empty-state-card,
+.dpo-tab-scroll-area > .loading-state {
+  margin-top: 0;
+  min-height: 100%;
+}
+

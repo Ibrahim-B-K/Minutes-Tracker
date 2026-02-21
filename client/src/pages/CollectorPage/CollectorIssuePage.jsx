@@ -3,14 +3,58 @@ import CollectorHeader from "../../components/Collector/CollectorHeader";
 import CollectorTabs from "../../components/Collector/IssuePage/CollectorTabs";
 import CollectorFilterBar from "../../components/Collector/IssuePage/CollectorFilterBar";
 import CollectorIssueCard from "../../components/Collector/IssuePage/CollectorIssueCard";
+import EmptyStateCard from "../../components/common/EmptyStateCard";
+import LoadingState from "../../components/common/LoadingState";
 import "./CollectorIssuePage.css";
 import api from "../../api/axios"; // Uses your configured axios with Token
 
 function CollectorIssuePage() {
   const [activeTab, setActiveTab] = useState("Pending");
   const [filters, setFilters] = useState({});
+  const [defaultDateRange, setDefaultDateRange] = useState(null);
+  const [didInitDateRange, setDidInitDateRange] = useState(false);
   const [allIssues, setAllIssues] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  const dateKeyFromRaw = (raw) => {
+    if (!raw || typeof raw !== "string") return null;
+
+    const ymdMatch = raw.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (ymdMatch) {
+      return Number(`${ymdMatch[1]}${ymdMatch[2]}${ymdMatch[3]}`);
+    }
+
+    const dt = new Date(raw);
+    if (Number.isNaN(dt.getTime())) return null;
+    const y = dt.getFullYear();
+    const m = String(dt.getMonth() + 1).padStart(2, "0");
+    const d = String(dt.getDate()).padStart(2, "0");
+    return Number(`${y}${m}${d}`);
+  };
+
+  const getIssueDateKeys = (issue) => {
+    const keys = [dateKeyFromRaw(issue?.meeting_date || "")].filter(Boolean);
+    return [...new Set(keys)];
+  };
+
+  const getIssueDateKey = (issue) => {
+    const keys = getIssueDateKeys(issue);
+    return keys.length > 0 ? Math.max(...keys) : null;
+  };
+
+  const toDDMMYYYY = (dt) => {
+    const day = String(dt.getDate()).padStart(2, "0");
+    const month = String(dt.getMonth() + 1).padStart(2, "0");
+    const year = dt.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
+  const parseDDMMYYYYToKey = (value) => {
+    if (!value || typeof value !== "string") return null;
+    const [dd, mm, yyyy] = value.split("-");
+    if (!dd || !mm || !yyyy) return null;
+    return Number(`${yyyy}${mm.padStart(2, "0")}${dd.padStart(2, "0")}`);
+  };
 
   // 1. Fetch Logic: Get ALL issues once (or when Date filter changes)
   useEffect(() => {
@@ -27,6 +71,25 @@ function CollectorIssuePage() {
       .finally(() => setLoading(false));
 
   }, [filters.date]); // Only re-fetch from server if the DATE filter changes
+
+  useEffect(() => {
+    if (didInitDateRange || allIssues.length === 0) return;
+    const dated = allIssues
+      .map((issue) => {
+        const k = getIssueDateKey(issue);
+        if (!k) return null;
+        const s = String(k);
+        return new Date(Number(s.slice(0, 4)), Number(s.slice(4, 6)) - 1, Number(s.slice(6, 8)));
+      })
+      .filter(Boolean)
+      .sort((a, b) => b.getTime() - a.getTime());
+    if (dated.length === 0) return;
+
+    const latest = toDDMMYYYY(dated[0]);
+    setDefaultDateRange({ fromDate: latest, toDate: latest });
+    setFilters((prev) => ({ ...prev, fromDate: latest, toDate: latest }));
+    setDidInitDateRange(true);
+  }, [allIssues, didInitDateRange]);
 
   // 2. Instant Client-Side Filtering (Same logic as DPO page)
   const displayedIssues = useMemo(() => {
@@ -71,6 +134,23 @@ function CollectorIssuePage() {
         }
       }
 
+      const issueDateKeys = getIssueDateKeys(issue);
+      const fromDateKeyRaw = parseDDMMYYYYToKey(filters.fromDate);
+      const toDateKeyRaw = parseDDMMYYYYToKey(filters.toDate);
+      const lowerBound =
+        fromDateKeyRaw && toDateKeyRaw ? Math.min(fromDateKeyRaw, toDateKeyRaw) : fromDateKeyRaw;
+      const upperBound =
+        fromDateKeyRaw && toDateKeyRaw ? Math.max(fromDateKeyRaw, toDateKeyRaw) : toDateKeyRaw;
+      if ((lowerBound || upperBound) && issueDateKeys.length === 0) return false;
+      if (lowerBound || upperBound) {
+        const inRange = issueDateKeys.some((key) => {
+          if (lowerBound && key < lowerBound) return false;
+          if (upperBound && key > upperBound) return false;
+          return true;
+        });
+        if (!inRange) return false;
+      }
+
       // D. Sort Logic (Optional client-side sorting)
       // You can add sort logic here if needed, currently implied by order of array
 
@@ -79,18 +159,18 @@ function CollectorIssuePage() {
   }, [allIssues, activeTab, filters]);
 
   return (
-    <div className="collector-container">
+    <div className="collector-issuepage-container">
       <CollectorHeader />
 
-      <div className="content">
-        <div className="page-title">
+      <div className="collector-issuepage-content">
+        <div className="collector-page-title">
           <h1>District Monitor</h1>
         </div>
 
         <CollectorFilterBar
           activeTab={activeTab}
           onFilterChange={(newFilters) => setFilters(prev => ({ ...prev, ...newFilters }))}
-        // specific date filtering if needed
+          issue_date={defaultDateRange}
         />
 
         <CollectorTabs
@@ -100,9 +180,12 @@ function CollectorIssuePage() {
 
         <div className="collector-tab-scroll-area">
           {loading ? (
-            <p className="loading-text">Loading...</p>
+            <LoadingState text="Loading issues..." />
           ) : displayedIssues.length === 0 ? (
-            <p className="no-issues">No issues found</p>
+            <EmptyStateCard
+              title="No issues found"
+              description={`There are no ${activeTab.toLowerCase()} issues to display.`}
+            />
           ) : (
             displayedIssues.map((issue) => (
               <CollectorIssueCard key={issue.id} issue={issue} />

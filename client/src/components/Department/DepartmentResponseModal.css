@@ -1,5 +1,5 @@
 /* Overlay with blur effect */
-.modal-overlay {
+.department-modal-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.35);
@@ -11,7 +11,7 @@
 }
 
 /* Modal box */
-.modal-content {
+.department-modal-content {
   background: #ffffff;
   padding: 24px 28px;
   border-radius: 16px;
@@ -33,7 +33,7 @@
 }
 
 /* Issue title (top heading) */
-.issue-title {
+.department-issue-title {
   font-size: 22px;
   font-weight: 700;
   text-align: center;
@@ -42,27 +42,27 @@
 }
 
 /* Fields layout */
-.modal-fields {
+.department-modal-fields {
   display: flex;
   flex-direction: column;
   gap: 12px;
   margin-bottom: 20px;
 }
 
-.modal-row {
+.department-modal-row {
   display: flex;
   flex-direction: column;
   gap: 5px;
 }
 
-.modal-row label {
+.department-modal-row label {
   font-size: 13px;
   color: #4b5563;
   font-weight: 500;
 }
 
-.modal-row input,
-.modal-row textarea {
+.department-modal-row input,
+.department-modal-row textarea {
   padding: 8px 10px;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
@@ -70,38 +70,38 @@
   transition: border-color 0.2s ease;
 }
 
-.modal-row input:focus,
-.modal-row textarea:focus {
+.department-modal-row input:focus,
+.department-modal-row textarea:focus {
   outline: none;
   border-color: #2563eb;
 }
 
-.modal-row input[readonly] {
+.department-modal-row input[readonly] {
   background: #f9fafb;
   color: #6b7280;
   cursor: not-allowed;
 }
 
-.modal-row textarea {
+.department-modal-row textarea {
   resize: none;
   height: 70px;
 }
 
 /* Upload input */
-.modal-row input[type="file"] {
+.department-modal-row input[type="file"] {
   border: none;
   font-size: 13px;
   padding: 0;
 }
 
 /* Action buttons */
-.modal-actions {
+.department-modal-actions {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
 }
 
-.cancel-btn {
+.department-cancel-btn {
   background: #f3f4f6;
   border: none;
   padding: 8px 16px;
@@ -111,11 +111,11 @@
   transition: background-color 0.2s ease;
 }
 
-.cancel-btn:hover {
+.department-cancel-btn:hover {
   background: #e5e7eb;
 }
 
-.submit-btn {
+.department-submit-btn {
   background: #2563eb;
   color: white;
   border: none;
@@ -127,16 +127,16 @@
   transition: background-color 0.2s ease;
 }
 
-.submit-btn:hover {
+.department-submit-btn:hover {
   background: #1e40af;
 }
 
 /* No scrollbar */
-.modal-content::-webkit-scrollbar {
+.department-modal-content::-webkit-scrollbar {
   display: none;
 }
 /* Close icon (top-right corner) */
-.close-btn {
+.department-close-btn {
   position: absolute;
   top: 14px;
   right: 16px;
@@ -148,23 +148,23 @@
   transition: color 0.2s ease;
 }
 
-.close-btn:hover {
+.department-close-btn:hover {
   color: #111827;
 }
 
 /* Adjust modal content to make space for the close icon */
-.modal-content {
+.department-modal-content {
   position: relative;
   padding-top: 40px; /* extra space so title not overlaps close btn */
 }
 
 /* Single submit button centered */
-.modal-actions.single-btn {
+.department-modal-actions.department-single-btn {
   display: flex;
   justify-content: center;
 }
 /* Upload area box */
-.upload-area {
+.department-upload-area {
   border: 2px dashed #d1d5db;
   border-radius: 10px;
   padding: 20px;
@@ -177,20 +177,20 @@
 /* Add space below the upload area */
 
 
-.upload-area:hover {
+.department-upload-area:hover {
   border-color: #2563eb;
   background: #eff6ff;
   color: #1e3a8a;
 }
 
 /* File name display */
-.file-name {
+.department-file-name {
   font-size: 14px;
   color: #111827;
   font-weight: 500;
   word-break: break-all;
 }
-.su{
+.department-su{
     background: #2563eb;
   color: white;
   border: none;
