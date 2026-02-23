@@ -196,7 +196,7 @@
   padding: 4px 0;
 }
 
-.department-filter-dropdown:hover .department-filter-menu {
+.department-filter-dropdown.open .department-filter-menu {
   display: block;
 }
 

@@ -17,9 +17,27 @@ function DPOFilterBar({
   const [sortBy, setSortBy] = useState("newest");
   const [searchQuery, setSearchQuery] = useState("");
   const [activeDateField, setActiveDateField] = useState(null);
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [sortOpen, setSortOpen] = useState(false);
 
   const fromDatePickerRef = useRef(null);
   const toDatePickerRef = useRef(null);
+  const filterDropdownRef = useRef(null);
+  const sortDropdownRef = useRef(null);
+
+  // Close dropdowns on outside click
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (filterDropdownRef.current && !filterDropdownRef.current.contains(e.target)) {
+        setFilterOpen(false);
+      }
+      if (sortDropdownRef.current && !sortDropdownRef.current.contains(e.target)) {
+        setSortOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleGenerate = () => {
     setShowReportModal(true);
@@ -179,8 +197,8 @@ function DPOFilterBar({
       {/* Filter (Nested) */}
       <div className="dpo-filter-group dpo-custom-filter">
         <label>Filter:</label>
-        <div className="dpo-filter-dropdown">
-          <button className="dpo-filter-btn">
+        <div className={`dpo-filter-dropdown ${filterOpen ? "open" : ""}`} ref={filterDropdownRef}>
+          <button className="dpo-filter-btn" onClick={() => { setFilterOpen(!filterOpen); setSortOpen(false); }}>
             {filterLabel[filterBy]} ▾
           </button>
 
@@ -188,24 +206,24 @@ function DPOFilterBar({
             <div className="dpo-filter-item">
               Priority ▸
               <div className="dpo-sub-menu">
-                <div onClick={() => handleFilterChange("filterBy", "high")}>High</div>
-                <div onClick={() => handleFilterChange("filterBy", "medium")}>Medium</div>
-                <div onClick={() => handleFilterChange("filterBy", "low")}>Low</div>
+                <div onClick={() => { handleFilterChange("filterBy", "high"); setFilterOpen(false); }}>High</div>
+                <div onClick={() => { handleFilterChange("filterBy", "medium"); setFilterOpen(false); }}>Medium</div>
+                <div onClick={() => { handleFilterChange("filterBy", "low"); setFilterOpen(false); }}>Low</div>
               </div>
             </div>
 
             <div className="dpo-filter-item">
               Department ▸
               <div className="dpo-sub-menu">
-                <div onClick={() => handleFilterChange("filterBy", "health")}>Health</div>
-                <div onClick={() => handleFilterChange("filterBy", "education")}>Education</div>
-                <div onClick={() => handleFilterChange("filterBy", "works")}>Public Works</div>
+                <div onClick={() => { handleFilterChange("filterBy", "health"); setFilterOpen(false); }}>Health</div>
+                <div onClick={() => { handleFilterChange("filterBy", "education"); setFilterOpen(false); }}>Education</div>
+                <div onClick={() => { handleFilterChange("filterBy", "works"); setFilterOpen(false); }}>Public Works</div>
               </div>
             </div>
 
             <div
               className="dpo-filter-item"
-              onClick={() => handleFilterChange("filterBy", "all")}
+              onClick={() => { handleFilterChange("filterBy", "all"); setFilterOpen(false); }}
             >
               All Issues
             </div>
@@ -216,8 +234,8 @@ function DPOFilterBar({
       {/* Sort */}
       <div className="dpo-filter-group dpo-custom-filter">
         <label>Sort:</label>
-        <div className="dpo-filter-dropdown">
-          <button className="dpo-filter-btn">
+        <div className={`dpo-filter-dropdown ${sortOpen ? "open" : ""}`} ref={sortDropdownRef}>
+          <button className="dpo-filter-btn" onClick={() => { setSortOpen(!sortOpen); setFilterOpen(false); }}>
             {sortBy === "priority"
               ? "Priority"
               : sortBy === "department"
@@ -228,21 +246,21 @@ function DPOFilterBar({
           <div className="dpo-filter-menu">
             <div
               className="dpo-filter-item"
-              onClick={() => handleFilterChange("sortBy", "priority")}
+              onClick={() => { handleFilterChange("sortBy", "priority"); setSortOpen(false); }}
             >
               Priority
             </div>
 
             <div
               className="dpo-filter-item"
-              onClick={() => handleFilterChange("sortBy", "department")}
+              onClick={() => { handleFilterChange("sortBy", "department"); setSortOpen(false); }}
             >
               Department
             </div>
 
             <div
               className="dpo-filter-item"
-              onClick={() => handleFilterChange("sortBy", "deadline")}
+              onClick={() => { handleFilterChange("sortBy", "deadline"); setSortOpen(false); }}
             >
               Deadline
             </div>

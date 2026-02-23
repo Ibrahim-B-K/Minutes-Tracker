@@ -286,16 +286,36 @@ def _resolve_minutes_obj(minutes_id):
         return None, Response({"error": "Minutes record not found. Please upload file again."}, status=400)
 
 
+def _parse_deadline(item):
+    """Parse deadline from item data, defaulting to 14 days from today."""
+    raw = item.get('deadline', '')
+    if raw and raw.strip():
+        try:
+            # Handle DD-MM-YYYY format from frontend
+            parts = raw.strip().split('-')
+            if len(parts) == 3:
+                return date(int(parts[2]), int(parts[1]), int(parts[0]))
+        except (ValueError, IndexError):
+            pass
+    return date.today() + timedelta(days=14)
+
+
 def _create_issues_for_minutes(minute_obj, issues_data):
     dept_counts = {}
 
     for item in issues_data:
-        issue = Issue.objects.create(
+        issue_title = item.get('issue', 'No Title')
+
+        # Use update_or_create to avoid duplicates when re-allocating from drafts.
+        # Match on minutes + issue_title to find existing issues.
+        issue, created = Issue.objects.update_or_create(
             minutes=minute_obj,
-            issue_title=item.get('issue', 'No Title'),
-            issue_description=item.get('issue_description', ''),
-            location=item.get('location', ''),
-            priority=item.get('priority', 'Medium')
+            issue_title=issue_title,
+            defaults={
+                'issue_description': item.get('issue_description', ''),
+                'location': item.get('location', ''),
+                'priority': item.get('priority', 'Medium'),
+            }
         )
 
         dept_list = [
@@ -304,19 +324,28 @@ def _create_issues_for_minutes(minute_obj, issues_data):
             if d.strip()
         ]
 
+        d_date = _parse_deadline(item)
+
         for dept_name in dept_list:
             safe_dept_name = dept_name[:100]
             dept, _ = Department.objects.get_or_create(dept_name=safe_dept_name)
-            dept_counts[dept] = dept_counts.get(dept, 0) + 1
 
-            d_date = date.today() + timedelta(days=14)
-            IssueDepartment.objects.create(
+            # Use update_or_create for IssueDepartment too, so re-allocation
+            # updates the existing assignment instead of creating a duplicate.
+            _issue_dept, id_created = IssueDepartment.objects.update_or_create(
                 issue=issue,
                 department=dept,
-                deadline_date=d_date,
-                status='pending'
+                defaults={
+                    'deadline_date': d_date,
+                    'status': 'pending',
+                }
             )
 
+            # Only count as new assignment if the IssueDepartment was just created
+            if id_created:
+                dept_counts[dept] = dept_counts.get(dept, 0) + 1
+
+    # Only send notifications for genuinely new assignments
     for dept, count in dept_counts.items():
         users = User.objects.filter(department=dept).exclude(role__in=['DPO', 'COLLECTOR'])
         for u in users:

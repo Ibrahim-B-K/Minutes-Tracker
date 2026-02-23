@@ -281,7 +281,7 @@
   }
 }
 
-.dpo-filter-dropdown:hover .dpo-filter-menu {
+.dpo-filter-dropdown.open .dpo-filter-menu {
   display: block;
 }
 
