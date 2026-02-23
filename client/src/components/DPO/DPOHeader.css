@@ -1,9 +1,62 @@
-/* NavLink wrapper */
+/* ======================================== */
+/* ===== DPO HEADER — PREMIUM STYLE  ===== */
+/* ======================================== */
+
+.dpo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding: 14px 28px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 14px rgba(0, 0, 0, 0.03);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+}
+
+/* ── Logo ── */
+.dpo-logo {
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+  font-size: 1.12rem;
+  color: var(--color-text, #1f2937);
+  letter-spacing: -0.02em;
+}
+
+.dpo-logo-icon {
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(135deg, var(--color-primary, #2563eb), var(--color-primary-dark, #1d4ed8));
+  border-radius: 8px;
+  margin-right: 10px;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+}
+
+/* ── Nav wrapper ── */
+.dpo-header-icons {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  position: relative;
+}
+
+/* ── NavLink items ── */
 .dpo-nav-link {
   position: relative;
   display: flex;
   align-items: center;
   text-decoration: none;
+  padding: 6px 10px;
+  border-radius: var(--radius-md, 10px);
+  transition: background var(--transition-fast, 0.15s ease);
+}
+
+.dpo-nav-link:hover {
+  background: var(--color-primary-ghost, rgba(37, 99, 235, 0.08));
 }
 
 .dpo-nav-item {
@@ -11,21 +64,62 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
-  gap: 4px;
+  gap: 3px;
   width: 62px;
-
 }
 
 .dpo-nav-text {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
-  color: #2563eb;
+  color: var(--color-text-secondary, #6b7280);
   line-height: 1.1;
   text-align: center;
   white-space: nowrap;
-  transition: transform 0.15s ease;
+  transition: color var(--transition-fast, 0.15s ease),
+    font-weight var(--transition-fast, 0.15s ease);
 }
 
+/* active state */
+.dpo-nav-link.dpo-active .dpo-nav-text,
+.dpo-nav-link.active .dpo-nav-text {
+  color: var(--color-primary, #2563eb);
+  font-weight: 700;
+}
+
+.dpo-nav-link.dpo-active,
+.dpo-nav-link.active {
+  background: var(--color-primary-ghost, rgba(37, 99, 235, 0.08));
+}
+
+.dpo-nav-link.dpo-active .dpo-nav-item,
+.dpo-nav-link.active .dpo-nav-item {
+  transform: scale(1.05);
+}
+
+.dpo-nav-link.dpo-active .dpo-icon,
+.dpo-nav-link.active .dpo-icon {
+  transform: none;
+}
+
+/* ── Icons ── */
+.dpo-icon.dpo-home,
+.dpo-icon.dpo-bell,
+.dpo-icon.dpo-minutes,
+.dpo-icon.dpo-drafts {
+  color: var(--color-primary, #2563eb);
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform var(--transition-fast, 0.15s ease);
+}
+
+.dpo-nav-link:hover .dpo-icon {
+  transform: scale(1.12);
+}
+
+/* ── Bell wrap + notif dot ── */
 .dpo-bell-wrap {
   position: relative;
   display: inline-flex;
@@ -36,116 +130,63 @@
 .dpo-notification-dot {
   position: absolute;
   top: -2px;
-  right: -1px;
+  right: -2px;
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: #ef4444;
+  background: var(--color-danger, #ef4444);
   border: 2px solid #fff;
+  animation: pulseDot 2s ease-in-out infinite;
 }
 
-/* Active icon pop */
-.dpo-nav-link.dpo-active .dpo-icon,
-.dpo-nav-link.active .dpo-icon {
-  transform: none;
+@keyframes pulseDot {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.35);
+    opacity: 0.7;
+  }
 }
 
-.dpo-nav-link.dpo-active .dpo-nav-item,
-.dpo-nav-link.active .dpo-nav-item {
-  transform: scale(1.1);
-}
-
-.dpo-nav-link.dpo-active .dpo-nav-text,
-.dpo-nav-link.active .dpo-nav-text {
-  transform: none;
-  font-weight: 700;
-}
-
-/* Underline */
-
-.dpo-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: white;
-  padding: 15px 25px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-
-.dpo-logo {
-  display: flex;
-  align-items: center;
-  font-weight: 600;
-  font-size: 1.1rem;
-  color: #1a1a1a;
-}
-
-.dpo-logo-icon {
-  width: 28px;
-  height: 28px;
-  background: #2563eb;
-  border-radius: 5px;
-  margin-right: 10px;
-}
-
-.dpo-header-icons {
-  display: flex;
-  align-items: flex-end;
-  gap: 35px;
-  position: relative;
-}
-
-/* standard icon container */
-
-.dpo-icon.dpo-home {
-  background: white;
-  color: #2563eb;
-  font-size: 28px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: transform 0.15s ease;
-}
-
-
-.dpo-icon.dpo-bell {
-  background: white; /* make the circular background white */
-  color: #2563eb; /* bell color */
-  font-size: 25px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
+/* ── Profile avatar ── */
 .dpo-icon.dpo-profile {
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  background: #2563eb;
+  background: linear-gradient(135deg, var(--color-primary, #2563eb), var(--color-primary-dark, #1d4ed8));
   color: white;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  font-size: 16px;
-  line-height: 30px;
+  font-size: 14px;
+  line-height: 32px;
   text-align: center;
-  margin-bottom:6px;
+  margin-bottom: 4px;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+  transition: transform var(--transition-fast, 0.15s ease),
+    box-shadow var(--transition-fast, 0.15s ease);
 }
 
-/* Profile dropdown */
+.dpo-icon.dpo-profile:hover {
+  transform: scale(1.08);
+  box-shadow: 0 3px 12px rgba(37, 99, 235, 0.35);
+}
+
+/* ── Profile dropdown ── */
 .dpo-profile-dropdown {
   position: absolute;
   top: 55px;
   right: 0;
-  background: #fff;
-  border-radius: 10px;
-  width: 140px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-  padding: 8px 0;
+  background: var(--color-surface, #fff);
+  border-radius: var(--radius-lg, 14px);
+  width: 150px;
+  box-shadow: var(--shadow-lg, 0 8px 30px rgba(0, 0, 0, 0.12));
+  padding: 6px 0;
+  border: 1px solid var(--color-border, #e2e8f0);
   animation: dpoDropdownFade 0.2s ease;
   z-index: 1000;
 }
@@ -154,26 +195,26 @@
   width: 100%;
   background: none;
   border: none;
-
   text-align: left;
-  font-size: 14px;
+  font-size: 13.5px;
+  font-family: inherit;
   cursor: pointer;
-  color: #111827;
+  color: var(--color-text, #1f2937);
 }
 
-
-
-/* Smooth appearance */
 @keyframes dpoDropdownFade {
   from {
     opacity: 0;
-    transform: translateY(-6px);
+    transform: translateY(-8px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
+
+/* ── Logout / Add Dept buttons ── */
 .dpo-logout-btn {
   display: flex;
   align-items: center;
@@ -183,9 +224,12 @@
   border: none;
   padding: 10px 16px;
   text-align: left;
-  font-size: 14px;
+  font-size: 13.5px;
+  font-family: inherit;
   cursor: pointer;
-  color: #111827;
+  color: var(--color-text, #1f2937);
+  border-radius: 0;
+  transition: background var(--transition-fast, 0.15s ease);
 }
 
 .dpo-logout-btn:hover {
@@ -194,110 +238,83 @@
 
 .dpo-logout-icon {
   font-size: 18px;
-  color: #ef4444; /* subtle red for logout */
+  color: var(--color-danger, #ef4444);
 }
 
-.dpo-icon.dpo-minutes {
-  background: white;
-  color: #2563eb;
-  font-size: 25px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: transform 0.15s ease;
+.dpo-adddept-icon {
+  font-size: 18px;
+  color: var(--color-primary, #2563eb);
 }
 
-
-
-.dpo-icon.dpo-drafts {
-    background: white;
-  color: #2563eb;
-  font-size: 25px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: transform 0.15s ease;
-}
-/* Modal Overlay */
-.dpo-modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2000;
-}
-
-/* ========================= */
-/* ===== Modal Overlay ===== */
-/* ========================= */
+/* ═══════════════════════════════════ */
+/* ═════ MODAL — Add Department ═════ */
+/* ═══════════════════════════════════ */
 
 .dpo-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 2000;
-  backdrop-filter: blur(3px);
+  animation: fadeIn 0.2s ease;
 }
 
-/* ========================= */
-/* ===== Modal Box ===== */
-/* ========================= */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
 
 .dpo-modal {
-  background: #ffffff;
-  width: 380px;
-  max-width: 90%;
+  background: var(--color-surface, #fff);
+  width: 390px;
+  max-width: 92%;
   padding: 28px;
-  border-radius: 14px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+  border-radius: var(--radius-lg, 14px);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  animation: dpoDropdownFade 0.2s ease;
+  gap: 16px;
+  animation: dpoDropdownFade 0.25s ease;
 }
 
-/* Title */
 .dpo-modal h3 {
   margin: 0;
-  font-size: 20px;
-  font-weight: 600;
-  color: #111827;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-text, #1f2937);
   text-align: center;
 }
 
-/* ========================= */
-/* ===== Input Fields ===== */
-/* ========================= */
-
+/* ── Modal inputs ── */
 .dpo-modal input {
-  padding: 11px 12px;
-  border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  padding: 11px 14px;
+  border-radius: var(--radius-md, 10px);
+  border: 1.5px solid var(--color-border, #e2e8f0);
   font-size: 14px;
-  transition: all 0.2s ease;
+  font-family: inherit;
   background: #f9fafb;
+  transition: border-color var(--transition-base, 0.25s ease),
+    box-shadow var(--transition-base, 0.25s ease),
+    background var(--transition-base, 0.25s ease);
 }
 
 .dpo-modal input:focus {
   outline: none;
-  border-color: #2563eb;
-  background: #ffffff;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  border-color: var(--color-primary, #2563eb);
+  background: var(--color-surface, #fff);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
 }
 
-/* ========================= */
-/* ===== Password Field ===== */
-/* ========================= */
-
+/* ── Password field ── */
 .dpo-password-field {
   position: relative;
   display: flex;
@@ -313,77 +330,60 @@
   position: absolute;
   right: 12px;
   cursor: pointer;
-  color: #6b7280;
+  color: var(--color-text-muted, #9ca3af);
   display: flex;
   align-items: center;
-  transition: color 0.2s ease;
+  transition: color var(--transition-fast, 0.15s ease);
 }
 
 .dpo-eye-icon:hover {
-  color: #2563eb;
+  color: var(--color-primary, #2563eb);
 }
 
 .dpo-eye-icon svg {
   font-size: 20px;
 }
 
-/* ========================= */
-/* ===== Buttons ===== */
-/* ========================= */
-
+/* ── Modal buttons ── */
 .dpo-modal-buttons {
   display: flex;
   justify-content: flex-end;
-  gap: 12px;
-  margin-top: 8px;
+  gap: 10px;
+  margin-top: 6px;
 }
 
-/* Cancel */
 .dpo-cancel-btn {
   background: #f3f4f6;
   border: none;
-  padding: 9px 16px;
-  border-radius: 8px;
+  padding: 9px 18px;
+  border-radius: var(--radius-md, 10px);
   cursor: pointer;
   font-size: 14px;
-  transition: all 0.2s ease;
+  font-family: inherit;
+  font-weight: 500;
+  transition: background var(--transition-fast, 0.15s ease);
 }
 
 .dpo-cancel-btn:hover {
   background: #e5e7eb;
 }
 
-/* Create */
 .dpo-save-btn {
-  background: #2563eb;
+  background: linear-gradient(135deg, var(--color-primary, #2563eb), var(--color-primary-dark, #1d4ed8));
   color: white;
   border: none;
-  padding: 9px 18px;
-  border-radius: 8px;
+  padding: 9px 20px;
+  border-radius: var(--radius-md, 10px);
   cursor: pointer;
   font-size: 14px;
-  font-weight: 500;
-  transition: all 0.2s ease;
+  font-family: inherit;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+  transition: transform var(--transition-fast, 0.15s ease),
+    box-shadow var(--transition-fast, 0.15s ease);
 }
 
 .dpo-save-btn:hover {
-  background: #1d4ed8;
   transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
 }
-
-/* ========================= */
-/* ===== Add Dept Icon ===== */
-/* ========================= */
-
-.dpo-adddept-icon {
-  font-size: 18px;
-  color: #2563eb;
-}
-
-
-
-
-
-
-
-

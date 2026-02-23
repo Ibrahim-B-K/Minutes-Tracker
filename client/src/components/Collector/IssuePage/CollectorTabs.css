@@ -1,3 +1,5 @@
+/* ===== Collector Tabs — Premium ===== */
+
 .collector-tabs-container {
   display: flex;
   flex-direction: column;
@@ -6,31 +8,40 @@
 
 .collector-tabs {
   display: flex;
-  gap: 15px;
-  border-bottom: 1px solid #ddd;
-  margin-bottom: 10px;
+  gap: 4px;
+  border-bottom: 2px solid var(--color-border, #e2e8f0);
+  margin-bottom: 12px;
 }
 
 .collector-tab {
-  padding: 10px 20px;
+  padding: 10px 22px;
   cursor: pointer;
   font-weight: 500;
-  color: #000;
+  font-size: 0.9rem;
+  color: var(--color-text-secondary, #6b7280);
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  border-radius: var(--radius-sm, 6px) var(--radius-sm, 6px) 0 0;
+  transition: color var(--transition-fast, 0.15s ease),
+    border-color var(--transition-base, 0.25s ease),
+    background var(--transition-fast, 0.15s ease);
+}
+
+.collector-tab:hover {
+  color: var(--color-primary, #2563eb);
+  background: var(--color-primary-ghost, rgba(37, 99, 235, 0.04));
 }
 
 .collector-tab.collector-active {
-  border-bottom: 3px solid #007bff;
-  color: #007bff;
+  border-bottom-color: var(--color-primary, #2563eb);
+  color: var(--color-primary, #2563eb);
+  font-weight: 700;
+  background: var(--color-primary-ghost, rgba(37, 99, 235, 0.06));
 }
 
 .collector-tab-scroll-area {
   flex: 1;
   overflow-y: auto;
-  /* max-height removed */
   padding-right: 10px;
   scrollbar-width: thin;
-}
-
-.collector-tab {
-  transition: background-color 0.2s ease, color 0.2s ease;
 }

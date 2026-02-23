@@ -1,3 +1,5 @@
+/* ===== Collector Minutes Page — Premium ===== */
+
 .collector-minutespage-container {
   width: 100%;
   height: 100vh;
@@ -7,12 +9,25 @@
 }
 
 .collector-minutespage-container .collector-minutespage-content {
-  padding: 10px 70px;
+  padding: 16px 70px;
   flex: 1;
   min-height: 0;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  animation: collPageEnter 0.4s ease both;
+}
+
+@keyframes collPageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .collector-minutespage-container .collector-minutes-body {
@@ -25,85 +40,40 @@
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 20px;
-  color: #1f2937;
-}
-
-.collector-minutespage-container .collector-loading-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 60px 20px;
-  gap: 20px;
-}
-
-.collector-minutespage-container .collector-spinner {
-  width: 50px;
-  height: 50px;
-  border: 4px solid #e5e7eb;
-  border-top-color: #2563eb;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.collector-minutespage-container .collector-loading-text {
-  color: #6b7280;
-  font-size: 1rem;
+  color: var(--color-text, #1f2937);
 }
 
 .collector-minutespage-container .collector-error-message {
-  background: #fee;
+  background: #fef2f2;
   color: #dc2626;
   padding: 12px 16px;
-  border-radius: 8px;
+  border-radius: var(--radius-md, 10px);
   margin-bottom: 20px;
   border-left: 4px solid #dc2626;
-}
-
-.collector-minutespage-container .collector-no-minutes {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 80px 20px;
-  gap: 16px;
-  color: #9ca3af;
-}
-
-.collector-minutespage-container .collector-empty-icon {
-  font-size: 64px;
-  opacity: 0.5;
-}
-
-.collector-minutespage-container .collector-no-minutes p {
-  font-size: 1.2rem;
-  margin: 0;
+  font-size: 0.9rem;
 }
 
 .collector-minutespage-container .collector-minutes-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 18px;
 }
 
 .collector-minutespage-container .collector-minutes-card {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background: var(--color-surface, #fff);
+  border-radius: var(--radius-lg, 14px);
+  box-shadow: var(--shadow-sm, 0 2px 8px rgba(0, 0, 0, 0.06));
   overflow: hidden;
-  transition: all 0.3s ease;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-border, #e2e8f0);
+  transition: transform var(--transition-base, 0.25s ease),
+    box-shadow var(--transition-base, 0.25s ease),
+    border-color var(--transition-base, 0.25s ease);
 }
 
 .collector-minutespage-container .collector-minutes-card:hover {
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md, 0 4px 16px rgba(0, 0, 0, 0.08));
+  border-color: var(--color-border-hover, #cbd5e1);
 }
 
 .collector-minutespage-container .collector-card-header {
@@ -111,8 +81,8 @@
   align-items: center;
   gap: 12px;
   padding: 16px;
-  background: #f9fafb;
-  border-bottom: 1px solid #e5e7eb;
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  border-bottom: 1px solid var(--color-border, #e2e8f0);
 }
 
 .collector-minutespage-container .collector-pdf-icon {
@@ -123,9 +93,9 @@
 
 .collector-minutespage-container .collector-file-name {
   margin: 0;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--color-text, #1f2937);
   word-break: break-word;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -143,9 +113,9 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   gap: 8px;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
 }
 
 .collector-minutespage-container .collector-info-item:last-child {
@@ -154,12 +124,15 @@
 
 .collector-minutespage-container .collector-info-item .collector-label {
   font-weight: 600;
-  color: #6b7280;
-  min-width: 120px;
+  color: var(--color-text-secondary, #6b7280);
+  min-width: 115px;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .collector-minutespage-container .collector-info-item .collector-value {
-  color: #1f2937;
+  color: var(--color-text, #1f2937);
   text-align: right;
   flex: 1;
   word-break: break-word;
@@ -170,7 +143,7 @@
   gap: 10px;
   padding: 12px 16px;
   background: #f9fafb;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--color-border, #e2e8f0);
 }
 
 .collector-minutespage-container .collector-action-btn {
@@ -179,33 +152,36 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  padding: 10px 12px;
+  padding: 9px 12px;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-md, 10px);
   font-size: 0.85rem;
   font-weight: 600;
+  font-family: inherit;
   cursor: pointer;
-  transition: all 0.2s ease;
   text-decoration: none;
   color: white;
+  transition: transform var(--transition-fast, 0.15s ease), box-shadow var(--transition-fast, 0.15s ease);
 }
 
 .collector-minutespage-container .collector-view-btn {
-  background: #2563eb;
+  background: linear-gradient(135deg, var(--color-primary, #2563eb), var(--color-primary-dark, #1d4ed8));
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
 }
 
 .collector-minutespage-container .collector-view-btn:hover {
-  background: #1d4ed8;
   transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
 }
 
 .collector-minutespage-container .collector-download-btn {
-  background: #10b981;
+  background: linear-gradient(135deg, var(--color-success, #10b981), #059669);
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
 }
 
 .collector-minutespage-container .collector-download-btn:hover {
-  background: #059669;
   transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
 }
 
 .collector-minutespage-container .collector-btn-icon {
@@ -239,9 +215,8 @@
   }
 }
 
-.collector-minutespage-container .collector-minutes-body > .empty-state-card,
-.collector-minutespage-container .collector-minutes-body > .loading-state {
+.collector-minutespage-container .collector-minutes-body>.empty-state-card,
+.collector-minutespage-container .collector-minutes-body>.loading-state {
   margin-top: 0;
   min-height: 100%;
 }
-

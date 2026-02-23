@@ -1,17 +1,21 @@
+/* ===== Collector Filter Bar — Premium ===== */
+
 .collector-filter-bar {
   display: flex;
-  gap: 15px;
+  gap: 12px;
   align-items: center;
-  background: white;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  /* margin-bottom: 20px; */
+  background: var(--color-surface, #fff);
+  padding: 14px 16px;
+  border-radius: var(--radius-lg, 14px);
+  box-shadow: var(--shadow-sm, 0 2px 8px rgba(0, 0, 0, 0.06));
+  border: 1px solid var(--color-border, #e2e8f0);
   flex-wrap: wrap;
-  position: relative; /* positioning context for floating buttons */
+  position: relative;
+  transition: box-shadow var(--transition-base, 0.25s ease);
 }
-.collector-filter-bar {
-  transition: all 0.2s ease;
+
+.collector-filter-bar:focus-within {
+  box-shadow: var(--shadow-md, 0 4px 16px rgba(0, 0, 0, 0.08));
 }
 
 .collector-search-wrapper {
@@ -24,17 +28,29 @@
 }
 
 .collector-search-wrapper input {
-  padding: 10px 35px 10px 35px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 0.9rem;
+  padding: 9px 14px 9px 36px;
+  border: 1.5px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-md, 10px);
+  font-size: 0.88rem;
+  font-family: inherit;
   width: 100%;
+  background: #f9fafb;
+  outline: none;
+  transition: border-color var(--transition-base, 0.25s ease), box-shadow var(--transition-base, 0.25s ease), background var(--transition-base, 0.25s ease);
+}
+
+.collector-search-wrapper input:focus {
+  border-color: var(--color-primary, #2563eb);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  background: #fff;
 }
 
 .collector-search-icon {
   position: absolute;
   left: 10px;
   user-select: none;
+  color: var(--color-text-muted, #9ca3af);
+  font-size: 20px;
 }
 
 .collector-date-input-wrapper {
@@ -44,20 +60,34 @@
 }
 
 .collector-date-input-wrapper input {
-  padding: 10px 35px 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 0.9rem;
+  padding: 9px 36px 9px 12px;
+  border: 1.5px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-md, 10px);
+  font-size: 0.88rem;
+  font-family: inherit;
   width: 160px;
+  background: #f9fafb;
+  outline: none;
+  transition: border-color var(--transition-base, 0.25s ease), box-shadow var(--transition-base, 0.25s ease);
+}
+
+.collector-date-input-wrapper input:focus {
+  border-color: var(--color-primary, #2563eb);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 .collector-calendar-icon {
   position: absolute;
   right: 10px;
   font-size: 1rem;
-  color: #666;
+  color: var(--color-text-secondary, #6b7280);
   cursor: pointer;
   user-select: none;
+  transition: color var(--transition-fast, 0.15s ease);
+}
+
+.collector-calendar-icon:hover {
+  color: var(--color-primary, #2563eb);
 }
 
 .collector-filter-group {
@@ -67,46 +97,51 @@
 }
 
 .collector-filter-group label {
-  color: #000;
-  font-size: 0.9rem;
+  color: var(--color-text, #1f2937);
+  font-size: 0.88rem;
+  font-weight: 500;
   min-width: 60px;
 }
 
-.collector-filter-select {
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  width: 160px;
-  color: #000;
-  background: white;
-}
-
+.collector-filter-select,
 .collector-filter-btn {
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 0.9rem;
+  padding: 9px 12px;
+  border: 1.5px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-md, 10px);
+  font-size: 0.88rem;
+  font-family: inherit;
   width: 160px;
-  background: white;
-  color: #000;
+  background: #f9fafb;
+  color: var(--color-text, #1f2937);
   cursor: pointer;
   text-align: left;
+  outline: none;
+  transition: border-color var(--transition-base, 0.25s ease);
+}
+
+.collector-filter-select:focus,
+.collector-filter-btn:focus {
+  border-color: var(--color-primary, #2563eb);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 .collector-generate-btn {
-  background: #2563eb;
+  background: linear-gradient(135deg, var(--color-primary, #2563eb), var(--color-primary-dark, #1d4ed8));
   color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
+  padding: 9px 20px;
+  border-radius: var(--radius-md, 10px);
   cursor: pointer;
-  transition: background 0.2s ease;
+  font-weight: 600;
+  font-family: inherit;
   margin-left: auto;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
+  transition: transform var(--transition-fast, 0.15s ease), box-shadow var(--transition-fast, 0.15s ease);
 }
 
 .collector-generate-btn:hover {
-  background: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
 }
 
 .collector-upload-btn {
@@ -114,17 +149,20 @@
   right: 12px;
   top: -18px;
   z-index: 20;
-  background: #10b981;
+  background: linear-gradient(135deg, var(--color-success, #10b981), #059669);
   color: white;
   border: none;
-  padding: 8px 12px;
-  border-radius: 8px;
-  box-shadow: 0 6px 12px rgba(16, 185, 129, 0.12);
+  padding: 8px 14px;
+  border-radius: var(--radius-md, 10px);
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
+  font-family: inherit;
+  font-weight: 600;
   display: flex;
   align-items: center;
   gap: 6px;
+  transition: transform var(--transition-fast, 0.15s ease), box-shadow var(--transition-fast, 0.15s ease);
 }
 
 .collector-upload-btn img {
@@ -133,58 +171,58 @@
 }
 
 .collector-upload-btn:hover {
-  background: #059669;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3);
 }
 
-/* ================= CUSTOM FILTER DROPDOWN ================= */
-
+/* ── Filter dropdown ── */
 .collector-custom-filter,
 .collector-filter-dropdown {
   position: relative;
 }
 
-/* Dropdown Menu */
 .collector-filter-menu {
   display: none;
   position: absolute;
-  top: 39px;
+  top: 42px;
   left: 0;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 6px;
+  background: var(--color-surface, #fff);
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-md, 10px);
   min-width: 160px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-lg, 0 8px 30px rgba(0, 0, 0, 0.12));
   z-index: 50;
+  padding: 4px 0;
 }
 
 .collector-filter-dropdown:hover .collector-filter-menu {
   display: block;
 }
 
-/* Dropdown Items */
 .collector-filter-item {
-  padding: 10px 12px;
+  padding: 9px 14px;
   cursor: pointer;
   position: relative;
   white-space: nowrap;
+  font-size: 0.88rem;
+  transition: background var(--transition-fast, 0.15s ease);
 }
 
 .collector-filter-item:hover {
   background: #f3f4f6;
 }
 
-/* ================= SUB MENU ================= */
-
 .collector-sub-menu {
   display: none;
   position: absolute;
   top: 0;
   left: 100%;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 6px;
+  background: var(--color-surface, #fff);
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-md, 10px);
   min-width: 160px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-lg, 0 8px 30px rgba(0, 0, 0, 0.12));
+  padding: 4px 0;
 }
 
 .collector-filter-item:hover .collector-sub-menu {
@@ -192,8 +230,9 @@
 }
 
 .collector-sub-menu div {
-  padding: 10px 12px;
+  padding: 9px 14px;
   cursor: pointer;
+  transition: background var(--transition-fast, 0.15s ease);
 }
 
 .collector-sub-menu div:hover {

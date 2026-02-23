@@ -1,41 +1,51 @@
 /* =========================
-   ISSUE CARD
+   ISSUE CARD — Premium
 ========================= */
 
 .dpo-issue-card {
-  position: relative; /* Needed for bottom-right log button */
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  position: relative;
+  background: var(--color-surface, #fff);
+  border-radius: var(--radius-lg, 14px);
+  box-shadow: var(--shadow-sm, 0 2px 8px rgba(0, 0, 0, 0.06));
   padding: 20px;
   margin-top: 10px;
   border-left: 5px solid #facc15;
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-left: 5px solid #facc15;
   opacity: 0;
-  animation: fadeInCard 0.3s ease forwards;
+  animation: fadeInCard 0.35s ease forwards;
+  transition: transform var(--transition-base, 0.25s ease),
+    box-shadow var(--transition-base, 0.25s ease);
+}
+
+.dpo-issue-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md, 0 4px 16px rgba(0, 0, 0, 0.08));
 }
 
 .dpo-issue-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 14px;
 }
 
 .dpo-issue-id {
-  font-weight: 600;
+  font-weight: 700;
   font-size: 1rem;
+  color: var(--color-text, #1f2937);
 }
 
 .dpo-status {
-  font-size: 0.8rem;
-  padding: 5px 10px;
-  border-radius: 12px;
-  font-weight: 500;
+  font-size: 0.78rem;
+  padding: 4px 12px;
+  border-radius: var(--radius-full, 9999px);
+  font-weight: 600;
   text-transform: capitalize;
+  letter-spacing: 0.02em;
 }
 
 /* Status Colors */
-
 .dpo-status.dpo-pending {
   background: #fef9c3;
   color: #854d0e;
@@ -58,17 +68,20 @@
 .dpo-issue-row {
   display: flex;
   align-items: flex-start;
-  margin: 6px 0;
-  font-size: 0.9rem;
+  margin: 5px 0;
+  font-size: 0.88rem;
   color: #333;
 }
 
 .dpo-issue-row .dpo-label {
   width: 120px;
   font-weight: 600;
-  color: #444;
+  color: var(--color-text-secondary, #6b7280);
   position: relative;
   padding-right: 8px;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .dpo-issue-row .dpo-label::after {
@@ -80,7 +93,8 @@
 .dpo-issue-row .dpo-value {
   flex: 1;
   padding-left: 12px;
-  margin-top: 6px;
+  margin-top: 0;
+  color: var(--color-text, #1f2937);
 }
 
 .dpo-overdue-text {
@@ -89,17 +103,82 @@
 }
 
 /* =========================
+   METRICS ROW
+========================= */
+
+.dpo-issue-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--color-border, #e2e8f0);
+}
+
+.dpo-metric {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dpo-metric-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-text-secondary, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.dpo-metric-value {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--color-text, #1f2937);
+  display: flex;
+  align-items: center;
+}
+
+.dpo-dept-tag {
+  background: #f1f5f9;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.8rem;
+  display: inline-block;
+  width: fit-content;
+  border: 1px solid #e2e8f0;
+}
+
+.dpo-priority-high {
+  color: #dc2626 !important;
+}
+
+.dpo-priority-medium {
+  color: #ca8a04 !important;
+}
+
+.dpo-priority-low {
+  color: #16a34a !important;
+}
+
+@media (max-width: 600px) {
+  .dpo-issue-metrics {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+/* =========================
    FOOTER
 ========================= */
 
 .dpo-footer-line {
   height: 1px;
-  background: #000;
-  margin: 20px 0px 10px;
+  background: var(--color-border, #e2e8f0);
+  margin: 16px 0 10px;
 }
 
 .dpo-issue-footer {
-  padding-bottom: 40px; /* Space for bottom-right log button */
+  padding-bottom: 40px;
 }
 
 /* =========================
@@ -109,17 +188,18 @@
 .dpo-response-received {
   display: flex;
   flex-direction: column;
-  background-color: #c9ffd9;
-  padding: 8px;
-  border-radius: 8px;
-  margin: 0px 0px 8px 0px;
+  background-color: #ecfdf5;
+  padding: 10px 12px;
+  border-radius: var(--radius-md, 10px);
+  margin: 0 0 8px;
   gap: 4px;
   align-items: flex-start;
+  border: 1px solid #bbf7d0;
 }
 
 .dpo-res {
   margin: 0;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   line-height: 1.4;
   color: #333;
   width: 100%;
@@ -132,67 +212,93 @@
 
 .dpo-res-button {
   align-self: flex-end;
-  background: #19A752;
+  background: linear-gradient(135deg, #16a34a, #15803d);
   color: white;
   border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
+  padding: 6px 14px;
+  border-radius: var(--radius-sm, 6px);
   cursor: pointer;
-  font-size: 0.85rem;
-  font-weight: 500;
-  transition: background 0.2s ease;
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-family: inherit;
+  box-shadow: 0 2px 6px rgba(22, 163, 74, 0.2);
+  transition: transform var(--transition-fast, 0.15s ease),
+    box-shadow var(--transition-fast, 0.15s ease);
+}
+
+.dpo-res-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(22, 163, 74, 0.3);
 }
 
 /* =========================
-   LOG BUTTON (Bottom Right)
+   LOG BUTTON
 ========================= */
 
 .dpo-log-btn {
   position: absolute;
   bottom: 12px;
   right: 15px;
-  background: #2563eb;
+  background: linear-gradient(135deg, var(--color-primary, #2563eb), var(--color-primary-dark, #1d4ed8));
   color: white;
   border: none;
-  padding: 6px 14px;
-  border-radius: 6px;
+  padding: 6px 16px;
+  border-radius: var(--radius-sm, 6px);
   cursor: pointer;
   font-size: 13px;
-  font-weight: 500;
-  transition: background 0.2s ease;
+  font-weight: 600;
+  font-family: inherit;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
+  transition: transform var(--transition-fast, 0.15s ease),
+    box-shadow var(--transition-fast, 0.15s ease);
 }
 
 .dpo-log-btn:hover {
-  background: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
 }
 
 /* =========================
-   MODAL
+   LOG MODAL
 ========================= */
 
 .dpo-log-overlay {
   position: fixed;
   inset: 0;
   z-index: 3000;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .dpo-log-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
 .dpo-log-modal {
   position: relative;
-  background: white;
+  background: var(--color-surface, #fff);
   width: 550px;
   max-height: 80vh;
   overflow-y: auto;
   margin: 70px auto;
-  padding: 20px;
-  border-radius: 10px;
+  padding: 24px;
+  border-radius: var(--radius-lg, 14px);
   z-index: 3001;
-  animation: fadeInCard 0.2s ease forwards;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+  animation: fadeInCard 0.25s ease forwards;
 }
 
 .dpo-log-header {
@@ -206,6 +312,12 @@
   border: none;
   font-size: 18px;
   cursor: pointer;
+  color: var(--color-text-muted, #9ca3af);
+  transition: color var(--transition-fast, 0.15s ease);
+}
+
+.dpo-log-close:hover {
+  color: var(--color-text, #1f2937);
 }
 
 .dpo-log-entry {
@@ -217,20 +329,22 @@
 .dpo-log-dot {
   width: 10px;
   height: 10px;
-  background: #2563eb;
+  background: var(--color-primary, #2563eb);
   border-radius: 50%;
   margin-top: 6px;
+  flex-shrink: 0;
 }
 
 .dpo-log-msg {
   background: #f3f4f6;
-  padding: 6px 10px;
-  border-radius: 6px;
+  padding: 8px 12px;
+  border-radius: var(--radius-md, 10px);
+  flex: 1;
 }
 
 .dpo-log-date {
   font-size: 0.75rem;
-  color: #6b7280;
+  color: var(--color-text-muted, #9ca3af);
   margin-top: 4px;
 }
 
@@ -241,8 +355,9 @@
 @keyframes fadeInCard {
   from {
     opacity: 0;
-    transform: translateY(4px);
+    transform: translateY(6px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

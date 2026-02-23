@@ -1,8 +1,60 @@
+/* =================================================== */
+/* ===== DEPARTMENT HEADER — PREMIUM STYLE      ===== */
+/* =================================================== */
+
+.department-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding: 14px 28px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 14px rgba(0, 0, 0, 0.03);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+}
+
+.department-logo {
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+  font-size: 1.12rem;
+  color: var(--color-text, #1f2937);
+  letter-spacing: -0.02em;
+}
+
+.department-logo-icon {
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(135deg, var(--color-primary, #2563eb), var(--color-primary-dark, #1d4ed8));
+  border-radius: 8px;
+  margin-right: 10px;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+}
+
+.department-header-icons {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  position: relative;
+}
+
+/* ── NavLink items ── */
 .department-nav-link {
   position: relative;
   display: flex;
   align-items: center;
   text-decoration: none;
+  padding: 6px 10px;
+  border-radius: var(--radius-md, 10px);
+  transition: background var(--transition-fast, 0.15s ease);
+}
+
+.department-nav-link:hover {
+  background: var(--color-primary-ghost, rgba(37, 99, 235, 0.08));
 }
 
 .department-nav-item {
@@ -10,20 +62,60 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
-  gap: 4px;
+  gap: 3px;
   width: 62px;
 }
 
 .department-nav-text {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
-  color: #2563eb;
+  color: var(--color-text-secondary, #6b7280);
   line-height: 1.1;
   text-align: center;
   white-space: nowrap;
-  transition: transform 0.15s ease;
+  transition: color var(--transition-fast, 0.15s ease),
+    font-weight var(--transition-fast, 0.15s ease);
 }
 
+.department-nav-link.department-active .department-nav-text,
+.department-nav-link.active .department-nav-text {
+  color: var(--color-primary, #2563eb);
+  font-weight: 700;
+}
+
+.department-nav-link.department-active,
+.department-nav-link.active {
+  background: var(--color-primary-ghost, rgba(37, 99, 235, 0.08));
+}
+
+.department-nav-link.department-active .department-nav-item,
+.department-nav-link.active .department-nav-item {
+  transform: scale(1.05);
+}
+
+.department-nav-link.department-active .department-icon,
+.department-nav-link.active .department-icon {
+  transform: none;
+}
+
+/* ── Icons ── */
+.department-icon.department-home,
+.department-icon.department-bell,
+.department-icon.department-minutes {
+  color: var(--color-primary, #2563eb);
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform var(--transition-fast, 0.15s ease);
+}
+
+.department-nav-link:hover .department-icon {
+  transform: scale(1.12);
+}
+
+/* ── Bell wrap + notif dot ── */
 .department-bell-wrap {
   position: relative;
   display: inline-flex;
@@ -34,120 +126,63 @@
 .department-notification-dot {
   position: absolute;
   top: -2px;
-  right: -1px;
+  right: -2px;
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: #ef4444;
+  background: var(--color-danger, #ef4444);
   border: 2px solid #fff;
+  animation: departmentPulseDot 2s ease-in-out infinite;
 }
 
-.department-nav-link.department-active .department-icon,
-.department-nav-link.active .department-icon {
-  transform: none;
+@keyframes departmentPulseDot {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.35);
+    opacity: 0.7;
+  }
 }
 
-.department-nav-link.department-active .department-nav-item,
-.department-nav-link.active .department-nav-item {
-  transform: scale(1.1);
-}
-
-.department-nav-link.department-active .department-nav-text,
-.department-nav-link.active .department-nav-text {
-  transform: none;
-  font-weight: 700;
-}
-
-.department-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: white;
-  padding: 15px 25px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.department-logo {
-  display: flex;
-  align-items: center;
-  font-weight: 600;
-  font-size: 1.1rem;
-  color: #1a1a1a;
-}
-
-.department-logo-icon {
-  width: 28px;
-  height: 28px;
-  background: #2563eb;
-  border-radius: 5px;
-  margin-right: 10px;
-}
-
-.department-header-icons {
-  display: flex;
-  align-items: flex-end;
-  gap: 35px;
-  position: relative;
-}
-
-.department-icon.department-home {
-  background: white;
-  color: #2563eb;
-  font-size: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: transform 0.15s ease;
-}
-
-.department-icon.department-bell {
-  background: white;
-  color: #2563eb;
-  font-size: 25px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-.department-icon.department-minutes {
-  background: white;
-  color: #2563eb;
-  font-size: 25px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: transform 0.15s ease;
-}
-
+/* ── Profile avatar ── */
 .department-icon.department-profile {
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  background: #2563eb;
+  background: linear-gradient(135deg, var(--color-primary, #2563eb), var(--color-primary-dark, #1d4ed8));
   color: white;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  font-size: 16px;
-  line-height: 30px;
+  font-size: 14px;
+  line-height: 32px;
   text-align: center;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+  transition: transform var(--transition-fast, 0.15s ease),
+    box-shadow var(--transition-fast, 0.15s ease);
 }
 
+.department-icon.department-profile:hover {
+  transform: scale(1.08);
+  box-shadow: 0 3px 12px rgba(37, 99, 235, 0.35);
+}
+
+/* ── Profile dropdown ── */
 .department-profile-dropdown {
   position: absolute;
   top: 55px;
   right: 0;
-  background: #fff;
-  border-radius: 10px;
-  width: 140px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-  padding: 8px 0;
+  background: var(--color-surface, #fff);
+  border-radius: var(--radius-lg, 14px);
+  width: 150px;
+  box-shadow: var(--shadow-lg, 0 8px 30px rgba(0, 0, 0, 0.12));
+  padding: 6px 0;
+  border: 1px solid var(--color-border, #e2e8f0);
   animation: departmentDropdownFade 0.2s ease;
   z-index: 1000;
 }
@@ -157,20 +192,18 @@
   background: none;
   border: none;
   text-align: left;
-  font-size: 14px;
+  font-size: 13.5px;
+  font-family: inherit;
   cursor: pointer;
-  color: #111827;
-}
-
-.department-profile-dropdown button:hover {
-  background: #f3f4f6;
+  color: var(--color-text, #1f2937);
 }
 
 @keyframes departmentDropdownFade {
   from {
     opacity: 0;
-    transform: translateY(-6px);
+    transform: translateY(-8px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -186,9 +219,11 @@
   border: none;
   padding: 10px 16px;
   text-align: left;
-  font-size: 14px;
+  font-size: 13.5px;
+  font-family: inherit;
   cursor: pointer;
-  color: #111827;
+  color: var(--color-text, #1f2937);
+  transition: background var(--transition-fast, 0.15s ease);
 }
 
 .department-logout-btn:hover {
@@ -197,5 +232,5 @@
 
 .department-logout-icon {
   font-size: 18px;
-  color: #ef4444;
+  color: var(--color-danger, #ef4444);
 }

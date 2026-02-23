@@ -1,3 +1,5 @@
+/* ===== Empty State Card — Polished ===== */
+
 .empty-state-card {
   width: 100%;
   min-height: 100%;
@@ -14,6 +16,19 @@
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
+  animation: fadeInUp 0.5s ease both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .empty-state-compact {
@@ -24,24 +39,40 @@
 }
 
 .empty-state-illustration {
-  width: clamp(180px, 28vh, 260px);
-  height: clamp(180px, 28vh, 260px);
-  margin: 0 auto 4px;
+  width: clamp(160px, 24vh, 220px);
+  height: clamp(160px, 24vh, 220px);
+  margin: 0 auto 8px;
   display: block;
+  animation: floatIllustration 4s ease-in-out infinite;
+}
+
+@keyframes floatIllustration {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 .empty-stroke {
-  stroke: #3b82f6;
+  stroke: var(--color-primary-light, #3b82f6);
   stroke-width: 2.6;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
 .empty-state-card h3 {
-  margin: 4px 0 4px;
-  font-size: 2.1rem;
+  margin: 6px 0 6px;
+  font-size: 1.8rem;
   font-weight: 700;
-  color: #1e3a8a;
+  background: linear-gradient(135deg, #1e3a8a, var(--color-primary, #2563eb));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   text-align: center;
   width: 100%;
 }
@@ -49,9 +80,9 @@
 .empty-state-card p {
   margin: 0;
   max-width: 700px;
-  font-size: 1.28rem;
+  font-size: 1.15rem;
   line-height: 1.6;
-  color: #334155;
+  color: var(--color-text-secondary, #6b7280);
   text-align: center;
 }
 
@@ -62,18 +93,18 @@
   }
 
   .empty-state-illustration {
-    width: clamp(150px, 24vh, 220px);
-    height: clamp(150px, 24vh, 220px);
-    margin: 0 auto 4px;
+    width: clamp(130px, 20vh, 180px);
+    height: clamp(130px, 20vh, 180px);
+    margin: 0 auto 6px;
   }
 
   .empty-state-card h3 {
-    font-size: 1.7rem;
+    font-size: 1.5rem;
     margin: 4px 0 4px;
   }
 
   .empty-state-card p {
-    font-size: 1.14rem;
+    font-size: 1rem;
     line-height: 1.5;
   }
 }

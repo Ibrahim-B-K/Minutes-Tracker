@@ -50,22 +50,34 @@ function DepartmentIssueCard({ issue }) {
             <div className="department-label">Description</div>
             <div className="department-value">{issue.issue_description}</div>
           </div>
-          <div className="department-issue-row">
-            <div className="department-label">Priority</div>
-            <div className="department-value">{issue.priority}</div>
-          </div>
 
-          <div className="department-issue-row">
-            <div className="department-label">Location</div>
-            <div className="department-value">{issue.location}</div>
-          </div>
-
-          <div className="department-issue-row">
-            <div className={`department-label ${status === "overdue" ? "department-overdue-text" : ""}`}>
-              Deadline
+          {issue.location && (
+            <div className="department-issue-row">
+              <div className="department-label">Location</div>
+              <div className="department-value">{issue.location}</div>
             </div>
-            <div className={`department-value ${status === "overdue" ? "department-overdue-text" : ""}`}>
-              <span>{issue.deadline}</span>
+          )}
+        </div>
+
+        <div className="department-issue-metrics">
+          <div className="department-metric">
+            <div className="department-metric-label">DEPARTMENT</div>
+            <div className="department-metric-value department-dept-tag">
+              {issue.department?.replace(/_/g, " ")}
+            </div>
+          </div>
+
+          <div className="department-metric">
+            <div className="department-metric-label">PRIORITY</div>
+            <div className={`department-metric-value department-priority-${issue.priority?.toLowerCase()}`}>
+              {issue.priority === "High" ? "! High" : issue.priority}
+            </div>
+          </div>
+
+          <div className="department-metric">
+            <div className="department-metric-label">DEADLINE</div>
+            <div className={`department-metric-value ${status === "overdue" ? "department-overdue-text" : ""}`}>
+              {issue.deadline}
             </div>
           </div>
         </div>

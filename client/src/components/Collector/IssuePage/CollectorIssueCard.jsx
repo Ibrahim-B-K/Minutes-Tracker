@@ -85,67 +85,53 @@ function IssueCard({ issue }) {
           </span>
         </div>
 
-        <div className="collector-issue-row">
-          <div className="collector-label">Issue</div>
-          <div className="collector-value">
-            {issue.issue}
-          </div>
-        </div>
-
-        <div className="collector-issue-row">
-          <div className="collector-label">
-            Description
-          </div>
-          <div className="collector-value">
-            {issue.issue_description}
-          </div>
-        </div>
-
         <div className="collector-issue-body">
           <div className="collector-issue-row">
-            <div className="collector-label">
-              Department
-            </div>
+            <div className="collector-label">Issue</div>
             <div className="collector-value">
-              {issue.department}
+              {issue.issue}
             </div>
           </div>
 
           <div className="collector-issue-row">
             <div className="collector-label">
-              Priority
+              Description
             </div>
             <div className="collector-value">
-              {issue.priority}
+              {issue.issue_description}
             </div>
           </div>
 
-          <div className="collector-issue-row">
-            <div className="collector-label">
-              Location
+          {issue.location && (
+            <div className="collector-issue-row">
+              <div className="collector-label">
+                Location
+              </div>
+              <div className="collector-value">
+                {issue.location}
+              </div>
             </div>
-            <div className="collector-value">
-              {issue.location}
+          )}
+        </div>
+
+        <div className="collector-issue-metrics">
+          <div className="collector-metric">
+            <div className="collector-metric-label">DEPARTMENT</div>
+            <div className="collector-metric-value collector-dept-tag">
+              {issue.department?.replace(/_/g, " ")}
             </div>
           </div>
 
-          <div className="collector-issue-row">
-            <div
-              className={`collector-label ${
-                normalizedStatus === "overdue"
-                  ? "collector-overdue-text"
-                  : ""
-              }`}
-            >
-              Deadline
+          <div className="collector-metric">
+            <div className="collector-metric-label">PRIORITY</div>
+            <div className={`collector-metric-value collector-priority-${issue.priority?.toLowerCase()}`}>
+              {issue.priority === "High" ? "! High" : issue.priority}
             </div>
-            <div
-              className={`collector-value ${
-                normalizedStatus === "overdue"
-                  ? "collector-overdue-text"
-                  : ""
-              }`}
-            >
+          </div>
+
+          <div className="collector-metric">
+            <div className="collector-metric-label">DEADLINE</div>
+            <div className={`collector-metric-value ${normalizedStatus === "overdue" ? "collector-overdue-text" : ""}`}>
               {issue.deadline}
             </div>
           </div>

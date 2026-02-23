@@ -1,19 +1,23 @@
+/* ===== DPO Filter Bar — Premium ===== */
+
 .dpo-filter-bar {
   display: flex;
-  gap: 15px;
+  gap: 12px;
   align-items: center;
-  background: white;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  /* margin-bottom: 20px; */
-
+  background: var(--color-surface, #fff);
+  padding: 14px 16px;
+  border-radius: var(--radius-lg, 14px);
+  box-shadow: var(--shadow-sm, 0 2px 8px rgba(0, 0, 0, 0.06));
+  border: 1px solid var(--color-border, #e2e8f0);
   position: relative;
-  transition: all 0.2s ease;
+  transition: box-shadow var(--transition-base, 0.25s ease);
 }
 
-/* ================= SEARCH ================= */
+.dpo-filter-bar:focus-within {
+  box-shadow: var(--shadow-md, 0 4px 16px rgba(0, 0, 0, 0.08));
+}
 
+/* ── Search ── */
 .dpo-search-wrapper {
   position: relative;
   display: flex;
@@ -24,21 +28,34 @@
 }
 
 .dpo-search-wrapper input {
-  padding: 10px 35px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 0.9rem;
+  padding: 9px 14px 9px 36px;
+  border: 1.5px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-md, 10px);
+  font-size: 0.88rem;
+  font-family: inherit;
   width: 100%;
+  background: #f9fafb;
+  transition: border-color var(--transition-base, 0.25s ease),
+    box-shadow var(--transition-base, 0.25s ease),
+    background var(--transition-base, 0.25s ease);
+  outline: none;
+}
+
+.dpo-search-wrapper input:focus {
+  border-color: var(--color-primary, #2563eb);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  background: #fff;
 }
 
 .dpo-search-icon {
   position: absolute;
   left: 10px;
   user-select: none;
+  color: var(--color-text-muted, #9ca3af);
+  font-size: 20px;
 }
 
-/* ================= DATE INPUT ================= */
-
+/* ── Date Input ── */
 .dpo-date-input-wrapper {
   position: relative;
   display: flex;
@@ -46,23 +63,37 @@
 }
 
 .dpo-date-input-wrapper input {
-  padding: 10px 35px 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 0.9rem;
+  padding: 9px 36px 9px 12px;
+  border: 1.5px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-md, 10px);
+  font-size: 0.88rem;
+  font-family: inherit;
+  background: #f9fafb;
+  transition: border-color var(--transition-base, 0.25s ease),
+    box-shadow var(--transition-base, 0.25s ease);
+  outline: none;
+}
+
+.dpo-date-input-wrapper input:focus {
+  border-color: var(--color-primary, #2563eb);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 .dpo-calendar-icon {
   position: absolute;
   right: 10px;
   font-size: 1rem;
-  color: #666;
+  color: var(--color-text-secondary, #6b7280);
   cursor: pointer;
   user-select: none;
+  transition: color var(--transition-fast, 0.15s ease);
 }
 
-/* ================= FILTER / SORT GROUP ================= */
+.dpo-calendar-icon:hover {
+  color: var(--color-primary, #2563eb);
+}
 
+/* ── Filter group ── */
 .dpo-filter-group {
   display: flex;
   align-items: center;
@@ -70,65 +101,84 @@
 }
 
 .dpo-filter-group label {
-  color: #f00;
-  font-size: 0.9rem;
+  color: var(--color-danger, #ef4444);
+  font-size: 0.88rem;
   min-width: 60px;
+  font-weight: 500;
 }
 
-/* ===== COMMON CONTROL STYLE (Filter & Sort SAME) ===== */
-
+/* ── Controls ── */
 .dpo-filter-select,
 .dpo-filter-btn {
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 0.9rem;
+  padding: 9px 12px;
+  border: 1.5px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-md, 10px);
+  font-size: 0.88rem;
+  font-family: inherit;
   width: 160px;
-  background: white;
-  color: #000;
+  background: #f9fafb;
+  color: var(--color-text, #1f2937);
   cursor: pointer;
   text-align: left;
+  transition: border-color var(--transition-base, 0.25s ease);
+  outline: none;
 }
 
-/* ================= GENERATE BUTTON ================= */
+.dpo-filter-select:focus,
+.dpo-filter-btn:focus {
+  border-color: var(--color-primary, #2563eb);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
 
+/* ── Generate Button ── */
 .dpo-generate-btn {
-  background: #2563eb;
+  background: linear-gradient(135deg, var(--color-primary, #2563eb), var(--color-primary-dark, #1d4ed8));
   color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
+  padding: 9px 20px;
+  border-radius: var(--radius-md, 10px);
   cursor: pointer;
-  transition: background 0.2s ease;
+  font-weight: 600;
+  font-family: inherit;
+  font-size: 0.88rem;
   margin-left: auto;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
+  transition: transform var(--transition-fast, 0.15s ease),
+    box-shadow var(--transition-fast, 0.15s ease);
 }
 
 .dpo-generate-btn:hover {
-  background: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
 }
 
-/* ---------- Send Email Button ---------- */
+/* ── Send Email Button ── */
 .dpo-send-email-btn {
-  background: #af381a;
+  background: linear-gradient(135deg, #b91c1c, #991b1b);
   color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
+  padding: 9px 20px;
+  border-radius: var(--radius-md, 10px);
   cursor: pointer;
-  transition: all 0.2s ease;
-  margin-left: auto;
   font-weight: 600;
+  font-family: inherit;
+  font-size: 0.88rem;
+  margin-left: auto;
+  box-shadow: 0 2px 8px rgba(185, 28, 28, 0.2);
+  transition: transform var(--transition-fast, 0.15s ease),
+    box-shadow var(--transition-fast, 0.15s ease);
 }
 
 .dpo-send-email-btn:hover:not(:disabled) {
-  background: #992d13;
-  transform: scale(1.02);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(185, 28, 28, 0.3);
 }
 
 .dpo-send-email-btn:disabled {
   background: #9ca3af;
   cursor: not-allowed;
   opacity: 0.7;
+  box-shadow: none;
 }
 
 .dpo-send-email-btn.dpo-loading {
@@ -136,42 +186,56 @@
   cursor: not-allowed;
 }
 
-
-
 .dpo-email-status-popup {
   position: absolute;
   right: 0;
   top: 100%;
-  margin-top: 10px;
+  margin-top: 8px;
   background: #1f2937;
   color: white;
-  padding: 10px 15px;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  animation: fadeIn 0.3s ease;
+  padding: 10px 16px;
+  border-radius: var(--radius-md, 10px);
+  font-size: 0.82rem;
+  font-weight: 500;
+  animation: popupSlide 0.25s ease;
   z-index: 100;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-lg, 0 8px 30px rgba(0, 0, 0, 0.12));
   white-space: nowrap;
 }
 
-/* ================= UPLOAD BUTTON ================= */
+@keyframes popupSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
 
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Upload btn ── */
 .dpo-upload-btn {
   position: absolute;
   right: 12px;
   top: -18px;
   z-index: 20;
-  background: #10b981;
+  background: linear-gradient(135deg, var(--color-success, #10b981), #059669);
   color: white;
   border: none;
-  padding: 8px 12px;
-  border-radius: 8px;
-  box-shadow: 0 6px 12px rgba(16, 185, 129, 0.12);
+  padding: 8px 14px;
+  border-radius: var(--radius-md, 10px);
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
+  font-family: inherit;
+  font-weight: 600;
   display: flex;
   align-items: center;
   gap: 6px;
+  transition: transform var(--transition-fast, 0.15s ease),
+    box-shadow var(--transition-fast, 0.15s ease);
 }
 
 .dpo-upload-btn img {
@@ -180,59 +244,82 @@
 }
 
 .dpo-upload-btn:hover {
-  background: #059669;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3);
 }
 
-/* ================= CUSTOM FILTER DROPDOWN ================= */
-
+/* ── Filter dropdown ── */
 .dpo-custom-filter,
 .dpo-filter-dropdown {
   position: relative;
-
 }
 
-/* Dropdown Menu */
 .dpo-filter-menu {
   display: none;
   position: absolute;
-  top: 39px;
+  top: 42px;
   left: 0;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 6px;
+  background: var(--color-surface, #fff);
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-md, 10px);
   min-width: 160px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-lg, 0 8px 30px rgba(0, 0, 0, 0.12));
   z-index: 50;
+  padding: 4px 0;
+  animation: dropIn 0.15s ease;
+}
+
+@keyframes dropIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .dpo-filter-dropdown:hover .dpo-filter-menu {
   display: block;
 }
 
-/* Dropdown Items */
 .dpo-filter-item {
-  padding: 10px 12px;
+  padding: 9px 14px;
   cursor: pointer;
   position: relative;
   white-space: nowrap;
+  font-size: 0.88rem;
+  color: var(--color-text, #1f2937);
+  transition: background var(--transition-fast, 0.15s ease);
+  border-radius: 0;
+}
+
+.dpo-filter-item:first-child {
+  border-radius: var(--radius-md, 10px) var(--radius-md, 10px) 0 0;
+}
+
+.dpo-filter-item:last-child {
+  border-radius: 0 0 var(--radius-md, 10px) var(--radius-md, 10px);
 }
 
 .dpo-filter-item:hover {
   background: #f3f4f6;
 }
 
-/* ================= SUB MENU ================= */
-
+/* ── Sub-menu ── */
 .dpo-sub-menu {
   display: none;
   position: absolute;
   top: 0;
   left: 100%;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 6px;
+  background: var(--color-surface, #fff);
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-md, 10px);
   min-width: 160px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-lg, 0 8px 30px rgba(0, 0, 0, 0.12));
+  padding: 4px 0;
 }
 
 .dpo-filter-item:hover .dpo-sub-menu {
@@ -240,7 +327,10 @@
 }
 
 .dpo-sub-menu div {
-  padding: 10px 12px;
+  padding: 9px 14px;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: background var(--transition-fast, 0.15s ease);
 }
 
 .dpo-sub-menu div:hover {

@@ -38,45 +38,43 @@ function IssueCard({ issue }) {
           </span>
         </div>
 
-        <div className="dpo-issue-row">
-          <div className="dpo-label">Issue</div>
-          <div className="dpo-value">{issue.issue}</div>
-        </div>
-
-        <div className="dpo-issue-row">
-          <div className="dpo-label">Description</div>
-          <div className="dpo-value">{issue.issue_description}</div>
-        </div>
-
         <div className="dpo-issue-body">
           <div className="dpo-issue-row">
-            <div className="dpo-label">Department</div>
-            <div className="dpo-value">{issue.department}</div>
+            <div className="dpo-label">Issue</div>
+            <div className="dpo-value">{issue.issue}</div>
           </div>
 
           <div className="dpo-issue-row">
-            <div className="dpo-label">Priority</div>
-            <div className="dpo-value">{issue.priority}</div>
+            <div className="dpo-label">Description</div>
+            <div className="dpo-value">{issue.issue_description}</div>
           </div>
 
-          <div className="dpo-issue-row">
-            <div className="dpo-label">Location</div>
-            <div className="dpo-value">{issue.location}</div>
-          </div>
-
-          <div className="dpo-issue-row">
-            <div
-              className={`dpo-label ${
-                status === "overdue" ? "dpo-overdue-text" : ""
-              }`}
-            >
-              Deadline
+          {issue.location && (
+            <div className="dpo-issue-row">
+              <div className="dpo-label">Location</div>
+              <div className="dpo-value">{issue.location}</div>
             </div>
-            <div
-              className={`dpo-value ${
-                status === "overdue" ? "dpo-overdue-text" : ""
-              }`}
-            >
+          )}
+        </div>
+
+        <div className="dpo-issue-metrics">
+          <div className="dpo-metric">
+            <div className="dpo-metric-label">DEPARTMENT</div>
+            <div className="dpo-metric-value dpo-dept-tag">
+              {issue.department?.replace(/_/g, " ")}
+            </div>
+          </div>
+
+          <div className="dpo-metric">
+            <div className="dpo-metric-label">PRIORITY</div>
+            <div className={`dpo-metric-value dpo-priority-${issue.priority?.toLowerCase()}`}>
+              {issue.priority === "High" ? "! High" : issue.priority}
+            </div>
+          </div>
+
+          <div className="dpo-metric">
+            <div className="dpo-metric-label">DEADLINE</div>
+            <div className={`dpo-metric-value ${status === "overdue" ? "dpo-overdue-text" : ""}`}>
               {issue.deadline}
             </div>
           </div>

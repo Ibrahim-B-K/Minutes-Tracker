@@ -1,114 +1,109 @@
-/* ==============================
-   Main Container
-============================== */
+/* ===== DPO Assign Issues — Premium ===== */
+
 .dpo-assign-issues-container {
   height: 100%;
   min-height: 0;
-  background: #fff;
-  border-radius: 14px;
+  background: var(--color-surface, #fff);
+  border-radius: var(--radius-lg, 14px);
   padding: 28px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--shadow-md, 0 4px 16px rgba(0, 0, 0, 0.08));
   max-width: 100%;
   width: 100%;
   box-sizing: border-box;
   margin: 0;
-  font-family: "Inter", sans-serif;
+  font-family: var(--font-family, 'Inter', sans-serif);
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  border: 1px solid var(--color-border, #e2e8f0);
 }
 
-/* ==============================
-   Header
-============================== */
-.dpo-assign-header {
+/* ── Header ── */
+.dpo-assign-issues-container .dpo-assign-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 15px;
 }
 
-.dpo-assign-header h2 {
+.dpo-assign-issues-container .dpo-assign-header h2 {
   font-size: 20px;
-  font-weight: 600;
-  color: #111827;
+  font-weight: 700;
+  color: var(--color-text, #1f2937);
   margin: 0;
 }
 
-.dpo-allocate-btn {
-  background-color: #16a34a;
+.dpo-assign-issues-container .dpo-allocate-btn {
+  background: linear-gradient(135deg, #16a34a, #15803d);
   color: #fff;
   border: none;
-  padding: 8px 18px;
-  border-radius: 8px;
+  padding: 8px 20px;
+  border-radius: var(--radius-md, 10px);
   cursor: pointer;
   font-weight: 600;
-  transition: background-color 0.2s ease;
-  box-shadow: 0 3px 8px rgba(22, 163, 74, 0.2);
+  font-family: inherit;
+  box-shadow: 0 3px 10px rgba(22, 163, 74, 0.2);
+  transition: transform var(--transition-fast, 0.15s ease), box-shadow var(--transition-fast, 0.15s ease);
 }
 
-.dpo-allocate-btn:hover {
-  background-color: #15803d;
+.dpo-assign-issues-container .dpo-allocate-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 16px rgba(22, 163, 74, 0.3);
 }
 
-/* ==============================
-   Issue Cards List
-============================== */
+/* ── Issue cards list ── */
 .dpo-issue-cards {
   flex: 1;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
   padding-right: 4px;
 }
 
 .dpo-issue-cards::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 .dpo-issue-cards::-webkit-scrollbar-thumb {
   background: #cbd5e1;
-  border-radius: 6px;
+  border-radius: 20px;
 }
 
 .dpo-issue-cards::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
 
-/* ==============================
-   Card Layout
-============================== */
+/* ── Card ── */
 .dpo-assign-issues-container .dpo-issue-assign-card {
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  background-color: #f9fafb;
-  padding: 10px;
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-lg, 14px);
+  background: #f9fafb;
+  padding: 14px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
-  transition: box-shadow 0.2s ease;
+  gap: 8px;
+  box-shadow: var(--shadow-xs, 0 1px 2px rgba(0, 0, 0, 0.04));
+  transition: box-shadow var(--transition-base, 0.25s ease), transform var(--transition-base, 0.25s ease);
 }
 
 .dpo-assign-issues-container .dpo-issue-assign-card:hover {
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--shadow-sm, 0 2px 8px rgba(0, 0, 0, 0.06));
+  transform: translateY(-1px);
 }
 
-/* ==============================
-   Card Header (Top Row)
-============================== */
+/* ── Card header ── */
 .dpo-assign-issues-container .dpo-issue-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--color-border, #e2e8f0);
   padding-bottom: 6px;
 }
 
 .dpo-assign-issues-container .dpo-entry-id {
-  font-weight: 600;
-  color: #111827;
+  font-weight: 700;
+  color: var(--color-text, #1f2937);
   font-size: 15px;
 }
 
@@ -121,44 +116,49 @@
   color: #dc2626;
   font-size: 22px;
   cursor: pointer;
-  transition: transform 0.2s ease, color 0.2s ease;
+  transition: transform var(--transition-fast, 0.15s ease), color var(--transition-fast, 0.15s ease);
 }
 
 .dpo-assign-issues-container .dpo-delete-btn:hover {
   color: #b91c1c;
-  transform: scale(1.15);
+  transform: scale(1.18);
 }
 
 .dpo-assign-issues-container .dpo-flag-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
-  border-radius: 8px;
-  border: 1px solid #cbd5e1;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md, 10px);
+  border: 1.5px solid var(--color-border-hover, #cbd5e1);
   background: #fff;
   color: #475569;
   cursor: pointer;
+  transition: border-color var(--transition-fast, 0.15s ease), background var(--transition-fast, 0.15s ease);
+}
+
+.dpo-assign-issues-container .dpo-flag-btn:hover {
+  border-color: var(--color-primary, #2563eb);
 }
 
 .dpo-assign-issues-container .dpo-flag-btn-mapped {
-  border-color: #2563eb;
-  color: #2563eb;
+  border-color: var(--color-primary, #2563eb);
+  color: var(--color-primary, #2563eb);
   background: #eff6ff;
 }
 
 .dpo-assign-issues-container .dpo-unresolved-panel {
   border: 1px solid #dbeafe;
   background: #f8fbff;
-  border-radius: 10px;
-  padding: 10px;
+  border-radius: var(--radius-md, 10px);
+  padding: 12px;
 }
 
 .dpo-assign-issues-container .dpo-unresolved-title {
-  margin: 0 0 8px 0;
+  margin: 0 0 8px;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   color: #1e3a8a;
 }
 
@@ -173,12 +173,10 @@
   gap: 8px;
   align-items: flex-start;
   font-size: 13px;
-  color: #1f2937;
+  color: var(--color-text, #1f2937);
 }
 
-/* ==============================
-   Form Section
-============================== */
+/* ── Form ── */
 .dpo-assign-issues-container .dpo-issue-form {
   display: flex;
   flex-direction: column;
@@ -191,35 +189,39 @@
 }
 
 .dpo-assign-issues-container .dpo-form-field label {
-  color: #374151;
-  font-size: 14px;
-  font-weight: 500;
+  color: var(--color-text-secondary, #6b7280);
+  font-size: 13px;
+  font-weight: 600;
   margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .dpo-assign-issues-container .dpo-form-field input,
 .dpo-assign-issues-container .dpo-form-field select {
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  padding: 8px 10px;
+  border: 1.5px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-md, 10px);
+  padding: 9px 12px;
   font-size: 14px;
-  background-color: #fff;
+  font-family: inherit;
+  background: #fff;
   outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color var(--transition-base, 0.25s ease), box-shadow var(--transition-base, 0.25s ease);
 }
 
 .dpo-assign-issues-container .dpo-form-field textarea {
   resize: none;
   height: 35px;
   min-height: 35px;
-  padding: 6px 8px;
+  padding: 8px 10px;
   font-size: 13px;
+  font-family: inherit;
   line-height: 1.4;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  background-color: #fff;
+  border: 1.5px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-md, 10px);
+  background: #fff;
   outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color var(--transition-base, 0.25s ease), box-shadow var(--transition-base, 0.25s ease);
 }
 
 .dpo-assign-issues-container .dpo-form-field .dpo-description-textarea {
@@ -230,13 +232,11 @@
 .dpo-assign-issues-container .dpo-form-field input:focus,
 .dpo-assign-issues-container .dpo-form-field select:focus,
 .dpo-assign-issues-container .dpo-form-field textarea:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  border-color: var(--color-primary, #2563eb);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
 }
 
-/* ==============================
-   Deadline Field
-============================== */
+/* ── Deadline ── */
 .dpo-assign-issues-container .dpo-deadline-input {
   position: relative;
   display: flex;
@@ -252,13 +252,13 @@
   position: absolute;
   right: 12px;
   font-size: 18px;
-  color: #4b5563;
+  color: var(--color-text-secondary, #6b7280);
   cursor: pointer;
-  transition: color 0.2s ease;
+  transition: color var(--transition-fast, 0.15s ease);
 }
 
 .dpo-assign-issues-container .dpo-calendar-icon:hover {
-  color: #2563eb;
+  color: var(--color-primary, #2563eb);
 }
 
 .dpo-assign-issues-container .dpo-assign-actions {
@@ -272,21 +272,24 @@
   justify-content: flex-end;
   align-items: center;
   gap: 10px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--color-border, #e2e8f0);
   padding-top: 10px;
 }
 
 .dpo-assign-issues-container .dpo-inline-allocate-btn {
-  background-color: #2563eb;
+  background: linear-gradient(135deg, var(--color-primary, #2563eb), var(--color-primary-dark, #1d4ed8));
   color: #fff;
   border: none;
-  padding: 4px 10px;
-  border-radius: 4px;
+  padding: 6px 14px;
+  border-radius: var(--radius-sm, 6px);
   cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.2s ease;
+  font-weight: 600;
+  font-family: inherit;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2);
+  transition: transform var(--transition-fast, 0.15s ease), box-shadow var(--transition-fast, 0.15s ease);
 }
 
 .dpo-assign-issues-container .dpo-inline-allocate-btn:hover {
-  background-color: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(37, 99, 235, 0.3);
 }
