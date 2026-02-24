@@ -183,6 +183,14 @@ function DPOIssuePage() {
         alert("Backend not ready");
       });
   };
+  const handleResolve = (issueId, newStatus) => {
+    setAllIssues((prev) =>
+      prev.map((iss) =>
+        iss.id === issueId ? { ...iss, resolution_status: newStatus } : iss
+      )
+    );
+  };
+
   const handleSendOverdueEmails = () => {
     setEmailLoading(true);
     setEmailStatus("Performing overdue email checks and sending..");
@@ -250,7 +258,7 @@ function DPOIssuePage() {
             />
           ) : (
             displayedIssues.map((issue) => (
-              <DPOIssueCard key={issue.id} issue={issue} />
+              <DPOIssueCard key={issue.id} issue={issue} onResolve={handleResolve} />
             ))
           )}
         </div>

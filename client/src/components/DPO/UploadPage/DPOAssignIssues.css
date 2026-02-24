@@ -166,6 +166,8 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
+  max-height: 220px;
+  overflow-y: auto;
 }
 
 .dpo-assign-issues-container .dpo-unresolved-item {
@@ -174,6 +176,143 @@
   align-items: flex-start;
   font-size: 13px;
   color: var(--color-text, #1f2937);
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.dpo-assign-issues-container .dpo-unresolved-item:hover {
+  background: #e0ecff;
+}
+
+.dpo-assign-issues-container .dpo-suggested-item {
+  background: #fef9c3;
+  border: 1px solid #fbbf24;
+  border-radius: 6px;
+}
+
+.dpo-assign-issues-container .dpo-existing-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.dpo-assign-issues-container .dpo-existing-title {
+  font-weight: 600;
+  font-size: 13px;
+  color: #1f2937;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.dpo-assign-issues-container .dpo-existing-meta {
+  font-size: 11px;
+  color: #6b7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dpo-assign-issues-container .dpo-ai-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: #92400e;
+  background: #fef3c7;
+  border: 1px solid #fbbf24;
+  padding: 1px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.dpo-assign-issues-container .dpo-flag-search {
+  width: 100%;
+  border: 1.5px solid #dbeafe;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 13px;
+  font-family: inherit;
+  margin-bottom: 8px;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+}
+
+.dpo-assign-issues-container .dpo-flag-search:focus {
+  border-color: var(--color-primary, #2563eb);
+}
+
+.dpo-assign-issues-container .dpo-no-existing {
+  color: #94a3b8;
+  font-size: 12px;
+  text-align: center;
+  padding: 8px 0;
+  margin: 0;
+}
+
+.dpo-assign-issues-container .dpo-unlink-btn {
+  display: block;
+  margin-top: 8px;
+  background: none;
+  border: 1px solid #dc2626;
+  color: #dc2626;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s ease;
+}
+
+.dpo-assign-issues-container .dpo-unlink-btn:hover {
+  background: #fef2f2;
+}
+
+.dpo-assign-issues-container .dpo-flag-btn-suggested {
+  animation: flag-pulse 2s ease-in-out infinite;
+  border-color: #f59e0b;
+  color: #f59e0b;
+}
+
+@keyframes flag-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.3); }
+  50% { box-shadow: 0 0 0 6px rgba(245, 158, 11, 0); }
+}
+
+.dpo-assign-issues-container .dpo-linked-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #2563eb;
+  background: #eff6ff;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid #bfdbfe;
+}
+
+.dpo-matching-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #f59e0b;
+  animation: pulse-text 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-text {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 
 /* ── Form ── */

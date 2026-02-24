@@ -48,6 +48,18 @@ class Issue(models.Model):
     issue_description = models.TextField(default="")
     location = models.CharField(max_length=200)
     priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES)
+    parent_issue = models.ForeignKey(
+        'self',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='follow_ups'
+    )
+    resolution_status = models.CharField(
+        max_length=20,
+        choices=[('unresolved', 'Unresolved'), ('resolved', 'Resolved')],
+        default='unresolved'
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 class IssueDepartment(models.Model):
     STATUS_CHOICES = [

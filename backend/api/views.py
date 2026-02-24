@@ -31,7 +31,7 @@ from .models import (
 )
 from .services import check_and_send_overdue_emails
 from .serializers import IssueDepartmentSerializer, NotificationSerializer, DPOIssueSerializer
-from .gemini_utils import analyze_document_with_gemini
+from .gemini_utils import analyze_document_with_gemini, match_issues_with_gemini
 import os
 from datetime import datetime, date, timedelta
 import io
@@ -306,6 +306,18 @@ def _create_issues_for_minutes(minute_obj, issues_data):
     for item in issues_data:
         issue_title = item.get('issue', 'No Title')
 
+        # Resolve parent_issue if provided
+        parent_issue_id = item.get('parent_issue_id')
+        parent_issue_obj = None
+        if parent_issue_id:
+            try:
+                parent_issue_obj = Issue.objects.get(id=int(parent_issue_id))
+                # Star topology: always point to the root
+                if parent_issue_obj.parent_issue_id:
+                    parent_issue_obj = parent_issue_obj.parent_issue
+            except (Issue.DoesNotExist, ValueError, TypeError):
+                parent_issue_obj = None
+
         # Use update_or_create to avoid duplicates when re-allocating from drafts.
         # Match on minutes + issue_title to find existing issues.
         issue, created = Issue.objects.update_or_create(
@@ -316,6 +328,7 @@ def _create_issues_for_minutes(minute_obj, issues_data):
                 'issue_description': item.get('issue_description', ''),
                 'location': item.get('location', ''),
                 'priority': item.get('priority', 'Medium'),
+                'parent_issue': parent_issue_obj,
             }
         )
 
@@ -713,6 +726,80 @@ def send_overdue_alerts(request):
         "success": True,
         "sent_count": sent_count
     })
+
+
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
+def resolve_issue(request, issue_id):
+    """Toggle resolution_status between resolved/unresolved."""
+    if request.user.role.lower() != 'dpo':
+        return Response({"error": "Only DPO can resolve issues"}, status=403)
+
+    try:
+        issue = Issue.objects.get(id=issue_id)
+    except Issue.DoesNotExist:
+        return Response({"error": "Issue not found"}, status=404)
+
+    new_status = request.data.get('resolution_status')
+    if new_status not in ('resolved', 'unresolved'):
+        return Response({"error": "Invalid status. Use 'resolved' or 'unresolved'."}, status=400)
+
+    issue.resolution_status = new_status
+    issue.save(update_fields=['resolution_status'])
+
+    return Response({
+        "success": True,
+        "id": issue.id,
+        "resolution_status": issue.resolution_status
+    })
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_existing_issues(request):
+    """Return all existing issues for the flag panel on the allocation page."""
+    if request.user.role.lower() != 'dpo':
+        return Response({"error": "Unauthorized"}, status=403)
+
+    issues = Issue.objects.select_related('minutes').filter(resolution_status='unresolved').order_by('-id')
+
+    result = []
+    for iss in issues:
+        # Get departments for this issue
+        depts = ", ".join(
+            a.department.dept_name
+            for a in iss.issuedepartment_set.select_related('department').all()
+        )
+        result.append({
+            'id': iss.id,
+            'issue': iss.issue_title,
+            'issue_description': iss.issue_description,
+            'issue_no': iss.issue_no,
+            'minutes_title': iss.minutes.title if iss.minutes else '',
+            'minutes_id': iss.minutes.id if iss.minutes else None,
+            'meeting_date': iss.minutes.meeting_date.isoformat() if iss.minutes and iss.minutes.meeting_date else None,
+            'department': depts,
+            'location': iss.location,
+        })
+
+    return Response(result)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def match_issues(request):
+    """Use Gemini to suggest matches between new and existing issues."""
+    if request.user.role.lower() != 'dpo':
+        return Response({"error": "Unauthorized"}, status=403)
+
+    new_issues = request.data.get('new_issues', [])
+    existing_issues = request.data.get('existing_issues', [])
+
+    if not new_issues or not existing_issues:
+        return Response([])
+
+    matches = match_issues_with_gemini(new_issues, existing_issues)
+    return Response(matches)
 
 
 @api_view(['GET'])

@@ -1,7 +1,8 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useMemo } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import OutlinedFlagIcon from "@mui/icons-material/OutlinedFlag";
 import FlagIcon from "@mui/icons-material/Flag";
+import LinkIcon from "@mui/icons-material/Link";
 
 export default function IssueAssignCard({
   issue,
@@ -9,13 +10,15 @@ export default function IssueAssignCard({
   index,
   onAllocate,
   onDelete,
-  unresolvedIssues = [],
+  existingIssues = [],
   isFlagPanelOpen = false,
-  mappedUnresolvedId = null,
+  mappedExistingId = null,
+  suggestedMatch = null,
   onToggleFlagPanel,
   onMapIssue,
 }) {
   const dateRef = useRef(null);
+  const [flagSearch, setFlagSearch] = useState("");
 
   const handleChange = (field, value) => onChange(index, field, value);
 
@@ -36,35 +39,119 @@ export default function IssueAssignCard({
     return `${d}-${m}-${y}`;
   };
 
+  // Filter existing issues by search text
+  const filteredExisting = useMemo(() => {
+    if (!flagSearch.trim()) return existingIssues;
+    const q = flagSearch.toLowerCase();
+    return existingIssues.filter(
+      (item) =>
+        (item.issue || "").toLowerCase().includes(q) ||
+        (item.issue_description || "").toLowerCase().includes(q) ||
+        (item.minutes_title || "").toLowerCase().includes(q) ||
+        (item.department || "").toLowerCase().includes(q)
+    );
+  }, [existingIssues, flagSearch]);
+
+  // Sort: suggested match first, then rest
+  const sortedExisting = useMemo(() => {
+    if (!suggestedMatch) return filteredExisting;
+    const suggestedId = suggestedMatch.existingId;
+    return [...filteredExisting].sort((a, b) => {
+      if (a.id === suggestedId) return -1;
+      if (b.id === suggestedId) return 1;
+      return 0;
+    });
+  }, [filteredExisting, suggestedMatch]);
+
+  // Get info about the mapped issue for display
+  const mappedIssueInfo = mappedExistingId
+    ? existingIssues.find((e) => e.id === mappedExistingId)
+    : null;
+
   return (
     <div className="dpo-issue-assign-card">
       <div className="dpo-issue-top">
-        <div className="dpo-entry-id">{issue.issue_no}</div>
+        <div className="dpo-entry-id">
+          {issue.issue_no}
+          {mappedIssueInfo && (
+            <span className="dpo-linked-badge" title={`Linked to: ${mappedIssueInfo.issue}`}>
+              <LinkIcon style={{ fontSize: 14 }} /> Follow-up
+            </span>
+          )}
+        </div>
         <button
-          className={`dpo-flag-btn ${mappedUnresolvedId ? "dpo-flag-btn-mapped" : ""}`}
+          className={`dpo-flag-btn ${mappedExistingId ? "dpo-flag-btn-mapped" : ""} ${
+            suggestedMatch && !mappedExistingId ? "dpo-flag-btn-suggested" : ""
+          }`}
           onClick={onToggleFlagPanel}
-          title="Map with unresolved issue"
+          title={
+            mappedExistingId
+              ? "Linked to existing issue"
+              : suggestedMatch
+              ? `AI suggests a match (${suggestedMatch.confidence})`
+              : "Link to existing issue"
+          }
         >
-          {mappedUnresolvedId ? <FlagIcon fontSize="small" /> : <OutlinedFlagIcon fontSize="small" />}
+          {mappedExistingId ? (
+            <FlagIcon fontSize="small" />
+          ) : (
+            <OutlinedFlagIcon fontSize="small" />
+          )}
         </button>
       </div>
 
       {isFlagPanelOpen && (
         <div className="dpo-unresolved-panel">
-          <p className="dpo-unresolved-title">Map to unresolved issue</p>
+          <p className="dpo-unresolved-title">Link to existing issue</p>
+          <input
+            className="dpo-flag-search"
+            type="text"
+            placeholder="Search issues..."
+            value={flagSearch}
+            onChange={(e) => setFlagSearch(e.target.value)}
+          />
           <div className="dpo-unresolved-list">
-            {unresolvedIssues.map((item) => (
-              <label key={item.id} className="dpo-unresolved-item">
-                <input
-                  type="radio"
-                  name={`unresolved-map-${index}`}
-                  checked={mappedUnresolvedId === item.id}
-                  onChange={() => onMapIssue?.(item.id)}
-                />
-                <span>{item.title}</span>
-              </label>
-            ))}
+            {sortedExisting.length === 0 && (
+              <p className="dpo-no-existing">No existing issues found</p>
+            )}
+            {sortedExisting.slice(0, 15).map((item) => {
+              const isSuggested = suggestedMatch && suggestedMatch.existingId === item.id;
+              return (
+                <label
+                  key={item.id}
+                  className={`dpo-unresolved-item ${isSuggested ? "dpo-suggested-item" : ""}`}
+                >
+                  <input
+                    type="radio"
+                    name={`existing-map-${index}`}
+                    checked={mappedExistingId === item.id}
+                    onChange={() => onMapIssue?.(item.id)}
+                  />
+                  <div className="dpo-existing-info">
+                    <span className="dpo-existing-title">
+                      {item.issue}
+                      {isSuggested && (
+                        <span className="dpo-ai-badge">
+                          AI {suggestedMatch.confidence}
+                        </span>
+                      )}
+                    </span>
+                    <span className="dpo-existing-meta">
+                      {item.minutes_title} · {item.department}
+                    </span>
+                  </div>
+                </label>
+              );
+            })}
           </div>
+          {mappedExistingId && (
+            <button
+              className="dpo-unlink-btn"
+              onClick={() => onMapIssue?.(mappedExistingId)}
+            >
+              Remove link
+            </button>
+          )}
         </div>
       )}
 

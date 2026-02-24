@@ -1,10 +1,15 @@
 import React, { useState } from "react";
 import "./DPOIssueCard.css";
 import api from "../../../api/axios";
+import LinkIcon from "@mui/icons-material/Link";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import UndoIcon from "@mui/icons-material/Undo";
 
-function IssueCard({ issue }) {
+function IssueCard({ issue, onResolve }) {
   const [showLog, setShowLog] = useState(false);
+  const [resolving, setResolving] = useState(false);
   const status = issue.status || "pending";
+  const isResolved = issue.resolution_status === "resolved";
 
   const getStatusStyle = () => {
     switch (status) {
@@ -21,9 +26,25 @@ function IssueCard({ issue }) {
   // ✅ Now backend provides structured logs
   const timeline = issue.logs || [];
 
+  const isFollowUp = !!issue.parent_issue_id;
+  const hasFollowUps = (issue.follow_up_count || 0) > 0;
+
+  const handleResolveToggle = async () => {
+    const newStatus = isResolved ? "unresolved" : "resolved";
+    setResolving(true);
+    try {
+      await api.patch(`/issues/resolve/${issue.id}`, { resolution_status: newStatus });
+      if (onResolve) onResolve(issue.id, newStatus);
+    } catch (err) {
+      console.error("Failed to update resolution status:", err);
+    } finally {
+      setResolving(false);
+    }
+  };
+
   return (
     <>
-      <div className="dpo-issue-card" style={getStatusStyle()}>
+      <div className={`dpo-issue-card ${isResolved ? "dpo-issue-resolved" : ""}`} style={getStatusStyle()}>
         <div className="dpo-issue-header">
           <div className="dpo-issue-header-left">
             <span className="dpo-issue-id">
@@ -33,6 +54,19 @@ function IssueCard({ issue }) {
               <span className="dpo-issue-minute-tag" title={issue.minutes_title}>
                 {issue.minutes_title}
               </span>
+            )}
+            {isFollowUp && (
+              <span className="dpo-follow-up-badge" title="This is a follow-up of a previous issue">
+                <LinkIcon style={{ fontSize: 13 }} /> Follow-up
+              </span>
+            )}
+            {hasFollowUps && (
+              <span className="dpo-has-followups-badge" title={`${issue.follow_up_count} follow-up(s) in later meetings`}>
+                {issue.follow_up_count} follow-up{issue.follow_up_count > 1 ? "s" : ""}
+              </span>
+            )}
+            {isResolved && (
+              <span className="dpo-resolved-badge">Resolved</span>
             )}
           </div>
 
@@ -149,12 +183,28 @@ function IssueCard({ issue }) {
           )}
 
           {/* LOG BUTTON */}
-          <button
-            className="dpo-log-btn"
-            onClick={() => setShowLog(true)}
-          >
-            Log
-          </button>
+          <div className="dpo-footer-actions">
+            <button
+              className="dpo-log-btn"
+              onClick={() => setShowLog(true)}
+            >
+              Log
+            </button>
+            {(status === "submitted" || status === "completed" || status === "received") && (
+              <button
+                className={`dpo-resolve-btn ${isResolved ? "dpo-resolve-btn-undo" : ""}`}
+                onClick={handleResolveToggle}
+                disabled={resolving}
+                title={isResolved ? "Mark as unresolved" : "Mark as resolved"}
+              >
+                {isResolved ? (
+                  <><UndoIcon style={{ fontSize: 16 }} /> Unresolve</>
+                ) : (
+                  <><CheckCircleOutlineIcon style={{ fontSize: 16 }} /> Resolve</>
+                )}
+              </button>
+            )}
+          </div>
         </div>
       </div>
 

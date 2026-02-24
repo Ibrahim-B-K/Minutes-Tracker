@@ -56,6 +56,9 @@ class DPOIssueSerializer(serializers.ModelSerializer):
     minutes_uploaded_date = serializers.SerializerMethodField()
     minutes_title = serializers.SerializerMethodField()
     minutes_id = serializers.SerializerMethodField()
+    parent_issue_id = serializers.IntegerField(source='parent_issue.id', read_only=True, default=None)
+    follow_up_count = serializers.SerializerMethodField()
+    resolution_status = serializers.CharField(read_only=True)
     created_at = serializers.DateTimeField(read_only=True)
 
     class Meta:
@@ -75,6 +78,9 @@ class DPOIssueSerializer(serializers.ModelSerializer):
             'minutes_uploaded_date',
             'minutes_title',
             'minutes_id',
+            'parent_issue_id',
+            'follow_up_count',
+            'resolution_status',
             'created_at',
         ]
     
@@ -127,6 +133,9 @@ class DPOIssueSerializer(serializers.ModelSerializer):
         if obj.minutes:
             return obj.minutes.id
         return None
+
+    def get_follow_up_count(self, obj):
+        return obj.follow_ups.count()
 
 class NotificationSerializer(serializers.ModelSerializer):
     time_ago = serializers.SerializerMethodField()

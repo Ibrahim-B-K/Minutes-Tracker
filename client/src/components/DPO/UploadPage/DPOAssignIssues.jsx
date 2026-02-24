@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./DPOAssignIssues.css";
 import { Link } from "react-router-dom";
 import DPOIssueAssignCard from "./DPOIssueAssignCard";
@@ -7,19 +7,15 @@ import api from "../../../api/axios";
 import { getDraftById, removeDraft, saveDraft } from "../../../utils/dpoDrafts";
 import { emitIssuesUpdated, emitNotificationsUpdated } from "../../../utils/liveUpdates";
 
-const DUMMY_UNRESOLVED_ISSUES = [
-  { id: "unr-101", title: "Road widening pending near market junction" },
-  { id: "unr-102", title: "Drainage blockage in ward 7 unresolved" },
-  { id: "unr-103", title: "Streetlight maintenance issue not completed" },
-  { id: "unr-104", title: "Water supply complaint still open" },
-];
-
 export default function AssignIssues({ draftId = null }) {
   const [issues, setIssues] = useState([]);
   const [minutesId, setMinutesId] = useState(null);
   const [openFlagForIssue, setOpenFlagForIssue] = useState(null);
   const [mappedIssues, setMappedIssues] = useState({});
   const [showLogModal, setShowLogModal] = useState(false);
+  const [existingIssues, setExistingIssues] = useState([]);
+  const [suggestedMatches, setSuggestedMatches] = useState({});
+  const [matchingInProgress, setMatchingInProgress] = useState(false);
 
   const applyDefaultDeadlines = (sourceIssues) => {
     return (sourceIssues || []).map((issue) => {
@@ -34,6 +30,62 @@ export default function AssignIssues({ draftId = null }) {
       return issue;
     });
   };
+
+  // Fetch existing issues for the flag panel
+  useEffect(() => {
+    api.get("/existing-issues")
+      .then((res) => setExistingIssues(Array.isArray(res.data) ? res.data : []))
+      .catch((err) => console.error("Failed to load existing issues:", err));
+  }, []);
+
+  // Trigger Gemini matching once we have both issues and existing issues
+  useEffect(() => {
+    if (issues.length === 0 || existingIssues.length === 0) return;
+
+    const newForMatching = issues.map((iss, idx) => ({
+      index: idx,
+      issue: iss.issue || "",
+      issue_description: iss.issue_description || "",
+    }));
+
+    const existingForMatching = existingIssues.map((iss) => ({
+      id: iss.id,
+      issue: iss.issue,
+      issue_description: iss.issue_description,
+      minutes_title: iss.minutes_title,
+    }));
+
+    setMatchingInProgress(true);
+    api.post("/match-issues", {
+      new_issues: newForMatching,
+      existing_issues: existingForMatching,
+    })
+      .then((res) => {
+        const matches = Array.isArray(res.data) ? res.data : [];
+        const suggestions = {};
+        for (const m of matches) {
+          const issueKey = `${issues[m.new_index]?.issue_no || "issue"}-${m.new_index}`;
+          suggestions[issueKey] = {
+            existingId: m.existing_id,
+            confidence: m.confidence,
+          };
+        }
+        setSuggestedMatches(suggestions);
+
+        // Auto-map high-confidence matches
+        setMappedIssues((prev) => {
+          const updated = { ...prev };
+          for (const [key, val] of Object.entries(suggestions)) {
+            if (val.confidence === "high" && !updated[key]) {
+              updated[key] = val.existingId;
+            }
+          }
+          return updated;
+        });
+      })
+      .catch((err) => console.error("Matching failed:", err))
+      .finally(() => setMatchingInProgress(false));
+  }, [issues.length, existingIssues.length]); // only re-run when counts change
 
   useEffect(() => {
     const fetchIssuesFromServer = async () => {
@@ -95,9 +147,19 @@ export default function AssignIssues({ draftId = null }) {
     });
   }, [draftId, issues, minutesId]);
 
+  // Inject parent_issue_id into issues before sending to backend
+  const getIssuesWithParentMapping = () => {
+    return issues.map((issue, index) => {
+      const issueKey = getIssueKey(issue, index);
+      const parentId = mappedIssues[issueKey] || null;
+      return parentId ? { ...issue, parent_issue_id: parentId } : issue;
+    });
+  };
+
   const handleAllocateAll = () => {
+    const issuesWithParent = getIssuesWithParentMapping();
     api
-      .post("/assign-issues/allocate-all", { issues, minutes_id: minutesId })
+      .post("/assign-issues/allocate-all", { issues: issuesWithParent, minutes_id: minutesId })
       .then(() => {
         if (draftId) removeDraft(draftId);
         alert("All issues allocated!");
@@ -108,8 +170,11 @@ export default function AssignIssues({ draftId = null }) {
   };
 
   const handleAllocateIssue = (issue, index) => {
+    const issueKey = getIssueKey(issue, index);
+    const parentId = mappedIssues[issueKey] || null;
+    const payload = parentId ? { ...issue, parent_issue_id: parentId } : issue;
     api
-      .post("/assign-issues/allocate-single", { issue, minutes_id: minutesId })
+      .post("/assign-issues/allocate-single", { issue: payload, minutes_id: minutesId })
       .then(() => {
         setIssues((prev) => prev.filter((_, i) => i !== index));
         emitIssuesUpdated({ source: "dpo-allocate-single" });
@@ -128,15 +193,28 @@ export default function AssignIssues({ draftId = null }) {
     setOpenFlagForIssue((prev) => (prev === issueKey ? null : issueKey));
   };
 
-  const handleMapIssue = (issueKey, unresolvedId) => {
-    setMappedIssues((prev) => ({ ...prev, [issueKey]: unresolvedId }));
+  const handleMapIssue = (issueKey, existingId) => {
+    setMappedIssues((prev) => {
+      // If already mapped to this id, unmap it
+      if (prev[issueKey] === existingId) {
+        const updated = { ...prev };
+        delete updated[issueKey];
+        return updated;
+      }
+      return { ...prev, [issueKey]: existingId };
+    });
     setOpenFlagForIssue(null);
   };
 
   return (
     <div className="dpo-assign-issues-container">
       <div className="dpo-assign-header">
-        <h2>Assign Issues</h2>
+        <h2>
+          Assign Issues
+          {matchingInProgress && (
+            <span className="dpo-matching-badge">🔗 Matching...</span>
+          )}
+        </h2>
         <Link to="/dpo/home">
           <button className="dpo-allocate-btn" onClick={handleAllocateAll}>
             Allocate All
@@ -163,11 +241,12 @@ export default function AssignIssues({ draftId = null }) {
             onChange={handleChange}
             onAllocate={handleAllocateIssue}
             onDelete={handleDeleteIssue}
-            unresolvedIssues={DUMMY_UNRESOLVED_ISSUES}
+            existingIssues={existingIssues}
             isFlagPanelOpen={openFlagForIssue === issueKey}
-            mappedUnresolvedId={mappedIssues[issueKey] || null}
+            mappedExistingId={mappedIssues[issueKey] || null}
+            suggestedMatch={suggestedMatches[issueKey] || null}
             onToggleFlagPanel={() => handleToggleFlagPanel(issueKey)}
-            onMapIssue={(unresolvedId) => handleMapIssue(issueKey, unresolvedId)}
+            onMapIssue={(existingId) => handleMapIssue(issueKey, existingId)}
           />
           );
         })}
