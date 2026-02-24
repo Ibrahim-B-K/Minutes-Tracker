@@ -3,7 +3,7 @@ from .models import IssueDepartment, Notification, Issue
 
 class IssueDepartmentSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    issue_no = serializers.CharField(source='issue.id', read_only=True)
+    issue_no = serializers.CharField(source='issue.issue_no', read_only=True)
     issue_description = serializers.CharField(source='issue.issue_description', read_only=True)
     issue = serializers.CharField(source='issue.issue_title', read_only=True)
     department = serializers.CharField(source='department.dept_name', read_only=True)
@@ -41,7 +41,7 @@ class IssueDepartmentSerializer(serializers.ModelSerializer):
         }
 
 class DPOIssueSerializer(serializers.ModelSerializer):
-    issue_no = serializers.IntegerField(source='id', read_only=True)
+    issue_no = serializers.CharField(read_only=True)
     issue = serializers.CharField(source='issue_title')
     issue_description = serializers.CharField()
     location = serializers.CharField()
@@ -54,6 +54,8 @@ class DPOIssueSerializer(serializers.ModelSerializer):
     response = serializers.SerializerMethodField()
     meeting_date = serializers.SerializerMethodField()
     minutes_uploaded_date = serializers.SerializerMethodField()
+    minutes_title = serializers.SerializerMethodField()
+    minutes_id = serializers.SerializerMethodField()
     created_at = serializers.DateTimeField(read_only=True)
 
     class Meta:
@@ -71,6 +73,8 @@ class DPOIssueSerializer(serializers.ModelSerializer):
             'response',
             'meeting_date',
             'minutes_uploaded_date',
+            'minutes_title',
+            'minutes_id',
             'created_at',
         ]
     
@@ -112,6 +116,16 @@ class DPOIssueSerializer(serializers.ModelSerializer):
     def get_minutes_uploaded_date(self, obj):
         if obj.minutes and obj.minutes.created_at:
             return obj.minutes.created_at.date().isoformat()
+        return None
+
+    def get_minutes_title(self, obj):
+        if obj.minutes:
+            return obj.minutes.title or 'Untitled'
+        return 'Unknown'
+
+    def get_minutes_id(self, obj):
+        if obj.minutes:
+            return obj.minutes.id
         return None
 
 class NotificationSerializer(serializers.ModelSerializer):

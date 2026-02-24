@@ -137,7 +137,8 @@ function DPOIssuePage() {
         if (
           !issue.issue?.toLowerCase().includes(q) &&
           !issue.issue_no?.toString().includes(q) &&
-          !issue.department?.toLowerCase().includes(q)
+          !issue.department?.toLowerCase().includes(q) &&
+          !issue.minutes_title?.toLowerCase().includes(q)
         )
           return false;
       }
@@ -169,6 +170,7 @@ function DPOIssuePage() {
       return true;
     });
   }, [allIssues, activeTab, filters]);
+
   const handleAllocateIssue = (issue) => {
     console.log("Allocating issue:", issue);
 

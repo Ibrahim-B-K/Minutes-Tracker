@@ -312,6 +312,7 @@ def _create_issues_for_minutes(minute_obj, issues_data):
             minutes=minute_obj,
             issue_title=issue_title,
             defaults={
+                'issue_no': str(item.get('issue_no', '')),
                 'issue_description': item.get('issue_description', ''),
                 'location': item.get('location', ''),
                 'priority': item.get('priority', 'Medium'),
@@ -428,10 +429,11 @@ def get_all_issues(request):
     # 3. Start Query (FIXED for Speed AND Accuracy)
     # We kept 'department' (Major Speed Boost) but REMOVED 'responses'.
     # This ensures the serializer finds the latest response text correctly.
-    issues_query = Issue.objects.prefetch_related(
+    issues_query = Issue.objects.select_related(
+        'minutes'
+    ).prefetch_related(
         'issuedepartment_set',
         'issuedepartment_set__department'
-        # REMOVED: 'issuedepartment_set__responses' (This was causing the bug)
     ).all().order_by('-id')
 
     # 4. Apply Date Filter

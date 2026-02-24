@@ -30,10 +30,32 @@
   margin-bottom: 14px;
 }
 
+.dpo-issue-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
 .dpo-issue-id {
   font-weight: 700;
   font-size: 1rem;
   color: var(--color-text, #1f2937);
+  flex-shrink: 0;
+}
+
+.dpo-issue-minute-tag {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #6b7280;
+  background: #f1f5f9;
+  padding: 2px 8px;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
 }
 
 .dpo-status {

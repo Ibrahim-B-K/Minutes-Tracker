@@ -25,7 +25,16 @@ function IssueCard({ issue }) {
     <>
       <div className="dpo-issue-card" style={getStatusStyle()}>
         <div className="dpo-issue-header">
-          <span className="dpo-issue-id">{issue.issue_no}</span>
+          <div className="dpo-issue-header-left">
+            <span className="dpo-issue-id">
+              {issue.issue_no && issue.issue_no !== "" ? `#${issue.issue_no}` : `#${issue.id}`}
+            </span>
+            {issue.minutes_title && (
+              <span className="dpo-issue-minute-tag" title={issue.minutes_title}>
+                {issue.minutes_title}
+              </span>
+            )}
+          </div>
 
           <span
             className={`dpo-status ${

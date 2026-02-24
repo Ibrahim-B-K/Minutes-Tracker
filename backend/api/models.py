@@ -43,6 +43,7 @@ class Issue(models.Model):
         on_delete=models.CASCADE,
         related_name='issues'
     )
+    issue_no = models.CharField(max_length=20, default='', blank=True)
     issue_title = models.CharField(max_length=300)
     issue_description = models.TextField(default="")
     location = models.CharField(max_length=200)
