@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./CollectorFilterBar.css";
 import CollectorGenerateReports from "./CollectorGenerateReports";
-
+import CustomDateRangePicker from "../../common/CustomDateRangePicker";
+import { format, parse } from "date-fns";
 
 function CollectorFilterBar({ activeTab, onFilterChange, issue_date }) {
   const [showReportModal, setShowReportModal] = useState(false);
@@ -10,11 +11,10 @@ function CollectorFilterBar({ activeTab, onFilterChange, issue_date }) {
   const [filterBy, setFilterBy] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeDateField, setActiveDateField] = useState(null);
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const fromDatePickerRef = useRef(null);
-  const toDatePickerRef = useRef(null);
+  const datePickerRef = useRef(null);
 
   const handleGenerate = () => {
     setShowReportModal(true);
@@ -25,19 +25,15 @@ function CollectorFilterBar({ activeTab, onFilterChange, issue_date }) {
     if (issue_date?.toDate) setToDate(issue_date.toDate);
   }, [issue_date]);
 
-  const formatDateInput = (raw) => {
-    const digits = raw.replace(/\D/g, "").slice(0, 8);
-    if (digits.length <= 2) return digits;
-    if (digits.length <= 4) return `${digits.slice(0, 2)}-${digits.slice(2)}`;
-    return `${digits.slice(0, 2)}-${digits.slice(2, 4)}-${digits.slice(4)}`;
-  };
-
-  const dateKey = (value) => {
-    if (!value || typeof value !== "string") return null;
-    const [dd, mm, yyyy] = value.split("-");
-    if (!dd || !mm || !yyyy || dd.length < 2 || mm.length < 2 || yyyy.length < 4) return null;
-    return Number(`${yyyy}${mm}${dd}`);
-  };
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (datePickerRef.current && !datePickerRef.current.contains(event.target)) {
+        setShowDatePicker(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const emitFilters = (next) => {
     onFilterChange({
@@ -51,32 +47,6 @@ function CollectorFilterBar({ activeTab, onFilterChange, issue_date }) {
 
   const handleFilterChange = (type, value) => {
     let next = { fromDate, toDate, filterBy, sortBy, searchQuery };
-
-    if (type === "fromDate") {
-      const formatted = formatDateInput(value);
-      const fromK = dateKey(formatted);
-      const toK = dateKey(next.toDate);
-      next = {
-        ...next,
-        fromDate: formatted,
-        toDate: fromK && toK && fromK > toK ? formatted : next.toDate,
-      };
-      setFromDate(next.fromDate);
-      setToDate(next.toDate);
-    }
-
-    if (type === "toDate") {
-      const formatted = formatDateInput(value);
-      const fromK = dateKey(next.fromDate);
-      const toK = dateKey(formatted);
-      next = {
-        ...next,
-        toDate: formatted,
-        fromDate: fromK && toK && toK < fromK ? formatted : next.fromDate,
-      };
-      setFromDate(next.fromDate);
-      setToDate(next.toDate);
-    }
 
     if (type === "filterBy") {
       next = { ...next, filterBy: value };
@@ -96,19 +66,30 @@ function CollectorFilterBar({ activeTab, onFilterChange, issue_date }) {
     emitFilters(next);
   };
 
-  const handleDatePick = (e) => {
-    const parts = e.target.value.split("-");
-    if (parts.length === 3) {
-      const formatted = `${parts[2]}-${parts[1]}-${parts[0]}`;
+  const handleDateRangeChange = (range) => {
+    const formattedFrom = format(range.startDate, "dd-MM-yyyy");
+    const formattedTo = format(range.endDate, "dd-MM-yyyy");
+    
+    setFromDate(formattedFrom);
+    setToDate(formattedTo);
+    
+    const next = {
+      fromDate: formattedFrom,
+      toDate: formattedTo,
+      filterBy,
+      sortBy,
+      searchQuery,
+    };
+    emitFilters(next);
+  };
 
-      if (activeDateField === "from") {
-        setFromDate(formatted);
-        handleFilterChange("fromDate", formatted);
-      } else if (activeDateField === "to") {
-        setToDate(formatted);
-        handleFilterChange("toDate", formatted);
-      }
+  const parseDateString = (dateStr) => {
+    if (!dateStr) return new Date();
+    const parts = dateStr.split("-");
+    if (parts.length === 3) {
+      return new Date(parts[2], parts[1] - 1, parts[0]);
     }
+    return new Date();
   };
 
   const hasAdvancedFilters = fromDate || toDate || filterBy !== "all" || sortBy !== "newest";
@@ -160,58 +141,30 @@ function CollectorFilterBar({ activeTab, onFilterChange, issue_date }) {
       {showAdvancedFilters && (
         <div className="collector-advanced-filters-panel">
           <div className="collector-advanced-grid">
-            <div className="collector-filter-field">
-              <label>From Date</label>
-              <div className="collector-date-input-wrapper">
+            <div className="collector-filter-field" ref={datePickerRef} style={{ position: 'relative' }}>
+              <label>Date Range</label>
+              <div 
+                className="collector-date-input-wrapper" 
+                onClick={() => setShowDatePicker(!showDatePicker)}
+                style={{ cursor: 'pointer' }}
+              >
                 <input
                   type="text"
-                  placeholder="dd-mm-yyyy"
-                  value={fromDate}
-                  onChange={(e) => handleFilterChange("fromDate", e.target.value)}
+                  placeholder="Select date range"
+                  value={fromDate && toDate ? `${fromDate} to ${toDate}` : ""}
+                  readOnly
+                  style={{ cursor: 'pointer' }}
                 />
-                <span
-                  className="collector-calendar-icon"
-                  onClick={() => {
-                    setActiveDateField("from");
-                    fromDatePickerRef.current?.showPicker?.();
-                  }}
-                >
-                  📅
-                </span>
-                <input
-                  type="date"
-                  ref={fromDatePickerRef}
-                  onChange={handleDatePick}
-                  style={{ visibility: "hidden", position: "absolute" }}
-                />
+                <span className="collector-calendar-icon">📅</span>
               </div>
-            </div>
-
-            <div className="collector-filter-field">
-              <label>To Date</label>
-              <div className="collector-date-input-wrapper">
-                <input
-                  type="text"
-                  placeholder="dd-mm-yyyy"
-                  value={toDate}
-                  onChange={(e) => handleFilterChange("toDate", e.target.value)}
+              {showDatePicker && (
+                <CustomDateRangePicker
+                  initialStartDate={fromDate ? parseDateString(fromDate) : new Date()}
+                  initialEndDate={toDate ? parseDateString(toDate) : new Date()}
+                  onChange={handleDateRangeChange}
+                  onClose={() => setShowDatePicker(false)}
                 />
-                <span
-                  className="collector-calendar-icon"
-                  onClick={() => {
-                    setActiveDateField("to");
-                    toDatePickerRef.current?.showPicker?.();
-                  }}
-                >
-                  📅
-                </span>
-                <input
-                  type="date"
-                  ref={toDatePickerRef}
-                  onChange={handleDatePick}
-                  style={{ visibility: "hidden", position: "absolute" }}
-                />
-              </div>
+              )}
             </div>
 
             <div className="collector-filter-field">
