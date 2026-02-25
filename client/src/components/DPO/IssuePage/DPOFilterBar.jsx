@@ -8,42 +8,25 @@ function DPOFilterBar({
   issue_date,
   handleSendOverdueEmails,
   emailLoading,
-  emailStatus
+  emailStatus,
+  onAddIssue,
 }) {
   const [showReportModal, setShowReportModal] = useState(false);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
-  const [filterBy, setFilterBy] = useState("all"); // ✅ default All Issues
+  const [filterBy, setFilterBy] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
   const [searchQuery, setSearchQuery] = useState("");
   const [activeDateField, setActiveDateField] = useState(null);
-  const [filterOpen, setFilterOpen] = useState(false);
-  const [sortOpen, setSortOpen] = useState(false);
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
   const fromDatePickerRef = useRef(null);
   const toDatePickerRef = useRef(null);
-  const filterDropdownRef = useRef(null);
-  const sortDropdownRef = useRef(null);
-
-  // Close dropdowns on outside click
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (filterDropdownRef.current && !filterDropdownRef.current.contains(e.target)) {
-        setFilterOpen(false);
-      }
-      if (sortDropdownRef.current && !sortDropdownRef.current.contains(e.target)) {
-        setSortOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   const handleGenerate = () => {
     setShowReportModal(true);
   };
 
-  // Sync dates from parent
   useEffect(() => {
     if (issue_date?.fromDate) setFromDate(issue_date.fromDate);
     if (issue_date?.toDate) setToDate(issue_date.toDate);
@@ -63,47 +46,76 @@ function DPOFilterBar({
     return Number(`${yyyy}${mm}${dd}`);
   };
 
+  const emitFilters = (next) => {
+    onFilterChange({
+      fromDate: next.fromDate,
+      toDate: next.toDate,
+      filterBy: next.filterBy,
+      sortBy: next.sortBy,
+      searchQuery: next.searchQuery,
+    });
+  };
+
   const handleFilterChange = (type, value) => {
-    let updatedFilters = {
-      fromDate,
-      toDate,
-      filterBy,
-      sortBy,
-      searchQuery
-    };
+    let next = { fromDate, toDate, filterBy, sortBy, searchQuery };
 
     if (type === "fromDate") {
-      const v = formatDateInput(value);
-      setFromDate(v);
-      updatedFilters.fromDate = v;
-      const fromK = dateKey(v);
-      const toK = dateKey(updatedFilters.toDate);
-      if (fromK && toK && fromK > toK) {
-        setToDate(v);
-        updatedFilters.toDate = v;
-      }
-    } else if (type === "toDate") {
-      const v = formatDateInput(value);
-      setToDate(v);
-      updatedFilters.toDate = v;
-      const fromK = dateKey(updatedFilters.fromDate);
-      const toK = dateKey(v);
-      if (fromK && toK && toK < fromK) {
-        setFromDate(v);
-        updatedFilters.fromDate = v;
-      }
-    } else if (type === "filterBy") {
-      setFilterBy(value);
-      updatedFilters.filterBy = value;
-    } else if (type === "sortBy") {
-      setSortBy(value);
-      updatedFilters.sortBy = value;
-    } else if (type === "search") {
-      setSearchQuery(value);
-      updatedFilters.searchQuery = value;
+      const formatted = formatDateInput(value);
+      const fromK = dateKey(formatted);
+      const toK = dateKey(next.toDate);
+      next = {
+        ...next,
+        fromDate: formatted,
+        toDate: fromK && toK && fromK > toK ? formatted : next.toDate,
+      };
+      setFromDate(next.fromDate);
+      setToDate(next.toDate);
     }
 
-    onFilterChange(updatedFilters);
+    if (type === "toDate") {
+      const formatted = formatDateInput(value);
+      const fromK = dateKey(next.fromDate);
+      const toK = dateKey(formatted);
+      next = {
+        ...next,
+        toDate: formatted,
+        fromDate: fromK && toK && toK < fromK ? formatted : next.fromDate,
+      };
+      setFromDate(next.fromDate);
+      setToDate(next.toDate);
+    }
+
+    if (type === "filterBy") {
+      next = { ...next, filterBy: value };
+      setFilterBy(value);
+    }
+
+    if (type === "sortBy") {
+      next = { ...next, sortBy: value };
+      setSortBy(value);
+    }
+
+    if (type === "search") {
+      next = { ...next, searchQuery: value };
+      setSearchQuery(value);
+    }
+
+    emitFilters(next);
+  };
+
+  const clearAdvancedFilters = () => {
+    const next = {
+      fromDate: "",
+      toDate: "",
+      filterBy: "all",
+      sortBy: "newest",
+      searchQuery,
+    };
+    setFromDate(next.fromDate);
+    setToDate(next.toDate);
+    setFilterBy(next.filterBy);
+    setSortBy(next.sortBy);
+    emitFilters(next);
   };
 
   const handleDatePick = (e) => {
@@ -121,178 +133,151 @@ function DPOFilterBar({
     }
   };
 
-  const filterLabel = {
-    all: "All Issues",
-    high: "High Priority",
-    medium: "Medium Priority",
-    low: "Low Priority",
-    health: "Health Dept",
-    education: "Education Dept",
-    works: "Public Works"
-  };
+  const hasAdvancedFilters = fromDate || toDate || filterBy !== "all" || sortBy !== "newest";
 
   return (
-    <div className="dpo-filter-bar">
-      {/* Search */}
-      <div className="dpo-search-wrapper">
-        <span className="dpo-search-icon">🔍</span>
-        <input
-          type="text"
-          placeholder="Search issues..."
-          value={searchQuery}
-          onChange={(e) => handleFilterChange("search", e.target.value)}
-        />
-      </div>
-
-      {/* From Date */}
-      <div className="dpo-date-input-wrapper">
-        <input
-          type="text"
-          placeholder="From: (dd-mm-yyyy)"
-          value={fromDate}
-          onChange={(e) => handleFilterChange("fromDate", e.target.value)}
-        />
-        <span
-          className="dpo-calendar-icon"
-          onClick={() => {
-            setActiveDateField("from");
-            fromDatePickerRef.current.showPicker();
-          }}
-        >
-          📅
-        </span>
-        <input
-          type="date"
-          ref={fromDatePickerRef}
-          onChange={handleDatePick}
-          style={{ visibility: "hidden", position: "absolute" }}
-        />
-      </div>
-
-      {/* To Date */}
-      <div className="dpo-date-input-wrapper">
-        <input
-          type="text"
-          placeholder="To: (dd-mm-yyyy)"
-          value={toDate}
-          onChange={(e) => handleFilterChange("toDate", e.target.value)}
-        />
-        <span
-          className="dpo-calendar-icon"
-          onClick={() => {
-            setActiveDateField("to");
-            toDatePickerRef.current.showPicker();
-          }}
-        >
-          📅
-        </span>
-        <input
-          type="date"
-          ref={toDatePickerRef}
-          onChange={handleDatePick}
-          style={{ visibility: "hidden", position: "absolute" }}
-        />
-      </div>
-
-      {/* Filter (Nested) */}
-      <div className="dpo-filter-group dpo-custom-filter">
-        <label>Filter:</label>
-        <div className={`dpo-filter-dropdown ${filterOpen ? "open" : ""}`} ref={filterDropdownRef}>
-          <button className="dpo-filter-btn" onClick={() => { setFilterOpen(!filterOpen); setSortOpen(false); }}>
-            {filterLabel[filterBy]} ▾
-          </button>
-
-          <div className="dpo-filter-menu">
-            <div className="dpo-filter-item">
-              Priority ▸
-              <div className="dpo-sub-menu">
-                <div onClick={() => { handleFilterChange("filterBy", "high"); setFilterOpen(false); }}>High</div>
-                <div onClick={() => { handleFilterChange("filterBy", "medium"); setFilterOpen(false); }}>Medium</div>
-                <div onClick={() => { handleFilterChange("filterBy", "low"); setFilterOpen(false); }}>Low</div>
-              </div>
-            </div>
-
-            <div className="dpo-filter-item">
-              Department ▸
-              <div className="dpo-sub-menu">
-                <div onClick={() => { handleFilterChange("filterBy", "health"); setFilterOpen(false); }}>Health</div>
-                <div onClick={() => { handleFilterChange("filterBy", "education"); setFilterOpen(false); }}>Education</div>
-                <div onClick={() => { handleFilterChange("filterBy", "works"); setFilterOpen(false); }}>Public Works</div>
-              </div>
-            </div>
-
-            <div
-              className="dpo-filter-item"
-              onClick={() => { handleFilterChange("filterBy", "all"); setFilterOpen(false); }}
-            >
-              All Issues
-            </div>
-          </div>
+    <div className="dpo-filter-toolbar">
+      <div className="dpo-filter-toolbar-main">
+        <div className="dpo-search-wrapper">
+          <span className="dpo-search-icon">🔍</span>
+          <input
+            type="text"
+            placeholder="Search issues, issue no, minutes or department..."
+            value={searchQuery}
+            onChange={(e) => handleFilterChange("search", e.target.value)}
+          />
         </div>
-      </div>
 
-      {/* Sort */}
-      <div className="dpo-filter-group dpo-custom-filter">
-        <label>Sort:</label>
-        <div className={`dpo-filter-dropdown ${sortOpen ? "open" : ""}`} ref={sortDropdownRef}>
-          <button className="dpo-filter-btn" onClick={() => { setSortOpen(!sortOpen); setFilterOpen(false); }}>
-            {sortBy === "priority"
-              ? "Priority"
-              : sortBy === "department"
-                ? "Department"
-                : "Deadline"} ▾
-          </button>
-
-          <div className="dpo-filter-menu">
-            <div
-              className="dpo-filter-item"
-              onClick={() => { handleFilterChange("sortBy", "priority"); setSortOpen(false); }}
-            >
-              Priority
-            </div>
-
-            <div
-              className="dpo-filter-item"
-              onClick={() => { handleFilterChange("sortBy", "department"); setSortOpen(false); }}
-            >
-              Department
-            </div>
-
-            <div
-              className="dpo-filter-item"
-              onClick={() => { handleFilterChange("sortBy", "deadline"); setSortOpen(false); }}
-            >
-              Deadline
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-      {/* Generate */}
-      {activeTab === "Received" && (
-        <button className="dpo-generate-btn" onClick={handleGenerate}>
-          Generate Report
-        </button>
-      )}
-      {activeTab === "Overdue" && (
-        <div style={{ position: 'relative', display: 'flex', alignItems: 'center', marginLeft: 'auto' }}>
+        <div className="dpo-toolbar-actions">
           <button
-            className={`dpo-send-email-btn ${emailLoading ? 'dpo-loading' : ''}`}
-            onClick={handleSendOverdueEmails}
-            disabled={emailLoading}
+            className={`dpo-toolbar-btn ${showAdvancedFilters ? "active" : ""}`}
+            onClick={() => setShowAdvancedFilters((prev) => !prev)}
           >
-            {emailLoading ? "Sending..." : "Send Overdue Emails"}
+            Filters {hasAdvancedFilters ? "•" : ""}
           </button>
 
-          {emailStatus && (
-            <div className="dpo-email-status-popup">
-              {emailStatus}
+          <button className="dpo-add-issue-btn" onClick={onAddIssue}>
+            + Add Issue
+          </button>
+
+          {activeTab === "Received" && (
+            <button className="dpo-generate-btn" onClick={handleGenerate}>
+              Generate Report
+            </button>
+          )}
+
+          {activeTab === "Overdue" && (
+            <div className="dpo-overdue-action-wrap">
+              <button
+                className={`dpo-send-email-btn ${emailLoading ? "dpo-loading" : ""}`}
+                onClick={handleSendOverdueEmails}
+                disabled={emailLoading}
+              >
+                {emailLoading ? "Sending..." : "Send Overdue Emails"}
+              </button>
+
+              {emailStatus && <div className="dpo-email-status-popup">{emailStatus}</div>}
             </div>
           )}
         </div>
-      )}
+      </div>
 
+      {showAdvancedFilters && (
+        <div className="dpo-advanced-filters-panel">
+          <div className="dpo-advanced-grid">
+            <div className="dpo-filter-field">
+              <label>From Date</label>
+              <div className="dpo-date-input-wrapper">
+                <input
+                  type="text"
+                  placeholder="dd-mm-yyyy"
+                  value={fromDate}
+                  onChange={(e) => handleFilterChange("fromDate", e.target.value)}
+                />
+                <span
+                  className="dpo-calendar-icon"
+                  onClick={() => {
+                    setActiveDateField("from");
+                    fromDatePickerRef.current?.showPicker?.();
+                  }}
+                >
+                  📅
+                </span>
+                <input
+                  type="date"
+                  ref={fromDatePickerRef}
+                  onChange={handleDatePick}
+                  style={{ visibility: "hidden", position: "absolute" }}
+                />
+              </div>
+            </div>
+
+            <div className="dpo-filter-field">
+              <label>To Date</label>
+              <div className="dpo-date-input-wrapper">
+                <input
+                  type="text"
+                  placeholder="dd-mm-yyyy"
+                  value={toDate}
+                  onChange={(e) => handleFilterChange("toDate", e.target.value)}
+                />
+                <span
+                  className="dpo-calendar-icon"
+                  onClick={() => {
+                    setActiveDateField("to");
+                    toDatePickerRef.current?.showPicker?.();
+                  }}
+                >
+                  📅
+                </span>
+                <input
+                  type="date"
+                  ref={toDatePickerRef}
+                  onChange={handleDatePick}
+                  style={{ visibility: "hidden", position: "absolute" }}
+                />
+              </div>
+            </div>
+
+            <div className="dpo-filter-field">
+              <label>Filter By</label>
+              <select
+                className="dpo-filter-select"
+                value={filterBy}
+                onChange={(e) => handleFilterChange("filterBy", e.target.value)}
+              >
+                <option value="all">All Issues</option>
+                <option value="high">Priority: High</option>
+                <option value="medium">Priority: Medium</option>
+                <option value="low">Priority: Low</option>
+                <option value="health">Department: Health</option>
+                <option value="education">Department: Education</option>
+                <option value="works">Department: Public Works</option>
+              </select>
+            </div>
+
+            <div className="dpo-filter-field">
+              <label>Sort</label>
+              <select
+                className="dpo-filter-select"
+                value={sortBy}
+                onChange={(e) => handleFilterChange("sortBy", e.target.value)}
+              >
+                <option value="newest">Newest First</option>
+                <option value="deadline">Deadline</option>
+                <option value="priority">Priority</option>
+                <option value="department">Department</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="dpo-advanced-actions">
+            <button className="dpo-clear-filters-btn" onClick={clearAdvancedFilters}>
+              Clear Filters
+            </button>
+          </div>
+        </div>
+      )}
 
       <DPOGenerateReports
         isOpen={showReportModal}

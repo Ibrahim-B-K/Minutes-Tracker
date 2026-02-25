@@ -7,37 +7,19 @@ function CollectorFilterBar({ activeTab, onFilterChange, issue_date }) {
   const [showReportModal, setShowReportModal] = useState(false);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
-  const [filterBy, setFilterBy] = useState("all"); // ✅ default All Issues
+  const [filterBy, setFilterBy] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
   const [searchQuery, setSearchQuery] = useState("");
   const [activeDateField, setActiveDateField] = useState(null);
-  const [filterOpen, setFilterOpen] = useState(false);
-  const [sortOpen, setSortOpen] = useState(false);
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
   const fromDatePickerRef = useRef(null);
   const toDatePickerRef = useRef(null);
-  const filterDropdownRef = useRef(null);
-  const sortDropdownRef = useRef(null);
-
-  // Close dropdowns on outside click
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (filterDropdownRef.current && !filterDropdownRef.current.contains(e.target)) {
-        setFilterOpen(false);
-      }
-      if (sortDropdownRef.current && !sortDropdownRef.current.contains(e.target)) {
-        setSortOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   const handleGenerate = () => {
     setShowReportModal(true);
   };
 
-  // Sync dates from parent
   useEffect(() => {
     if (issue_date?.fromDate) setFromDate(issue_date.fromDate);
     if (issue_date?.toDate) setToDate(issue_date.toDate);
@@ -57,47 +39,61 @@ function CollectorFilterBar({ activeTab, onFilterChange, issue_date }) {
     return Number(`${yyyy}${mm}${dd}`);
   };
 
+  const emitFilters = (next) => {
+    onFilterChange({
+      fromDate: next.fromDate,
+      toDate: next.toDate,
+      filterBy: next.filterBy,
+      sortBy: next.sortBy,
+      searchQuery: next.searchQuery,
+    });
+  };
+
   const handleFilterChange = (type, value) => {
-    let updatedFilters = {
-      fromDate,
-      toDate,
-      filterBy,
-      sortBy,
-      searchQuery
-    };
+    let next = { fromDate, toDate, filterBy, sortBy, searchQuery };
 
     if (type === "fromDate") {
-      const v = formatDateInput(value);
-      setFromDate(v);
-      updatedFilters.fromDate = v;
-      const fromK = dateKey(v);
-      const toK = dateKey(updatedFilters.toDate);
-      if (fromK && toK && fromK > toK) {
-        setToDate(v);
-        updatedFilters.toDate = v;
-      }
-    } else if (type === "toDate") {
-      const v = formatDateInput(value);
-      setToDate(v);
-      updatedFilters.toDate = v;
-      const fromK = dateKey(updatedFilters.fromDate);
-      const toK = dateKey(v);
-      if (fromK && toK && toK < fromK) {
-        setFromDate(v);
-        updatedFilters.fromDate = v;
-      }
-    } else if (type === "filterBy") {
-      setFilterBy(value);
-      updatedFilters.filterBy = value;
-    } else if (type === "sortBy") {
-      setSortBy(value);
-      updatedFilters.sortBy = value;
-    } else if (type === "search") {
-      setSearchQuery(value);
-      updatedFilters.searchQuery = value;
+      const formatted = formatDateInput(value);
+      const fromK = dateKey(formatted);
+      const toK = dateKey(next.toDate);
+      next = {
+        ...next,
+        fromDate: formatted,
+        toDate: fromK && toK && fromK > toK ? formatted : next.toDate,
+      };
+      setFromDate(next.fromDate);
+      setToDate(next.toDate);
     }
 
-    onFilterChange(updatedFilters);
+    if (type === "toDate") {
+      const formatted = formatDateInput(value);
+      const fromK = dateKey(next.fromDate);
+      const toK = dateKey(formatted);
+      next = {
+        ...next,
+        toDate: formatted,
+        fromDate: fromK && toK && toK < fromK ? formatted : next.fromDate,
+      };
+      setFromDate(next.fromDate);
+      setToDate(next.toDate);
+    }
+
+    if (type === "filterBy") {
+      next = { ...next, filterBy: value };
+      setFilterBy(value);
+    }
+
+    if (type === "sortBy") {
+      next = { ...next, sortBy: value };
+      setSortBy(value);
+    }
+
+    if (type === "search") {
+      next = { ...next, searchQuery: value };
+      setSearchQuery(value);
+    }
+
+    emitFilters(next);
   };
 
   const handleDatePick = (e) => {
@@ -115,159 +111,147 @@ function CollectorFilterBar({ activeTab, onFilterChange, issue_date }) {
     }
   };
 
-  const filterLabel = {
-    all: "All Issues",
-    high: "High Priority",
-    medium: "Medium Priority",
-    low: "Low Priority",
-    health: "Health Dept",
-    education: "Education Dept",
-    works: "Public Works"
+  const hasAdvancedFilters = fromDate || toDate || filterBy !== "all" || sortBy !== "newest";
+
+  const clearAdvancedFilters = () => {
+    const next = {
+      fromDate: "",
+      toDate: "",
+      filterBy: "all",
+      sortBy: "newest",
+      searchQuery,
+    };
+    setFromDate(next.fromDate);
+    setToDate(next.toDate);
+    setFilterBy(next.filterBy);
+    setSortBy(next.sortBy);
+    emitFilters(next);
   };
 
   return (
-    <div className="collector-filter-bar">
-      {/* Search */}
-      <div className="collector-search-wrapper">
-        <span className="collector-search-icon">🔍</span>
-        <input
-          type="text"
-          placeholder="Search issues..."
-          value={searchQuery}
-          onChange={(e) => handleFilterChange("search", e.target.value)}
-        />
-      </div>
+    <div className="collector-filter-toolbar">
+      <div className="collector-filter-toolbar-main">
+        <div className="collector-search-wrapper">
+          <span className="collector-search-icon">🔍</span>
+          <input
+            type="text"
+            placeholder="Search issues, issue no, minutes or department..."
+            value={searchQuery}
+            onChange={(e) => handleFilterChange("search", e.target.value)}
+          />
+        </div>
 
-      {/* From Date */}
-      <div className="collector-date-input-wrapper">
-        <input
-          type="text"
-          placeholder="From: (dd-mm-yyyy)"
-          value={fromDate}
-          onChange={(e) => handleFilterChange("fromDate", e.target.value)}
-        />
-        <span
-          className="collector-calendar-icon"
-          onClick={() => {
-            setActiveDateField("from");
-            fromDatePickerRef.current.showPicker();
-          }}
-        >
-          📅
-        </span>
-        <input
-          type="date"
-          ref={fromDatePickerRef}
-          onChange={handleDatePick}
-          style={{ visibility: "hidden", position: "absolute" }}
-        />
-      </div>
-
-      {/* To Date */}
-      <div className="collector-date-input-wrapper">
-        <input
-          type="text"
-          placeholder="To: (dd-mm-yyyy)"
-          value={toDate}
-          onChange={(e) => handleFilterChange("toDate", e.target.value)}
-        />
-        <span
-          className="collector-calendar-icon"
-          onClick={() => {
-            setActiveDateField("to");
-            toDatePickerRef.current.showPicker();
-          }}
-        >
-          📅
-        </span>
-        <input
-          type="date"
-          ref={toDatePickerRef}
-          onChange={handleDatePick}
-          style={{ visibility: "hidden", position: "absolute" }}
-        />
-      </div>
-
-      {/* Filter (Nested) */}
-      <div className="collector-filter-group collector-custom-filter">
-        <label>Filter:</label>
-        <div className={`collector-filter-dropdown ${filterOpen ? "open" : ""}`} ref={filterDropdownRef}>
-          <button className="collector-filter-btn" onClick={() => { setFilterOpen(!filterOpen); setSortOpen(false); }}>
-            {filterLabel[filterBy]} ▾
+        <div className="collector-toolbar-actions">
+          <button
+            className={`collector-toolbar-btn ${showAdvancedFilters ? "active" : ""}`}
+            onClick={() => setShowAdvancedFilters((prev) => !prev)}
+          >
+            Filters {hasAdvancedFilters ? "•" : ""}
           </button>
 
-          <div className="collector-filter-menu">
-            <div className="collector-filter-item">
-              Priority ▸
-              <div className="collector-sub-menu">
-                <div onClick={() => { handleFilterChange("filterBy", "high"); setFilterOpen(false); }}>High</div>
-                <div onClick={() => { handleFilterChange("filterBy", "medium"); setFilterOpen(false); }}>Medium</div>
-                <div onClick={() => { handleFilterChange("filterBy", "low"); setFilterOpen(false); }}>Low</div>
-              </div>
-            </div>
-
-            <div className="collector-filter-item">
-              Department ▸
-              <div className="collector-sub-menu">
-                <div onClick={() => { handleFilterChange("filterBy", "health"); setFilterOpen(false); }}>Health</div>
-                <div onClick={() => { handleFilterChange("filterBy", "education"); setFilterOpen(false); }}>Education</div>
-                <div onClick={() => { handleFilterChange("filterBy", "works"); setFilterOpen(false); }}>Public Works</div>
-              </div>
-            </div>
-
-            <div
-              className="collector-filter-item"
-              onClick={() => { handleFilterChange("filterBy", "all"); setFilterOpen(false); }}
-            >
-              All Issues
-            </div>
-          </div>
+          {activeTab === "Received" && (
+            <button className="collector-generate-btn" onClick={handleGenerate}>
+              Generate Report
+            </button>
+          )}
         </div>
       </div>
 
-      {/* Sort */}
-      <div className="collector-filter-group collector-custom-filter">
-        <label>Sort:</label>
-        <div className={`collector-filter-dropdown ${sortOpen ? "open" : ""}`} ref={sortDropdownRef}>
-          <button className="collector-filter-btn" onClick={() => { setSortOpen(!sortOpen); setFilterOpen(false); }}>
-            {sortBy === "priority"
-              ? "Priority"
-              : sortBy === "department"
-                ? "Department"
-                : "Deadline"} ▾
-          </button>
-
-          <div className="collector-filter-menu">
-            <div
-              className="collector-filter-item"
-              onClick={() => { handleFilterChange("sortBy", "priority"); setSortOpen(false); }}
-            >
-              Priority
+      {showAdvancedFilters && (
+        <div className="collector-advanced-filters-panel">
+          <div className="collector-advanced-grid">
+            <div className="collector-filter-field">
+              <label>From Date</label>
+              <div className="collector-date-input-wrapper">
+                <input
+                  type="text"
+                  placeholder="dd-mm-yyyy"
+                  value={fromDate}
+                  onChange={(e) => handleFilterChange("fromDate", e.target.value)}
+                />
+                <span
+                  className="collector-calendar-icon"
+                  onClick={() => {
+                    setActiveDateField("from");
+                    fromDatePickerRef.current?.showPicker?.();
+                  }}
+                >
+                  📅
+                </span>
+                <input
+                  type="date"
+                  ref={fromDatePickerRef}
+                  onChange={handleDatePick}
+                  style={{ visibility: "hidden", position: "absolute" }}
+                />
+              </div>
             </div>
 
-            <div
-              className="collector-filter-item"
-              onClick={() => { handleFilterChange("sortBy", "department"); setSortOpen(false); }}
-            >
-              Department
+            <div className="collector-filter-field">
+              <label>To Date</label>
+              <div className="collector-date-input-wrapper">
+                <input
+                  type="text"
+                  placeholder="dd-mm-yyyy"
+                  value={toDate}
+                  onChange={(e) => handleFilterChange("toDate", e.target.value)}
+                />
+                <span
+                  className="collector-calendar-icon"
+                  onClick={() => {
+                    setActiveDateField("to");
+                    toDatePickerRef.current?.showPicker?.();
+                  }}
+                >
+                  📅
+                </span>
+                <input
+                  type="date"
+                  ref={toDatePickerRef}
+                  onChange={handleDatePick}
+                  style={{ visibility: "hidden", position: "absolute" }}
+                />
+              </div>
             </div>
 
-            <div
-              className="collector-filter-item"
-              onClick={() => { handleFilterChange("sortBy", "deadline"); setSortOpen(false); }}
-            >
-              Deadline
+            <div className="collector-filter-field">
+              <label>Filter By</label>
+              <select
+                className="collector-filter-select"
+                value={filterBy}
+                onChange={(e) => handleFilterChange("filterBy", e.target.value)}
+              >
+                <option value="all">All Issues</option>
+                <option value="high">Priority: High</option>
+                <option value="medium">Priority: Medium</option>
+                <option value="low">Priority: Low</option>
+                <option value="health">Department: Health</option>
+                <option value="education">Department: Education</option>
+                <option value="works">Department: Public Works</option>
+              </select>
+            </div>
+
+            <div className="collector-filter-field">
+              <label>Sort</label>
+              <select
+                className="collector-filter-select"
+                value={sortBy}
+                onChange={(e) => handleFilterChange("sortBy", e.target.value)}
+              >
+                <option value="newest">Newest First</option>
+                <option value="deadline">Deadline</option>
+                <option value="priority">Priority</option>
+                <option value="department">Department</option>
+              </select>
             </div>
           </div>
+
+          <div className="collector-advanced-actions">
+            <button className="collector-clear-filters-btn" onClick={clearAdvancedFilters}>
+              Clear Filters
+            </button>
+          </div>
         </div>
-      </div>
-
-
-      {/* Generate */}
-      {activeTab === "Received" && (
-        <button className="collector-generate-btn" onClick={handleGenerate}>
-          Generate Report
-        </button>
       )}
 
       <CollectorGenerateReports

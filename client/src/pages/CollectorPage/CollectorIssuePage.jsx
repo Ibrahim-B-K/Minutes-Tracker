@@ -93,7 +93,7 @@ function CollectorIssuePage() {
 
   // 2. Instant Client-Side Filtering (Same logic as DPO page)
   const displayedIssues = useMemo(() => {
-    return allIssues.filter((issue) => {
+    const filtered = allIssues.filter((issue) => {
 
       // A. Filter by Tab
       const status = issue.status ? issue.status.toLowerCase() : "pending";
@@ -151,11 +151,44 @@ function CollectorIssuePage() {
         if (!inRange) return false;
       }
 
-      // D. Sort Logic (Optional client-side sorting)
-      // You can add sort logic here if needed, currently implied by order of array
-
       return true;
     });
+
+    const parseDeadline = (value) => {
+      if (!value || typeof value !== "string") return Number.MAX_SAFE_INTEGER;
+      const [dd, mm, yyyy] = value.split("-");
+      if (!dd || !mm || !yyyy) return Number.MAX_SAFE_INTEGER;
+      return Number(`${yyyy}${mm}${dd}`);
+    };
+
+    const priorityRank = (value) => {
+      const p = String(value || "").toLowerCase();
+      if (p === "high") return 0;
+      if (p === "medium") return 1;
+      if (p === "low") return 2;
+      return 3;
+    };
+
+    const sortBy = String(filters.sortBy || "newest").toLowerCase();
+    const sorted = [...filtered];
+
+    if (sortBy === "priority") {
+      sorted.sort((a, b) => priorityRank(a.priority) - priorityRank(b.priority));
+      return sorted;
+    }
+
+    if (sortBy === "department") {
+      sorted.sort((a, b) => String(a.department || "").localeCompare(String(b.department || "")));
+      return sorted;
+    }
+
+    if (sortBy === "deadline") {
+      sorted.sort((a, b) => parseDeadline(a.deadline) - parseDeadline(b.deadline));
+      return sorted;
+    }
+
+    sorted.sort((a, b) => Number(b.id || 0) - Number(a.id || 0));
+    return sorted;
   }, [allIssues, activeTab, filters]);
 
   return (

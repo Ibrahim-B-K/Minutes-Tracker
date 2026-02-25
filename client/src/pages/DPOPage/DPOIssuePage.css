@@ -87,24 +87,7 @@
 
 /* ── Tabs wrapper ── */
 .dpo-tabs-wrapper {
-  position: relative;
   margin-top: 10px;
-}
-
-.dpo-tabs-add-icon {
-  position: absolute;
-  right: -2px;
-  top: 60%;
-  transform: translateY(-50%);
-  cursor: pointer;
-  color: var(--color-text-secondary, #6b7280);
-  transition: color var(--transition-fast, 0.15s ease),
-    transform var(--transition-fast, 0.15s ease);
-}
-
-.dpo-tabs-add-icon:hover {
-  color: var(--color-primary, #2563eb);
-  transform: translateY(-50%) scale(1.15);
 }
 
 .dpo-no-issues {

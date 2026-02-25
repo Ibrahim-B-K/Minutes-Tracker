@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import DriveFolderUploadSharpIcon from "@mui/icons-material/DriveFolderUploadSharp";
-import AddBoxIcon from "@mui/icons-material/AddBox";
 
 // Components
 import DPOHeader from "../../components/DPO/DPOHeader";
@@ -124,7 +123,7 @@ function DPOIssuePage() {
 
   // ===== FILTER =====
   const displayedIssues = useMemo(() => {
-    return allIssues.filter((issue) => {
+    const filtered = allIssues.filter((issue) => {
       const status = issue.status?.toLowerCase() || "pending";
       const tab = activeTab.toLowerCase();
 
@@ -172,6 +171,42 @@ function DPOIssuePage() {
 
       return true;
     });
+
+    const parseDeadline = (value) => {
+      if (!value || typeof value !== "string") return Number.MAX_SAFE_INTEGER;
+      const [dd, mm, yyyy] = value.split("-");
+      if (!dd || !mm || !yyyy) return Number.MAX_SAFE_INTEGER;
+      return Number(`${yyyy}${mm}${dd}`);
+    };
+
+    const priorityRank = (value) => {
+      const p = String(value || "").toLowerCase();
+      if (p === "high") return 0;
+      if (p === "medium") return 1;
+      if (p === "low") return 2;
+      return 3;
+    };
+
+    const sortBy = String(filters.sortBy || "newest").toLowerCase();
+    const sorted = [...filtered];
+
+    if (sortBy === "priority") {
+      sorted.sort((a, b) => priorityRank(a.priority) - priorityRank(b.priority));
+      return sorted;
+    }
+
+    if (sortBy === "department") {
+      sorted.sort((a, b) => String(a.department || "").localeCompare(String(b.department || "")));
+      return sorted;
+    }
+
+    if (sortBy === "deadline") {
+      sorted.sort((a, b) => parseDeadline(a.deadline) - parseDeadline(b.deadline));
+      return sorted;
+    }
+
+    sorted.sort((a, b) => Number(b.id || 0) - Number(a.id || 0));
+    return sorted;
   }, [allIssues, activeTab, filters]);
 
   const handleAllocateIssue = (issue) => {
@@ -243,16 +278,12 @@ function DPOIssuePage() {
           handleSendOverdueEmails={handleSendOverdueEmails}
           emailLoading={emailLoading}
           emailStatus={emailStatus}
+          onAddIssue={() => setShowAssignModal(true)}
         />
 
         {/* ✅ Tabs wrapper (DO NOT TOUCH DPOTabs) */}
         <div className="dpo-tabs-wrapper">
           <DPOTabs activeTab={activeTab} setActiveTab={setActiveTab} />
-
-          <AddBoxIcon
-            className="dpo-tabs-add-icon"
-            onClick={() => setShowAssignModal(true)}
-          />
         </div>
 
         <div className="dpo-tab-scroll-area">
