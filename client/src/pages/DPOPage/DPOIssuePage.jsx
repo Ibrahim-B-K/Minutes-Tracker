@@ -8,6 +8,7 @@ import DPOHeader from "../../components/DPO/DPOHeader";
 import DPOTabs from "../../components/DPO/IssuePage/DPOTabs";
 import DPOFilterBar from "../../components/DPO/IssuePage/DPOFilterBar";
 import DPOIssueCard from "../../components/DPO/IssuePage/DPOIssueCard";
+import DPOIssueLifecycleDrawer from "../../components/DPO/IssuePage/DPOIssueLifecycleDrawer";
 import DPOSingleIssueAssignCard from "../../components/DPO/IssuePage/DPOSingleIssueAssignCard";
 import EmptyStateCard from "../../components/common/EmptyStateCard";
 import LoadingState from "../../components/common/LoadingState";
@@ -30,6 +31,8 @@ function DPOIssuePage() {
   const [emailLoading, setEmailLoading] = useState(false);
   const [emailStatus, setEmailStatus] = useState(""); // For "sending..." or success message
   const [showAssignModal, setShowAssignModal] = useState(false);
+  const [logIssue, setLogIssue] = useState(null);
+  const [isLifecycleOpen, setIsLifecycleOpen] = useState(false);
 
   const fetchIssues = async () => {
     if (allIssues.length === 0) setLoading(true);
@@ -191,6 +194,15 @@ function DPOIssuePage() {
     );
   };
 
+  const handleOpenLifecycle = (issue) => {
+    setLogIssue(issue);
+    setIsLifecycleOpen(true);
+  };
+
+  const handleCloseLifecycle = () => {
+    setIsLifecycleOpen(false);
+  };
+
   const handleSendOverdueEmails = () => {
     setEmailLoading(true);
     setEmailStatus("Performing overdue email checks and sending..");
@@ -258,11 +270,22 @@ function DPOIssuePage() {
             />
           ) : (
             displayedIssues.map((issue) => (
-              <DPOIssueCard key={issue.id} issue={issue} onResolve={handleResolve} />
+              <DPOIssueCard
+                key={issue.id}
+                issue={issue}
+                onResolve={handleResolve}
+                onOpenLog={handleOpenLifecycle}
+              />
             ))
           )}
         </div>
       </div>
+
+      <DPOIssueLifecycleDrawer
+        isOpen={isLifecycleOpen}
+        onClose={handleCloseLifecycle}
+        selectedIssue={logIssue}
+      />
 
       {/* ===== MODAL ===== */}
       {showAssignModal && (

@@ -285,9 +285,7 @@
 ========================= */
 
 .dpo-log-btn {
-  position: absolute;
-  bottom: 12px;
-  right: 15px;
+  position: static;
   background: linear-gradient(135deg, var(--color-primary, #2563eb), var(--color-primary-dark, #1d4ed8));
   color: white;
   border: none;

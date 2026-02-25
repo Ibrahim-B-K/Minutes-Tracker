@@ -13,6 +13,7 @@ urlpatterns = [
     path('existing-issues', views.get_existing_issues),
     path('match-issues', views.match_issues),
     path('issues', views.get_all_issues),
+    path('issues/<int:issue_id>/lifecycle', views.get_issue_lifecycle),
     path('issues/resolve/<int:issue_id>', views.resolve_issue),
     path('issues/<str:dept_name>', views.get_dept_issues),
     path('submit-response', views.submit_response),

@@ -5,8 +5,7 @@ import LinkIcon from "@mui/icons-material/Link";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import UndoIcon from "@mui/icons-material/Undo";
 
-function IssueCard({ issue, onResolve }) {
-  const [showLog, setShowLog] = useState(false);
+function IssueCard({ issue, onResolve, onOpenLog }) {
   const [resolving, setResolving] = useState(false);
   const status = issue.status || "pending";
   const isResolved = issue.resolution_status === "resolved";
@@ -22,9 +21,6 @@ function IssueCard({ issue, onResolve }) {
         return { borderColor: "#facc15" };
     }
   };
-
-  // ✅ Now backend provides structured logs
-  const timeline = issue.logs || [];
 
   const isFollowUp = !!issue.parent_issue_id;
   const hasFollowUps = (issue.follow_up_count || 0) > 0;
@@ -186,7 +182,7 @@ function IssueCard({ issue, onResolve }) {
           <div className="dpo-footer-actions">
             <button
               className="dpo-log-btn"
-              onClick={() => setShowLog(true)}
+              onClick={() => onOpenLog?.(issue)}
             >
               Log
             </button>
@@ -207,66 +203,6 @@ function IssueCard({ issue, onResolve }) {
           </div>
         </div>
       </div>
-
-      {/* LOG MODAL */}
-      {showLog && (
-        <div className="dpo-log-overlay">
-          <div
-            className="dpo-log-backdrop"
-            onClick={() => setShowLog(false)}
-          ></div>
-
-          <div className="dpo-log-modal">
-            <div className="dpo-log-header">
-              <h3>Issue Log - {issue.issue_no}</h3>
-              <button
-                className="dpo-log-close"
-                onClick={() => setShowLog(false)}
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className="dpo-log-body">
-              {timeline.length === 0 ? (
-                <p>No log history available</p>
-              ) : (
-                timeline.map((log, index) => (
-                  <div
-                    key={log.id || index}
-                    className="dpo-log-entry"
-                  >
-                    <div className="dpo-log-dot"></div>
-
-                    <div>
-                      <strong>{log.title}</strong>
-
-                      {log.department && (
-                        <p>
-                          <strong>Department:</strong>{" "}
-                          {log.department}
-                        </p>
-                      )}
-
-                      {log.description && (
-                        <p className="dpo-log-msg">
-                          {log.description}
-                        </p>
-                      )}
-
-                      <p className="dpo-log-date">
-                        {new Date(
-                          log.created_at
-                        ).toLocaleString()}
-                      </p>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 }

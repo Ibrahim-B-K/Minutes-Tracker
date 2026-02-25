@@ -756,6 +756,125 @@ def resolve_issue(request, issue_id):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
+def get_issue_lifecycle(request, issue_id):
+    """Return lifecycle chain for a given issue with optional filters."""
+    if request.user.role.lower() not in ['dpo', 'collector']:
+        return Response({"error": "Unauthorized"}, status=403)
+
+    try:
+        target_issue = Issue.objects.select_related('parent_issue').get(id=issue_id)
+    except Issue.DoesNotExist:
+        return Response({"error": "Issue not found"}, status=404)
+
+    root_issue = target_issue
+    seen = set()
+    while root_issue.parent_issue_id and root_issue.id not in seen:
+        seen.add(root_issue.id)
+        parent = root_issue.parent_issue
+        if not parent:
+            break
+        root_issue = parent
+
+    lifecycle_qs = Issue.objects.select_related(
+        'minutes', 'parent_issue'
+    ).prefetch_related(
+        'issuedepartment_set',
+        'issuedepartment_set__department',
+        'issuedepartment_set__responses'
+    ).filter(
+        Q(id=root_issue.id) | Q(parent_issue_id=root_issue.id)
+    )
+
+    serialized_items = list(DPOIssueSerializer(lifecycle_qs, many=True).data)
+
+    status_filter = (request.query_params.get('status') or '').strip().lower()
+    department_filter = (request.query_params.get('department') or '').strip().lower()
+    search_filter = (request.query_params.get('search') or '').strip().lower()
+    from_date = (request.query_params.get('from_date') or '').strip()
+    to_date = (request.query_params.get('to_date') or '').strip()
+    has_response = (request.query_params.get('has_response') or '').strip().lower()
+
+    def normalized_status(value):
+        s = str(value or 'pending').lower().strip()
+        if s in ['submitted', 'completed', 'received']:
+            return 'received'
+        if s == 'overdue':
+            return 'overdue'
+        return 'pending'
+
+    def in_date_range(item_date):
+        if not item_date:
+            return not (from_date or to_date)
+        date_part = str(item_date)[:10]
+        try:
+            item_dt = datetime.strptime(date_part, '%Y-%m-%d').date()
+        except ValueError:
+            return True
+
+        if from_date:
+            try:
+                from_dt = datetime.strptime(from_date, '%Y-%m-%d').date()
+                if item_dt < from_dt:
+                    return False
+            except ValueError:
+                pass
+
+        if to_date:
+            try:
+                to_dt = datetime.strptime(to_date, '%Y-%m-%d').date()
+                if item_dt > to_dt:
+                    return False
+            except ValueError:
+                pass
+
+        return True
+
+    filtered_items = []
+    for item in serialized_items:
+        item_status = normalized_status(item.get('status'))
+        item_department = str(item.get('department') or '').lower()
+        item_search_blob = ' '.join([
+            str(item.get('issue') or ''),
+            str(item.get('issue_description') or ''),
+            str(item.get('minutes_title') or ''),
+            str(item.get('issue_no') or ''),
+        ]).lower()
+        responses = item.get('response') or []
+
+        if status_filter and status_filter != 'all' and item_status != status_filter:
+            continue
+        if department_filter and department_filter != 'all' and department_filter not in item_department:
+            continue
+        if search_filter and search_filter not in item_search_blob:
+            continue
+        if not in_date_range(item.get('meeting_date')):
+            continue
+        if has_response == 'true' and len(responses) == 0:
+            continue
+        if has_response == 'false' and len(responses) > 0:
+            continue
+
+        filtered_items.append(item)
+
+    filtered_items.sort(key=lambda item: (
+        str(item.get('meeting_date') or ''),
+        str(item.get('created_at') or ''),
+        int(item.get('id') or 0),
+    ))
+
+    return Response({
+        'issue_id': target_issue.id,
+        'issue_no': target_issue.issue_no,
+        'root_issue_id': root_issue.id,
+        'root_issue_no': root_issue.issue_no,
+        'total_iterations': len(serialized_items),
+        'filtered_iterations': len(filtered_items),
+        'items': filtered_items,
+    })
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_existing_issues(request):
     """Return all existing issues for the flag panel on the allocation page."""
     if request.user.role.lower() != 'dpo':
