@@ -27,6 +27,7 @@ function Header() {
   const [deptData, setDeptData] = useState({
     name: "",
     email: "",
+    designation: "",
     password: "",
     confirmPassword: "",
   });
@@ -101,19 +102,41 @@ function Header() {
     setDeptData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleCreateDepartment = () => {
+  const handleCreateDepartment = async () => {
+    if (!deptData.name.trim() || !deptData.email.trim() || !deptData.designation.trim() || !deptData.password || !deptData.confirmPassword) {
+      alert("Please fill all fields");
+      return;
+    }
+
     if (deptData.password !== deptData.confirmPassword) {
       alert("Passwords do not match");
       return;
     }
 
-    setShowDeptModal(false);
-    setDeptData({
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    });
+    try {
+      const res = await api.post("/departments/create-user", {
+        dept_name: deptData.name.trim(),
+        email: deptData.email.trim(),
+        designation: deptData.designation.trim(),
+        password: deptData.password,
+        confirm_password: deptData.confirmPassword,
+      });
+
+      const createdUsername = res?.data?.username;
+      alert(createdUsername ? `Department user created. Username: ${createdUsername}` : "Department user created successfully");
+
+      setShowDeptModal(false);
+      setDeptData({
+        name: "",
+        email: "",
+        designation: "",
+        password: "",
+        confirmPassword: "",
+      });
+    } catch (err) {
+      const message = err?.response?.data?.error || "Failed to create department user";
+      alert(message);
+    }
   };
 
   return (
@@ -212,6 +235,14 @@ function Header() {
               name="email"
               placeholder="Department Email"
               value={deptData.email}
+              onChange={handleInputChange}
+            />
+
+            <input
+              type="text"
+              name="designation"
+              placeholder="Designation"
+              value={deptData.designation}
               onChange={handleInputChange}
             />
 

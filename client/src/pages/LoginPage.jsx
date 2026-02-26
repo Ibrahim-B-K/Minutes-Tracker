@@ -98,6 +98,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import "./LoginPage.css";
 import { clearAuthValues, setAuthValue } from "../utils/authStorage";
 
@@ -111,6 +113,7 @@ export default function Login() {
   // Form state
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   // UI state
   const [error, setError] = useState("");
@@ -211,12 +214,17 @@ export default function Login() {
 
         <div className="input-field">
           <label>Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <div className="login-password-field">
+            <input
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <span className="login-eye-icon" onClick={() => setShowPassword((prev) => !prev)}>
+              {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+            </span>
+          </div>
         </div>
 
         <button className="login-btn" type="submit" disabled={loading}>

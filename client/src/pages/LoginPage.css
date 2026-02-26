@@ -186,6 +186,35 @@
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
 }
 
+.login-password-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.login-password-field input {
+  width: 100%;
+  padding-right: 42px;
+}
+
+.login-eye-icon {
+  position: absolute;
+  right: 12px;
+  cursor: pointer;
+  color: var(--color-text-muted, #9ca3af);
+  display: flex;
+  align-items: center;
+  transition: color var(--transition-fast, 0.15s ease);
+}
+
+.login-eye-icon:hover {
+  color: var(--color-primary, #2563eb);
+}
+
+.login-eye-icon svg {
+  font-size: 20px;
+}
+
 /* ── Button ── */
 .login-btn {
   width: 100%;

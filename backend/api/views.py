@@ -6,7 +6,9 @@ from rest_framework.throttling import AnonRateThrottle
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
+from django.utils.text import slugify
 from django.db.models import Q
+from django.db import transaction
 
 from datetime import datetime, date
 import os
@@ -92,6 +94,73 @@ def login_view(request):
 def logout_view(request):
     Token.objects.filter(user=request.user).delete()
     return Response({"success": True})
+
+
+def _resolve_department_username(dept_name):
+    base = slugify(dept_name)[:40].replace('-', '_') or 'department'
+    candidate = base
+    suffix = 1
+
+    while User.objects.filter(username=candidate).exists():
+        suffix += 1
+        suffix_text = f'_{suffix}'
+        candidate = f'{base[:150 - len(suffix_text)]}{suffix_text}'
+
+    return candidate
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def create_department_user(request):
+    if request.user.role.lower() != 'dpo':
+        return Response({"error": "Only DPO can add department users"}, status=403)
+
+    dept_name = (request.data.get('dept_name') or '').strip()
+    designation = (request.data.get('designation') or '').strip()
+    email = (request.data.get('email') or '').strip()
+    password = request.data.get('password') or ''
+    confirm_password = request.data.get('confirm_password') or ''
+
+    if not dept_name:
+        return Response({"error": "Department name is required"}, status=400)
+    if not designation:
+        return Response({"error": "Designation is required"}, status=400)
+    if not email:
+        return Response({"error": "Department email is required"}, status=400)
+    if not password:
+        return Response({"error": "Password is required"}, status=400)
+    if password != confirm_password:
+        return Response({"error": "Passwords do not match"}, status=400)
+    if len(password) < 6:
+        return Response({"error": "Password must be at least 6 characters"}, status=400)
+
+    if Department.objects.filter(dept_name__iexact=dept_name).exists():
+        return Response({"error": "Department already exists"}, status=409)
+
+    username = _resolve_department_username(dept_name)
+
+    with transaction.atomic():
+        department = Department.objects.create(
+            dept_name=dept_name,
+            designation=designation,
+            email=email,
+        )
+
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password,
+            role='department',
+            department=department,
+            is_active=True,
+        )
+
+    return Response({
+        "success": True,
+        "department": department.dept_name,
+        "designation": department.designation,
+        "username": user.username,
+    }, status=201)
 
 
 
