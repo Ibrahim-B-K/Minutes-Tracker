@@ -16,7 +16,7 @@ def get_best_model():
     except: pass
     return 'models/gemini-1.5-flash'
 
-def analyze_document_with_gemini(file_path):
+def analyze_document_with_gemini(file_path, available_departments=None):
     print(f"--- 🧠 Starting AI Analysis for: {file_path} ---")
     genai.configure(api_key=GOOGLE_API_KEY)
     
@@ -35,12 +35,25 @@ def analyze_document_with_gemini(file_path):
         HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT
     ]}
     
-    prompt = """
+    available_departments = available_departments or []
+    dept_list_text = '\n'.join(f'- {dept}' for dept in available_departments) if available_departments else '(No department list provided)'
+
+    prompt = f"""
     Analyze this Malayalam PDF. Extract every actionable issue.
+
+    AVAILABLE DEPARTMENTS (master list):
+    {dept_list_text}
     
     FORCE RULES:
     1. EXTRACT EVERY ISSUE listed. Do not skip any.
-    2. YOU MUST ASSIGN AT LEAST ONE DEPARTMENT. If it is not explicitly mentioned, you MUST INFER it based on these keywords:
+    2. YOU MUST ASSIGN AT LEAST ONE DEPARTMENT.
+    3. Department output must be selected ONLY from AVAILABLE DEPARTMENTS above.
+    4. If the minute explicitly names a department, choose that exact department from AVAILABLE DEPARTMENTS.
+    5. If no department is explicit, infer the best-fit department from AVAILABLE DEPARTMENTS using issue context.
+    6. Never invent a new department name.
+    7. If uncertain, choose the closest available department; do not leave departments empty.
+
+    Inference hints:
        - 'റോഡ്' (Road), 'പാലം' (Bridge) -> PWD_ROADS
        - 'കെട്ടിടം' (Building), 'സ്കൂൾ അറ്റകുറ്റപ്പണി' (School repair) -> PWD_BUILDINGS
        - 'കുടിവെള്ളം' (Drinking water), 'പൈപ്പ്' (Pipe) -> KWA
@@ -56,7 +69,7 @@ def analyze_document_with_gemini(file_path):
     
     Return a JSON ARRAY of objects:
     - issue_no: string
-    - departments: ARRAY of strings (e.g. ["PWD_ROADS", "LSGD"]) should be extracted from text after നടപടി:- only give the dept, not the officer position, and also convert to the english names of the  departments as above.
+    - departments: ARRAY of strings using exact department names from AVAILABLE DEPARTMENTS only.
     - issue: ONE-LINE Malayalam summary (max 20 words)
     - issue_description: FULL detailed Malayalam issue description (multiple sentences),dont assume anything not in the document.
     - location: Malayalam place name (if mentioned) or "".

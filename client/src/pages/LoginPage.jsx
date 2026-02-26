@@ -95,9 +95,9 @@
 
 // Updated Code Below- BY KEERTHI- TRYING TO FIX LOGIN ISSUE USING TOKEN AUTHENTICATION
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./LoginPage.css";
 import { clearAuthValues, setAuthValue } from "../utils/authStorage";
 
@@ -106,6 +106,7 @@ import { clearAuthValues, setAuthValue } from "../utils/authStorage";
 
 export default function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Form state
   const [username, setUsername] = useState("");
@@ -114,6 +115,15 @@ export default function Login() {
   // UI state
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search || "");
+    const reason = params.get("reason");
+    if (reason === "session_expired") {
+      setError("Your session expired. Please log in again.");
+      navigate("/login", { replace: true });
+    }
+  }, [location.search, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -99,17 +99,27 @@ AUTHENTICATION_BACKENDS = [
 ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
+        'api.authentication.ExpiringTokenAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': os.getenv('THROTTLE_ANON_RATE', '120/minute'),
+        'user': os.getenv('THROTTLE_USER_RATE', '600/minute'),
+        'login': os.getenv('THROTTLE_LOGIN_RATE', '10/minute'),
+    },
 }
+TOKEN_TTL_HOURS = int(os.getenv('TOKEN_TTL_HOURS', '8'))
 SESSION_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_SECURE = False  # localhost only
+SESSION_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE', 'False').lower() == 'true'
 CSRF_COOKIE_SAMESITE = 'Lax'
-CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = os.getenv('CSRF_COOKIE_SECURE', 'False').lower() == 'true'
 
 EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', "django.core.mail.backends.smtp.EmailBackend")
 EMAIL_HOST = os.getenv('EMAIL_HOST', "smtp-relay.brevo.com")

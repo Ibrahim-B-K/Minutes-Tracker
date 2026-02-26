@@ -1,0 +1,2018 @@
+[
+  {
+    "id": 107,
+    "username": "land_revenue_department_collectorate",
+    "email": "irkan.ker@nic.in",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:00.924133+00:00"
+  },
+  {
+    "id": 108,
+    "username": "anert",
+    "email": "kannur@anert.in",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:01.563051+00:00"
+  },
+  {
+    "id": 109,
+    "username": "animal_husbandry_kannur",
+    "email": "cruknr.ahd@kerala.gov.in",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:02.193749+00:00"
+  },
+  {
+    "id": 110,
+    "username": "aralam_wildlife_warden",
+    "email": "ww-aralam.for@kerala.gov.in",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:02.820793+00:00"
+  },
+  {
+    "id": 111,
+    "username": "azhikkal_port",
+    "email": "azhikkalport@yahoo.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:03.691824+00:00"
+  },
+  {
+    "id": 112,
+    "username": "dairy_development_office",
+    "email": "dairyddknr@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:04.320469+00:00"
+  },
+  {
+    "id": 113,
+    "username": "fisheries_kannur",
+    "email": "ddfisherieskannur@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:06.137993+00:00"
+  },
+  {
+    "id": 114,
+    "username": "distict_woman_child_development",
+    "email": "wcdkannur@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:06.772287+00:00"
+  },
+  {
+    "id": 115,
+    "username": "district_information_office",
+    "email": "kannurdio@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:07.404168+00:00"
+  },
+  {
+    "id": 116,
+    "username": "district_medical_office_health",
+    "email": "dmohkannur@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:08.275625+00:00"
+  },
+  {
+    "id": 117,
+    "username": "district_medical_office_homeo",
+    "email": "dmohomknr@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:08.907447+00:00"
+  },
+  {
+    "id": 118,
+    "username": "district_medical_office_ism",
+    "email": "knr.ism.dmo@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:09.532482+00:00"
+  },
+  {
+    "id": 119,
+    "username": "police",
+    "email": "dpoknr.pol@kerala.gov.in",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:10.401840+00:00"
+  },
+  {
+    "id": 120,
+    "username": "state_health_agency_sha",
+    "email": "dpcknr.sha@kerala.gov.in",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:11.036231+00:00"
+  },
+  {
+    "id": 121,
+    "username": "district_registrar_general_office_kannur",
+    "email": "regkan.ker@nic.in",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:11.660095+00:00"
+  },
+  {
+    "id": 122,
+    "username": "district_supply_office",
+    "email": "dsoknr.sch@kerala.gov.in",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:12.529873+00:00"
+  },
+  {
+    "id": 123,
+    "username": "ksrtc",
+    "email": "knr@kerala.gov.in",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:13.154531+00:00"
+  },
+  {
+    "id": 124,
+    "username": "divisional_forest_office_dfo_kannur",
+    "email": "dfo-knr.for@kerala.gov.in",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:13.783246+00:00"
+  },
+  {
+    "id": 125,
+    "username": "dtpc",
+    "email": "info@dtpckannur.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:14.650325+00:00"
+  },
+  {
+    "id": 126,
+    "username": "kseb_electrical_circle_kannur",
+    "email": "dyceknr@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:15.277454+00:00"
+  },
+  {
+    "id": 127,
+    "username": "economics_statistics",
+    "email": "ecostatknr@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:15.905307+00:00"
+  },
+  {
+    "id": 128,
+    "username": "ee_lsgd_dtpanchayat",
+    "email": "eelsgdkannurdivision@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:16.528196+00:00"
+  },
+  {
+    "id": 129,
+    "username": "ee_pmgsy_piupau",
+    "email": "piupmgsykannur@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:17.414937+00:00"
+  },
+  {
+    "id": 130,
+    "username": "electrical_inspectorate",
+    "email": "eikannur@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:18.040784+00:00"
+  },
+  {
+    "id": 131,
+    "username": "district_employment_exchange",
+    "email": "deeknr.emp.lbr@kerala.gov.in",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:18.670705+00:00"
+  },
+  {
+    "id": 132,
+    "username": "exise",
+    "email": "aec_kannur@yahoo.co.in",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:19.538426+00:00"
+  },
+  {
+    "id": 133,
+    "username": "ffda",
+    "email": "bffdakannur@ymail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:20.165128+00:00"
+  },
+  {
+    "id": 134,
+    "username": "finance_office_collectorate_kannur",
+    "email": "jseknr.ker@nic.in",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:20.797205+00:00"
+  },
+  {
+    "id": 135,
+    "username": "fire_rescue_office_kannur",
+    "email": "adoknr.frs@kerala.gov.in",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:21.670892+00:00"
+  },
+  {
+    "id": 136,
+    "username": "food_safety_office",
+    "email": "acfskannur@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:22.297737+00:00"
+  },
+  {
+    "id": 137,
+    "username": "general_education",
+    "email": "ddekannur@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:22.936005+00:00"
+  },
+  {
+    "id": 138,
+    "username": "dic",
+    "email": "dickannur@ymail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:23.565605+00:00"
+  },
+  {
+    "id": 139,
+    "username": "mining_geology_kannur",
+    "email": "geo.kan.dmg@kerala.gov.in",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:24.197724+00:00"
+  },
+  {
+    "id": 140,
+    "username": "ground_water_kannur",
+    "email": "gwdknr@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:24.852609+00:00"
+  },
+  {
+    "id": 141,
+    "username": "harbour_engineering_kannur",
+    "email": "eeknr.hed@kerala.gov.in",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:25.481599+00:00"
+  },
+  {
+    "id": 142,
+    "username": "harithakeralam_kannur",
+    "email": "hkmkannur@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:26.113672+00:00"
+  },
+  {
+    "id": 143,
+    "username": "icds_programme_office",
+    "email": "po.kannur@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:26.742959+00:00"
+  },
+  {
+    "id": 144,
+    "username": "inland_navgation",
+    "email": "indivisionknr@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:27.379945+00:00"
+  },
+  {
+    "id": 145,
+    "username": "irrigation_thalassery",
+    "email": "eeidtly@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:28.007902+00:00"
+  },
+  {
+    "id": 146,
+    "username": "itcell_revenue_department_kannur_collectorate",
+    "email": "itcellknr1.ker@nic.in",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:28.637845+00:00"
+  },
+  {
+    "id": 147,
+    "username": "itdpst_kannur",
+    "email": "cnritdp@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:29.276642+00:00"
+  },
+  {
+    "id": 148,
+    "username": "jalanidhi_kannur",
+    "email": "rpmukannur@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:29.917133+00:00"
+  },
+  {
+    "id": 149,
+    "username": "co_operatives",
+    "email": "jrgknnr.coop@kerala.gov.in",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:31.039992+00:00"
+  },
+  {
+    "id": 150,
+    "username": "kerala_social_security_mission_kannur",
+    "email": "dckssmknr@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:31.665874+00:00"
+  },
+  {
+    "id": 151,
+    "username": "kerala_state_it_mission_kannur",
+    "email": "dpmknr.ksitm@kerala.gov.in",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:32.303151+00:00"
+  },
+  {
+    "id": 152,
+    "username": "khadi_village",
+    "email": "poknr@kkvib.org",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:32.933483+00:00"
+  },
+  {
+    "id": 153,
+    "username": "kiidc",
+    "email": "iidctvm@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:33.563165+00:00"
+  },
+  {
+    "id": 154,
+    "username": "krfb_kannur",
+    "email": "eekrfbknr@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:34.195269+00:00"
+  },
+  {
+    "id": 155,
+    "username": "kscc_kannur",
+    "email": "kscckannur@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:34.824345+00:00"
+  },
+  {
+    "id": 156,
+    "username": "kseb_division_thalassery",
+    "email": "eedntly@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:35.459955+00:00"
+  },
+  {
+    "id": 157,
+    "username": "kseb_payyannur",
+    "email": "eledvnpayyanur@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:36.088903+00:00"
+  },
+  {
+    "id": 158,
+    "username": "kseb_sreekandapuram",
+    "email": "dceskpm@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:36.724151+00:00"
+  },
+  {
+    "id": 159,
+    "username": "kseb_iritty",
+    "email": "eedvniritty@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:37.355355+00:00"
+  },
+  {
+    "id": 160,
+    "username": "kseb_kannur",
+    "email": "knredkseb@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:37.987874+00:00"
+  },
+  {
+    "id": 161,
+    "username": "ksebltd",
+    "email": "kebcil.ksebl@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:38.621213+00:00"
+  },
+  {
+    "id": 162,
+    "username": "kshb_kannur",
+    "email": "kshbkannur2021@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:39.507959+00:00"
+  },
+  {
+    "id": 163,
+    "username": "kstp",
+    "email": "kstpknr@yahoo.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:40.137558+00:00"
+  },
+  {
+    "id": 164,
+    "username": "kudumbasree",
+    "email": "spemknr2@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:40.763662+00:00"
+  },
+  {
+    "id": 165,
+    "username": "kwa_ph_division",
+    "email": "eephkannur@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:41.719924+00:00"
+  },
+  {
+    "id": 166,
+    "username": "kwa_project_division",
+    "email": "eeprojectkannur@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:42.354027+00:00"
+  },
+  {
+    "id": 167,
+    "username": "kwa_mattannur_kannur",
+    "email": "eemattanur@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:42.980588+00:00"
+  },
+  {
+    "id": 168,
+    "username": "kwataliparamba",
+    "email": "eewsdntpba@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:43.616441+00:00"
+  },
+  {
+    "id": 169,
+    "username": "labour_office_kannur",
+    "email": "districtlabourofficerkannur@yahoo.in",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:44.244097+00:00"
+  },
+  {
+    "id": 170,
+    "username": "ldm_syndicate_bank",
+    "email": "idosyndicatebankkannur@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:44.878016+00:00"
+  },
+  {
+    "id": 171,
+    "username": "matsyafed_kannur",
+    "email": "mfed_knr@yahoo.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:45.829898+00:00"
+  },
+  {
+    "id": 172,
+    "username": "mgnregs_kannur",
+    "email": "mgnregskannur@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:46.463616+00:00"
+  },
+  {
+    "id": 173,
+    "username": "minor_irrigation_kannur",
+    "email": "midknr@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:47.090104+00:00"
+  },
+  {
+    "id": 174,
+    "username": "national_health_mission",
+    "email": "dpmknr@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:47.730354+00:00"
+  },
+  {
+    "id": 175,
+    "username": "national_highway",
+    "email": "eepwdnhkannur@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:48.359278+00:00"
+  },
+  {
+    "id": 176,
+    "username": "nhai_kannur",
+    "email": "kannurnhai@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:48.994994+00:00"
+  },
+  {
+    "id": 177,
+    "username": "nhai_kkd",
+    "email": "kozhikodenhai@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:49.625935+00:00"
+  },
+  {
+    "id": 178,
+    "username": "nirmithi_kendra_kannur",
+    "email": "kannurnirmithi@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:50.263286+00:00"
+  },
+  {
+    "id": 179,
+    "username": "pariyaram_medical_college",
+    "email": "ms@mcpariyaram.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:50.890429+00:00"
+  },
+  {
+    "id": 180,
+    "username": "pazhassi_irrigation_project_kannur",
+    "email": "pyipexecutiveengineer@yahoo.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:51.837414+00:00"
+  },
+  {
+    "id": 181,
+    "username": "pmgsypiu2",
+    "email": "pmgsy2021@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:52.471070+00:00"
+  },
+  {
+    "id": 182,
+    "username": "police_narcotics",
+    "email": "dyspnarcoknr.pol@kerala.gov.in",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:53.104466+00:00"
+  },
+  {
+    "id": 183,
+    "username": "pollution_control_board_kannur",
+    "email": "kspcbdoknr@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:53.737265+00:00"
+  },
+  {
+    "id": 184,
+    "username": "principal_agriculture_office_kannur",
+    "email": "jdaknr@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:54.373859+00:00"
+  },
+  {
+    "id": 185,
+    "username": "diet_kannur",
+    "email": "dietkannur@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:55.002393+00:00"
+  },
+  {
+    "id": 186,
+    "username": "pau_kannur",
+    "email": "pdpaukannur@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:55.631885+00:00"
+  },
+  {
+    "id": 187,
+    "username": "coir",
+    "email": "pocoirkannur@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:56.263317+00:00"
+  },
+  {
+    "id": 188,
+    "username": "city_road_improvement_krfb_kannur",
+    "email": "krfbkannur@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:56.894323+00:00"
+  },
+  {
+    "id": 189,
+    "username": "pwd_bridges_kannur",
+    "email": "eebknr@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:57.526505+00:00"
+  },
+  {
+    "id": 190,
+    "username": "pwd_electrical_division",
+    "email": "electricaldivisionkannur@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:58.154221+00:00"
+  },
+  {
+    "id": 191,
+    "username": "pwd_eletronics",
+    "email": "pwdelekannur@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:58.785961+00:00"
+  },
+  {
+    "id": 192,
+    "username": "pwd_maintenance",
+    "email": "eerdmaintknr@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:00:59.418900+00:00"
+  },
+  {
+    "id": 193,
+    "username": "pwd_roads",
+    "email": "eerbknr@pwd.kerala.gov.in",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:01:00.052263+00:00"
+  },
+  {
+    "id": 194,
+    "username": "pwd_buildings_thalassery",
+    "email": "eebldknr@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:01:00.685459+00:00"
+  },
+  {
+    "id": 195,
+    "username": "rdo_thaliparamba",
+    "email": "rdo-tlpb.rev@kerala.gov.in",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:01:01.319628+00:00"
+  },
+  {
+    "id": 196,
+    "username": "rdo_thalassery",
+    "email": "rdo-thalassery@kerala.gov.in",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:01:01.948772+00:00"
+  },
+  {
+    "id": 197,
+    "username": "higher_secondary_education",
+    "email": "rddknr@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:01:02.584630+00:00"
+  },
+  {
+    "id": 198,
+    "username": "rto_kannur",
+    "email": "kl13.mvd@kerala.gov.in",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:01:03.223798+00:00"
+  },
+  {
+    "id": 199,
+    "username": "samagra_sikshakeralam_ssk_kannur",
+    "email": "ssakannur@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:01:03.856589+00:00"
+  },
+  {
+    "id": 200,
+    "username": "sc_development",
+    "email": "ddoscknr@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:01:04.491646+00:00"
+  },
+  {
+    "id": 201,
+    "username": "scstcorporation",
+    "email": "knrksdc@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:01:05.126092+00:00"
+  },
+  {
+    "id": 202,
+    "username": "social_forestry_acf_kannur",
+    "email": "acf.sf-knr.for@kerala.gov.in",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:01:05.764201+00:00"
+  },
+  {
+    "id": 203,
+    "username": "social_justice_kannur",
+    "email": "dswoknrswd@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:01:06.389634+00:00"
+  },
+  {
+    "id": 204,
+    "username": "social_security_mission",
+    "email": "socialsecuritymission@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:01:07.024533+00:00"
+  },
+  {
+    "id": 205,
+    "username": "soi_isurvey_kannur",
+    "email": "adsskannur@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:01:07.652971+00:00"
+  },
+  {
+    "id": 206,
+    "username": "soil_conservation",
+    "email": "dscoknr@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:01:08.287983+00:00"
+  },
+  {
+    "id": 207,
+    "username": "sports_council_kannur",
+    "email": "sportscouncilkannur@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:01:08.916986+00:00"
+  },
+  {
+    "id": 208,
+    "username": "total_sanitation_kannur",
+    "email": "tsckannur@gmail.com",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:01:09.551890+00:00"
+  },
+  {
+    "id": 209,
+    "username": "tourism_department",
+    "email": "ddknr@keralatourism.org",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:01:10.182996+00:00"
+  },
+  {
+    "id": 210,
+    "username": "town_planning_kannur",
+    "email": "isgdping@kerala.gov.in",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:01:10.811160+00:00"
+  },
+  {
+    "id": 211,
+    "username": "university",
+    "email": "patoregistrar@kannuruniv.ac.in",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:01:11.438669+00:00"
+  },
+  {
+    "id": 212,
+    "username": "adm_collectorate",
+    "email": "admcollectorate@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:53:34.022633+00:00"
+  },
+  {
+    "id": 213,
+    "username": "anert_2",
+    "email": "kannur@anert.in",
+    "role": "department",
+    "department_id": 262,
+    "date_joined": "2026-02-26T13:53:34.843651+00:00"
+  },
+  {
+    "id": 214,
+    "username": "animal_husbandry_kannur_2",
+    "email": "cruknr.ahd@kerala.gov.in",
+    "role": "department",
+    "department_id": 263,
+    "date_joined": "2026-02-26T13:53:35.650435+00:00"
+  },
+  {
+    "id": 215,
+    "username": "aralam_wildlife_warden_2",
+    "email": "ww-aralam.for@kerala.gov.in",
+    "role": "department",
+    "department_id": 264,
+    "date_joined": "2026-02-26T13:53:36.468559+00:00"
+  },
+  {
+    "id": 216,
+    "username": "asst_development_commissioner_general",
+    "email": "asstdevelopmentcommi@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:53:37.241016+00:00"
+  },
+  {
+    "id": 217,
+    "username": "azhikkal_port_officer",
+    "email": "azhikkalportofficer@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:53:38.010587+00:00"
+  },
+  {
+    "id": 218,
+    "username": "dairy_development_office_2",
+    "email": "dairyddknr@gmail.com",
+    "role": "department",
+    "department_id": 267,
+    "date_joined": "2026-02-26T13:53:38.961302+00:00"
+  },
+  {
+    "id": 219,
+    "username": "deputy_collector_dm",
+    "email": "deputycollectordm@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:53:39.736707+00:00"
+  },
+  {
+    "id": 220,
+    "username": "deputy_collector_la",
+    "email": "deputycollectorla@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:53:40.518614+00:00"
+  },
+  {
+    "id": 221,
+    "username": "deputy_collector_lr",
+    "email": "deputycollectorlr@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:53:41.395699+00:00"
+  },
+  {
+    "id": 222,
+    "username": "deputy_director_fisheries_kannur",
+    "email": "deputydirectorfisher@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:53:42.163501+00:00"
+  },
+  {
+    "id": 223,
+    "username": "distict_woman_child_development_2",
+    "email": "wcdkannur@gmail.com",
+    "role": "department",
+    "department_id": 272,
+    "date_joined": "2026-02-26T13:53:42.963134+00:00"
+  },
+  {
+    "id": 224,
+    "username": "district_information_officer",
+    "email": "districtinformationo@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:53:43.860621+00:00"
+  },
+  {
+    "id": 225,
+    "username": "district_medical_officer_health",
+    "email": "districtmedicaloffic@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:53:44.637421+00:00"
+  },
+  {
+    "id": 226,
+    "username": "district_medical_officer_homeo",
+    "email": "districtmedicaloffic@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:53:45.424382+00:00"
+  },
+  {
+    "id": 227,
+    "username": "district_medical_officer_ism",
+    "email": "districtmedicaloffic@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:53:46.192899+00:00"
+  },
+  {
+    "id": 228,
+    "username": "district_police_cheif",
+    "email": "districtpolicecheif@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:53:46.963001+00:00"
+  },
+  {
+    "id": 229,
+    "username": "district_project_co_ordinator_state_heal",
+    "email": "districtprojectcoord@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:53:47.759838+00:00"
+  },
+  {
+    "id": 230,
+    "username": "district_registrar_office",
+    "email": "districtregistraroff@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:53:48.545822+00:00"
+  },
+  {
+    "id": 231,
+    "username": "district_supply_officer",
+    "email": "districtsupplyoffice@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:53:49.325228+00:00"
+  },
+  {
+    "id": 232,
+    "username": "district_transport_officer_ksrtc",
+    "email": "districttransportoff@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:53:50.109154+00:00"
+  },
+  {
+    "id": 233,
+    "username": "divisional_forest_officerdfo_kannur",
+    "email": "divisionalforestoffi@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:53:51.139850+00:00"
+  },
+  {
+    "id": 234,
+    "username": "dtpc_secretary",
+    "email": "dtpcsecretary@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:53:51.958931+00:00"
+  },
+  {
+    "id": 235,
+    "username": "dychief_engineer_electrical_circlekannur",
+    "email": "dychiefengineerelect@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:53:52.987061+00:00"
+  },
+  {
+    "id": 236,
+    "username": "economics_statistics_2",
+    "email": "ecostatknr@gmail.com",
+    "role": "department",
+    "department_id": 285,
+    "date_joined": "2026-02-26T13:53:53.848188+00:00"
+  },
+  {
+    "id": 237,
+    "username": "ee_lsgd_dtpanchayat_2",
+    "email": "eelsgdkannurdivision@gmail.com",
+    "role": "department",
+    "department_id": 286,
+    "date_joined": "2026-02-26T13:53:54.670086+00:00"
+  },
+  {
+    "id": 238,
+    "username": "ee_pmgsy_piupau_2",
+    "email": "piupmgsykannur@gmail.com",
+    "role": "department",
+    "department_id": 287,
+    "date_joined": "2026-02-26T13:53:55.529941+00:00"
+  },
+  {
+    "id": 239,
+    "username": "electrical_inspectorate_2",
+    "email": "eikannur@gmail.com",
+    "role": "department",
+    "department_id": 288,
+    "date_joined": "2026-02-26T13:53:56.401163+00:00"
+  },
+  {
+    "id": 240,
+    "username": "employment_officer",
+    "email": "employmentofficer@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:53:57.192229+00:00"
+  },
+  {
+    "id": 241,
+    "username": "exise_deputy_commissioner",
+    "email": "exisedeputycommissio@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:53:58.015952+00:00"
+  },
+  {
+    "id": 242,
+    "username": "ffda_2",
+    "email": "bffdakannur@ymail.com",
+    "role": "department",
+    "department_id": 291,
+    "date_joined": "2026-02-26T13:53:59.006061+00:00"
+  },
+  {
+    "id": 243,
+    "username": "finance_officer_collectorate_kannur",
+    "email": "financeofficercollec@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:54:00.080141+00:00"
+  },
+  {
+    "id": 244,
+    "username": "fire_rescue_officer_kannur",
+    "email": "firerescueofficerkan@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:54:00.936643+00:00"
+  },
+  {
+    "id": 245,
+    "username": "food_safety_office_2",
+    "email": "acfskannur@gmail.com",
+    "role": "department",
+    "department_id": 294,
+    "date_joined": "2026-02-26T13:54:02.351367+00:00"
+  },
+  {
+    "id": 246,
+    "username": "general_education_deputy_director",
+    "email": "generaleducationdepu@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:54:03.135811+00:00"
+  },
+  {
+    "id": 247,
+    "username": "general_manager_dic",
+    "email": "generalmanagerdic@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:54:03.971999+00:00"
+  },
+  {
+    "id": 248,
+    "username": "geologist_mining_geology_kannur",
+    "email": "geologistmininggeolo@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:54:04.798836+00:00"
+  },
+  {
+    "id": 249,
+    "username": "ground_water_kannur_2",
+    "email": "gwdknr@gmail.com",
+    "role": "department",
+    "department_id": 298,
+    "date_joined": "2026-02-26T13:54:05.910858+00:00"
+  },
+  {
+    "id": 250,
+    "username": "harbour_engineering_kannur_2",
+    "email": "eeknr.hed@kerala.gov.in",
+    "role": "department",
+    "department_id": 299,
+    "date_joined": "2026-02-26T13:54:06.919824+00:00"
+  },
+  {
+    "id": 251,
+    "username": "harithakeralam_kannur_2",
+    "email": "hkmkannur@gmail.com",
+    "role": "department",
+    "department_id": 300,
+    "date_joined": "2026-02-26T13:54:07.807751+00:00"
+  },
+  {
+    "id": 252,
+    "username": "icds_programmeofficer",
+    "email": "icdsprogrammeofficer@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:54:08.590785+00:00"
+  },
+  {
+    "id": 253,
+    "username": "inland_navgation_2",
+    "email": "indivisionknr@gmail.com",
+    "role": "department",
+    "department_id": 302,
+    "date_joined": "2026-02-26T13:54:09.416759+00:00"
+  },
+  {
+    "id": 254,
+    "username": "irrigation_thalassery_2",
+    "email": "eeidtly@gmail.com",
+    "role": "department",
+    "department_id": 303,
+    "date_joined": "2026-02-26T13:54:10.450718+00:00"
+  },
+  {
+    "id": 255,
+    "username": "itcell_revenue_department_kannur_collect",
+    "email": "itcellknr1.ker@nic.in",
+    "role": "department",
+    "department_id": 304,
+    "date_joined": "2026-02-26T13:54:11.239067+00:00"
+  },
+  {
+    "id": 256,
+    "username": "itdpst_kannur_2",
+    "email": "cnritdp@gmail.com",
+    "role": "department",
+    "department_id": 305,
+    "date_joined": "2026-02-26T13:54:12.108188+00:00"
+  },
+  {
+    "id": 257,
+    "username": "jalanidhi_kannur_2",
+    "email": "rpmukannur@gmail.com",
+    "role": "department",
+    "department_id": 306,
+    "date_joined": "2026-02-26T13:54:12.983486+00:00"
+  },
+  {
+    "id": 258,
+    "username": "joint_director_ddp",
+    "email": "jointdirectorddp@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:54:13.792044+00:00"
+  },
+  {
+    "id": 259,
+    "username": "joint_registrar_co_operatives",
+    "email": "jointregistrarcooper@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:54:14.613706+00:00"
+  },
+  {
+    "id": 260,
+    "username": "kerala_social_security_mission_kannur_2",
+    "email": "dckssmknr@gmail.com",
+    "role": "department",
+    "department_id": 309,
+    "date_joined": "2026-02-26T13:54:15.531046+00:00"
+  },
+  {
+    "id": 261,
+    "username": "kerala_state_it_missionkannur",
+    "email": "keralastateitmission@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:54:16.383061+00:00"
+  },
+  {
+    "id": 262,
+    "username": "khadi_village_2",
+    "email": "poknr@kkvib.org",
+    "role": "department",
+    "department_id": 311,
+    "date_joined": "2026-02-26T13:54:17.199833+00:00"
+  },
+  {
+    "id": 263,
+    "username": "kiidc_2",
+    "email": "iidctvm@gmail.com",
+    "role": "department",
+    "department_id": 312,
+    "date_joined": "2026-02-26T13:54:18.071560+00:00"
+  },
+  {
+    "id": 264,
+    "username": "krfb_kannur_2",
+    "email": "eekrfbknr@gmail.com",
+    "role": "department",
+    "department_id": 313,
+    "date_joined": "2026-02-26T13:54:18.914670+00:00"
+  },
+  {
+    "id": 265,
+    "username": "kscc_kannur_2",
+    "email": "kscckannur@gmail.com",
+    "role": "department",
+    "department_id": 314,
+    "date_joined": "2026-02-26T13:54:20.116565+00:00"
+  },
+  {
+    "id": 266,
+    "username": "kseb_division_thalassery_2",
+    "email": "eedntly@gmail.com",
+    "role": "department",
+    "department_id": 315,
+    "date_joined": "2026-02-26T13:54:21.177371+00:00"
+  },
+  {
+    "id": 267,
+    "username": "kseb_payyannur_2",
+    "email": "eledvnpayyanur@gmail.com",
+    "role": "department",
+    "department_id": 316,
+    "date_joined": "2026-02-26T13:54:21.999972+00:00"
+  },
+  {
+    "id": 268,
+    "username": "kseb_sreekandapuram_2",
+    "email": "dceskpm@gmail.com",
+    "role": "department",
+    "department_id": 317,
+    "date_joined": "2026-02-26T13:54:23.090120+00:00"
+  },
+  {
+    "id": 269,
+    "username": "kseb_iritty_2",
+    "email": "eedvniritty@gmail.com",
+    "role": "department",
+    "department_id": 318,
+    "date_joined": "2026-02-26T13:54:23.942816+00:00"
+  },
+  {
+    "id": 270,
+    "username": "kseb_kannur_2",
+    "email": "knredkseb@gmail.com",
+    "role": "department",
+    "department_id": 319,
+    "date_joined": "2026-02-26T13:54:24.926224+00:00"
+  },
+  {
+    "id": 271,
+    "username": "ksebltd_2",
+    "email": "kebcil.ksebl@gmail.com",
+    "role": "department",
+    "department_id": 320,
+    "date_joined": "2026-02-26T13:54:25.752484+00:00"
+  },
+  {
+    "id": 272,
+    "username": "kshb_kannur_2",
+    "email": "kshbkannur2021@gmail.com",
+    "role": "department",
+    "department_id": 321,
+    "date_joined": "2026-02-26T13:54:26.559336+00:00"
+  },
+  {
+    "id": 273,
+    "username": "kstpknr",
+    "email": "kstpknr@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:54:27.325345+00:00"
+  },
+  {
+    "id": 274,
+    "username": "kudumbasree_2",
+    "email": "spemknr1@gmail.com | spemknr2@gmail.com",
+    "role": "department",
+    "department_id": 323,
+    "date_joined": "2026-02-26T13:54:28.264289+00:00"
+  },
+  {
+    "id": 275,
+    "username": "kwa_ph_division_2",
+    "email": "eephkannur@gmail.com",
+    "role": "department",
+    "department_id": 324,
+    "date_joined": "2026-02-26T13:54:29.129153+00:00"
+  },
+  {
+    "id": 276,
+    "username": "kwa_project_division_2",
+    "email": "eeprojectkannur@gmail.com",
+    "role": "department",
+    "department_id": 325,
+    "date_joined": "2026-02-26T13:54:30.110027+00:00"
+  },
+  {
+    "id": 277,
+    "username": "kwa_mattannur_kannur_2",
+    "email": "eemattanur@gmail.com",
+    "role": "department",
+    "department_id": 326,
+    "date_joined": "2026-02-26T13:54:30.968851+00:00"
+  },
+  {
+    "id": 278,
+    "username": "kwataliparamba_2",
+    "email": "eewsdntpba@gmail.com",
+    "role": "department",
+    "department_id": 327,
+    "date_joined": "2026-02-26T13:54:31.918477+00:00"
+  },
+  {
+    "id": 279,
+    "username": "labour_office_kannur_2",
+    "email": "districtlabourofficerkannur@yahoo.in",
+    "role": "department",
+    "department_id": 328,
+    "date_joined": "2026-02-26T13:54:32.747708+00:00"
+  },
+  {
+    "id": 280,
+    "username": "ldm_syndicate_bank_2",
+    "email": "Ido.kannur@canarabank.com | Idosyndicatebankkannur@gmail.com",
+    "role": "department",
+    "department_id": 329,
+    "date_joined": "2026-02-26T13:54:33.648945+00:00"
+  },
+  {
+    "id": 281,
+    "username": "matsyafed_kannur_2",
+    "email": "mfed_knr@yahoo.com",
+    "role": "department",
+    "department_id": 330,
+    "date_joined": "2026-02-26T13:54:34.714909+00:00"
+  },
+  {
+    "id": 282,
+    "username": "mgnregs_kannur_2",
+    "email": "mgnregskannur@gmail.com",
+    "role": "department",
+    "department_id": 331,
+    "date_joined": "2026-02-26T13:54:35.537498+00:00"
+  },
+  {
+    "id": 283,
+    "username": "minor_irrigation_kannur_2",
+    "email": "midknr@gmail.com",
+    "role": "department",
+    "department_id": 332,
+    "date_joined": "2026-02-26T13:54:36.405336+00:00"
+  },
+  {
+    "id": 284,
+    "username": "national_health_mission_2",
+    "email": "dpmknr@gmail.com",
+    "role": "department",
+    "department_id": 333,
+    "date_joined": "2026-02-26T13:54:37.268793+00:00"
+  },
+  {
+    "id": 285,
+    "username": "national_highway_2",
+    "email": "eepwdnhkannur@gmail.com",
+    "role": "department",
+    "department_id": 334,
+    "date_joined": "2026-02-26T13:54:38.078720+00:00"
+  },
+  {
+    "id": 286,
+    "username": "nhai_kannur_2",
+    "email": "kannurnhai@gmail.com",
+    "role": "department",
+    "department_id": 335,
+    "date_joined": "2026-02-26T13:54:38.887387+00:00"
+  },
+  {
+    "id": 287,
+    "username": "nhai_kkd_2",
+    "email": "kozhikodenhai@gmail.com",
+    "role": "department",
+    "department_id": 336,
+    "date_joined": "2026-02-26T13:54:39.693328+00:00"
+  },
+  {
+    "id": 288,
+    "username": "nirmithi_kendra_kannur_2",
+    "email": "kannurnirmithi@gmail.com",
+    "role": "department",
+    "department_id": 337,
+    "date_joined": "2026-02-26T13:54:40.511896+00:00"
+  },
+  {
+    "id": 289,
+    "username": "pariyaram_medical_college_principal",
+    "email": "pariyarammedicalcoll@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:54:41.288676+00:00"
+  },
+  {
+    "id": 290,
+    "username": "pariyaram_medical_college_supdt",
+    "email": "pariyarammedicalcoll@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:54:42.118685+00:00"
+  },
+  {
+    "id": 291,
+    "username": "pazhassi_irrigation_project_kannur_2",
+    "email": "pyipexecutiveengineer@yahoo.com",
+    "role": "department",
+    "department_id": 340,
+    "date_joined": "2026-02-26T13:54:42.930581+00:00"
+  },
+  {
+    "id": 292,
+    "username": "pmgsypiu2_2",
+    "email": "pmgsy2021@gmail.com",
+    "role": "department",
+    "department_id": 341,
+    "date_joined": "2026-02-26T13:54:43.845145+00:00"
+  },
+  {
+    "id": 293,
+    "username": "police_narcotics_2",
+    "email": "dyspnarcoknr.pol@kerala.gov.in",
+    "role": "department",
+    "department_id": 342,
+    "date_joined": "2026-02-26T13:54:44.670686+00:00"
+  },
+  {
+    "id": 294,
+    "username": "pollution_control_board_kannur_2",
+    "email": "kspcbdoknr@gmail.com",
+    "role": "department",
+    "department_id": 343,
+    "date_joined": "2026-02-26T13:54:45.524971+00:00"
+  },
+  {
+    "id": 295,
+    "username": "principal_agriculture_officer_kannur",
+    "email": "principalagriculture@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:54:46.312849+00:00"
+  },
+  {
+    "id": 296,
+    "username": "principal_dietkannur",
+    "email": "principaldietkannur@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:54:47.332658+00:00"
+  },
+  {
+    "id": 297,
+    "username": "project_director_pau_kannur",
+    "email": "projectdirectorpauka@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:54:48.122439+00:00"
+  },
+  {
+    "id": 298,
+    "username": "project_office_coir",
+    "email": "projectofficecoir@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:54:49.071491+00:00"
+  },
+  {
+    "id": 299,
+    "username": "projectco_ordinator_city_road_improvemen",
+    "email": "projectcoordinatorci@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:54:49.852746+00:00"
+  },
+  {
+    "id": 300,
+    "username": "pwd_bridges_kannur_2",
+    "email": "eebknr@gmail.com",
+    "role": "department",
+    "department_id": 349,
+    "date_joined": "2026-02-26T13:54:50.657882+00:00"
+  },
+  {
+    "id": 301,
+    "username": "pwd_electrical_division_2",
+    "email": "electricaldivisionkannur@gmail.com",
+    "role": "department",
+    "department_id": 350,
+    "date_joined": "2026-02-26T13:54:51.464299+00:00"
+  },
+  {
+    "id": 302,
+    "username": "pwd_eletronics_2",
+    "email": "pwdelekannur@gmail.com",
+    "role": "department",
+    "department_id": 351,
+    "date_joined": "2026-02-26T13:54:52.404238+00:00"
+  },
+  {
+    "id": 303,
+    "username": "pwd_maintenance_2",
+    "email": "eerdmaintknr@gmail.com",
+    "role": "department",
+    "department_id": 352,
+    "date_joined": "2026-02-26T13:54:53.206281+00:00"
+  },
+  {
+    "id": 304,
+    "username": "pwd_roads_2",
+    "email": "eerbknr@pwd.kerala.gov.in",
+    "role": "department",
+    "department_id": 353,
+    "date_joined": "2026-02-26T13:54:54.015681+00:00"
+  },
+  {
+    "id": 305,
+    "username": "pwd_buildings_thalassery_2",
+    "email": "eebldknr@gmail.com",
+    "role": "department",
+    "department_id": 354,
+    "date_joined": "2026-02-26T13:54:55.038346+00:00"
+  },
+  {
+    "id": 306,
+    "username": "rdo_thalassery_2",
+    "email": "rdo-thalassery@kerala.gov.in",
+    "role": "department",
+    "department_id": 356,
+    "date_joined": "2026-02-26T13:54:55.944514+00:00"
+  },
+  {
+    "id": 307,
+    "username": "rdo_thaliparamba_2",
+    "email": "rdo-tlpb.rev@kerala.gov.in",
+    "role": "department",
+    "department_id": 355,
+    "date_joined": "2026-02-26T13:54:56.755271+00:00"
+  },
+  {
+    "id": 308,
+    "username": "regional_deputy_director_higher_secondar",
+    "email": "regionaldeputydirect@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:54:57.596847+00:00"
+  },
+  {
+    "id": 309,
+    "username": "rto_kannur_2",
+    "email": "Kl13.mvd@kerala.gov.in",
+    "role": "department",
+    "department_id": 358,
+    "date_joined": "2026-02-26T13:54:58.443339+00:00"
+  },
+  {
+    "id": 310,
+    "username": "samagra_sikshakeralam_ssk_kannur_2",
+    "email": "ssakannur@gmail.com",
+    "role": "department",
+    "department_id": 359,
+    "date_joined": "2026-02-26T13:54:59.400470+00:00"
+  },
+  {
+    "id": 311,
+    "username": "sc_development_2",
+    "email": "ddoscknr@gmail.com",
+    "role": "department",
+    "department_id": 360,
+    "date_joined": "2026-02-26T13:55:00.223173+00:00"
+  },
+  {
+    "id": 312,
+    "username": "scstcorporation_2",
+    "email": "knrksdc@gmail.com",
+    "role": "department",
+    "department_id": 361,
+    "date_joined": "2026-02-26T13:55:01.071278+00:00"
+  },
+  {
+    "id": 313,
+    "username": "social_forestry_acf_kannur_2",
+    "email": "acf.sf-knr.for@kerala.gov.in",
+    "role": "department",
+    "department_id": 362,
+    "date_joined": "2026-02-26T13:55:02.034181+00:00"
+  },
+  {
+    "id": 314,
+    "username": "social_justice_kannur_2",
+    "email": "dswoknrswd@gmail.com",
+    "role": "department",
+    "department_id": 363,
+    "date_joined": "2026-02-26T13:55:02.861563+00:00"
+  },
+  {
+    "id": 315,
+    "username": "social_security_mission_2",
+    "email": "socialsecuritymission@gmail.com",
+    "role": "department",
+    "department_id": 364,
+    "date_joined": "2026-02-26T13:55:03.675979+00:00"
+  },
+  {
+    "id": 316,
+    "username": "soi_isurvey_kannur_2",
+    "email": "adsskannur@gmail.com",
+    "role": "department",
+    "department_id": 365,
+    "date_joined": "2026-02-26T13:55:04.584959+00:00"
+  },
+  {
+    "id": 317,
+    "username": "soil_conservation_2",
+    "email": "dscoknr@gmail.com",
+    "role": "department",
+    "department_id": 366,
+    "date_joined": "2026-02-26T13:55:05.818721+00:00"
+  },
+  {
+    "id": 318,
+    "username": "sports_council_kannur_2",
+    "email": "sportscouncilkannur@gmail.com",
+    "role": "department",
+    "department_id": 367,
+    "date_joined": "2026-02-26T13:55:06.703170+00:00"
+  },
+  {
+    "id": 319,
+    "username": "total_sanitation_kannur_2",
+    "email": "tsckannur@gmail.com",
+    "role": "department",
+    "department_id": 368,
+    "date_joined": "2026-02-26T13:55:07.519474+00:00"
+  },
+  {
+    "id": 320,
+    "username": "tourism_department_2",
+    "email": "ddknr@keralatourism.org",
+    "role": "department",
+    "department_id": 369,
+    "date_joined": "2026-02-26T13:55:08.453362+00:00"
+  },
+  {
+    "id": 321,
+    "username": "town_planne_rkannur",
+    "email": "townplannerkannur@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:55:09.516719+00:00"
+  },
+  {
+    "id": 322,
+    "username": "town_planner_new",
+    "email": "townplannernew@dept.local",
+    "role": "department",
+    "department_id": null,
+    "date_joined": "2026-02-26T13:55:10.551728+00:00"
+  },
+  {
+    "id": 323,
+    "username": "town_planning_kannur_2",
+    "email": "Isgdping@kerala.gov.in",
+    "role": "department",
+    "department_id": 372,
+    "date_joined": "2026-02-26T13:55:11.489458+00:00"
+  },
+  {
+    "id": 324,
+    "username": "university_2",
+    "email": "patoregistrar@kannuruniv.ac.in",
+    "role": "department",
+    "department_id": 373,
+    "date_joined": "2026-02-26T13:55:12.561143+00:00"
+  },
+  {
+    "id": 325,
+    "username": "azhikkal_port_2",
+    "email": "azhikkalport@yahoo.com",
+    "role": "department",
+    "department_id": 375,
+    "date_joined": "2026-02-26T14:22:24.894708+00:00"
+  },
+  {
+    "id": 326,
+    "username": "city_road_improvement_krfb_kannur_2",
+    "email": "krfbkannur@gmail.com",
+    "role": "department",
+    "department_id": 406,
+    "date_joined": "2026-02-26T14:22:25.759935+00:00"
+  },
+  {
+    "id": 327,
+    "username": "co_operatives_2",
+    "email": "jrgknnr.coop@kerala.gov.in",
+    "role": "department",
+    "department_id": 398,
+    "date_joined": "2026-02-26T14:22:26.562633+00:00"
+  },
+  {
+    "id": 328,
+    "username": "coir_2",
+    "email": "pocoirkannur@gmail.com",
+    "role": "department",
+    "department_id": 405,
+    "date_joined": "2026-02-26T14:22:27.654496+00:00"
+  },
+  {
+    "id": 329,
+    "username": "dic_2",
+    "email": "dickannur@ymail.com",
+    "role": "department",
+    "department_id": 394,
+    "date_joined": "2026-02-26T14:22:28.762051+00:00"
+  },
+  {
+    "id": 330,
+    "username": "diet_kannur_2",
+    "email": "dietkannur@gmail.com",
+    "role": "department",
+    "department_id": 403,
+    "date_joined": "2026-02-26T14:22:29.643933+00:00"
+  },
+  {
+    "id": 331,
+    "username": "district_employment_exchange_2",
+    "email": "deeknr.emp.lbr@kerala.gov.in",
+    "role": "department",
+    "department_id": 389,
+    "date_joined": "2026-02-26T14:22:30.777119+00:00"
+  },
+  {
+    "id": 332,
+    "username": "district_information_office_2",
+    "email": "kannurdio@gmail.com",
+    "role": "department",
+    "department_id": 377,
+    "date_joined": "2026-02-26T14:22:31.729209+00:00"
+  },
+  {
+    "id": 333,
+    "username": "district_medical_office_health_2",
+    "email": "dmohkannur@gmail.com",
+    "role": "department",
+    "department_id": 378,
+    "date_joined": "2026-02-26T14:22:32.577081+00:00"
+  },
+  {
+    "id": 334,
+    "username": "district_medical_office_homeo_2",
+    "email": "dmohomknr@gmail.com",
+    "role": "department",
+    "department_id": 379,
+    "date_joined": "2026-02-26T14:22:33.463712+00:00"
+  },
+  {
+    "id": 335,
+    "username": "district_medical_office_ism_2",
+    "email": "knr.ism.dmo@gmail.com",
+    "role": "department",
+    "department_id": 380,
+    "date_joined": "2026-02-26T14:22:34.376095+00:00"
+  },
+  {
+    "id": 336,
+    "username": "district_registrar_general_office_kannur_2",
+    "email": "regkan.ker@nic.in",
+    "role": "department",
+    "department_id": 383,
+    "date_joined": "2026-02-26T14:22:35.285688+00:00"
+  },
+  {
+    "id": 337,
+    "username": "district_supply_office_2",
+    "email": "dsoknr.sch@kerala.gov.in",
+    "role": "department",
+    "department_id": 384,
+    "date_joined": "2026-02-26T14:22:36.192257+00:00"
+  },
+  {
+    "id": 338,
+    "username": "divisional_forest_office_dfo_kannur_2",
+    "email": "dfo-knr.for@kerala.gov.in",
+    "role": "department",
+    "department_id": 386,
+    "date_joined": "2026-02-26T14:22:37.009266+00:00"
+  },
+  {
+    "id": 339,
+    "username": "dtpc_2",
+    "email": "info@dtpckannur.com",
+    "role": "department",
+    "department_id": 387,
+    "date_joined": "2026-02-26T14:22:37.872541+00:00"
+  },
+  {
+    "id": 340,
+    "username": "exise_2",
+    "email": "aec_kannur@yahoo.co.in",
+    "role": "department",
+    "department_id": 390,
+    "date_joined": "2026-02-26T14:22:39.682951+00:00"
+  },
+  {
+    "id": 341,
+    "username": "finance_office_collectorate_kannur_2",
+    "email": "jseknr.ker@nic.in",
+    "role": "department",
+    "department_id": 391,
+    "date_joined": "2026-02-26T14:22:40.927720+00:00"
+  },
+  {
+    "id": 342,
+    "username": "fire_rescue_office_kannur_2",
+    "email": "adoknr.frs@kerala.gov.in",
+    "role": "department",
+    "department_id": 392,
+    "date_joined": "2026-02-26T14:22:41.730016+00:00"
+  },
+  {
+    "id": 343,
+    "username": "fisheries_kannur_2",
+    "email": "ddfisherieskannur@gmail.com",
+    "role": "department",
+    "department_id": 376,
+    "date_joined": "2026-02-26T14:22:42.522773+00:00"
+  },
+  {
+    "id": 344,
+    "username": "general_education_2",
+    "email": "ddekannur@gmail.com",
+    "role": "department",
+    "department_id": 393,
+    "date_joined": "2026-02-26T14:22:44.556175+00:00"
+  },
+  {
+    "id": 345,
+    "username": "higher_secondary_education_2",
+    "email": "rddknr@gmail.com",
+    "role": "department",
+    "department_id": 407,
+    "date_joined": "2026-02-26T14:22:46.285159+00:00"
+  },
+  {
+    "id": 346,
+    "username": "icds_programme_office_2",
+    "email": "po.kannur@gmail.com",
+    "role": "department",
+    "department_id": 396,
+    "date_joined": "2026-02-26T14:22:47.194697+00:00"
+  },
+  {
+    "id": 347,
+    "username": "kerala_state_it_mission_kannur_2",
+    "email": "dpmknr.ksitm@kerala.gov.in",
+    "role": "department",
+    "department_id": 399,
+    "date_joined": "2026-02-26T14:22:49.564755+00:00"
+  },
+  {
+    "id": 348,
+    "username": "kseb_electrical_circle_kannur_2",
+    "email": "dyceknr@gmail.com",
+    "role": "department",
+    "department_id": 388,
+    "date_joined": "2026-02-26T14:22:52.354016+00:00"
+  },
+  {
+    "id": 349,
+    "username": "ksrtc_2",
+    "email": "knr@kerala.gov.in",
+    "role": "department",
+    "department_id": 385,
+    "date_joined": "2026-02-26T14:22:54.295061+00:00"
+  },
+  {
+    "id": 350,
+    "username": "kstp_2",
+    "email": "kstpknr@yahoo.com",
+    "role": "department",
+    "department_id": 400,
+    "date_joined": "2026-02-26T14:22:55.096509+00:00"
+  },
+  {
+    "id": 351,
+    "username": "land_revenue_department_collectorate_2",
+    "email": "Irkan.ker@nic.in | admkan.ker@nic.in | kannurdm@gmail.com | lakan.ker@nic.in",
+    "role": "department",
+    "department_id": 374,
+    "date_joined": "2026-02-26T14:22:57.667423+00:00"
+  },
+  {
+    "id": 352,
+    "username": "lsgd_2",
+    "email": "jdlsgdknr@gmail.com",
+    "role": "department",
+    "department_id": 397,
+    "date_joined": "2026-02-26T14:22:58.750244+00:00"
+  },
+  {
+    "id": 353,
+    "username": "mining_geology_kannur_2",
+    "email": "geo.kan.dmg@kerala.gov.in",
+    "role": "department",
+    "department_id": 395,
+    "date_joined": "2026-02-26T14:23:00.081115+00:00"
+  },
+  {
+    "id": 354,
+    "username": "pariyaram_medical_college_2",
+    "email": "ms@mcpariyaram.com | principal@mcpariyaram.com",
+    "role": "department",
+    "department_id": 401,
+    "date_joined": "2026-02-26T14:23:02.451240+00:00"
+  },
+  {
+    "id": 355,
+    "username": "pau_kannur_2",
+    "email": "pdpaukannur@gmail.com",
+    "role": "department",
+    "department_id": 404,
+    "date_joined": "2026-02-26T14:23:03.436762+00:00"
+  },
+  {
+    "id": 356,
+    "username": "police_2",
+    "email": "dpoknr.pol@kerala.gov.in",
+    "role": "department",
+    "department_id": 381,
+    "date_joined": "2026-02-26T14:23:04.671315+00:00"
+  },
+  {
+    "id": 357,
+    "username": "principal_agriculture_office_kannur_2",
+    "email": "jdaknr@gmail.com",
+    "role": "department",
+    "department_id": 402,
+    "date_joined": "2026-02-26T14:23:06.234181+00:00"
+  },
+  {
+    "id": 358,
+    "username": "state_health_agency_sha_2",
+    "email": "dpcknr.sha@kerala.gov.in",
+    "role": "department",
+    "department_id": 382,
+    "date_joined": "2026-02-26T14:23:12.733285+00:00"
+  }
+]

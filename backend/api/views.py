@@ -1,6 +1,7 @@
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, throttle_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
+from rest_framework.throttling import AnonRateThrottle
 
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.views.decorators.csrf import csrf_exempt
@@ -19,6 +20,8 @@ import httpx
 import requests
 import uuid
 from urllib.parse import quote
+import difflib
+import re
 
 from .models import (
     User,
@@ -51,67 +54,35 @@ SUPABASE_BUCKET = os.getenv('SUPABASE_BUCKET_NAME', 'Mnutes')
 TEMP_DATA_CACHE = []
 
 
+class LoginRateThrottle(AnonRateThrottle):
+    scope = 'login'
+
+
 # ================= AUTH ================= #
 
 
 @api_view(['POST'])
 @permission_classes([AllowAny]) 
+@throttle_classes([LoginRateThrottle])
 def login_view(request):
-    print("\n\n🔥 ================= DIAGNOSTIC LOGIN START ================= 🔥")
-    
-    # 1. Capture what the Frontend sent
-    username_input = request.data.get('username')
-    password_input = request.data.get('password')
-    print(f"🔥 INPUT RECEIVED -> Username: '{username_input}' | Password: '{password_input}'")
+    username_input = (request.data.get('username') or '').strip()
+    password_input = request.data.get('password') or ''
 
     if not username_input or not password_input:
-        print("🔥 ERROR: Username or Password missing in request body.")
         return Response({"success": False, "message": "Missing credentials"}, status=400)
-
-    # 2. direct Database Check (Bypassing authentication to see if user exists)
-    User = get_user_model()
-    try:
-        # Try finding exact match
-        user_db = User.objects.get(username=username_input)
-        print(f"🔥 DB LOOKUP -> ✅ User '{username_input}' found in database.")
-        print(f"   - ID: {user_db.id}")
-        print(f"   - Role: {user_db.role}")
-        print(f"   - is_active: {user_db.is_active}")
-        print(f"   - Password Valid?: {user_db.check_password(password_input)}")
-        
-        if not user_db.is_active:
-            print("   ⚠️ WARNING: User is INACTIVE. Login will fail.")
-        
-        if not user_db.check_password(password_input):
-            print("   ⚠️ WARNING: Password check FAILED. The password stored does not match the input.")
-
-    except User.DoesNotExist:
-        print(f"🔥 DB LOOKUP -> ❌ User '{username_input}' does NOT exist.")
-        # Check if it exists with different capitalization
-        similar = User.objects.filter(username__iexact=username_input)
-        if similar.exists():
-            print(f"   ⚠️ FOUND MISMATCH: Did you mean '{similar.first().username}'?")
-        else:
-            print(f"   ⚠️ No user found. Available users: {list(User.objects.values_list('username', flat=True))}")
-
-    # 3. Actual Authentication Attempt
     user = authenticate(username=username_input, password=password_input)
 
-    if user is None:
-        print("🔥 FINAL RESULT -> ❌ authenticate() failed.")
-        print("🔥 ================= DIAGNOSTIC LOGIN END ================= 🔥\n\n")
+    if user is None or not user.is_active:
         return Response({"success": False, "message": "Invalid username or password"}, status=401)
 
-    print("🔥 FINAL RESULT -> ✅ Login Successful!")
-    print("🔥 ================= DIAGNOSTIC LOGIN END ================= 🔥\n\n")
-
-    token, _ = Token.objects.get_or_create(user=user)
+    Token.objects.filter(user=user).delete()
+    token = Token.objects.create(user=user)
 
     return Response({
         "success": True,
         "token": token.key,
         "username": user.username,
-        "role": user.role,
+        "role": (user.role or '').lower(),
         "department": user.department.dept_name if user.department else None
     })
 
@@ -119,7 +90,7 @@ def login_view(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def logout_view(request):
-    request.user.auth_token.delete()  # Delete the token
+    Token.objects.filter(user=request.user).delete()
     return Response({"success": True})
 
 
@@ -148,8 +119,10 @@ def upload_minutes(request):
         for chunk in file.chunks():
             dest.write(chunk)
 
-    # Analyze with Gemini
-    raw_data = analyze_document_with_gemini(local_file_path)
+    available_departments = list(Department.objects.values_list('dept_name', flat=True))
+
+    # Analyze with Gemini using current department master list
+    raw_data = analyze_document_with_gemini(local_file_path, available_departments)
 
     # Upload to Supabase Storage
     supabase_file_path = None
@@ -191,22 +164,16 @@ def upload_minutes(request):
             print(f"⚠️ Supabase upload exception: {e}")
             supabase_file_path = None
 
+    dept_objects = list(Department.objects.all())
+    dept_name_map = _build_department_name_maps(dept_objects)
+
     clean_data = []
     for item in raw_data:
-        depts = item.get('departments') or []
-        if not depts:
-            depts = [item.get('department', 'GENERAL')]
-
-        item['department'] = ", ".join(d.upper() for d in depts if d)
+        item = _normalize_issue_departments(item, dept_name_map)
         clean_data.append(item)
 
     # ===== CREATE MINUTES RECORD NOW (not waiting for allocate_all) ===== #
-    # Get or create DPO user
-    u_by = User.objects.filter(role='DPO').first()
-    if not u_by:
-        u_by = User.objects.first()
-    if not u_by:
-        u_by = User.objects.create_user(username='dpo', password='dpo', role='DPO')
+    u_by = request.user
     # Parse meeting date if provided
     try:
         if meeting_date_str:
@@ -300,8 +267,123 @@ def _parse_deadline(item):
     return date.today() + timedelta(days=14)
 
 
+def _extract_departments(item):
+    return [
+        d.strip()[:100]
+        for d in str(item.get('department', 'GENERAL')).split(',')
+        if d.strip()
+    ]
+
+
+def _dept_key(value):
+    return re.sub(r'[^A-Z0-9]+', '', (value or '').strip().upper())
+
+
+def _build_department_name_maps(departments):
+    exact = {}
+    normalized = {}
+
+    for dept in departments:
+        name = (dept.dept_name or '').strip()
+        if not name:
+            continue
+
+        exact[name.upper()] = dept
+        normalized_key = _dept_key(name)
+        if normalized_key and normalized_key not in normalized:
+            normalized[normalized_key] = dept
+
+    return {
+        'exact': exact,
+        'normalized': normalized,
+        'normalized_keys': list(normalized.keys()),
+    }
+
+
+def _match_department(raw_name, dept_maps, cutoff=0.72):
+    value = (raw_name or '').strip()
+    if not value:
+        return None
+
+    exact = dept_maps['exact']
+    normalized = dept_maps['normalized']
+
+    exact_match = exact.get(value.upper())
+    if exact_match:
+        return exact_match
+
+    key = _dept_key(value)
+    if key in normalized:
+        return normalized[key]
+
+    if not key:
+        return None
+
+    # Handle alias-like values by containment (e.g., AGRICULTURE -> PRINCIPAL AGRICULTURE OFFICE)
+    containment_candidates = []
+    for normalized_key, dept in normalized.items():
+        if key in normalized_key or normalized_key in key:
+            containment_candidates.append((abs(len(normalized_key) - len(key)), dept))
+
+    if containment_candidates:
+        containment_candidates.sort(key=lambda x: x[0])
+        return containment_candidates[0][1]
+
+    close = difflib.get_close_matches(key, dept_maps['normalized_keys'], n=1, cutoff=0.55)
+    if close:
+        return normalized.get(close[0])
+
+    return None
+
+
+def _normalize_issue_departments(item, dept_maps):
+    raw_depts = item.get('departments') or []
+    if not raw_depts:
+        raw_depts = [item.get('department', '')]
+
+    resolved = []
+    unresolved = []
+    seen = set()
+
+    for raw_name in raw_depts:
+        raw_clean = (raw_name or '').strip()
+        if not raw_clean:
+            continue
+
+        matched = _match_department(raw_clean, dept_maps)
+        if matched:
+            canonical = matched.dept_name
+            if canonical not in seen:
+                resolved.append(canonical)
+                seen.add(canonical)
+        else:
+            unresolved.append(raw_clean)
+
+    if resolved:
+        item['departments'] = resolved
+        item['department'] = ', '.join(resolved)
+    else:
+        item['departments'] = unresolved
+        item['department'] = ', '.join(unresolved)
+
+    return item
+
+
+def _collect_unknown_departments(issues_data):
+    dept_maps = _build_department_name_maps(Department.objects.all())
+    unknown = set()
+
+    for item in issues_data:
+        for dept_name in _extract_departments(item):
+            if not _match_department(dept_name, dept_maps):
+                unknown.add(dept_name)
+
+    return sorted(unknown)
+
+
 def _create_issues_for_minutes(minute_obj, issues_data):
     dept_counts = {}
+    dept_maps = _build_department_name_maps(Department.objects.all())
 
     for item in issues_data:
         issue_title = item.get('issue', 'No Title')
@@ -332,17 +414,15 @@ def _create_issues_for_minutes(minute_obj, issues_data):
             }
         )
 
-        dept_list = [
-            d.strip().upper()
-            for d in str(item.get('department', 'GENERAL')).split(',')
-            if d.strip()
-        ]
+        normalized_item = _normalize_issue_departments(item, dept_maps)
+        dept_list = _extract_departments(normalized_item)
 
         d_date = _parse_deadline(item)
 
         for dept_name in dept_list:
-            safe_dept_name = dept_name[:100]
-            dept, _ = Department.objects.get_or_create(dept_name=safe_dept_name)
+            dept = _match_department(dept_name, dept_maps)
+            if not dept:
+                continue
 
             # Use update_or_create for IssueDepartment too, so re-allocation
             # updates the existing assignment instead of creating a duplicate.
@@ -385,6 +465,16 @@ def allocate_single(request):
     if err:
         return err
 
+    unknown_departments = _collect_unknown_departments([issue_item])
+    if unknown_departments:
+        return Response(
+            {
+                "error": "Unknown department(s). Please map to master department list.",
+                "unknown_departments": unknown_departments,
+            },
+            status=400,
+        )
+
     _create_issues_for_minutes(minute_obj, [issue_item])
     return Response({"success": True, "allocated": 1})
 
@@ -410,6 +500,16 @@ def allocate_all(request):
     minute_obj, err = _resolve_minutes_obj(minutes_id)
     if err:
         return err
+
+    unknown_departments = _collect_unknown_departments(issues_data)
+    if unknown_departments:
+        return Response(
+            {
+                "error": "Unknown department(s). Please map to master department list.",
+                "unknown_departments": unknown_departments,
+            },
+            status=400,
+        )
 
     _create_issues_for_minutes(minute_obj, issues_data)
 
@@ -462,12 +562,20 @@ def get_dept_issues(request, dept_name):
     if request.user.role.lower() != 'department':
         return Response({"error": "Unauthorized"}, status=403)
 
+    if not request.user.department:
+        return Response({"error": "Department mapping missing for user"}, status=403)
+
+    requested_dept_name = (dept_name or '').strip().lower()
+    user_dept_name = (request.user.department.dept_name or '').strip().lower()
+    if requested_dept_name != user_dept_name:
+        return Response({"error": "Unauthorized department access"}, status=403)
+
     today = date.today()
     
     # 1. OPTIMIZATION: 'select_related' fetches the parent Issue and Dept info in the SAME query.
     # 'prefetch_related' fetches all the responses in the SAME query.
     issues_query = IssueDepartment.objects.select_related('issue', 'department').prefetch_related('responses').filter(
-        department__dept_name__iexact=dept_name.strip()
+        department=request.user.department
     ).order_by('-issue__id') 
     
     # 2. Update Overdue Status (Only for pending items to save time)
@@ -483,6 +591,12 @@ def get_dept_issues(request, dept_name):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def submit_response(request):
+    if request.user.role.lower() != 'department':
+        return Response({"error": "Only department users can submit responses"}, status=403)
+
+    if not request.user.department:
+        return Response({"error": "Department mapping missing for user"}, status=403)
+
     # 1. Get data safely (handle both JSON and FormData)
     issue_id = request.data.get('issue_id') or request.data.get('id')
     response_text = request.data.get('response')
@@ -494,7 +608,10 @@ def submit_response(request):
         return Response({"error": "Invalid ID provided"}, status=400)
 
     try:
-        issue_link = IssueDepartment.objects.get(id=issue_id)
+        issue_link = IssueDepartment.objects.get(
+            id=issue_id,
+            department=request.user.department,
+        )
         
         # FIX: Create Response with attachment
         ResponseModel.objects.create(
@@ -521,7 +638,7 @@ def submit_response(request):
         return Response({"success": True})
 
     except IssueDepartment.DoesNotExist:
-        return Response({"error": "Issue not found"}, status=404)
+        return Response({"error": "Issue not found or not assigned to your department"}, status=404)
     except Exception as e:
         print(f"🔥 CRITICAL SUBMIT ERROR: {str(e)}")
         import traceback

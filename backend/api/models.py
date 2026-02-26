@@ -17,7 +17,9 @@ class User(AbstractUser):
     )
 class Department(models.Model):
     dept_name = models.CharField(max_length=100, unique=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    designation = models.CharField(max_length=150, blank=True, default='')
+    category = models.CharField(max_length=30, blank=True, default='')
+    email = models.CharField(max_length=320, blank=True, default='')
 
     def __str__(self):
         return self.dept_name
