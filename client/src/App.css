@@ -1,6 +1,5 @@
 body {
   margin: 0;
-  font-family: "Inter", Arial, sans-serif;
-  background-color: #E6F3FF;
-  /* overflow: hidden; */
+  font-family: var(--font-family, 'Inter', Arial, sans-serif);
+  background: var(--color-bg, #eef2f9);
 }

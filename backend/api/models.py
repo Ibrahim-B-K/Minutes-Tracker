@@ -17,7 +17,9 @@ class User(AbstractUser):
     )
 class Department(models.Model):
     dept_name = models.CharField(max_length=100, unique=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    designation = models.CharField(max_length=150, blank=True, default='')
+    category = models.CharField(max_length=30, blank=True, default='')
+    email = models.CharField(max_length=320, blank=True, default='')
 
     def __str__(self):
         return self.dept_name
@@ -43,10 +45,23 @@ class Issue(models.Model):
         on_delete=models.CASCADE,
         related_name='issues'
     )
+    issue_no = models.CharField(max_length=20, default='', blank=True)
     issue_title = models.CharField(max_length=300)
     issue_description = models.TextField(default="")
     location = models.CharField(max_length=200)
     priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES)
+    parent_issue = models.ForeignKey(
+        'self',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='follow_ups'
+    )
+    resolution_status = models.CharField(
+        max_length=20,
+        choices=[('unresolved', 'Unresolved'), ('resolved', 'Resolved')],
+        default='unresolved'
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 class IssueDepartment(models.Model):
     STATUS_CHOICES = [
@@ -70,7 +85,7 @@ class Response(models.Model):
     submitted_at = models.DateTimeField(auto_now_add=True)
 class Notification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    issue_department = models.ForeignKey(IssueDepartment, on_delete=models.CASCADE)
+    issue_department = models.ForeignKey(IssueDepartment, on_delete=models.CASCADE, null=True, blank=True)
     message = models.TextField()
     is_read = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)

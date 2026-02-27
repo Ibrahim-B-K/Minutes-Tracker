@@ -1,23 +1,23 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "./CollectorGenerateReports.css";
 import CollectorGenerateReportCard from "./CollectorGenerateReportCard";
+import EmptyStateCard from "../../common/EmptyStateCard";
+import LoadingState from "../../common/LoadingState";
 import api from "../../../api/axios";
+import { getAuthValue } from "../../../utils/authStorage";
 
 export default function GenerateReports({ isOpen, onClose }) {
   const [format, setFormat] = useState("pdf");
   const [reports, setReports] = useState([]);
+  const [loadingReports, setLoadingReports] = useState(false);
 
   const handleDownload = async () => {
     try {
       const res = await fetch(`${api.defaults.baseURL}/generate-report`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          Authorization: `Token ${getAuthValue("token")}`,
         },
-        body: JSON.stringify({
-          format,
-          reports
-        })
       });
 
       if (!res.ok) {
@@ -29,7 +29,7 @@ export default function GenerateReports({ isOpen, onClose }) {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = format === "pdf" ? "report.pdf" : "report.xlsx";
+      a.download = "Follow_Up_Report.xlsx";
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -43,11 +43,35 @@ export default function GenerateReports({ isOpen, onClose }) {
 
   useEffect(() => {
     if (!isOpen) return;
+    setLoadingReports(true);
+    setReports([]);
 
-    fetch(`${api.defaults.baseURL}/issues/received`)
-      .then((res) => res.json())
-      .then((data) => setReports(data))
-      .catch((err) => console.error("Error fetching reports:", err));
+    api
+      .get("/issues")
+      .then((res) => {
+        const receivedLike = (res.data || []).filter((issue) => {
+          const status = String(issue.status || "").toLowerCase();
+          return ["received", "submitted", "completed"].includes(status);
+        });
+
+        const normalized = receivedLike.map((issue) => ({
+          id: issue.id,
+          issue_no: issue.issue_no,
+          department: issue.department || "",
+          issue: issue.issue || "",
+          issue_description: issue.issue_description || "",
+          location: issue.location || "",
+          response: Array.isArray(issue.response)
+            ? issue.response
+                .map((r) => `[${r.department || "Department"}] ${r.text || ""}`.trim())
+                .join("\n")
+            : issue.response || "",
+        }));
+
+        setReports(normalized);
+      })
+      .catch((err) => console.error("Error fetching reports:", err))
+      .finally(() => setLoadingReports(false));
   }, [isOpen]);
 
   const handleChange = useCallback((index, field, value) => {
@@ -65,35 +89,41 @@ export default function GenerateReports({ isOpen, onClose }) {
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay">
+    <div className="collector-modal-overlay">
       <div
-        className="generate-reports-container"
+        className="collector-generate-reports-container"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="generate-header">
-          <div className="format-toggle">
+        <div className="collector-generate-header">
+          <div className="collector-format-toggle">
             <button
-              className={`format-btn ${format === "pdf" ? "active" : ""}`}
+              className={`collector-format-btn ${format === "pdf" ? "collector-active" : ""}`}
               onClick={() => setFormat("pdf")}
             >
               PDF
             </button>
             <button
-              className={`format-btn ${format === "excel" ? "active" : ""}`}
+              className={`collector-format-btn ${format === "excel" ? "collector-active" : ""}`}
               onClick={() => setFormat("excel")}
             >
               Excel
             </button>
           </div>
 
-          <button className="close" onClick={onClose}>
+          <button className="collector-close" onClick={onClose}>
             &times;
           </button>
         </div>
 
-        <div className="report-list">
-          {reports.length === 0 ? (
-            <p>No received issues available</p>
+        <div className="collector-report-list">
+          {loadingReports ? (
+            <LoadingState compact text="Loading received issues..." />
+          ) : reports.length === 0 ? (
+            <EmptyStateCard
+              compact
+              title="No received issues"
+              description="Received issues will appear here for report generation."
+            />
           ) : (
             reports.map((report, index) => (
               <CollectorGenerateReportCard
@@ -107,8 +137,8 @@ export default function GenerateReports({ isOpen, onClose }) {
           )}
         </div>
 
-        <div className="download-section">
-          <button className="generate-download-btn" onClick={handleDownload}>
+        <div className="collector-download-section">
+          <button className="collector-generate-download-btn" onClick={handleDownload}>
             Download Report
           </button>
         </div>

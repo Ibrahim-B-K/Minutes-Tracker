@@ -1,88 +1,100 @@
-.dpo-container {
+/* ===== Department Response Page — Premium ===== */
+
+.department-container {
   width: 100%;
-}
-
-.dpo-container .content {
-  padding: 10px 70px;
-}
-
-.dpo-container h1 {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 20px;
-  color: #111;
-}
-
-.filters {
+  height: 100vh;
+  overflow: hidden;
   display: flex;
-  gap: 15px;
-  align-items: center;
-  background: white;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  margin-bottom: 20px;
+  flex-direction: column;
 }
 
-.filters input,
-.filters select {
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 0.9rem;
-}
-
-.generate-btn {
-  background: #2563eb;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.generate-btn:hover {
-  background: #1d4ed8;
-}
-
-.page-title {
+.department-container .department-content {
+  padding: 16px 70px;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
   display: flex;
-  justify-content: space-between;
-
+  flex-direction: column;
+  animation: deptPageEnter 0.4s ease both;
 }
 
-.upload-icon {
-  color: black;
-  border-radius: 8px;
-  /* keep it slightly rounded, not circular */
-  padding: 2px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  transition: all 0.2s ease;
-  background: transparent;
-  margin-top: 40px;
-  margin-right: 5px;
-}
-
-.upload-icon:hover {
-  color: #1d4ed8;
-  transform: scale(1.05);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
-}
-
-.upload-icon {
-  font-size: 35px !important;
-  width: 35px !important;
-  height: 35px !important;
-}
-
-@keyframes fadeIn {
+@keyframes deptPageEnter {
   from {
-    opacity: 0.3;
-    transform: translateY(3px);
+    opacity: 0;
+    transform: translateY(10px);
   }
 
   to {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.department-container h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--color-text, #1f2937);
+}
+
+.department-page-title {
+  display: flex;
+  justify-content: space-between;
+}
+
+.department-upload-icon {
+  color: var(--color-text-secondary, #6b7280);
+  border-radius: var(--radius-md, 10px);
+  padding: 2px;
+  transition: color var(--transition-fast, 0.15s ease), transform var(--transition-fast, 0.15s ease);
+  background: transparent;
+  margin-top: 40px;
+  margin-right: 5px;
+  font-size: 35px !important;
+  width: 35px !important;
+  height: 35px !important;
+}
+
+.department-upload-icon:hover {
+  color: var(--color-primary-dark, #1d4ed8);
+  transform: scale(1.08);
+}
+
+.department-tab-scroll-area {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding-right: 10px;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.department-tab-scroll-area::-webkit-scrollbar {
+  width: 6px;
+}
+
+.department-tab-scroll-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.department-tab-scroll-area::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 20px;
+}
+
+.department-no-issues {
+  text-align: center;
+  margin-top: 40px;
+  padding: 20px;
+  background: #f3f4f6;
+  border-radius: var(--radius-lg, 14px);
+  color: var(--color-text-secondary, #6b7280);
+}
+
+.department-tab-scroll-area>.empty-state-card,
+.department-tab-scroll-area>.loading-state {
+  margin-top: 0;
+  min-height: 100%;
 }

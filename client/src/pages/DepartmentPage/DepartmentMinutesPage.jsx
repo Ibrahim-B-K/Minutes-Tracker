@@ -4,13 +4,15 @@ import GetAppIcon from "@mui/icons-material/GetApp";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 import DepartmentHeader from "../../components/Department/DepartmentHeader";
+import EmptyStateCard from "../../components/common/EmptyStateCard";
+import LoadingState from "../../components/common/LoadingState";
 import api from "../../api/axios";
 
 import "./DepartmentMinutesPage.css";
 
 function DepartmentMinutesPage() {
   const [minutes, setMinutes] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -46,7 +48,6 @@ function DepartmentMinutesPage() {
 
   const handleView = (fileUrl) => {
     if (fileUrl) {
-      // Open in new tab for preview
       const link = document.createElement("a");
       link.href = fileUrl;
       link.target = "_blank";
@@ -59,15 +60,12 @@ function DepartmentMinutesPage() {
 
   const handleDownload = async (fileUrl, fileName) => {
     if (!fileUrl) return;
-    
+
     try {
-      // Fetch the file as a blob
       const response = await fetch(fileUrl);
-      if (!response.ok) throw new Error('Failed to download file');
-      
+      if (!response.ok) throw new Error("Failed to download file");
+
       const blob = await response.blob();
-      
-      // Create a blob URL and trigger download
       const blobUrl = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = blobUrl;
@@ -75,87 +73,82 @@ function DepartmentMinutesPage() {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      
-      // Clean up the blob URL
       window.URL.revokeObjectURL(blobUrl);
-    } catch (error) {
-      console.error("Download error:", error);
+    } catch (downloadError) {
+      console.error("Download error:", downloadError);
       alert("Failed to download file. Please try again.");
     }
   };
 
   return (
-    <div className="dept-container">
+    <div className="department-container">
       <DepartmentHeader />
 
-      <div className="minutes-page-content">
-        <h1 className="page-title">📄 Meeting Minutes</h1>
+      <div className="department-minutes-page-content">
+        <h1 className="department-page-title">Meeting Minutes</h1>
 
-        {error && <div className="error-message">{error}</div>}
+        {error && <div className="department-error-message">{error}</div>}
 
-        {loading ? (
-          <div className="loading-container">
-            <div className="spinner"></div>
-            <p className="loading-text">Loading minutes...</p>
-          </div>
-        ) : minutes.length === 0 ? (
-          <div className="no-minutes">
-            <PictureAsPdfIcon className="empty-icon" />
-            <p>No minutes uploaded yet</p>
-          </div>
-        ) : (
-          <div className="minutes-grid">
-            {minutes.map((m) => (
-              <div key={m.id} className="minutes-card">
-                <div className="card-header">
-                  <PictureAsPdfIcon className="pdf-icon" />
-                  <h3 className="file-name">{m.originalFileName || m.title}</h3>
-                </div>
-
-                <div className="card-body">
-                  <div className="info-item">
-                    <span className="label">📅 Uploaded:</span>
-                    <span className="value">{formatDate(m.uploadedDate)}</span>
+        <div className="department-minutes-body">
+          {loading ? (
+            <LoadingState text="Loading minutes..." />
+          ) : minutes.length === 0 ? (
+            <EmptyStateCard
+              title="No minutes uploaded"
+              description="There are no meeting minutes to display yet."
+            />
+          ) : (
+            <div className="department-minutes-grid">
+              {minutes.map((m) => (
+                <div key={m.id} className="department-minutes-card">
+                  <div className="department-card-header">
+                    <PictureAsPdfIcon className="department-pdf-icon" />
+                    <h3 className="department-file-name">{m.originalFileName || m.title}</h3>
                   </div>
 
-                  {m.meetingDate && (
-                    <div className="info-item">
-                      <span className="label">📋 Meeting Date:</span>
-                      <span className="value">{formatDate(m.meetingDate)}</span>
+                  <div className="department-card-body">
+                    <div className="department-info-item">
+                      <span className="department-label">Uploaded:</span>
+                      <span className="department-value">{formatDate(m.uploadedDate)}</span>
                     </div>
-                  )}
 
-                  <div className="info-item">
-                    <span className="label">👤 Uploaded By:</span>
-                    <span className="value">{m.uploadedBy}</span>
+                    {m.meetingDate && (
+                      <div className="department-info-item">
+                        <span className="department-label">Meeting Date:</span>
+                        <span className="department-value">{formatDate(m.meetingDate)}</span>
+                      </div>
+                    )}
+
+                    <div className="department-info-item">
+                      <span className="department-label">Uploaded By:</span>
+                      <span className="department-value">{m.uploadedBy}</span>
+                    </div>
+                  </div>
+
+                  <div className="department-card-actions">
+                    <button
+                      className="department-action-btn department-view-btn"
+                      onClick={() => handleView(m.fileUrl)}
+                      title="View document"
+                    >
+                      <OpenInNewIcon className="department-btn-icon" />
+                      View
+                    </button>
+
+                    <button
+                      className="department-action-btn department-download-btn"
+                      onClick={() => handleDownload(m.fileUrl, m.originalFileName)}
+                      title="Download document"
+                    >
+                      <GetAppIcon className="department-btn-icon" />
+                      Download
+                    </button>
                   </div>
                 </div>
-
-                <div className="card-actions">
-                  <button
-                    className="action-btn view-btn"
-                    onClick={() => handleView(m.fileUrl)}
-                    title="View document"
-                  >
-                    <OpenInNewIcon className="btn-icon" />
-                    View
-                  </button>
-
-                  <button
-                    className="action-btn download-btn"
-                    onClick={() =>
-                      handleDownload(m.fileUrl, m.originalFileName)
-                    }
-                    title="Download document"
-                  >
-                    <GetAppIcon className="btn-icon" />
-                    Download
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

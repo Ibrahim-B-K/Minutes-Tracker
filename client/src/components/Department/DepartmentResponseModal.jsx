@@ -1,13 +1,20 @@
 import React, { useRef, useState } from "react";
-import axios from "axios"; // THIS WAS MISSING
 import "./DepartmentResponseModal.css";
 import api from "../../api/axios";
+import { emitIssuesUpdated, emitNotificationsUpdated } from "../../utils/liveUpdates";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import CloseIcon from "@mui/icons-material/Close";
+import DescriptionIcon from "@mui/icons-material/Description";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import EventIcon from "@mui/icons-material/Event";
+import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 
 function ResponseModal({ isOpen, onClose, issue }) {
   const fileInputRef = useRef(null);
   const [fileName, setFileName] = useState("");
   const [file, setFile] = useState(null);
   const [responseText, setResponseText] = useState("");
+  const [isDragging, setIsDragging] = useState(false);
 
   if (!isOpen) return null;
 
@@ -19,8 +26,19 @@ function ResponseModal({ isOpen, onClose, issue }) {
     }
   };
 
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
   const handleDrop = (e) => {
     e.preventDefault();
+    setIsDragging(false);
     const selected = e.dataTransfer.files[0];
     if (selected) {
       setFile(selected);
@@ -53,9 +71,10 @@ function ResponseModal({ isOpen, onClose, issue }) {
       });
 
       if (res.data.success) {
-        alert("Submitted successfully!");
+        // alert("Submitted successfully!");
         onClose();
-        window.location.reload();
+        emitIssuesUpdated({ source: "department-response", department: issue.department });
+        emitNotificationsUpdated({ source: "department-response" });
       }
     } catch (error) {
       console.error("Submission error:", error.response?.data || error.message);
@@ -64,74 +83,97 @@ function ResponseModal({ isOpen, onClose, issue }) {
   };
 
   return (
-    <div className="modal-overlay" >
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <button className="close-btn" onClick={onClose}>
-          &times;
-        </button>
+    <div className="department-modal-overlay">
+      <div className="department-modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className="department-modal-header">
+          <div>
+            <h2 className="department-issue-title">Submit Response</h2>
+            <p className="department-issue-subtitle">Issue #{issue.issue_no}</p>
+          </div>
+          <button className="department-close-icon-btn" onClick={onClose}>
+            <CloseIcon fontSize="small" />
+          </button>
+        </div>
 
-        <h2 className="issue-title">Issue #{issue.issue_no}</h2>
+        <div className="department-modal-body">
+          {/* Issue Details Section */}
+          <div className="department-issue-details-grid">
+            <div className="department-detail-item full-width">
+              <label><DescriptionIcon fontSize="inherit" /> Issue Description</label>
+              <div className="department-detail-value main-issue-text">{issue.issue}</div>
+            </div>
 
-        <div className="modal-fields">
-          <div className="modal-row">
-            <label>Issue</label>
-            <input type="text" value={issue.issue} readOnly />
+            <div className={`department-detail-item priority-${issue.priority?.toLowerCase()}`}>
+              <label><PriorityHighIcon fontSize="inherit" /> Priority</label>
+              <div className="department-detail-value">{issue.priority}</div>
+            </div>
+
+            <div className="department-detail-item">
+              <label><LocationOnIcon fontSize="inherit" /> Location</label>
+              <div className="department-detail-value">{issue.location || "N/A"}</div>
+            </div>
+
+            <div className="department-detail-item">
+              <label><EventIcon fontSize="inherit" /> Deadline</label>
+              <div className="department-detail-value">{issue.deadline}</div>
+            </div>
           </div>
 
-          <div className="modal-row">
-            <label>Priority</label>
-            <input type="text" value={issue.priority} readOnly />
-          </div>
+          <div className="department-divider"></div>
 
-          <div className="modal-row">
-            <label>Location</label>
-            <input type="text" value={issue.location} readOnly />
-          </div>
-
-          <div className="modal-row">
-            <label>Deadline</label>
-            <input type="text" value={issue.deadline} readOnly />
-          </div>
-
-          <div className="modal-row">
-            <label>Your Response</label>
+          {/* Response Form Section */}
+          <div className="department-form-section">
+            <label className="department-input-label">Your Response</label>
             <textarea
-              placeholder="Type your response here..."
+              className="department-response-textarea"
+              placeholder="Type detailed action taken report here..."
               value={responseText}
               onChange={(e) => setResponseText(e.target.value)}
             />
-          </div>
 
-          <div className="modal-row">
-            <label>Upload File</label>
-
+            <label className="department-input-label">Attachment (Optional)</label>
             <div
-              className="upload-area"
+              className={`department-upload-area ${isDragging ? "dragging" : ""}`}
               onClick={() => fileInputRef.current.click()}
               onDrop={handleDrop}
               onDragOver={handleDragOver}
+              onDragEnter={handleDragEnter}
+              onDragLeave={handleDragLeave}
             >
-              {fileName ? (
-                <p className="file-name">{fileName}</p>
-              ) : (
-                <p>
-                  <strong>Click to upload</strong> or drag and drop file here
-                </p>
-              )}
-
               <input
                 type="file"
                 ref={fileInputRef}
                 onChange={handleFileChange}
                 hidden
               />
+              
+              <div className="upload-icon-wrapper">
+                <CloudUploadIcon fontSize="large" />
+              </div>
+              
+              {fileName ? (
+                <div className="department-file-info">
+                  <span className="file-name">{fileName}</span>
+                  <span className="change-file-text">Click to change</span>
+                </div>
+              ) : (
+                <div className="department-upload-text">
+                  <span className="upload-main-text">Click to upload document</span>
+                  <span className="upload-sub-text">or drag and drop (PDF, JPG, DOCX)</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
 
-        <button className="su" onClick={handleSubmit}>
-          Submit
-        </button>
+        <div className="department-modal-footer">
+          <button className="department-cancel-btn" onClick={onClose}>
+            Cancel
+          </button>
+          <button className="department-submit-btn" onClick={handleSubmit} disabled={!responseText.trim()}>
+            Submit Response
+          </button>
+        </div>
       </div>
     </div>
   );

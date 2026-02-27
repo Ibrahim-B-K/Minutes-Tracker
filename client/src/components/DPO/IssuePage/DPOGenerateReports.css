@@ -1,230 +1,229 @@
-/* ==============================
-   Main Container
-============================== */
-.generate-reports-container { 
-  background: #fff; 
-  border-radius: 14px; 
-  padding: 30px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06); 
-  margin: 0 auto;     /* ✅ CENTERED */
-  font-family: "Inter", sans-serif; 
-  display: flex; 
+/* ===== DPO Generate Reports — Premium ===== */
+
+.dpo-generate-reports-container {
+  background: var(--color-surface, #fff);
+  border-radius: var(--radius-lg, 14px);
+  padding: 28px;
+  box-shadow: var(--shadow-md, 0 4px 16px rgba(0, 0, 0, 0.08));
+  margin: 0 auto;
+  font-family: var(--font-family, 'Inter', sans-serif);
+  display: flex;
   flex-direction: column;
   max-height: 480px;
   width: 800px;
+  border: 1px solid var(--color-border, #e2e8f0);
 }
 
-
-/* ==============================
-   Header
-============================== */
-.generate-header { 
-  display: flex; 
-  justify-content: space-between; 
-  align-items: center; 
-  margin-bottom: 15px; 
+.dpo-generate-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
 }
 
-.close-btn {
+.dpo-close-btn {
   margin-left: auto;
   background: none;
   border: none;
   font-size: 22px;
   cursor: pointer;
-  color: #555;
-  transition: color 0.2s ease;
+  color: var(--color-text-muted, #9ca3af);
+  transition: color var(--transition-fast, 0.15s ease);
 }
 
-.close-btn:hover {
-  color: #000;
+.dpo-close-btn:hover {
+  color: var(--color-text, #1f2937);
 }
 
-/* ==============================
-   Report List
-============================== */
-.report-list { 
-  flex: 1; 
-  overflow-y: auto; 
-  display: flex; 
-  flex-direction: column; 
-  gap: 20px; 
-  padding-right: 4px; 
-}
-
-.report-list::-webkit-scrollbar { 
-  width: 8px; 
-}
-
-.report-list::-webkit-scrollbar-thumb { 
-  background: #cbd5e1; 
-  border-radius: 6px; 
-}
-
-.report-list::-webkit-scrollbar-thumb:hover { 
-  background: #94a3b8; 
-}
-
-/* ==============================
-   Report Card Layout
-============================== */
-.generate-report-card {
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  background-color: #f9fafb;
-  padding: 10px;
+/* ── Report List ── */
+.dpo-report-list {
+  flex: 1;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
-  transition: box-shadow 0.2s ease;
+  gap: 16px;
+  padding-right: 4px;
 }
 
-.generate-report-card:hover {
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+.dpo-report-list::-webkit-scrollbar {
+  width: 6px;
 }
 
-/* ==============================
-   Report Top Section
-============================== */
-.report-top {
+.dpo-report-list::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 20px;
+}
+
+.dpo-report-list::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* ── Report Card ── */
+.dpo-generate-report-card {
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-lg, 14px);
+  background: #f9fafb;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: var(--shadow-xs, 0 1px 2px rgba(0, 0, 0, 0.04));
+  transition: box-shadow var(--transition-base, 0.25s ease), transform var(--transition-base, 0.25s ease);
+}
+
+.dpo-generate-report-card:hover {
+  box-shadow: var(--shadow-sm, 0 2px 8px rgba(0, 0, 0, 0.06));
+  transform: translateY(-1px);
+}
+
+.dpo-report-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #e5e7eb;
-  padding-bottom: 2px;
+  border-bottom: 1px solid var(--color-border, #e2e8f0);
+  padding-bottom: 6px;
 }
 
-.report-id {
-  font-weight: 600;
-  color: #111827;
+.dpo-report-id {
+  font-weight: 700;
+  color: var(--color-text, #1f2937);
   font-size: 15px;
 }
 
-.report-delete-btn {
+.dpo-report-delete-btn {
   background: none;
   border: none;
   color: #b91c1c;
   font-size: 18px;
   cursor: pointer;
-  transition: transform 0.2s ease, color 0.2s ease;
+  transition: transform var(--transition-fast, 0.15s ease), color var(--transition-fast, 0.15s ease);
 }
 
-.report-delete-btn:hover {
+.dpo-report-delete-btn:hover {
   color: #991b1b;
-  transform: scale(1.15);
+  transform: scale(1.18);
 }
 
-/* ==============================
-   Report Form
-============================== */
-.report-form {
+/* ── Report Form ── */
+.dpo-report-form {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.form-field {
+.dpo-form-field {
   display: flex;
   flex-direction: column;
 }
 
-.form-field label {
-  color: #374151;
-  font-size: 14px;
-  font-weight: 500;
+.dpo-form-field label {
+  color: var(--color-text-secondary, #6b7280);
+  font-size: 13px;
+  font-weight: 600;
   margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
-.form-field input,
-.form-field select {
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  padding: 8px 10px;
+.dpo-form-field input,
+.dpo-form-field select {
+  border: 1.5px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-md, 10px);
+  padding: 9px 12px;
   font-size: 14px;
-  background-color: #fff;
+  font-family: inherit;
+  background: #fff;
   outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color var(--transition-base, 0.25s ease), box-shadow var(--transition-base, 0.25s ease);
 }
 
-.form-field textarea {
+.dpo-form-field textarea {
   resize: none;
   height: 70px;
   min-height: 70px;
-  padding: 6px 8px;
+  padding: 8px 10px;
   font-size: 13px;
+  font-family: inherit;
   line-height: 1.4;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  background-color: #fff;
+  border: 1.5px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-md, 10px);
+  background: #fff;
   outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color var(--transition-base, 0.25s ease), box-shadow var(--transition-base, 0.25s ease);
 }
 
-.form-field input:focus,
-.form-field select:focus,
-.form-field textarea:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+.dpo-form-field input:focus,
+.dpo-form-field select:focus,
+.dpo-form-field textarea:focus {
+  border-color: var(--color-primary, #2563eb);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
 }
 
-/* ==============================
-   Format Toggle
-============================== */
-.format-toggle {
+/* ── Format Toggle ── */
+.dpo-format-toggle {
   display: flex;
-  gap: 10px;
+  gap: 8px;
 }
 
-.format-btn {
-  padding: 6px 14px;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
-  background-color: #f3f4f6;
-  font-weight: 500;
+.dpo-format-btn {
+  padding: 6px 16px;
+  border-radius: var(--radius-md, 10px);
+  border: 1.5px solid var(--color-border, #e2e8f0);
+  background: #f3f4f6;
+  font-weight: 600;
+  font-family: inherit;
+  font-size: 0.85rem;
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: background var(--transition-fast, 0.15s ease), color var(--transition-fast, 0.15s ease), border-color var(--transition-fast, 0.15s ease);
 }
 
-.format-btn:hover {
-  background-color: #e5e7eb;
+.dpo-format-btn:hover {
+  background: #e5e7eb;
 }
 
-.format-btn.active {
-  background-color: #2563eb;
+.dpo-format-btn.dpo-active {
+  background: linear-gradient(135deg, var(--color-primary, #2563eb), var(--color-primary-dark, #1d4ed8));
   color: #fff;
-  border-color: #2563eb;
+  border-color: var(--color-primary, #2563eb);
 }
 
-/* ==============================
-   Download Button Section
-============================== */
-.download-section {
+/* ── Download ── */
+.dpo-download-section {
   display: flex;
-  align-items: center; 
-  justify-content: flex-end; 
-  height: 4px; 
-  margin-top: 25px;  
+  align-items: center;
+  justify-content: flex-end;
+  height: 4px;
+  margin-top: 25px;
   margin-right: 10px;
 }
 
-.generate-download-btn {
-  background-color: #2563eb;
+.dpo-generate-download-btn {
+  background: linear-gradient(135deg, var(--color-primary, #2563eb), var(--color-primary-dark, #1d4ed8));
   color: white;
   border: none;
   padding: 10px 24px;
-  border-radius: 8px;
+  border-radius: var(--radius-md, 10px);
   font-weight: 600;
+  font-family: inherit;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
+  transition: transform var(--transition-fast, 0.15s ease), box-shadow var(--transition-fast, 0.15s ease);
 }
 
-.generate-download-btn:hover {
-  background-color: #1d4ed8;
+.dpo-generate-download-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
 }
-.close{
-    background: none;
+
+.dpo-close {
+  background: none;
   border: none;
   font-size: 22px;
-  color: #6b7280;
+  color: var(--color-text-muted, #9ca3af);
   cursor: pointer;
+  transition: color var(--transition-fast, 0.15s ease);
+}
+
+.dpo-close:hover {
+  color: var(--color-text, #1f2937);
 }

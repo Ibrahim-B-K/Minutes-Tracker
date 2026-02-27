@@ -95,24 +95,38 @@
 
 // Updated Code Below- BY KEERTHI- TRYING TO FIX LOGIN ISSUE USING TOKEN AUTHENTICATION
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import "./LoginPage.css";
+import { clearAuthValues, setAuthValue } from "../utils/authStorage";
 
 // Backend base URL
 // const API_BASE_URL = "http://localhost:8000";
 
 export default function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Form state
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   // UI state
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search || "");
+    const reason = params.get("reason");
+    if (reason === "session_expired") {
+      setError("Your session expired. Please log in again.");
+      navigate("/login", { replace: true });
+    }
+  }, [location.search, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -143,18 +157,19 @@ export default function Login() {
 
       const { token, role, department, username: loggedUser } = response.data;
 
-      // ✅ Store token for future API calls
-      localStorage.setItem("token", token);
-      localStorage.setItem("username", loggedUser);
-      localStorage.setItem("role", role);
+      // ✅ Store auth in tab-scoped storage to support multi-role multi-tab.
+      clearAuthValues();
+      setAuthValue("token", token);
+      setAuthValue("username", loggedUser);
+      setAuthValue("role", role);
 
       if (department) {
-        localStorage.setItem("department", department);
+        setAuthValue("department", department);
       }
 
       // ✅ Role-based navigation (REQUIRED) 
       if (role === "dpo") {
-        navigate("/dpo");
+        navigate("/dpo/home");
       } else if (role === "collector") {
         navigate("/collector");
       } else if (role === "department") {
@@ -199,12 +214,17 @@ export default function Login() {
 
         <div className="input-field">
           <label>Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <div className="login-password-field">
+            <input
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <span className="login-eye-icon" onClick={() => setShowPassword((prev) => !prev)}>
+              {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+            </span>
+          </div>
         </div>
 
         <button className="login-btn" type="submit" disabled={loading}>

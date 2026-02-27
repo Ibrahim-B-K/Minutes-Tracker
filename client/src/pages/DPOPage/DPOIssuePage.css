@@ -1,47 +1,77 @@
+/* ===== DPO Issue Page — Premium ===== */
+
 .dpo-container {
   width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-.dpo-container .content {
-  padding: 10px 70px;
+.dpo-container .dpo-content {
+  padding: 16px 70px;
   position: relative;
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: pageEnter 0.4s ease both;
 }
 
-/* ---------- Title ---------- */
-.dpo-container .page-title {
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Title ── */
+.dpo-container .dpo-page-title {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
 }
 
-.dpo-container .page-title h1 {
-  font-size: 2.1rem;
+.dpo-container .dpo-page-title h1 {
+  font-size: 2rem;
   font-weight: 700;
+  margin: 0;
+  color: var(--color-text, #1f2937);
 }
 
-/* ---------- Upload Icon ---------- */
-.upload-icon {
+/* ── Upload Icon ── */
+.dpo-upload-icon {
   font-size: 35px !important;
   margin-top: 40px;
   cursor: pointer;
-  transition: 0.2s;
+  color: var(--color-text-secondary, #6b7280);
+  transition: color var(--transition-fast, 0.15s ease),
+    transform var(--transition-fast, 0.15s ease);
 }
 
-.upload-icon:hover {
-  color: #1d4ed8;
-  transform: scale(1.05);
+.dpo-upload-icon:hover {
+  color: var(--color-primary-dark, #1d4ed8);
+  transform: scale(1.08);
 }
 
+/* ── Scroll area ── */
 .dpo-tab-scroll-area {
-  height: calc(100vh - 220px);
-  /* Restricted height to keep header visible */
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
   padding-right: 10px;
-  /* Space for scrollbar */
   scrollbar-width: thin;
   scrollbar-color: #cbd5e1 transparent;
 }
 
-/* Custom scrollbar for Webkit browsers */
 .dpo-tab-scroll-area::-webkit-scrollbar {
   width: 6px;
 }
@@ -55,28 +85,69 @@
   border-radius: 20px;
 }
 
-/* ---------- Tabs ---------- */
-.tabs-wrapper {
-  position: relative;
+/* ── Tabs wrapper ── */
+.dpo-tabs-wrapper {
   margin-top: 10px;
 }
 
-/* Add icon anchored to tabs (NO layout impact) */
-.tabs-add-icon {
-  position: absolute;
-  right: -2px;
-  top: 60%;
-  transform: translateY(-50%);
-  cursor: pointer;
-  color: #555;
-  transition: 0.2s;
+.dpo-no-issues {
+  text-align: center;
+  margin-top: 40px;
+  padding: 20px;
+  background: #f3f4f6;
+  border-radius: var(--radius-lg, 14px);
 }
 
+.dpo-loading-text {
+  opacity: 0.7;
+}
 
-@keyframes fadeIn {
+/* ── MODAL ── */
+.dpo-assign-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: modalFadeIn 0.2s ease;
+}
+
+@keyframes modalFadeIn {
   from {
-    opacity: 0.3;
-    transform: translateY(3px);
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.dpo-assign-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.dpo-assign-modal {
+  position: relative;
+  width: 720px;
+  max-height: 85vh;
+  background: var(--color-surface, #fff);
+  border-radius: var(--radius-lg, 14px);
+  padding: 24px;
+  overflow-y: auto;
+  z-index: 10000;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
+  animation: modalSlideUp 0.3s ease both;
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
   }
 
   to {
@@ -85,69 +156,65 @@
   }
 }
 
-.no-issues {
-  text-align: center;
-  margin-top: 40px;
-  padding: 20px;
-  background: #f3f4f6;
-  border-radius: 12px;
+.dpo-assign-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
 }
 
-.loading-text {
-  opacity: 0.7;
+.dpo-assign-header h2 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--color-text, #1f2937);
 }
 
-/* ---------- MODAL ---------- */
-.assign-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
+.dpo-close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--color-text-muted, #9ca3af);
+  transition: color var(--transition-fast, 0.15s ease),
+    transform var(--transition-fast, 0.15s ease);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.assign-backdrop {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(6px);
+.dpo-close-btn:hover {
+  color: var(--color-text, #1f2937);
+  background: #f3f4f6;
+  transform: scale(1.1);
 }
 
-.assign-modal {
-  position: relative;
-  width: 720px;
-  max-height: 85vh;
-  background: white;
-  border-radius: 12px;
-  padding: 20px;
-  overflow-y: auto;
-  z-index: 10000;
-}
-
-.assign-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.close-btn {
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-.allocate-btn {
-  background: #1d4ed8;
+.dpo-allocate-btn {
+  background: linear-gradient(135deg, var(--color-primary, #2563eb), var(--color-primary-dark, #1d4ed8));
   color: #fff;
   border: none;
-  padding: 6px 14px;
+  padding: 8px 16px;
   margin-bottom: 4px;
-  border-radius: 6px;
+  border-radius: var(--radius-md, 10px);
   cursor: pointer;
+  font-weight: 600;
+  font-family: inherit;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+  transition: transform var(--transition-fast, 0.15s ease),
+    box-shadow var(--transition-fast, 0.15s ease);
 }
 
-.allocate-btn:hover {
-  background: #1e40af;
+.dpo-allocate-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
 }
+
+.dpo-tab-scroll-area>.empty-state-card,
+.dpo-tab-scroll-area>.loading-state {
+  margin-top: 0;
+  min-height: 100%;
+}
+

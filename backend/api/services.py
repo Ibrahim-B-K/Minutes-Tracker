@@ -13,7 +13,6 @@ def check_and_send_overdue_emails():
     # Get only PENDING items that are now overdue
     overdue_entries = IssueDepartment.objects.filter(
         deadline_date__lt=today
-        
     )
 
     for entry in overdue_entries:

@@ -50,11 +50,11 @@ function DepartmentFilterBar({ activeTab, onFilterChange, issue_date }) {
   };
 
   return (
-    <div className="filter-bar">
+    <div className="department-filter-bar">
 
       {/* Search Box */}
-      <div className="search-wrapper">
-        <span className="search-icon">🔍</span>
+      <div className="department-search-wrapper">
+        <span className="department-search-icon">🔍</span>
         <input
           type="text"
           placeholder="Search issues..."
@@ -67,7 +67,7 @@ function DepartmentFilterBar({ activeTab, onFilterChange, issue_date }) {
       </div>
 
       {/* Date Input */}
-      <div className="date-input-wrapper">
+      <div className="department-date-input-wrapper">
         <input
           type="text"
           placeholder="dd-mm-yyyy"
@@ -76,7 +76,7 @@ function DepartmentFilterBar({ activeTab, onFilterChange, issue_date }) {
         />
 
         <span
-          className="calendar-icon"
+          className="department-calendar-icon"
           onClick={() => datePickerRef.current.showPicker()}
         >
           📅
@@ -91,7 +91,7 @@ function DepartmentFilterBar({ activeTab, onFilterChange, issue_date }) {
       </div>
 
       {/* Filter By */}
-      <div className="filter-group">
+      <div className="department-filter-group">
         <label>Filter By:</label>
         <select
           value={filterBy}
@@ -99,7 +99,7 @@ function DepartmentFilterBar({ activeTab, onFilterChange, issue_date }) {
             setFilterBy(e.target.value);
             updateFilters({ filterBy: e.target.value });
           }}
-          className="filter-select"
+          className="department-filter-select"
         >
           <option value="all">All Issues</option>
           <option value="high">High Priority</option>
@@ -109,7 +109,7 @@ function DepartmentFilterBar({ activeTab, onFilterChange, issue_date }) {
       </div>
 
       {/* Sort By */}
-      <div className="filter-group">
+      <div className="department-filter-group">
         <label>Sort By:</label>
         <select
           value={sortBy}
@@ -117,7 +117,7 @@ function DepartmentFilterBar({ activeTab, onFilterChange, issue_date }) {
             setSortBy(e.target.value);
             updateFilters({ sortBy: e.target.value });
           }}
-          className="filter-select"
+          className="department-filter-select"
         >
           <option value="newest">Newest</option>
           <option value="priority">Priority</option>

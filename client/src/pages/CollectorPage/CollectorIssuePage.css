@@ -1,53 +1,89 @@
-.collector-container {
+/* ===== Collector Issue Page — Premium ===== */
+
+.collector-issuepage-container {
   width: 100%;
-}
-
-.collector-container .content {
-  padding: 0px 70px;
-  position: relative;
-}
-
-.collector-container .page-title h1 {
-  font-size: 2.5rem;
-  font-weight: 500;
-  margin-bottom: -5px;
-  color: #111;
-}
-
-.collector-container .filters {
+  height: 100vh;
+  overflow: hidden;
   display: flex;
-  gap: 15px;
-  align-items: center;
-  background: white;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  flex-direction: column;
+}
+
+.collector-issuepage-container .collector-issuepage-content {
+  padding: 16px 70px;
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: collPageEnter 0.4s ease both;
+}
+
+@keyframes collPageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.collector-issuepage-container .collector-page-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-shrink: 0;
   margin-bottom: 20px;
 }
 
-.collector-container .filters input,
-.collector-container .filters select {
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 0.9rem;
+.collector-issuepage-container .collector-page-title h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--color-text, #1f2937);
 }
 
-.collector-container .generate-btn {
-  background: #2563eb;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.collector-container .generate-btn:hover {
-  background: #1d4ed8;
-}
-
-.collector-container .page-title {
+.collector-tab-scroll-area {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
   display: flex;
-  justify-content: space-between;
-  margin-top: -20px;
+  flex-direction: column;
+  padding-right: 10px;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.collector-tab-scroll-area::-webkit-scrollbar {
+  width: 6px;
+}
+
+.collector-tab-scroll-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.collector-tab-scroll-area::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 20px;
+}
+
+.collector-no-issues {
+  text-align: center;
+  margin-top: 40px;
+  padding: 20px;
+  background: #f3f4f6;
+  border-radius: var(--radius-lg, 14px);
+  color: var(--color-text-secondary, #6b7280);
+}
+
+.collector-loading-text {
+  opacity: 0.7;
+}
+
+.collector-tab-scroll-area>.empty-state-card,
+.collector-tab-scroll-area>.loading-state {
+  margin-top: 0;
+  min-height: 100%;
 }

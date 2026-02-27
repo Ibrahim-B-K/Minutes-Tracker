@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 // import axios from "axios";
 import DepartmentHeader from "../../components/Department/DepartmentHeader";
-import "./NotificationPage.css";
+import EmptyStateCard from "../../components/common/EmptyStateCard";
+import LoadingState from "../../components/common/LoadingState";
+import "./DepartmentNotificationPage.css";
 import api from "../../api/axios";
+import { getAuthValue } from "../../utils/authStorage";
+import { LIVE_EVENT_NOTIFICATIONS_UPDATED, addLiveEventListener } from "../../utils/liveUpdates";
 
 function DepartmentNotificationPage() {
   const [notifications, setNotifications] = useState([]);
@@ -10,7 +14,7 @@ function DepartmentNotificationPage() {
 
   useEffect(() => {
     const fetchNotifications = async () => {
-      const username = localStorage.getItem("username");
+      const username = getAuthValue("username");
       try {
         const res = await api.get("/notifications", {
           params: { username }
@@ -24,38 +28,48 @@ function DepartmentNotificationPage() {
     };
 
     fetchNotifications();
+    const onNotificationsUpdated = () => fetchNotifications();
+    const unsubscribe = addLiveEventListener(
+      LIVE_EVENT_NOTIFICATIONS_UPDATED,
+      onNotificationsUpdated
+    );
+    return unsubscribe;
   }, []);
 
   return (
-    <div className="notificationpage-container">
+    <div className="department-notificationpage-container">
       <DepartmentHeader activeTab="notifications" />
 
-      <div className="notificationpage-content">
-        <div className="notification-header">
+      <div className="department-notificationpage-content">
+        <div className="department-notification-header">
           <h1>Notifications</h1>
         </div>
 
-        <div className="notification-list">
+        <div className="department-notification-list">
           {loading ? (
-            <p>Loading...</p>
+            <LoadingState text="Loading notifications..." />
           ) : notifications.length === 0 ? (
-            <div className="no-notifications">No new notifications</div>
+            <EmptyStateCard
+              compact
+              title="No notifications"
+              description="You are all caught up."
+            />
           ) : (
             notifications.map((note) => {
               const safeType = note.type || "general";
               return (
-                <div key={note.id} className={`notification-card ${safeType}`}>
-                  <div className="notification-icon">
+                <div key={note.id} className={`department-notification-card department-${safeType}`}>
+                  <div className="department-notification-icon">
                     {safeType === "assign" && <span>📝</span>}
                     {safeType === "deadline" && <span>⏰</span>}
                     {safeType === "response" && <span>📩</span>}
                     {safeType === "general" && <span>🔔</span>}
                   </div>
 
-                  <div className="notification-content">
+                  <div className="department-notification-content">
                     <h3>{safeType.toUpperCase()}</h3>
                     <p>{note.message}</p>
-                    <span className="time">{note.time_ago}</span>
+                    <span className="department-time">{note.time_ago}</span>
                   </div>
                 </div>
               );

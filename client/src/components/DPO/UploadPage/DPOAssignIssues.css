@@ -1,204 +1,434 @@
-/* ==============================
-   Main Container
-============================== */
-.assign-issues-container { 
-  max-height: 465px;
-  background: #fff; 
-  border-radius: 14px; 
+/* ===== DPO Assign Issues — Premium ===== */
+
+.dpo-assign-issues-container {
+  height: 100%;
+  min-height: 0;
+  background: var(--color-surface, #fff);
+  border-radius: var(--radius-lg, 14px);
   padding: 28px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06); 
-  max-width: 800px; 
-  margin: -20px auto 0; 
-  font-family: "Inter", sans-serif; 
-  display: flex; 
-  flex-direction: column;
-
-}
-
-/* ==============================
-   Header
-============================== */
-.assign-header { 
-  display: flex; 
-  justify-content: space-between; 
-  align-items: center; 
-  margin-bottom: 15px; 
-}
-
-.assign-header h2 { 
-  font-size: 20px; 
-  font-weight: 600; 
-  color: #111827; 
-  margin: 0; 
-}
-
-.allocate-btn { 
-  background-color: #16a34a; 
-  color: #fff; 
-  border: none; 
-  padding: 8px 18px; 
-  border-radius: 8px; 
-  cursor: pointer; 
-  font-weight: 600; 
-  transition: background-color 0.2s ease; 
-  box-shadow: 0 3px 8px rgba(22, 163, 74, 0.2); 
-}
-
-.allocate-btn:hover { 
-  background-color: #15803d; 
-}
-
-/* ==============================
-   Issue Cards List
-============================== */
-.issue-cards { 
-  flex: 1; 
-  overflow-y: auto; 
-  display: flex; 
-  flex-direction: column; 
-  gap: 20px; 
-  padding-right: 4px; 
-}
-
-.issue-cards::-webkit-scrollbar { 
-  width: 8px; 
-}
-
-.issue-cards::-webkit-scrollbar-thumb { 
-  background: #cbd5e1; 
-  border-radius: 6px; 
-}
-
-.issue-cards::-webkit-scrollbar-thumb:hover { 
-  background: #94a3b8; 
-}
-
-/* ==============================
-   Card Layout
-============================== */
-.issue-assign-card {
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  background-color: #f9fafb;
-  padding: 10px;
+  box-shadow: var(--shadow-md, 0 4px 16px rgba(0, 0, 0, 0.08));
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  font-family: var(--font-family, 'Inter', sans-serif);
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
-  transition: box-shadow 0.2s ease;
+  overflow: hidden;
+  border: 1px solid var(--color-border, #e2e8f0);
 }
 
-.issue-assign-card:hover {
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
-}
-
-/* ==============================
-   Card Header (Top Row)
-============================== */
-.issue-top {
+/* ── Header ── */
+.dpo-assign-issues-container .dpo-assign-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #e5e7eb;
-  padding-bottom: 2px;
+  margin-bottom: 15px;
 }
 
-.entry-id {
+.dpo-assign-issues-container .dpo-assign-header h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-text, #1f2937);
+  margin: 0;
+}
+
+.dpo-assign-issues-container .dpo-allocate-btn {
+  background: linear-gradient(135deg, #16a34a, #15803d);
+  color: #fff;
+  border: none;
+  padding: 8px 20px;
+  border-radius: var(--radius-md, 10px);
+  cursor: pointer;
   font-weight: 600;
-  color: #111827;
+  font-family: inherit;
+  box-shadow: 0 3px 10px rgba(22, 163, 74, 0.2);
+  transition: transform var(--transition-fast, 0.15s ease), box-shadow var(--transition-fast, 0.15s ease);
+}
+
+.dpo-assign-issues-container .dpo-allocate-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 16px rgba(22, 163, 74, 0.3);
+}
+
+/* ── Issue cards list ── */
+.dpo-issue-cards {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-right: 4px;
+}
+
+.dpo-issue-cards::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dpo-issue-cards::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 20px;
+}
+
+.dpo-issue-cards::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* ── Card ── */
+.dpo-assign-issues-container .dpo-issue-assign-card {
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-lg, 14px);
+  background: #f9fafb;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: var(--shadow-xs, 0 1px 2px rgba(0, 0, 0, 0.04));
+  transition: box-shadow var(--transition-base, 0.25s ease), transform var(--transition-base, 0.25s ease);
+}
+
+.dpo-assign-issues-container .dpo-issue-assign-card:hover {
+  box-shadow: var(--shadow-sm, 0 2px 8px rgba(0, 0, 0, 0.06));
+  transform: translateY(-1px);
+}
+
+/* ── Card header ── */
+.dpo-assign-issues-container .dpo-issue-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--color-border, #e2e8f0);
+  padding-bottom: 6px;
+}
+
+.dpo-assign-issues-container .dpo-entry-id {
+  font-weight: 700;
+  color: var(--color-text, #1f2937);
   font-size: 15px;
 }
 
-.delete-btn {
+.dpo-assign-issues-container .dpo-delete-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: none;
   border: none;
-  color: #b91c1c;
-  font-size: 18px;
+  color: #dc2626;
+  font-size: 22px;
   cursor: pointer;
-  transition: transform 0.2s ease, color 0.2s ease;
+  transition: transform var(--transition-fast, 0.15s ease), color var(--transition-fast, 0.15s ease);
 }
 
-.delete-btn:hover {
-  color: #991b1b;
-  transform: scale(1.15);
+.dpo-assign-issues-container .dpo-delete-btn:hover {
+  color: #b91c1c;
+  transform: scale(1.18);
 }
 
-/* ==============================
-   Form Section
-============================== */
-.issue-form {
+.dpo-assign-issues-container .dpo-flag-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md, 10px);
+  border: 1.5px solid var(--color-border-hover, #cbd5e1);
+  background: #fff;
+  color: #475569;
+  cursor: pointer;
+  transition: border-color var(--transition-fast, 0.15s ease), background var(--transition-fast, 0.15s ease);
+}
+
+.dpo-assign-issues-container .dpo-flag-btn:hover {
+  border-color: var(--color-primary, #2563eb);
+}
+
+.dpo-assign-issues-container .dpo-flag-btn-mapped {
+  border-color: var(--color-primary, #2563eb);
+  color: var(--color-primary, #2563eb);
+  background: #eff6ff;
+}
+
+.dpo-assign-issues-container .dpo-unresolved-panel {
+  border: 1px solid #dbeafe;
+  background: #f8fbff;
+  border-radius: var(--radius-md, 10px);
+  padding: 12px;
+}
+
+.dpo-assign-issues-container .dpo-unresolved-title {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e3a8a;
+}
+
+.dpo-assign-issues-container .dpo-unresolved-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.dpo-assign-issues-container .dpo-unresolved-item {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  font-size: 13px;
+  color: var(--color-text, #1f2937);
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.dpo-assign-issues-container .dpo-unresolved-item:hover {
+  background: #e0ecff;
+}
+
+.dpo-assign-issues-container .dpo-suggested-item {
+  background: #fef9c3;
+  border: 1px solid #fbbf24;
+  border-radius: 6px;
+}
+
+.dpo-assign-issues-container .dpo-existing-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.dpo-assign-issues-container .dpo-existing-title {
+  font-weight: 600;
+  font-size: 13px;
+  color: #1f2937;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.dpo-assign-issues-container .dpo-existing-meta {
+  font-size: 11px;
+  color: #6b7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dpo-assign-issues-container .dpo-ai-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: #92400e;
+  background: #fef3c7;
+  border: 1px solid #fbbf24;
+  padding: 1px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.dpo-assign-issues-container .dpo-flag-search {
+  width: 100%;
+  border: 1.5px solid #dbeafe;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 13px;
+  font-family: inherit;
+  margin-bottom: 8px;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+}
+
+.dpo-assign-issues-container .dpo-flag-search:focus {
+  border-color: var(--color-primary, #2563eb);
+}
+
+.dpo-assign-issues-container .dpo-no-existing {
+  color: #94a3b8;
+  font-size: 12px;
+  text-align: center;
+  padding: 8px 0;
+  margin: 0;
+}
+
+.dpo-assign-issues-container .dpo-unlink-btn {
+  display: block;
+  margin-top: 8px;
+  background: none;
+  border: 1px solid #dc2626;
+  color: #dc2626;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s ease;
+}
+
+.dpo-assign-issues-container .dpo-unlink-btn:hover {
+  background: #fef2f2;
+}
+
+.dpo-assign-issues-container .dpo-flag-btn-suggested {
+  animation: flag-pulse 2s ease-in-out infinite;
+  border-color: #f59e0b;
+  color: #f59e0b;
+}
+
+@keyframes flag-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.3); }
+  50% { box-shadow: 0 0 0 6px rgba(245, 158, 11, 0); }
+}
+
+.dpo-assign-issues-container .dpo-linked-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #2563eb;
+  background: #eff6ff;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid #bfdbfe;
+}
+
+.dpo-matching-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #f59e0b;
+  animation: pulse-text 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-text {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ── Form ── */
+.dpo-assign-issues-container .dpo-issue-form {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.form-field {
+.dpo-assign-issues-container .dpo-form-field {
   display: flex;
   flex-direction: column;
 }
 
-.form-field label {
-  color: #374151;
-  font-size: 14px;
-  font-weight: 500;
+.dpo-assign-issues-container .dpo-form-field label {
+  color: var(--color-text-secondary, #6b7280);
+  font-size: 13px;
+  font-weight: 600;
   margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
-.form-field input,
-.form-field select {
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  padding: 8px 10px;
+.dpo-assign-issues-container .dpo-form-field input,
+.dpo-assign-issues-container .dpo-form-field select {
+  border: 1.5px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-md, 10px);
+  padding: 9px 12px;
   font-size: 14px;
-  background-color: #fff;
+  font-family: inherit;
+  background: #fff;
   outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color var(--transition-base, 0.25s ease), box-shadow var(--transition-base, 0.25s ease);
 }
 
-.form-field textarea {
+.dpo-assign-issues-container .dpo-form-field textarea {
   resize: none;
   height: 35px;
   min-height: 35px;
-  padding: 6px 8px;
+  padding: 8px 10px;
   font-size: 13px;
+  font-family: inherit;
   line-height: 1.4;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  background-color: #fff;
+  border: 1.5px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-md, 10px);
+  background: #fff;
   outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color var(--transition-base, 0.25s ease), box-shadow var(--transition-base, 0.25s ease);
 }
 
-.form-field input:focus,
-.form-field select:focus,
-.form-field textarea:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+.dpo-assign-issues-container .dpo-form-field .dpo-description-textarea {
+  height: 86px;
+  min-height: 86px;
 }
 
-/* ==============================
-   Deadline Field
-============================== */
-.deadline-input {
+.dpo-assign-issues-container .dpo-form-field input:focus,
+.dpo-assign-issues-container .dpo-form-field select:focus,
+.dpo-assign-issues-container .dpo-form-field textarea:focus {
+  border-color: var(--color-primary, #2563eb);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+/* ── Deadline ── */
+.dpo-assign-issues-container .dpo-deadline-input {
   position: relative;
   display: flex;
   align-items: center;
 }
 
-.deadline-input input {
+.dpo-assign-issues-container .dpo-deadline-input input {
   width: 100%;
   padding-right: 38px;
 }
 
-.calendar-icon {
+.dpo-assign-issues-container .dpo-calendar-icon {
   position: absolute;
   right: 12px;
   font-size: 18px;
-  color: #4b5563;
+  color: var(--color-text-secondary, #6b7280);
   cursor: pointer;
-  transition: color 0.2s ease;
+  transition: color var(--transition-fast, 0.15s ease);
 }
 
-.calendar-icon:hover {
-  color: #2563eb;
+.dpo-assign-issues-container .dpo-calendar-icon:hover {
+  color: var(--color-primary, #2563eb);
+}
+
+.dpo-assign-issues-container .dpo-assign-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dpo-assign-issues-container .dpo-card-bottom-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  border-top: 1px solid var(--color-border, #e2e8f0);
+  padding-top: 10px;
+}
+
+.dpo-assign-issues-container .dpo-inline-allocate-btn {
+  background: linear-gradient(135deg, var(--color-primary, #2563eb), var(--color-primary-dark, #1d4ed8));
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: var(--radius-sm, 6px);
+  cursor: pointer;
+  font-weight: 600;
+  font-family: inherit;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2);
+  transition: transform var(--transition-fast, 0.15s ease), box-shadow var(--transition-fast, 0.15s ease);
+}
+
+.dpo-assign-issues-container .dpo-inline-allocate-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(37, 99, 235, 0.3);
 }

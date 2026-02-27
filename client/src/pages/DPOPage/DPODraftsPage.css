@@ -1,0 +1,238 @@
+/* ===== DPO Drafts Page — Premium ===== */
+
+.dpo-drafts-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.dpo-drafts-content {
+  padding: 24px 70px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: pageEnter 0.4s ease both;
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dpo-drafts-title {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0;
+  color: var(--color-text, #1f2937);
+}
+
+.dpo-drafts-topbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0;
+  padding: 0 0 20px;
+  width: 100%;
+}
+
+.dpo-drafts-upload-btn {
+  border: none;
+  border-radius: var(--radius-md, 10px);
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: 600;
+  font-family: inherit;
+  font-size: 0.9rem;
+  background: linear-gradient(135deg, var(--color-primary, #2563eb), var(--color-primary-dark, #1d4ed8));
+  color: #fff;
+  margin-top: 0;
+  flex-shrink: 0;
+  box-shadow: 0 3px 10px rgba(37, 99, 235, 0.25);
+  transition: transform var(--transition-fast, 0.15s ease),
+    box-shadow var(--transition-fast, 0.15s ease);
+}
+
+.dpo-drafts-upload-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 18px rgba(37, 99, 235, 0.35);
+}
+
+/* ── Body / scroll ── */
+.dpo-drafts-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding-right: 10px;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.dpo-drafts-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dpo-drafts-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dpo-drafts-body::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 20px;
+}
+
+.dpo-drafts-body-upload,
+.dpo-drafts-body-assign {
+  overflow: hidden;
+  padding-right: 0;
+}
+
+.dpo-drafts-upload-wrapper {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.dpo-drafts-upload-wrapper .dpo-upload-form {
+  width: 100%;
+  max-width: 800px;
+  margin: 24px auto 0;
+}
+
+.dpo-drafts-upload-wrapper .dpo-loading-card {
+  width: 100%;
+  max-width: 550px;
+  margin: 24px auto 0;
+}
+
+.dpo-drafts-assign-wrapper {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ── Grid ── */
+.dpo-drafts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 18px;
+}
+
+/* ── Draft card ── */
+.dpo-draft-card {
+  background: var(--color-surface, #fff);
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-lg, 14px);
+  box-shadow: var(--shadow-sm, 0 2px 8px rgba(0, 0, 0, 0.06));
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: transform var(--transition-base, 0.25s ease),
+    box-shadow var(--transition-base, 0.25s ease),
+    border-color var(--transition-base, 0.25s ease);
+}
+
+.dpo-draft-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md, 0 4px 16px rgba(0, 0, 0, 0.08));
+  border-color: var(--color-border-hover, #cbd5e1);
+}
+
+.dpo-draft-card-header h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--color-text, #1f2937);
+}
+
+.dpo-draft-card-header span {
+  display: block;
+  margin-top: 4px;
+  color: var(--color-text-secondary, #6b7280);
+  font-size: 0.88rem;
+}
+
+.dpo-draft-meta p {
+  margin: 0;
+  font-size: 0.88rem;
+  color: #374151;
+}
+
+.dpo-draft-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.dpo-draft-actions button {
+  border: none;
+  border-radius: var(--radius-md, 10px);
+  padding: 9px 12px;
+  cursor: pointer;
+  font-weight: 600;
+  background: var(--color-primary, #2563eb);
+  color: #fff;
+}
+
+.dpo-draft-actions .dpo-draft-open-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary, #2563eb);
+  font-size: 22px;
+  transition: transform var(--transition-fast, 0.15s ease),
+    color var(--transition-fast, 0.15s ease);
+}
+
+.dpo-draft-actions .dpo-draft-open-btn:hover {
+  color: var(--color-primary-dark, #1d4ed8);
+  transform: scale(1.18);
+}
+
+.dpo-draft-actions .dpo-draft-open-btn svg {
+  fill: currentColor;
+}
+
+.dpo-draft-actions .dpo-draft-delete-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-danger-dark, #dc2626);
+  font-size: 22px;
+  transition: transform var(--transition-fast, 0.15s ease),
+    color var(--transition-fast, 0.15s ease);
+}
+
+.dpo-draft-actions .dpo-draft-delete-btn:hover {
+  color: #b91c1c;
+  transform: scale(1.18);
+}
+
+.dpo-drafts-body>.empty-state-card,
+.dpo-drafts-body>.loading-state {
+  margin-top: 0;
+  min-height: 100%;
+}

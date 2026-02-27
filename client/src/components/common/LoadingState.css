@@ -1,0 +1,134 @@
+/* ===== Loading State — Polished ===== */
+
+.loading-state {
+  width: 100%;
+  height: 100%;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  text-align: center;
+  align-self: stretch;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.loading-state-compact {
+  height: 100%;
+  min-height: 120px;
+  gap: 10px;
+}
+
+.loading-state-raised {
+  transform: translateY(-18px);
+}
+
+.loading-state-raised.loading-state-compact {
+  transform: translateY(-12px);
+}
+
+/* ── Orbit ring ── */
+.loading-orbit {
+  width: 60px;
+  height: 60px;
+  border: 2px solid rgba(37, 99, 235, 0.15);
+  border-radius: 50%;
+  position: relative;
+  animation: loading-spin 1.6s linear infinite;
+}
+
+.loading-state-compact .loading-orbit {
+  width: 48px;
+  height: 48px;
+}
+
+/* ── Dots ── */
+.loading-dot {
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-primary, #2563eb), var(--color-primary-dark, #1d4ed8));
+  box-shadow: 0 1px 6px rgba(37, 99, 235, 0.35);
+}
+
+.loading-dot-1 {
+  top: -5.5px;
+  left: 24.5px;
+}
+
+.loading-dot-2 {
+  right: -5.5px;
+  top: 24.5px;
+}
+
+.loading-dot-3 {
+  bottom: -5.5px;
+  left: 24.5px;
+}
+
+.loading-state-compact .loading-dot {
+  width: 9px;
+  height: 9px;
+}
+
+.loading-state-compact .loading-dot-1 {
+  top: -4.5px;
+  left: 19.5px;
+}
+
+.loading-state-compact .loading-dot-2 {
+  right: -4.5px;
+  top: 19.5px;
+}
+
+.loading-state-compact .loading-dot-3 {
+  bottom: -4.5px;
+  left: 19.5px;
+}
+
+/* ── Text ── */
+.loading-state p {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-primary-darker, #1e40af);
+  animation: loadingPulse 1.8s ease-in-out infinite;
+}
+
+.loading-state-compact p {
+  font-size: 0.92rem;
+}
+
+@keyframes loadingPulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes loading-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
