@@ -20,6 +20,7 @@ urlpatterns = [
     path('submit-response', views.submit_response),
     path('notifications', views.get_notifications),
     path('generate-report', views.generate_report),
+    path('generate-minutes-pdf', views.generate_minutes_pdf),
     path('send-overdue-alerts', views.send_overdue_alerts),
 ]
 

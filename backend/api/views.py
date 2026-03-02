@@ -1188,16 +1188,70 @@ def delete_minutes(request, minutes_id):
         return Response({"error": str(e)}, status=500)
 
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def generate_minutes_pdf(request):
+    try:
+        from weasyprint import HTML
+    except ImportError as e:
+        print("WeasyPrint error:", e)
+        return Response({"error": "PDF renderer (WeasyPrint) not installed."}, status=500)
 
+    html_content = request.data.get('html', '')
+    if not html_content:
+        return Response({"error": "No HTML content provided"}, status=400)
+    
+    # Quill CSS mapped to WeasyPrint
+    quill_css = """
+    @page { 
+        size: A4 portrait; 
+        margin: 1.5cm 2.0cm; 
+    }
+    body { 
+        font-family: 'Manjari', 'Meera', 'Noto Sans Malayalam', 'Times New Roman', Times, serif; 
+        font-size: 14pt; 
+        line-height: 1.6;
+    }
+    .minute-title-section { text-align: center; font-weight: bold; margin-bottom: 30px; }
+    .ql-align-center { text-align: center; }
+    .ql-align-right { text-align: right; }
+    .ql-align-justify { text-align: justify; }
+    .ql-indent-1 { padding-left: 3em; }
+    .ql-indent-2 { padding-left: 6em; }
+    .ql-indent-3 { padding-left: 9em; }
+    .ql-indent-4 { padding-left: 12em; }
+    .ql-indent-5 { padding-left: 15em; }
+    .ql-indent-6 { padding-left: 18em; }
+    .ql-indent-7 { padding-left: 21em; }
+    .ql-indent-8 { padding-left: 24em; }
+    ul, ol { padding-left: 1.5em; margin-top: 5px; margin-bottom: 5px; }
+    li { margin-bottom: 5px; }
+    p { margin-top: 0; margin-bottom: 5px; }
+    strong { font-weight: bold; }
+    em { font-style: italic; }
+    u { text-decoration: underline; }
+    """
 
+    full_html = f"""
+    <!DOCTYPE html>
+    <html lang="ml">
+    <head>
+        <meta charset="utf-8">
+        <style>{quill_css}</style>
+    </head>
+    <body>
+        <div class="ql-editor">
+            {html_content}
+        </div>
+    </body>
+    </html>
+    """
 
-
-
-
-
-
-
-
-
-
-
+    try:
+        pdf_file = HTML(string=full_html).write_pdf()
+        response = HttpResponse(pdf_file, content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="minutes.pdf"'
+        return response
+    except Exception as e:
+        print("WeasyPrint conversion error:", e)
+        return Response({"error": str(e)}, status=500)

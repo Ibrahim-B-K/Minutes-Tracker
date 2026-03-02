@@ -47,6 +47,14 @@ CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:5173",
 ]
 
+# During local development make it easy to test from the Vite dev server.
+# In production rely on explicit `CORS_ALLOWED_ORIGINS` instead.
+if DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = True
+
+# Allow credentials (cookies) over cross-origin requests when needed.
+CORS_ALLOW_CREDENTIALS = True
+
 
 ROOT_URLCONF = 'backend.urls'
 
