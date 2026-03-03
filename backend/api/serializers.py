@@ -49,6 +49,7 @@ class DPOIssueSerializer(serializers.ModelSerializer):
     
     # For DPO, we group by departments and collect ALL responses
     department = serializers.SerializerMethodField()
+    assigned_departments = serializers.SerializerMethodField()
     status = serializers.SerializerMethodField()
     deadline = serializers.SerializerMethodField()
     response = serializers.SerializerMethodField()
@@ -71,6 +72,7 @@ class DPOIssueSerializer(serializers.ModelSerializer):
             'location', 
             'priority', 
             'department', 
+            'assigned_departments',
             'status', 
             'deadline', 
             'response',
@@ -84,6 +86,10 @@ class DPOIssueSerializer(serializers.ModelSerializer):
             'created_at',
         ]
     
+    def get_assigned_departments(self, obj):
+        assignments = obj.issuedepartment_set.all()
+        return [{"dept_name": a.department.dept_name, "designation": a.department.designation} for a in assignments]
+
     def get_department(self, obj):
         assignments = obj.issuedepartment_set.all()
         return ", ".join([a.department.dept_name for a in assignments])
