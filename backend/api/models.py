@@ -81,7 +81,7 @@ class Response(models.Model):
         related_name='responses'
     )
     response_text = models.TextField()
-    attachment_path = models.FileField(upload_to='responses/', null=True, blank=True)
+    attachment_path = models.FileField(max_length=1000, null=True, blank=True)  # Supabase public URL
     submitted_at = models.DateTimeField(auto_now_add=True)
 class Notification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -37,6 +37,7 @@ from .models import (
 from .services import check_and_send_overdue_emails
 from .serializers import IssueDepartmentSerializer, NotificationSerializer, DPOIssueSerializer
 from .gemini_utils import analyze_document_with_gemini, match_issues_with_gemini
+from .supabase_utils import upload_to_supabase
 import os
 from datetime import datetime, date, timedelta
 import io
@@ -193,45 +194,15 @@ def upload_minutes(request):
     # Analyze with Gemini using current department master list
     raw_data = analyze_document_with_gemini(local_file_path, available_departments)
 
-    # Upload to Supabase Storage
-    supabase_file_path = None
-    if SUPABASE_URL and SUPABASE_KEY:
-        try:
-            with open(local_file_path, 'rb') as f:
-                file_data = f.read()
-            
-            # Generate unique filename to avoid collisions
-            file_name = f"{uuid.uuid4()}_{file.name}"
-            # Upload to public/ folder (required by RLS policy)
-            supabase_file_path = f"public/{file_name}"
-            
-            # URL-encode the file path to handle spaces and special characters
-            encoded_file_path = quote(supabase_file_path, safe='/')
-            
-            # Supabase Storage REST API endpoint
-            upload_url = f"{SUPABASE_URL}/storage/v1/object/{SUPABASE_BUCKET}/{encoded_file_path}"
-            
-            # Use apikey header for Supabase Storage API
-            headers = {
-                'apikey': SUPABASE_KEY,
-                'Content-Type': 'application/octet-stream'
-            }
-            
-            print(f"📤 Uploading to Supabase: {upload_url}")
-            response = requests.put(upload_url, data=file_data, headers=headers, timeout=30)
-            
-            if response.status_code == 200:
-                # Generate public URL for viewing/downloading
-                public_url = f"{SUPABASE_URL}/storage/v1/object/public/{SUPABASE_BUCKET}/{encoded_file_path}"
-                print(f"✅ File uploaded to Supabase successfully!")
-                print(f"   Public URL: {public_url}")
-            else:
-                print(f"⚠️ Supabase upload failed: {response.status_code}")
-                print(f"   Response: {response.text}")
-                supabase_file_path = None
-        except Exception as e:
-            print(f"⚠️ Supabase upload exception: {e}")
-            supabase_file_path = None
+    # Upload to Supabase Storage using shared utility
+    with open(local_file_path, 'rb') as f:
+        file_data = f.read()
+    supabase_public_url = upload_to_supabase(
+        file_data=file_data,
+        original_filename=file.name,
+        bucket=SUPABASE_BUCKET,
+        folder='public'
+    )
 
     dept_objects = list(Department.objects.all())
     dept_name_map = _build_department_name_maps(dept_objects)
@@ -246,7 +217,6 @@ def upload_minutes(request):
     # Parse meeting date if provided
     try:
         if meeting_date_str:
-            # Handle dd-mm-yyyy format
             parts = meeting_date_str.split('-')
             if len(parts) == 3:
                 meeting_date_obj = datetime.strptime(meeting_date_str, '%d-%m-%Y').date()
@@ -256,12 +226,9 @@ def upload_minutes(request):
             meeting_date_obj = timezone.now().date()
     except:
         meeting_date_obj = timezone.now().date()
-    
-    # Create file_path for database (full URL if Supabase, local path if not)
-    if supabase_file_path:
-        file_path_for_db = f"{SUPABASE_URL}/storage/v1/object/public/{SUPABASE_BUCKET}/{supabase_file_path}"
-    else:
-        file_path_for_db = local_file_path
+
+    # Use Supabase URL if upload succeeded, otherwise fall back to local path
+    file_path_for_db = supabase_public_url or local_file_path
     
     # Create Minutes record IMMEDIATELY
     minute_obj = Minutes.objects.create(
@@ -276,10 +243,10 @@ def upload_minutes(request):
 
     # Store file path and minutes ID in TEMP_DATA_CACHE for the allocate step
     TEMP_DATA_CACHE = {
-        'file_path': supabase_file_path or local_file_path,
-        'is_supabase': supabase_file_path is not None,
+        'file_path': supabase_public_url or local_file_path,
+        'is_supabase': supabase_public_url is not None,
         'issues': clean_data,
-        'minutes_id': minute_obj.id  # Store the minutes ID
+        'minutes_id': minute_obj.id
     }
     
     return Response({"success": True, "data": clean_data, "minutes_id": minute_obj.id})
@@ -682,13 +649,28 @@ def submit_response(request):
             department=request.user.department,
         )
         
-        # FIX: Create Response with attachment
+        # Upload attachment to Supabase 'Response' bucket
+        attachment_url = None
+        if attachment:
+            file_bytes = attachment.read()
+            attachment_url = upload_to_supabase(
+                file_data=file_bytes,
+                original_filename=attachment.name,
+                bucket='Response',
+                folder='public'
+            )
+            if not attachment_url:
+                print(f"⚠️ Supabase upload failed for attachment, falling back to local storage")
+                # Rewind for local save fallback
+                attachment.seek(0)
+
+        # Save Response — use URL if Supabase succeeded, otherwise local file
         ResponseModel.objects.create(
-            issue_department=issue_link, 
+            issue_department=issue_link,
             response_text=response_text or "",
-            attachment_path=attachment
+            attachment_path=attachment_url if attachment_url else (attachment or None)
         )
-        
+
         issue_link.status = 'submitted'
         issue_link.save()
         

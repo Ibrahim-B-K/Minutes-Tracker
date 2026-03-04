@@ -37,7 +37,7 @@ class IssueDepartmentSerializer(serializers.ModelSerializer):
             
         return {
             "text": last_response.response_text,
-            "attachment": last_response.attachment_path.url if last_response.attachment_path else None
+            "attachment": last_response.attachment_path.name if last_response.attachment_path else None
         }
 
 class DPOIssueSerializer(serializers.ModelSerializer):
@@ -98,7 +98,7 @@ class DPOIssueSerializer(serializers.ModelSerializer):
         statuses = [a.status.lower() for a in obj.issuedepartment_set.all()]
         if not statuses: return "pending"
         if "overdue" in statuses: return "overdue"
-        if any(s in ["submitted", "completed"] for s in statuses):
+        if all(s in ["submitted", "completed"] for s in statuses):
             return "submitted"
         return "pending"
 
@@ -116,7 +116,7 @@ class DPOIssueSerializer(serializers.ModelSerializer):
                 response_list.append({
                     "department": assign.department.dept_name,
                     "text": latest_resp.response_text or "",
-                    "attachment": latest_resp.attachment_path.url if latest_resp.attachment_path else None
+                    "attachment": latest_resp.attachment_path.name if latest_resp.attachment_path else None
                 })
         return response_list if response_list else None
 
