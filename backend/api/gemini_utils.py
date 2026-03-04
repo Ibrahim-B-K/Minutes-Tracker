@@ -46,22 +46,15 @@ def analyze_document_with_gemini(file_path, available_departments=None):
     
     FORCE RULES:
     1. EXTRACT EVERY ISSUE listed. Do not skip any.
-    2. YOU MUST ASSIGN AT LEAST ONE DEPARTMENT.
-    3. Department output must be selected ONLY from AVAILABLE DEPARTMENTS above.
-    4. If the minute explicitly names a department, choose that exact department from AVAILABLE DEPARTMENTS.
-    5. If no department is explicit, infer the best-fit department from AVAILABLE DEPARTMENTS using issue context.
-    6. Never invent a new department name.
-    7. If uncertain, choose the closest available department; do not leave departments empty.
+    2. Extract ONLY issues that contain the word "നടപടി".
+    3. Skip all issues that do NOT contain a "നടപടി" field.
+    4. Departments should be taken from the sentence after the "നടപടി" field. If multiple departments are mentioned, extract all and match with the AVAILABLE DEPARTMENTS.
+    5. Department output must be selected ONLY from AVAILABLE DEPARTMENTS above.
+    6. If the minute explicitly names a designation and department, choose that exact department from AVAILABLE DEPARTMENTS that matches the designation too.
+    7. Never invent a new department name.
+    8. Donot keep deptartment field empty if the minute clearly mentions a department, even if that department is not in AVAILABLE DEPARTMENTS. In that case, choose the closest matching department from AVAILABLE DEPARTMENTS based on the designation mentioned in the minute.
 
-    Inference hints:
-       - 'റോഡ്' (Road), 'പാലം' (Bridge) -> PWD_ROADS
-       - 'കെട്ടിടം' (Building), 'സ്കൂൾ അറ്റകുറ്റപ്പണി' (School repair) -> PWD_BUILDINGS
-       - 'കുടിവെള്ളം' (Drinking water), 'പൈപ്പ്' (Pipe) -> KWA
-       - 'വൈദ്യുതി' (Electricity), 'ലൈൻ' (Line), 'ട്രാൻസ്ഫോർമർ' -> KSEB
-       - 'മാലിന്യം' (Waste), 'പഞ്ചായത്ത്' (Panchayat), 'തെരുവുനായ' (Stray dog) -> LSGD
-       - 'കൃഷി' (Farming), 'കർഷകർ' (Farmers), 'വിളനാശം' (Crop damage) -> AGRICULTURE
-       - 'ക്രമസമാധാനം' (Law & Order), 'ട്രാഫിക്' (Traffic) -> POLICE
-
+    
     STRICT RULES:
     1. Do NOT invent dates. If no deadline is explicitly mentioned in the text for an issue, the "deadline" field MUST be an empty string "".
     2. Do NOT use today's date or any date like '18-12-25'.
@@ -71,7 +64,7 @@ def analyze_document_with_gemini(file_path, available_departments=None):
     - issue_no: string
     - departments: ARRAY of strings using exact department names from AVAILABLE DEPARTMENTS only.
     - issue: ONE-LINE Malayalam summary (max 20 words)
-    - issue_description: FULL detailed Malayalam issue description (multiple sentences),dont assume anything not in the document.
+    - issue_description: FULL detailed Malayalam issue description exactly as given in the document, dont assume anything not in the document.
     - location: Malayalam place name (if mentioned) or "".
     - priority: High/Medium/Low (based on urgency in text, urgency can be inferred from words and high priority for issues that involve MLA/MP/Minister requests)
     - deadline (DD-MM-YYYY or "")

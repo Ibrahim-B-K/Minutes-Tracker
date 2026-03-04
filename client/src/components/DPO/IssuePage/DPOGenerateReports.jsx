@@ -145,6 +145,7 @@ export default function GenerateReports({ isOpen, onClose }) {
           department: issue.department || "",
           assigned_departments: issue.assigned_departments || [],
           resolution_status: issue.resolution_status || 'unresolved',
+          meeting_date: issue.meeting_date || "", // Added this line
           issue: issue.issue || "",
           location: issue.location || "",
           response: Array.isArray(issue.response)
@@ -155,6 +156,14 @@ export default function GenerateReports({ isOpen, onClose }) {
         }));
 
         setReports(normalized);
+
+        // Default the Minute PDF date and title if not yet set
+        if (normalized.length > 0) {
+          const firstDate = normalized[0].meeting_date;
+          if (firstDate) {
+            setMinuteDate(firstDate.split('T')[0]);
+          }
+        }
       })
       .catch((err) => console.error("Error fetching reports:", err))
       .finally(() => setLoadingReports(false));

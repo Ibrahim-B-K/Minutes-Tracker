@@ -844,8 +844,21 @@ def generate_report(request):
             "നിലവിലെ സ്റ്റാറ്റസ്"
         ]
         
+        # Default if no dates are found
         meeting_date_str = timezone.now().strftime("%d-%m-%Y")
-
+        
+        # Try to get the meeting date from the first issue for the header
+        first_report = reports_data[0] if reports_data else {}
+        raw_meeting_date = first_report.get('meeting_date')
+        if raw_meeting_date:
+            try:
+                # Expecting YYYY-MM-DD from serializer
+                if 'T' in raw_meeting_date:
+                    raw_meeting_date = raw_meeting_date.split('T')[0]
+                dt = datetime.strptime(raw_meeting_date, '%Y-%m-%d')
+                meeting_date_str = dt.strftime("%d-%m-%Y")
+            except:
+                pass
         ws.merge_cells('A1:E1')
         main_header = ws['A1']
         main_header.value = f"{meeting_date_str} -ന് ചേർന്ന ജില്ലാ വികസന സമിതി യോഗത്തിന്റെ തുടർ നടപടി റിപ്പോർട്ട്"
@@ -864,7 +877,18 @@ def generate_report(request):
 
         # Populate Excel with the EDITED data from the frontend
         for index, report in enumerate(reports_data, start=1):
-            subject_col_text = f"തീയതി: {meeting_date_str}\n\n{report.get('issue_no', '')}"
+            # Use specific meeting date for this issue
+            row_meeting_date_str = meeting_date_str # Fallback to header date
+            raw_row_date = report.get('meeting_date')
+            if raw_row_date:
+                try:
+                    if 'T' in raw_row_date: raw_row_date = raw_row_date.split('T')[0]
+                    dt = datetime.strptime(raw_row_date, '%Y-%m-%d')
+                    row_meeting_date_str = dt.strftime("%d-%m-%Y")
+                except:
+                    pass
+
+            subject_col_text = f"തീയതി: {row_meeting_date_str}\n\n{report.get('issue_no', '')}"
 
             row_data = [
                 index,
