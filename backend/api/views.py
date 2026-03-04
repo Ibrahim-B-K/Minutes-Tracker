@@ -430,8 +430,11 @@ def _create_issues_for_minutes(minute_obj, issues_data):
         if parent_issue_id:
             try:
                 parent_issue_obj = Issue.objects.get(id=int(parent_issue_id))
-                # Star topology: always point to the root
-                if parent_issue_obj.parent_issue_id:
+                # Star topology: always point to the absolute root
+                # Recursive traversal to the top-most parent
+                visited = set()
+                while parent_issue_obj.parent_issue and parent_issue_obj.id not in visited:
+                    visited.add(parent_issue_obj.id)
                     parent_issue_obj = parent_issue_obj.parent_issue
             except (Issue.DoesNotExist, ValueError, TypeError):
                 parent_issue_obj = None
@@ -934,14 +937,25 @@ def get_issue_lifecycle(request, issue_id):
     except Issue.DoesNotExist:
         return Response({"error": "Issue not found"}, status=404)
 
+    # Find the absolute root
     root_issue = target_issue
-    seen = set()
-    while root_issue.parent_issue_id and root_issue.id not in seen:
-        seen.add(root_issue.id)
-        parent = root_issue.parent_issue
-        if not parent:
+    visited = set()
+    while root_issue.parent_issue and root_issue.id not in visited:
+        visited.add(root_issue.id)
+        root_issue = root_issue.parent_issue
+
+    # Collect all issues in the chain (Root + all descendants)
+    # Since chains are small, we can do this in a few steps or use a broader filter
+    all_related_ids = {root_issue.id}
+    
+    # Simple iterative approach to find descendants (since chains are likely < 10 items)
+    current_parents = [root_issue.id]
+    for _ in range(10): # Max depth safeguard
+        descendants = list(Issue.objects.filter(parent_issue_id__in=current_parents).values_list('id', flat=True))
+        if not descendants:
             break
-        root_issue = parent
+        all_related_ids.update(descendants)
+        current_parents = descendants
 
     lifecycle_qs = Issue.objects.select_related(
         'minutes', 'parent_issue'
@@ -949,9 +963,7 @@ def get_issue_lifecycle(request, issue_id):
         'issuedepartment_set',
         'issuedepartment_set__department',
         'issuedepartment_set__responses'
-    ).filter(
-        Q(id=root_issue.id) | Q(parent_issue_id=root_issue.id)
-    )
+    ).filter(id__in=all_related_ids)
 
     serialized_items = list(DPOIssueSerializer(lifecycle_qs, many=True).data)
 
