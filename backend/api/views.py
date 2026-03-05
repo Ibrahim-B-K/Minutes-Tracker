@@ -37,6 +37,7 @@ from .models import (
 from .services import check_and_send_overdue_emails
 from .serializers import IssueDepartmentSerializer, NotificationSerializer, DPOIssueSerializer
 from .gemini_utils import analyze_document_with_gemini, match_issues_with_gemini
+from .supabase_utils import upload_to_supabase
 import os
 from datetime import datetime, date, timedelta
 import io
@@ -193,45 +194,15 @@ def upload_minutes(request):
     # Analyze with Gemini using current department master list
     raw_data = analyze_document_with_gemini(local_file_path, available_departments)
 
-    # Upload to Supabase Storage
-    supabase_file_path = None
-    if SUPABASE_URL and SUPABASE_KEY:
-        try:
-            with open(local_file_path, 'rb') as f:
-                file_data = f.read()
-            
-            # Generate unique filename to avoid collisions
-            file_name = f"{uuid.uuid4()}_{file.name}"
-            # Upload to public/ folder (required by RLS policy)
-            supabase_file_path = f"public/{file_name}"
-            
-            # URL-encode the file path to handle spaces and special characters
-            encoded_file_path = quote(supabase_file_path, safe='/')
-            
-            # Supabase Storage REST API endpoint
-            upload_url = f"{SUPABASE_URL}/storage/v1/object/{SUPABASE_BUCKET}/{encoded_file_path}"
-            
-            # Use apikey header for Supabase Storage API
-            headers = {
-                'apikey': SUPABASE_KEY,
-                'Content-Type': 'application/octet-stream'
-            }
-            
-            print(f"📤 Uploading to Supabase: {upload_url}")
-            response = requests.put(upload_url, data=file_data, headers=headers, timeout=30)
-            
-            if response.status_code == 200:
-                # Generate public URL for viewing/downloading
-                public_url = f"{SUPABASE_URL}/storage/v1/object/public/{SUPABASE_BUCKET}/{encoded_file_path}"
-                print(f"✅ File uploaded to Supabase successfully!")
-                print(f"   Public URL: {public_url}")
-            else:
-                print(f"⚠️ Supabase upload failed: {response.status_code}")
-                print(f"   Response: {response.text}")
-                supabase_file_path = None
-        except Exception as e:
-            print(f"⚠️ Supabase upload exception: {e}")
-            supabase_file_path = None
+    # Upload to Supabase Storage using shared utility
+    with open(local_file_path, 'rb') as f:
+        file_data = f.read()
+    supabase_public_url = upload_to_supabase(
+        file_data=file_data,
+        original_filename=file.name,
+        bucket=SUPABASE_BUCKET,
+        folder='public'
+    )
 
     dept_objects = list(Department.objects.all())
     dept_name_map = _build_department_name_maps(dept_objects)
@@ -246,7 +217,6 @@ def upload_minutes(request):
     # Parse meeting date if provided
     try:
         if meeting_date_str:
-            # Handle dd-mm-yyyy format
             parts = meeting_date_str.split('-')
             if len(parts) == 3:
                 meeting_date_obj = datetime.strptime(meeting_date_str, '%d-%m-%Y').date()
@@ -256,12 +226,9 @@ def upload_minutes(request):
             meeting_date_obj = timezone.now().date()
     except:
         meeting_date_obj = timezone.now().date()
-    
-    # Create file_path for database (full URL if Supabase, local path if not)
-    if supabase_file_path:
-        file_path_for_db = f"{SUPABASE_URL}/storage/v1/object/public/{SUPABASE_BUCKET}/{supabase_file_path}"
-    else:
-        file_path_for_db = local_file_path
+
+    # Use Supabase URL if upload succeeded, otherwise fall back to local path
+    file_path_for_db = supabase_public_url or local_file_path
     
     # Create Minutes record IMMEDIATELY
     minute_obj = Minutes.objects.create(
@@ -276,10 +243,10 @@ def upload_minutes(request):
 
     # Store file path and minutes ID in TEMP_DATA_CACHE for the allocate step
     TEMP_DATA_CACHE = {
-        'file_path': supabase_file_path or local_file_path,
-        'is_supabase': supabase_file_path is not None,
+        'file_path': supabase_public_url or local_file_path,
+        'is_supabase': supabase_public_url is not None,
         'issues': clean_data,
-        'minutes_id': minute_obj.id  # Store the minutes ID
+        'minutes_id': minute_obj.id
     }
     
     return Response({"success": True, "data": clean_data, "minutes_id": minute_obj.id})
@@ -463,8 +430,11 @@ def _create_issues_for_minutes(minute_obj, issues_data):
         if parent_issue_id:
             try:
                 parent_issue_obj = Issue.objects.get(id=int(parent_issue_id))
-                # Star topology: always point to the root
-                if parent_issue_obj.parent_issue_id:
+                # Star topology: always point to the absolute root
+                # Recursive traversal to the top-most parent
+                visited = set()
+                while parent_issue_obj.parent_issue and parent_issue_obj.id not in visited:
+                    visited.add(parent_issue_obj.id)
                     parent_issue_obj = parent_issue_obj.parent_issue
             except (Issue.DoesNotExist, ValueError, TypeError):
                 parent_issue_obj = None
@@ -682,13 +652,28 @@ def submit_response(request):
             department=request.user.department,
         )
         
-        # FIX: Create Response with attachment
+        # Upload attachment to Supabase 'Response' bucket
+        attachment_url = None
+        if attachment:
+            file_bytes = attachment.read()
+            attachment_url = upload_to_supabase(
+                file_data=file_bytes,
+                original_filename=attachment.name,
+                bucket='Response',
+                folder='public'
+            )
+            if not attachment_url:
+                print(f"⚠️ Supabase upload failed for attachment, falling back to local storage")
+                # Rewind for local save fallback
+                attachment.seek(0)
+
+        # Save Response — use URL if Supabase succeeded, otherwise local file
         ResponseModel.objects.create(
-            issue_department=issue_link, 
+            issue_department=issue_link,
             response_text=response_text or "",
-            attachment_path=attachment
+            attachment_path=attachment_url if attachment_url else (attachment or None)
         )
-        
+
         issue_link.status = 'submitted'
         issue_link.save()
         
@@ -859,8 +844,21 @@ def generate_report(request):
             "നിലവിലെ സ്റ്റാറ്റസ്"
         ]
         
+        # Default if no dates are found
         meeting_date_str = timezone.now().strftime("%d-%m-%Y")
-
+        
+        # Try to get the meeting date from the first issue for the header
+        first_report = reports_data[0] if reports_data else {}
+        raw_meeting_date = first_report.get('meeting_date')
+        if raw_meeting_date:
+            try:
+                # Expecting YYYY-MM-DD from serializer
+                if 'T' in raw_meeting_date:
+                    raw_meeting_date = raw_meeting_date.split('T')[0]
+                dt = datetime.strptime(raw_meeting_date, '%Y-%m-%d')
+                meeting_date_str = dt.strftime("%d-%m-%Y")
+            except:
+                pass
         ws.merge_cells('A1:E1')
         main_header = ws['A1']
         main_header.value = f"{meeting_date_str} -ന് ചേർന്ന ജില്ലാ വികസന സമിതി യോഗത്തിന്റെ തുടർ നടപടി റിപ്പോർട്ട്"
@@ -879,7 +877,18 @@ def generate_report(request):
 
         # Populate Excel with the EDITED data from the frontend
         for index, report in enumerate(reports_data, start=1):
-            subject_col_text = f"തീയതി: {meeting_date_str}\n\n{report.get('issue_no', '')}"
+            # Use specific meeting date for this issue
+            row_meeting_date_str = meeting_date_str # Fallback to header date
+            raw_row_date = report.get('meeting_date')
+            if raw_row_date:
+                try:
+                    if 'T' in raw_row_date: raw_row_date = raw_row_date.split('T')[0]
+                    dt = datetime.strptime(raw_row_date, '%Y-%m-%d')
+                    row_meeting_date_str = dt.strftime("%d-%m-%Y")
+                except:
+                    pass
+
+            subject_col_text = f"തീയതി: {row_meeting_date_str}\n\n{report.get('issue_no', '')}"
 
             row_data = [
                 index,
@@ -952,14 +961,25 @@ def get_issue_lifecycle(request, issue_id):
     except Issue.DoesNotExist:
         return Response({"error": "Issue not found"}, status=404)
 
+    # Find the absolute root
     root_issue = target_issue
-    seen = set()
-    while root_issue.parent_issue_id and root_issue.id not in seen:
-        seen.add(root_issue.id)
-        parent = root_issue.parent_issue
-        if not parent:
+    visited = set()
+    while root_issue.parent_issue and root_issue.id not in visited:
+        visited.add(root_issue.id)
+        root_issue = root_issue.parent_issue
+
+    # Collect all issues in the chain (Root + all descendants)
+    # Since chains are small, we can do this in a few steps or use a broader filter
+    all_related_ids = {root_issue.id}
+    
+    # Simple iterative approach to find descendants (since chains are likely < 10 items)
+    current_parents = [root_issue.id]
+    for _ in range(10): # Max depth safeguard
+        descendants = list(Issue.objects.filter(parent_issue_id__in=current_parents).values_list('id', flat=True))
+        if not descendants:
             break
-        root_issue = parent
+        all_related_ids.update(descendants)
+        current_parents = descendants
 
     lifecycle_qs = Issue.objects.select_related(
         'minutes', 'parent_issue'
@@ -967,9 +987,7 @@ def get_issue_lifecycle(request, issue_id):
         'issuedepartment_set',
         'issuedepartment_set__department',
         'issuedepartment_set__responses'
-    ).filter(
-        Q(id=root_issue.id) | Q(parent_issue_id=root_issue.id)
-    )
+    ).filter(id__in=all_related_ids)
 
     serialized_items = list(DPOIssueSerializer(lifecycle_qs, many=True).data)
 

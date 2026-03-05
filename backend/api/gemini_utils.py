@@ -36,47 +36,48 @@ def analyze_document_with_gemini(file_path, available_departments=None):
     ]}
     
     available_departments = available_departments or []
-    dept_list_text = '\n'.join(f'- {dept}' for dept in available_departments) if available_departments else '(No department list provided)'
+    dept_list_text = '\n'.join(available_departments) if available_departments else '(No department list provided)'
 
     prompt = f"""
-    Analyze this Malayalam PDF. Extract every actionable issue.
+    You are an AI specialized in analyzing Malayalam PDF minutes of meetings. 
 
-    AVAILABLE DEPARTMENTS (master list):
+    TASK: Extract every actionable issue from this document.
+
+    AVAILABLE DEPARTMENTS (Designation, Department Name):
     {dept_list_text}
-    
-    FORCE RULES:
-    1. EXTRACT EVERY ISSUE listed. Do not skip any.
-    2. YOU MUST ASSIGN AT LEAST ONE DEPARTMENT.
-    3. Department output must be selected ONLY from AVAILABLE DEPARTMENTS above.
-    4. If the minute explicitly names a department, choose that exact department from AVAILABLE DEPARTMENTS.
-    5. If no department is explicit, infer the best-fit department from AVAILABLE DEPARTMENTS using issue context.
-    6. Never invent a new department name.
-    7. If uncertain, choose the closest available department; do not leave departments empty.
 
-    Inference hints:
-       - 'റോഡ്' (Road), 'പാലം' (Bridge) -> PWD_ROADS
-       - 'കെട്ടിടം' (Building), 'സ്കൂൾ അറ്റകുറ്റപ്പണി' (School repair) -> PWD_BUILDINGS
-       - 'കുടിവെള്ളം' (Drinking water), 'പൈപ്പ്' (Pipe) -> KWA
-       - 'വൈദ്യുതി' (Electricity), 'ലൈൻ' (Line), 'ട്രാൻസ്ഫോർമർ' -> KSEB
-       - 'മാലിന്യം' (Waste), 'പഞ്ചായത്ത്' (Panchayat), 'തെരുവുനായ' (Stray dog) -> LSGD
-       - 'കൃഷി' (Farming), 'കർഷകർ' (Farmers), 'വിളനാശം' (Crop damage) -> AGRICULTURE
-       - 'ക്രമസമാധാനം' (Law & Order), 'ട്രാഫിക്' (Traffic) -> POLICE
+    EXTRACTION RULES:
+    1. Extract ONLY issues that contain the word "നടപടി".
+    2. Look ONLY at the text immediately following "നടപടി" to find the responsible parties.
+    3. Identify BOTH the designation AND the department name EXPLICITLY mentioned in the "നടപടി" (Action) text.
+    4. Map the identified designation + department strictly to the provided AVAILABLE DEPARTMENTS list.
+    5. CRITICAL INSTRUCTION: You MUST ONLY return a department if it is EXPLICITLY stated in the text. 
+    6. ZERO GUESSING ALLOWED: Do NOT add related departments. Do NOT infer a department just because of the context (e.g., if it mentions water, but doesn't name the water department in the 'നടപടി' section, DO NOT include the water department).
+    7. If only ONE department/officer is named, the "departments" array MUST contain exactly ONE string that matches a name from the AVAILABLE DEPARTMENTS list.
+    8. NEVER invent new department names. ONLY output strings exactly as they appear in the AVAILABLE DEPARTMENTS list (either as "Designation, Department Name" or just "Department Name").
+    9. Do not invent any dates. If no deadline is explicitly given, set "deadline" to "".
+    10. Maintain the original Malayalam text for issue_description and location fields.
+    11. Summarize each issue in ONE line (max 20 words) for the "issue" field.
+    12. Assign priority: High/Medium/Low. High if it involves MLA/MP/Minister requests, otherwise infer urgency from text.
 
-    STRICT RULES:
-    1. Do NOT invent dates. If no deadline is explicitly mentioned in the text for an issue, the "deadline" field MUST be an empty string "".
-    2. Do NOT use today's date or any date like '18-12-25'.
+    CRITICAL NEGATIVE EXAMPLES (DO NOT DO THIS):
+    - If the "നടപടി" section says "വാട്ടർ അതോറിറ്റി" (Water Authority), DO NOT add "LSGD" or "PWD_ROADS" just because it's about a road. ONLY return "KWA".
+    - If it says "എക്സിക്യുട്ടീവ് എൻജിനീയർ, പൊതുമരാമത്ത് (കെട്ടിടം)", search for the department that has designation "എക്സിക്യുട്ടീവ് എൻജിനീയർ" and name "പൊതുമരാമത്ത് (കെട്ടിടം)". 
+    - DO NOT return ["PWD_BUILDINGS", "PWD_ROADS", "PWD_NATIONAL_HIGHWAY"]. Return ONLY the precise match.
     
-    
-    Return a JSON ARRAY of objects:
-    - issue_no: string
-    - departments: ARRAY of strings using exact department names from AVAILABLE DEPARTMENTS only.
-    - issue: ONE-LINE Malayalam summary (max 20 words)
-    - issue_description: FULL detailed Malayalam issue description (multiple sentences),dont assume anything not in the document.
-    - location: Malayalam place name (if mentioned) or "".
-    - priority: High/Medium/Low (based on urgency in text, urgency can be inferred from words and high priority for issues that involve MLA/MP/Minister requests)
-    - deadline (DD-MM-YYYY or "")
-    
-    Output ONLY PURE JSON. Do not include any other text.
+    OUTPUT FORMAT: Return ONLY a JSON array of objects. Each object must have:
+
+    {{
+    "issue_no": string,
+    "departments": array of strings (EXACT items from AVAILABLE DEPARTMENTS list),
+    "issue": one-line Malayalam summary (max 20 words),
+    "issue_description": full Malayalam issue description exactly as in document,
+    "location": Malayalam place name if mentioned, else "",
+    "priority": High/Medium/Low,
+    "deadline": DD-MM-YYYY or ""
+    }}
+
+    Do NOT include any text outside the JSON array. Do NOT add explanations or code blocks.
     """
 
     try:

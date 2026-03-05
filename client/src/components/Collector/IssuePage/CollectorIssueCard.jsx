@@ -125,7 +125,7 @@ function IssueCard({ issue }) {
           <div className="collector-metric">
             <div className="collector-metric-label">PRIORITY</div>
             <div className={`collector-metric-value collector-priority-${issue.priority?.toLowerCase()}`}>
-              {issue.priority === "High" ? "! High" : issue.priority}
+              {issue.priority === "High" ? "High" : issue.priority}
             </div>
           </div>
 

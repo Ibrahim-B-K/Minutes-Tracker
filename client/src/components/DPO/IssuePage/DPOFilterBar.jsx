@@ -137,10 +137,10 @@ function DPOFilterBar({
           >
             Filters {hasAdvancedFilters ? "•" : ""}
           </button>
-
-          <button className="dpo-add-issue-btn" onClick={onAddIssue}>
+{/*commented out- keerthi  */}
+          {/* <button className="dpo-add-issue-btn" onClick={onAddIssue}>
             + Add Issue
-          </button>
+          </button> */}
 
           {activeTab === "Received" && (
             <button className="dpo-generate-btn" onClick={handleGenerate}>

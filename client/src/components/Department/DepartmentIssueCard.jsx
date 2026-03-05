@@ -70,7 +70,7 @@ function DepartmentIssueCard({ issue }) {
           <div className="department-metric">
             <div className="department-metric-label">PRIORITY</div>
             <div className={`department-metric-value department-priority-${issue.priority?.toLowerCase()}`}>
-              {issue.priority === "High" ? "! High" : issue.priority}
+              {issue.priority === "High" ? "High" : issue.priority}
             </div>
           </div>
 

@@ -107,7 +107,7 @@ function IssueCard({ issue, onResolve, onOpenLog }) {
           <div className="dpo-metric">
             <div className="dpo-metric-label">PRIORITY</div>
             <div className={`dpo-metric-value dpo-priority-${issue.priority?.toLowerCase()}`}>
-              {issue.priority === "High" ? "! High" : issue.priority}
+              {issue.priority === "High" ? "High" : issue.priority}
             </div>
           </div>
 
