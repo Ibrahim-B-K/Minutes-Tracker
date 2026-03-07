@@ -47,9 +47,9 @@ def analyze_document_with_gemini(file_path, available_departments=None):
     {dept_list_text}
 
     EXTRACTION RULES:
-    1. Extract ONLY issues that contain the word "നടപടി".
-    2. Look ONLY at the text immediately following "നടപടി" to find the responsible parties.
-    3. For each issue, identify ALL mentioned stakeholders (officers/departments).
+    1. Extract ONLY issues that contain the word .
+    2. Look ONLY at the text immediately following "നടപടി:" to find the responsible parties.
+    3. For each issue with "നടപടി:", identify ALL mentioned stakeholders (officers/departments).
     4. For EACH stakeholder, extract BOTH the "designation" and the "department" name as written in the text.
     5. CRITICAL INSTRUCTION: You MUST ONLY return a department if it is EXPLICITLY stated in the text. 
     6. ZERO GUESSING ALLOWED: Do NOT add related departments. Do NOT infer a department just because of the context.
@@ -62,7 +62,7 @@ def analyze_document_with_gemini(file_path, available_departments=None):
     CRITICAL NEGATIVE EXAMPLES (DO NOT DO THIS):
     - If the "നടപടി" section says "വാട്ടർ അതോറിറ്റി" (Water Authority), ONLY return "Water Authority".
     - If it says "എക്സിക്യുട്ടീവ് എൻജിനീയർ, പൊതുമരാമത്ത് (കെട്ടിടം)", extract Designation: "എക്സിക്യുട്ടീവ് എൻജിനീയർ", Department: "പൊതുമരാമത്ത് (കെട്ടിടം)".
-    
+    - if it doesnt have "നടപടി:", ignore the issue completely, even if it mentions a department elsewhere in the text.
     OUTPUT FORMAT: Return ONLY a JSON array of objects. Each object must have:
 
     {{
