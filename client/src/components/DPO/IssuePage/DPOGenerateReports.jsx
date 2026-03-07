@@ -9,7 +9,7 @@ import { getAuthValue } from "../../../utils/authStorage";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-export default function GenerateReports({ isOpen, onClose }) {
+export default function GenerateReports({ isOpen, onClose, issues }) {
   const [format, setFormat] = useState("pdf"); // 'pdf', 'excel', 'minute'
   const [reports, setReports] = useState([]);
   const [loadingReports, setLoadingReports] = useState(false);
@@ -130,44 +130,53 @@ export default function GenerateReports({ isOpen, onClose }) {
     setLoadingReports(true);
     setReports([]);
 
-    api
-      .get("/issues")
-      .then((res) => {
-        const receivedLike = (res.data || []).filter((issue) => {
-          const status = String(issue.status || "").toLowerCase();
-          return ["received", "submitted", "completed"].includes(status);
-        });
+    const processIssues = (data) => {
+      const receivedLike = (data || []).filter((issue) => {
+        const status = String(issue.status || "").toLowerCase();
+        return ["received", "submitted", "completed"].includes(status);
+      });
 
-        // Store full issue objects initially, or extract needed mapping including assigned_departments and resolution_status
-        const normalized = receivedLike.map((issue) => ({
-          id: issue.id,
-          issue_no: issue.issue_no,
-          department: issue.department || "",
-          assigned_departments: issue.assigned_departments || [],
-          resolution_status: issue.resolution_status || 'unresolved',
-          meeting_date: issue.meeting_date || "", // Added this line
-          issue: issue.issue || "",
-          location: issue.location || "",
-          response: Array.isArray(issue.response)
-            ? issue.response
-              .map((r) => `[${r.department || "Department"}] ${r.text || ""}`.trim())
-              .join("\n")
-            : issue.response || "",
-        }));
+      const normalized = receivedLike.map((issue) => ({
+        id: issue.id,
+        issue_no: issue.issue_no,
+        department: issue.department || "",
+        assigned_departments: issue.assigned_departments || [],
+        resolution_status: issue.resolution_status || 'unresolved',
+        meeting_date: issue.meeting_date || "",
+        issue: issue.issue || "",
+        location: issue.location || "",
+        response: Array.isArray(issue.response)
+          ? issue.response
+            .map((r) => `[${r.department || "Department"}] ${r.text || ""}`.trim())
+            .join("\n")
+          : issue.response || "",
+      }));
 
-        setReports(normalized);
+      setReports(normalized);
 
-        // Default the Minute PDF date and title if not yet set
-        if (normalized.length > 0) {
-          const firstDate = normalized[0].meeting_date;
-          if (firstDate) {
-            setMinuteDate(firstDate.split('T')[0]);
-          }
+      if (normalized.length > 0) {
+        const firstDate = normalized[0].meeting_date;
+        if (firstDate) {
+          setMinuteDate(firstDate.split('T')[0]);
         }
-      })
-      .catch((err) => console.error("Error fetching reports:", err))
-      .finally(() => setLoadingReports(false));
-  }, [isOpen]);
+      }
+      setLoadingReports(false);
+    };
+
+    if (issues && Array.isArray(issues)) {
+      processIssues(issues);
+    } else {
+      api
+        .get("/issues")
+        .then((res) => {
+          processIssues(res.data);
+        })
+        .catch((err) => {
+          console.error("Error fetching reports:", err);
+          setLoadingReports(false);
+        });
+    }
+  }, [isOpen, issues]);
 
   const handleChange = useCallback((index, field, value) => {
     setReports((prev) => {

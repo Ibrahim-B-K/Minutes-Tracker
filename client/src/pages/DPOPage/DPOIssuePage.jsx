@@ -279,6 +279,7 @@ function DPOIssuePage() {
           emailLoading={emailLoading}
           emailStatus={emailStatus}
           onAddIssue={() => setShowAssignModal(true)}
+          displayedIssues={displayedIssues}
         />
 
         {/* ✅ Tabs wrapper (DO NOT TOUCH DPOTabs) */}
