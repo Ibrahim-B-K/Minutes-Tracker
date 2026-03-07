@@ -43,4 +43,4 @@ tzdata==2025.3
 uritemplate==4.2.0
 urllib3==2.6.2
 reportlab
-weasyprint==59.0
+weasyprint>=61.0

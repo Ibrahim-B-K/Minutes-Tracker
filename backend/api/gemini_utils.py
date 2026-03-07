@@ -47,29 +47,32 @@ def analyze_document_with_gemini(file_path, available_departments=None):
     {dept_list_text}
 
     EXTRACTION RULES:
-    1. Extract ONLY issues that contain the word "നടപടി".
-    2. Look ONLY at the text immediately following "നടപടി" to find the responsible parties.
-    3. Identify BOTH the designation AND the department name EXPLICITLY mentioned in the "നടപടി" (Action) text.
-    4. Map the identified designation + department strictly to the provided AVAILABLE DEPARTMENTS list.
+    1. Extract ONLY issues that contain the word .
+    2. Look ONLY at the text immediately following "നടപടി:" to find the responsible parties.
+    3. For each issue with "നടപടി:", identify ALL mentioned stakeholders (officers/departments).
+    4. For EACH stakeholder, extract BOTH the "designation" and the "department" name as written in the text.
     5. CRITICAL INSTRUCTION: You MUST ONLY return a department if it is EXPLICITLY stated in the text. 
-    6. ZERO GUESSING ALLOWED: Do NOT add related departments. Do NOT infer a department just because of the context (e.g., if it mentions water, but doesn't name the water department in the 'നടപടി' section, DO NOT include the water department).
-    7. If only ONE department/officer is named, the "departments" array MUST contain exactly ONE string that matches a name from the AVAILABLE DEPARTMENTS list.
-    8. NEVER invent new department names. ONLY output strings exactly as they appear in the AVAILABLE DEPARTMENTS list (either as "Designation, Department Name" or just "Department Name").
-    9. Do not invent any dates. If no deadline is explicitly given, set "deadline" to "".
-    10. Maintain the original Malayalam text for issue_description and location fields.
-    11. Summarize each issue in ONE line (max 20 words) for the "issue" field.
-    12. Assign priority: High/Medium/Low. High if it involves MLA/MP/Minister requests, otherwise infer urgency from text.
+    6. ZERO GUESSING ALLOWED: Do NOT add related departments. Do NOT infer a department just because of the context.
+    7. Map each extracted pair to the AVAILABLE DEPARTMENTS list.
+    8. Do not invent any dates. If no deadline is explicitly given, set "deadline" to "".
+    9. Maintain the original Malayalam text for issue_description and location fields.
+    10. Summarize each issue in ONE line (max 20 words) for the "issue" field.
+    11. Assign priority: High/Medium/Low.
 
     CRITICAL NEGATIVE EXAMPLES (DO NOT DO THIS):
-    - If the "നടപടി" section says "വാട്ടർ അതോറിറ്റി" (Water Authority), DO NOT add "LSGD" or "PWD_ROADS" just because it's about a road. ONLY return "KWA".
-    - If it says "എക്സിക്യുട്ടീവ് എൻജിനീയർ, പൊതുമരാമത്ത് (കെട്ടിടം)", search for the department that has designation "എക്സിക്യുട്ടീവ് എൻജിനീയർ" and name "പൊതുമരാമത്ത് (കെട്ടിടം)". 
-    - DO NOT return ["PWD_BUILDINGS", "PWD_ROADS", "PWD_NATIONAL_HIGHWAY"]. Return ONLY the precise match.
-    
+    - If the "നടപടി" section says "വാട്ടർ അതോറിറ്റി" (Water Authority), ONLY return "Water Authority".
+    - If it says "എക്സിക്യുട്ടീവ് എൻജിനീയർ, പൊതുമരാമത്ത് (കെട്ടിടം)", extract Designation: "എക്സിക്യുട്ടീവ് എൻജിനീയർ", Department: "പൊതുമരാമത്ത് (കെട്ടിടം)".
+    - if it doesnt have "നടപടി:", ignore the issue completely, even if it mentions a department elsewhere in the text.
     OUTPUT FORMAT: Return ONLY a JSON array of objects. Each object must have:
 
     {{
     "issue_no": string,
-    "departments": array of strings (EXACT items from AVAILABLE DEPARTMENTS list),
+    "departments": [
+        {{
+            "designation": "english version of Malayalam designation extracted from text",
+            "department": "english version of Malayalam department name extracted from text"
+        }}
+    ],
     "issue": one-line Malayalam summary (max 20 words),
     "issue_description": full Malayalam issue description exactly as in document,
     "location": Malayalam place name if mentioned, else "",

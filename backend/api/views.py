@@ -189,9 +189,17 @@ def upload_minutes(request):
         for chunk in file.chunks():
             dest.write(chunk)
 
-    available_departments = list(Department.objects.values_list('dept_name', flat=True))
+    # Build a list of formatted department strings: "Designation, Department Name"
+    available_departments = []
+    for dept in Department.objects.all():
+        desig = (dept.designation or '').strip()
+        name = (dept.dept_name or '').strip()
+        if desig:
+            available_departments.append(f"{desig}, {name}")
+        else:
+            available_departments.append(name)
 
-    # Analyze with Gemini using current department master list
+    # Analyze with Gemini using current department master list (including designations)
     raw_data = analyze_document_with_gemini(local_file_path, available_departments)
 
     # Upload to Supabase Storage using shared utility
@@ -207,9 +215,13 @@ def upload_minutes(request):
     dept_objects = list(Department.objects.all())
     dept_name_map = _build_department_name_maps(dept_objects)
 
+    print(f"🔍 Gemini returned {len(raw_data)} issues.")
+    
     clean_data = []
-    for item in raw_data:
+    for i, item in enumerate(raw_data):
+        print(f"--- Processing Issue {i+1} ---")
         item = _normalize_issue_departments(item, dept_name_map)
+        print(f"  Matched Depts: {item.get('departments')}")
         clean_data.append(item)
 
     # ===== CREATE MINUTES RECORD NOW (not waiting for allocate_all) ===== #
@@ -304,71 +316,124 @@ def _parse_deadline(item):
 
 
 def _extract_departments(item):
+    val = item.get('departments')
+    # AI now returns a list of objects: [{"designation": "...", "department": "..."}, ...]
+    if isinstance(val, list):
+        return val
+    
+    # Fallback for old/manual data
+    val = item.get('department', 'GENERAL')
     return [
         d.strip()[:100]
-        for d in str(item.get('department', 'GENERAL')).split(',')
+        for d in str(val).split(',')
         if d.strip()
     ]
 
 
 def _dept_key(value):
-    return re.sub(r'[^A-Z0-9]+', '', (value or '').strip().upper())
+    # Keep alphabetical and numeric characters from any language (Malayalam, etc)
+    return re.sub(r'[^\w]+', '', (value or '').strip().upper())
 
 
 def _build_department_name_maps(departments):
     exact = {}
     normalized = {}
+    designation_map = {}
+    combined = {}
 
     for dept in departments:
         name = (dept.dept_name or '').strip()
+        desig = (dept.designation or '').strip()
         if not name:
             continue
 
         exact[name.upper()] = dept
-        normalized_key = _dept_key(name)
-        if normalized_key and normalized_key not in normalized:
-            normalized[normalized_key] = dept
+        
+        n_name = _dept_key(name)
+        if n_name and n_name not in normalized:
+            normalized[n_name] = dept
+            
+        if desig:
+            n_desig = _dept_key(desig)
+            if n_desig and n_desig not in designation_map:
+                designation_map[n_desig] = dept
+            
+            n_comb = _dept_key(f"{desig}{name}")
+            if n_comb and n_comb not in combined:
+                combined[n_comb] = dept
 
     return {
         'exact': exact,
         'normalized': normalized,
+        'designation': designation_map,
+        'combined': combined,
         'normalized_keys': list(normalized.keys()),
     }
 
 
-def _match_department(raw_name, dept_maps, cutoff=0.72):
-    value = (raw_name or '').strip()
-    if not value:
+def _match_department(raw_input, dept_maps, cutoff=0.72):
+    if not raw_input:
         return None
 
+    # Handle structured object from Gemini: {"designation": "...", "department": "..."}
+    if isinstance(raw_input, dict):
+        d_val = (raw_input.get('designation') or '').strip()
+        n_val = (raw_input.get('department') or '').strip()
+        query = f"{d_val}{n_val}"
+        raw_name = f"{d_val}, {n_val}" if d_val and n_val else (d_val or n_val)
+    else:
+        query = raw_input
+        raw_name = raw_input
+
+    print(f"    Matching Dept: '{raw_name}'")
+    
     exact = dept_maps['exact']
     normalized = dept_maps['normalized']
+    combined = dept_maps.get('combined', {})
+    designation_map = dept_maps.get('designation', {})
 
-    exact_match = exact.get(value.upper())
-    if exact_match:
-        return exact_match
+    # 1. Try exact name match if query is a string
+    if not isinstance(raw_input, dict):
+        exact_match = exact.get(query.strip().upper())
+        if exact_match:
+            return exact_match
 
-    key = _dept_key(value)
-    if key in normalized:
-        return normalized[key]
-
+    # 2. Try normalized combined match (designation + name)
+    key = _dept_key(query)
     if not key:
         return None
 
-    # Handle alias-like values by containment (e.g., AGRICULTURE -> PRINCIPAL AGRICULTURE OFFICE)
+    if key in combined:
+        return combined[key]
+
+    # 3. Try normalized name match
+    if key in normalized:
+        return normalized[key]
+        
+    # 4. Try normalized designation match (only if raw_input was a string/designation only)
+    if key in designation_map:
+        return designation_map[key]
+
+    # 5. Handle alias-like values by containment
     containment_candidates = []
     for normalized_key, dept in normalized.items():
         if key in normalized_key or normalized_key in key:
             containment_candidates.append((abs(len(normalized_key) - len(key)), dept))
+            
+    for comb_key, dept in combined.items():
+        if key in comb_key:
+             containment_candidates.append((abs(len(comb_key) - len(key)), dept))
 
     if containment_candidates:
         containment_candidates.sort(key=lambda x: x[0])
         return containment_candidates[0][1]
 
+    # 6. Fuzzy match fallback
     close = difflib.get_close_matches(key, dept_maps['normalized_keys'], n=1, cutoff=0.55)
     if close:
         return normalized.get(close[0])
 
+    print(f"    ⚠️ Match Failed for: '{raw_name}'")
     return None
 
 
@@ -381,19 +446,25 @@ def _normalize_issue_departments(item, dept_maps):
     unresolved = []
     seen = set()
 
-    for raw_name in raw_depts:
-        raw_clean = (raw_name or '').strip()
-        if not raw_clean:
+    for raw_input in raw_depts:
+        if not raw_input:
             continue
 
-        matched = _match_department(raw_clean, dept_maps)
+        matched = _match_department(raw_input, dept_maps)
         if matched:
             canonical = matched.dept_name
             if canonical not in seen:
                 resolved.append(canonical)
                 seen.add(canonical)
         else:
-            unresolved.append(raw_clean)
+            # For unresolved, if it's a dict, convert to a readable string for display
+            if isinstance(raw_input, dict):
+                d_val = (raw_input.get('designation') or '').strip()
+                n_val = (raw_input.get('department') or '').strip()
+                label = f"{d_val}, {n_val}" if d_val and n_val else (d_val or n_val)
+                unresolved.append(label or "Unknown")
+            else:
+                unresolved.append(str(raw_input))
 
     if resolved:
         item['departments'] = resolved
@@ -410,11 +481,17 @@ def _collect_unknown_departments(issues_data):
     unknown = set()
 
     for item in issues_data:
-        for dept_name in _extract_departments(item):
-            if not _match_department(dept_name, dept_maps):
-                unknown.add(dept_name)
+        for dept_input in _extract_departments(item):
+            if not _match_department(dept_input, dept_maps):
+                if isinstance(dept_input, dict):
+                    d_val = (dept_input.get('designation') or '').strip()
+                    n_val = (dept_input.get('department') or '').strip()
+                    label = f"{d_val}, {n_val}" if d_val and n_val else (d_val or n_val)
+                    unknown.add(label or "Unknown Stakeholder")
+                else:
+                    unknown.add(str(dept_input))
 
-    return sorted(unknown)
+    return sorted(list(unknown))
 
 
 def _create_issues_for_minutes(minute_obj, issues_data):
@@ -707,20 +784,8 @@ def get_notifications(request):
     ).order_by('-created_at')[:20]
 
     return Response(NotificationSerializer(notifs, many=True).data)
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def me(request):
-    return Response({
-        "authenticated": True,
-        "username": request.user.username,
-        "role": request.user.role,
-    })
-# core/views.py
-from django.http import JsonResponse
 
-def test_view(request):
-    print("🔥 TEST VIEW HIT:", request.method)
-    return JsonResponse({"ok": True})
+# ================= REPORTS ================= #
 
 
 @api_view(['POST'])
