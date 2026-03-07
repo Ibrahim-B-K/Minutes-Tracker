@@ -12,6 +12,7 @@ function DPOFilterBar({
   emailLoading,
   emailStatus,
   onAddIssue,
+  displayedIssues,
 }) {
   const [showReportModal, setShowReportModal] = useState(false);
   const [fromDate, setFromDate] = useState("");
@@ -236,6 +237,7 @@ function DPOFilterBar({
       <DPOGenerateReports
         isOpen={showReportModal}
         onClose={() => setShowReportModal(false)}
+        issues={displayedIssues}
       />
     </div>
   );
