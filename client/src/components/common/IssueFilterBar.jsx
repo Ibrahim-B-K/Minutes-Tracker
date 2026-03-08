@@ -1,10 +1,34 @@
 import React, { useEffect, useState, useRef } from "react";
-import "./CollectorFilterBar.css";
-import CollectorGenerateReports from "./CollectorGenerateReports";
-import CustomDateRangePicker from "../../common/CustomDateRangePicker";
-import { format, parse } from "date-fns";
+import "./IssueFilterBar.css";
+import DPOGenerateReports from "../DPO/IssuePage/DPOGenerateReports";
+import CustomDateRangePicker from "./CustomDateRangePicker";
+import { format } from "date-fns";
 
-function CollectorFilterBar({ activeTab, onFilterChange, issue_date }) {
+/**
+ * Unified Filter Bar for all roles (DPO, Collector, Department)
+ * 
+ * Props:
+ * - activeTab: current visible tab
+ * - onFilterChange: callback when any filter changes
+ * - issue_date: initial date range
+ * - handleSendOverdueEmails: action for overdue emails (DPO only)
+ * - emailLoading: loading state for email action
+ * - emailStatus: status message for email action
+ * - onAddIssue: action to add new issue (DPO only)
+ * - displayedIssues: list of issues currently visible (for reports)
+ * - role: 'dpo', 'collector', or 'department'
+ */
+function IssueFilterBar({
+  activeTab,
+  onFilterChange,
+  issue_date,
+  handleSendOverdueEmails,
+  emailLoading,
+  emailStatus,
+  onAddIssue,
+  displayedIssues,
+  role = "dpo",
+}) {
   const [showReportModal, setShowReportModal] = useState(false);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
@@ -15,6 +39,8 @@ function CollectorFilterBar({ activeTab, onFilterChange, issue_date }) {
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const datePickerRef = useRef(null);
+
+  const isDPO = role === "dpo";
 
   const handleGenerate = () => {
     setShowReportModal(true);
@@ -66,6 +92,21 @@ function CollectorFilterBar({ activeTab, onFilterChange, issue_date }) {
     emitFilters(next);
   };
 
+  const clearAdvancedFilters = () => {
+    const next = {
+      fromDate: "",
+      toDate: "",
+      filterBy: "all",
+      sortBy: "newest",
+      searchQuery,
+    };
+    setFromDate(next.fromDate);
+    setToDate(next.toDate);
+    setFilterBy(next.filterBy);
+    setSortBy(next.sortBy);
+    emitFilters(next);
+  };
+
   const handleDateRangeChange = (range) => {
     const formattedFrom = format(range.startDate, "dd-MM-yyyy");
     const formattedTo = format(range.endDate, "dd-MM-yyyy");
@@ -94,26 +135,11 @@ function CollectorFilterBar({ activeTab, onFilterChange, issue_date }) {
 
   const hasAdvancedFilters = fromDate || toDate || filterBy !== "all" || sortBy !== "newest";
 
-  const clearAdvancedFilters = () => {
-    const next = {
-      fromDate: "",
-      toDate: "",
-      filterBy: "all",
-      sortBy: "newest",
-      searchQuery,
-    };
-    setFromDate(next.fromDate);
-    setToDate(next.toDate);
-    setFilterBy(next.filterBy);
-    setSortBy(next.sortBy);
-    emitFilters(next);
-  };
-
   return (
-    <div className="collector-filter-toolbar">
-      <div className="collector-filter-toolbar-main">
-        <div className="collector-search-wrapper">
-          <span className="collector-search-icon">🔍</span>
+    <div className="common-filter-toolbar">
+      <div className="common-filter-toolbar-main">
+        <div className="common-search-wrapper">
+          <span className="common-search-icon">🔍</span>
           <input
             type="text"
             placeholder="Search issues, issue no, minutes or department..."
@@ -122,29 +148,42 @@ function CollectorFilterBar({ activeTab, onFilterChange, issue_date }) {
           />
         </div>
 
-        <div className="collector-toolbar-actions">
+        <div className="common-toolbar-actions">
           <button
-            className={`collector-toolbar-btn ${showAdvancedFilters ? "active" : ""}`}
+            className={`common-toolbar-btn ${showAdvancedFilters ? "active" : ""}`}
             onClick={() => setShowAdvancedFilters((prev) => !prev)}
           >
             Filters {hasAdvancedFilters ? "•" : ""}
           </button>
 
-          {activeTab === "Received" && (
-            <button className="collector-generate-btn" onClick={handleGenerate}>
+          {isDPO && activeTab === "Received" && (
+            <button className="common-generate-btn" onClick={handleGenerate}>
               Generate Report
             </button>
+          )}
+
+          {isDPO && activeTab === "Overdue" && (
+            <div className="common-overdue-action-wrap">
+              <button
+                className={`common-send-email-btn ${emailLoading ? "common-loading" : ""}`}
+                onClick={handleSendOverdueEmails}
+                disabled={emailLoading}
+              >
+                {emailLoading ? "Sending..." : "Send Overdue Emails"}
+              </button>
+              {emailStatus && <div className="common-email-status-popup">{emailStatus}</div>}
+            </div>
           )}
         </div>
       </div>
 
       {showAdvancedFilters && (
-        <div className="collector-advanced-filters-panel">
-          <div className="collector-advanced-grid">
-            <div className="collector-filter-field" ref={datePickerRef} style={{ position: 'relative' }}>
+        <div className="common-advanced-filters-panel">
+          <div className="common-advanced-grid">
+            <div className="common-filter-field" ref={datePickerRef} style={{ position: 'relative' }}>
               <label>Date Range</label>
               <div 
-                className="collector-date-input-wrapper" 
+                className="common-date-input-wrapper" 
                 onClick={() => setShowDatePicker(!showDatePicker)}
                 style={{ cursor: 'pointer' }}
               >
@@ -155,7 +194,7 @@ function CollectorFilterBar({ activeTab, onFilterChange, issue_date }) {
                   readOnly
                   style={{ cursor: 'pointer' }}
                 />
-                <span className="collector-calendar-icon">📅</span>
+                <span className="common-calendar-icon">📅</span>
               </div>
               {showDatePicker && (
                 <CustomDateRangePicker
@@ -167,10 +206,10 @@ function CollectorFilterBar({ activeTab, onFilterChange, issue_date }) {
               )}
             </div>
 
-            <div className="collector-filter-field">
+            <div className="common-filter-field">
               <label>Filter By</label>
               <select
-                className="collector-filter-select"
+                className="common-filter-select"
                 value={filterBy}
                 onChange={(e) => handleFilterChange("filterBy", e.target.value)}
               >
@@ -184,10 +223,10 @@ function CollectorFilterBar({ activeTab, onFilterChange, issue_date }) {
               </select>
             </div>
 
-            <div className="collector-filter-field">
+            <div className="common-filter-field">
               <label>Sort</label>
               <select
-                className="collector-filter-select"
+                className="common-filter-select"
                 value={sortBy}
                 onChange={(e) => handleFilterChange("sortBy", e.target.value)}
               >
@@ -199,20 +238,23 @@ function CollectorFilterBar({ activeTab, onFilterChange, issue_date }) {
             </div>
           </div>
 
-          <div className="collector-advanced-actions">
-            <button className="collector-clear-filters-btn" onClick={clearAdvancedFilters}>
+          <div className="common-advanced-actions">
+            <button className="common-clear-filters-btn" onClick={clearAdvancedFilters}>
               Clear Filters
             </button>
           </div>
         </div>
       )}
 
-      <CollectorGenerateReports
-        isOpen={showReportModal}
-        onClose={() => setShowReportModal(false)}
-      />
+      {isDPO && (
+        <DPOGenerateReports
+          isOpen={showReportModal}
+          onClose={() => setShowReportModal(false)}
+          issues={displayedIssues}
+        />
+      )}
     </div>
   );
 }
 
-export default CollectorFilterBar;
+export default IssueFilterBar;

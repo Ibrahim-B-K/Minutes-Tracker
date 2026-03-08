@@ -8,7 +8,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import DescriptionIcon from "@mui/icons-material/Description";
 import DraftsIcon from '@mui/icons-material/Drafts';
-
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import api from "../../api/axios";
 import { clearAuthValues, getAuthValue } from "../../utils/authStorage";
@@ -143,7 +143,7 @@ function Header() {
     <>
       <header className="dpo-header">
         <div className="dpo-logo">
-          <div className="dpo-logo-icon"></div>
+          <img src="/logo.png" className="dpo-logo-img" alt="Logo" />
           <span>Minutes Tracker System</span>
         </div>
 
@@ -191,9 +191,12 @@ function Header() {
               <span className="dpo-nav-text">Notifications</span>
             </span>
           </NavLink>
-          <div className="dpo-icon dpo-profile" onClick={() => setOpen((prev) => !prev)}>
-            D
-          </div>
+          <div className="dpo-nav-link" onClick={() => setOpen((prev) => !prev)}>
+          <span className="dpo-nav-item">
+            <AccountCircleIcon className="dpo-icon dpo-profile" />
+            <span className="dpo-nav-text">Profile</span>
+          </span>
+        </div>
 
           {open && (
             <div className="dpo-profile-dropdown">

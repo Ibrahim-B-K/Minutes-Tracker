@@ -4,19 +4,47 @@ import React, { useEffect, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import DepartmentHeader from "../../components/Department/DepartmentHeader";
 import DepartmentTabs from "../../components/Department/DepartmentTabs";
-import DepartmentIssueCard from "../../components/Department/DepartmentIssueCard";
 import EmptyStateCard from "../../components/common/EmptyStateCard";
 import LoadingState from "../../components/common/LoadingState";
 import { LIVE_EVENT_ISSUES_UPDATED, addLiveEventListener } from "../../utils/liveUpdates";
+import {
+  getIssueDateKeys,
+  getIssueDateKey,
+  toDDMMYYYY,
+  parseDDMMYYYYToKey,
+  parseDeadline,
+  priorityRank
+} from "../../utils/issueDateUtils";
+import IssueFilterBar from "../../components/common/IssueFilterBar";
+import IssueCard from "../../components/common/IssueCard";
+import DepartmentResponseModal from "../../components/Department/DepartmentResponseModal";
 import "./DepartmentResponsePage.css";
 import api from "../../api/axios";
 
 function DepartmentResponsePage() {
   const { dept } = useParams();
   const [activeTab, setActiveTab] = useState("Pending");
-  const [allIssues, setAllIssues] = useState([]); // Renamed for clarity
+  const [filters, setFilters] = useState({});
+  const [defaultDateRange, setDefaultDateRange] = useState(null);
+  const [didInitDateRange, setDidInitDateRange] = useState(false);
+  const [allIssues, setAllIssues] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  // Response Modal State
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedIssueForModal, setSelectedIssueForModal] = useState(null);
+
+  const handleOpenResponseModal = (issue) => {
+    setSelectedIssueForModal(issue);
+    setIsModalOpen(true);
+  };
+
+  const handleSubmitSuccess = () => {
+    setIsModalOpen(false);
+    fetchDeptIssues(); // Refresh list to reflect response
+    alert("Response submitted successfully!");
+  };
 
   const fetchDeptIssues = async () => {
     if (!dept) return;
@@ -39,6 +67,26 @@ function DepartmentResponsePage() {
   }, [dept]);
 
   useEffect(() => {
+    if (didInitDateRange || allIssues.length === 0) return;
+
+    const dated = allIssues
+      .map((issue) => {
+        const k = getIssueDateKey(issue);
+        if (!k) return null;
+        const s = String(k);
+        return new Date(Number(s.slice(0, 4)), Number(s.slice(4, 6)) - 1, Number(s.slice(6, 8)));
+      })
+      .filter(Boolean)
+      .sort((a, b) => b.getTime() - a.getTime());
+    if (dated.length === 0) return;
+
+    const latest = toDDMMYYYY(dated[0]);
+    setDefaultDateRange({ fromDate: latest, toDate: latest });
+    setFilters((prev) => ({ ...prev, fromDate: latest, toDate: latest }));
+    setDidInitDateRange(true);
+  }, [allIssues, didInitDateRange]);
+
+  useEffect(() => {
     const onIssuesUpdated = (evt) => {
       const eventDept = String(evt?.detail?.department || "").toUpperCase();
       if (!eventDept || eventDept.includes(String(dept || "").toUpperCase())) {
@@ -51,24 +99,89 @@ function DepartmentResponsePage() {
 
   // 2. OPTIMIZATION: Filter instantly in memory using useMemo
   const displayedIssues = useMemo(() => {
-    const tabLower = activeTab.toLowerCase().trim();
+    const filtered = allIssues.filter((issue) => {
+      const status = String(issue?.status || "pending").toLowerCase().trim();
+      const tabLower = activeTab.toLowerCase().trim();
 
-    return allIssues.filter((i) => {
-      const status = String(i?.status || "pending").toLowerCase().trim();
-
-      // Handle the 'Submitted' vs 'Received' logic if needed
+      // A. Tab Filter
       if (tabLower === 'submitted') {
-        return status === 'submitted' || status === 'completed' || status === 'received';
+        if (!(status === 'submitted' || status === 'completed' || status === 'received')) return false;
+      } else {
+        if (status !== tabLower) return false;
       }
-      return status === tabLower;
+
+      // B. Search Filter
+      if (filters.searchQuery) {
+        const q = filters.searchQuery.toLowerCase();
+        if (
+          !issue.issue?.toLowerCase().includes(q) &&
+          !issue.issue_no?.toString().includes(q) &&
+          !issue.minutes_title?.toLowerCase().includes(q)
+        )
+          return false;
+      }
+
+      // C. Priority Filter
+      if (filters.filterBy && filters.filterBy !== "all") {
+        const f = filters.filterBy.toLowerCase();
+        if (["high", "medium", "low"].includes(f)) {
+          if (issue.priority?.toLowerCase() !== f) return false;
+        }
+      }
+
+      // D. Date Range Filter
+      const issueDateKeys = getIssueDateKeys(issue);
+      const fromDateKeyRaw = parseDDMMYYYYToKey(filters.fromDate);
+      const toDateKeyRaw = parseDDMMYYYYToKey(filters.toDate);
+      const lowerBound =
+        fromDateKeyRaw && toDateKeyRaw ? Math.min(fromDateKeyRaw, toDateKeyRaw) : fromDateKeyRaw;
+      const upperBound =
+        fromDateKeyRaw && toDateKeyRaw ? Math.max(fromDateKeyRaw, toDateKeyRaw) : toDateKeyRaw;
+
+      if ((lowerBound || upperBound) && issueDateKeys.length === 0) return false;
+      if (lowerBound || upperBound) {
+        const inRange = issueDateKeys.some((key) => {
+          if (lowerBound && key < lowerBound) return false;
+          if (upperBound && key > upperBound) return false;
+          return true;
+        });
+        if (!inRange) return false;
+      }
+
+      return true;
     });
-  }, [allIssues, activeTab]); // Re-runs instantly when tab changes
+
+    // Sorting
+    const sortBy = String(filters.sortBy || "newest").toLowerCase();
+    const sorted = [...filtered];
+
+    if (sortBy === "priority") {
+      sorted.sort((a, b) => priorityRank(a.priority) - priorityRank(b.priority));
+      return sorted;
+    }
+
+    if (sortBy === "deadline") {
+      sorted.sort((a, b) => parseDeadline(a.deadline) - parseDeadline(b.deadline));
+      return sorted;
+    }
+
+    // Default newest (ID descending)
+    sorted.sort((a, b) => Number(b.id || 0) - Number(a.id || 0));
+    return sorted;
+  }, [allIssues, activeTab, filters]);
 
   return (
     <div className="department-container">
       <DepartmentHeader departmentName={dept} />
       <div className="department-content">
         <h1>{dept?.toUpperCase()} Department Portal</h1>
+
+        <IssueFilterBar
+          activeTab={activeTab}
+          onFilterChange={(nf) => setFilters((p) => ({ ...p, ...nf }))}
+          issue_date={defaultDateRange}
+          role="department"
+        />
 
         <DepartmentTabs activeTab={activeTab} setActiveTab={setActiveTab} />
 
@@ -84,10 +197,11 @@ function DepartmentResponsePage() {
             <>
               {displayedIssues.length > 0 ? (
                 displayedIssues.map((issue) => (
-                  <DepartmentIssueCard
-                    // We fixed the serializer to return 'id', so use that
+                  <IssueCard
                     key={issue.id}
                     issue={issue}
+                    role="department"
+                    onSubmitResponse={() => handleOpenResponseModal(issue)}
                   />
                 ))
               ) : (
@@ -100,6 +214,13 @@ function DepartmentResponsePage() {
           )}
         </div>
       </div>
+
+      <DepartmentResponseModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        issue={selectedIssueForModal}
+        onSubmit={handleSubmitSuccess}
+      />
     </div>
   );
 }

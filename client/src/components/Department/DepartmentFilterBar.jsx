@@ -118,7 +118,8 @@ function DepartmentFilterBar({ activeTab, onFilterChange, issue_date }) {
             updateFilters({ sortBy: e.target.value });
           }}
           className="department-filter-select"
-        >
+        > 
+          
           <option value="newest">Newest</option>
           <option value="priority">Priority</option>
           <option value="deadline">Deadline</option>

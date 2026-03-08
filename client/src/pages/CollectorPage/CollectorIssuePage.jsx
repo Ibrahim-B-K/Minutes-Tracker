@@ -1,12 +1,21 @@
 import React, { useEffect, useState, useMemo } from "react";
 import CollectorHeader from "../../components/Collector/CollectorHeader";
 import CollectorTabs from "../../components/Collector/IssuePage/CollectorTabs";
-import CollectorFilterBar from "../../components/Collector/IssuePage/CollectorFilterBar";
-import CollectorIssueCard from "../../components/Collector/IssuePage/CollectorIssueCard";
+import IssueCard from "../../components/common/IssueCard";
+import DPOIssueLifecycleDrawer from "../../components/DPO/IssuePage/DPOIssueLifecycleDrawer";
 import EmptyStateCard from "../../components/common/EmptyStateCard";
 import LoadingState from "../../components/common/LoadingState";
+import { 
+  getIssueDateKeys, 
+  getIssueDateKey, 
+  toDDMMYYYY, 
+  parseDDMMYYYYToKey, 
+  parseDeadline, 
+  priorityRank 
+} from "../../utils/issueDateUtils";
+import IssueFilterBar from "../../components/common/IssueFilterBar";
 import "./CollectorIssuePage.css";
-import api from "../../api/axios"; // Uses your configured axios with Token
+import api from "../../api/axios";
 
 function CollectorIssuePage() {
   const [activeTab, setActiveTab] = useState("Pending");
@@ -16,45 +25,15 @@ function CollectorIssuePage() {
   const [allIssues, setAllIssues] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const dateKeyFromRaw = (raw) => {
-    if (!raw || typeof raw !== "string") return null;
+  // Lifecycle Drawer State
+  const [selectedIssueForDrawer, setSelectedIssueForDrawer] = useState(null);
+  const [isLifecycleOpen, setIsLifecycleOpen] = useState(false);
 
-    const ymdMatch = raw.match(/^(\d{4})-(\d{2})-(\d{2})/);
-    if (ymdMatch) {
-      return Number(`${ymdMatch[1]}${ymdMatch[2]}${ymdMatch[3]}`);
-    }
-
-    const dt = new Date(raw);
-    if (Number.isNaN(dt.getTime())) return null;
-    const y = dt.getFullYear();
-    const m = String(dt.getMonth() + 1).padStart(2, "0");
-    const d = String(dt.getDate()).padStart(2, "0");
-    return Number(`${y}${m}${d}`);
+  const handleOpenLifecycle = (issue) => {
+    setSelectedIssueForDrawer(issue);
+    setIsLifecycleOpen(true);
   };
 
-  const getIssueDateKeys = (issue) => {
-    const keys = [dateKeyFromRaw(issue?.meeting_date || "")].filter(Boolean);
-    return [...new Set(keys)];
-  };
-
-  const getIssueDateKey = (issue) => {
-    const keys = getIssueDateKeys(issue);
-    return keys.length > 0 ? Math.max(...keys) : null;
-  };
-
-  const toDDMMYYYY = (dt) => {
-    const day = String(dt.getDate()).padStart(2, "0");
-    const month = String(dt.getMonth() + 1).padStart(2, "0");
-    const year = dt.getFullYear();
-    return `${day}-${month}-${year}`;
-  };
-
-  const parseDDMMYYYYToKey = (value) => {
-    if (!value || typeof value !== "string") return null;
-    const [dd, mm, yyyy] = value.split("-");
-    if (!dd || !mm || !yyyy) return null;
-    return Number(`${yyyy}${mm.padStart(2, "0")}${dd.padStart(2, "0")}`);
-  };
 
   // 1. Fetch Logic: Get ALL issues once (or when Date filter changes)
   useEffect(() => {
@@ -154,20 +133,6 @@ function CollectorIssuePage() {
       return true;
     });
 
-    const parseDeadline = (value) => {
-      if (!value || typeof value !== "string") return Number.MAX_SAFE_INTEGER;
-      const [dd, mm, yyyy] = value.split("-");
-      if (!dd || !mm || !yyyy) return Number.MAX_SAFE_INTEGER;
-      return Number(`${yyyy}${mm}${dd}`);
-    };
-
-    const priorityRank = (value) => {
-      const p = String(value || "").toLowerCase();
-      if (p === "high") return 0;
-      if (p === "medium") return 1;
-      if (p === "low") return 2;
-      return 3;
-    };
 
     const sortBy = String(filters.sortBy || "newest").toLowerCase();
     const sorted = [...filtered];
@@ -200,10 +165,11 @@ function CollectorIssuePage() {
           <h1>District Monitor</h1>
         </div>
 
-        <CollectorFilterBar
+        <IssueFilterBar
           activeTab={activeTab}
           onFilterChange={(newFilters) => setFilters(prev => ({ ...prev, ...newFilters }))}
           issue_date={defaultDateRange}
+          role="collector"
         />
 
         <CollectorTabs
@@ -221,10 +187,21 @@ function CollectorIssuePage() {
             />
           ) : (
             displayedIssues.map((issue) => (
-              <CollectorIssueCard key={issue.id} issue={issue} />
+              <IssueCard 
+                key={issue.id} 
+                issue={issue} 
+                role="collector"
+                onOpenLog={handleOpenLifecycle}
+              />
             ))
           )}
         </div>
+
+        <DPOIssueLifecycleDrawer
+          isOpen={isLifecycleOpen}
+          onClose={() => setIsLifecycleOpen(false)}
+          selectedIssue={selectedIssueForDrawer}
+        />
       </div>
     </div>
   );

@@ -26,15 +26,18 @@
   color: var(--color-text, #1f2937);
   letter-spacing: -0.02em;
 }
-
-.dpo-logo-icon {
-  width: 30px;
-  height: 30px;
-  background: linear-gradient(135deg, var(--color-primary, #2563eb), var(--color-primary-dark, #1d4ed8));
-  border-radius: 8px;
-  margin-right: 10px;
-  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+.dpo-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
+
+.dpo-logo-img {
+  width: 60px;
+  height: 45px;
+  object-fit: contain;
+}
+
 
 /* ── Nav wrapper ── */
 .dpo-header-icons {
@@ -53,6 +56,7 @@
   padding: 6px 10px;
   border-radius: var(--radius-md, 10px);
   transition: background var(--transition-fast, 0.15s ease);
+  cursor: pointer;
 }
 
 .dpo-nav-link:hover {
@@ -105,6 +109,7 @@
 .dpo-icon.dpo-home,
 .dpo-icon.dpo-bell,
 .dpo-icon.dpo-minutes,
+.dpo-icon.dpo-profile,
 .dpo-icon.dpo-drafts {
   color: var(--color-primary, #2563eb);
   font-size: 24px;
@@ -155,26 +160,9 @@
 
 /* ── Profile avatar ── */
 .dpo-icon.dpo-profile {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--color-primary, #2563eb), var(--color-primary-dark, #1d4ed8));
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-  font-size: 14px;
-  line-height: 32px;
-  text-align: center;
-  margin-bottom: 4px;
-  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
-  transition: transform var(--transition-fast, 0.15s ease),
-    box-shadow var(--transition-fast, 0.15s ease);
+  font-size: 26px;
 }
 
-.dpo-icon.dpo-profile:hover {
-  transform: scale(1.08);
-  box-shadow: 0 3px 12px rgba(37, 99, 235, 0.35);
-}
 
 /* ── Profile dropdown ── */
 .dpo-profile-dropdown {
