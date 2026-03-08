@@ -203,13 +203,14 @@ export default function GenerateReports({ isOpen, onClose, issues }) {
         html += `
           <p style="font-size: 15px; margin-bottom: 4px;"><strong>${index + 1}.</strong> ${report.issue}</p>
         `;
-        if (report.resolution_status !== 'resolved' && report.assigned_departments && report.assigned_departments.length > 0) {
-          const depts = report.assigned_departments.map(d => `${d.dept_name} - ${d.designation}`).join(', ');
-          html += `<p class="ql-align-right" style="font-size: 15px; font-weight: bold; margin-bottom: 4px;">(നടപടി: ${depts})</p>`;
-        }
         const responseText = report.response ? report.response.replace(/\[.*?\]\s/g, '') : "No response provided.";
         html += `<p class="ql-indent-1" style="font-size: 15px; margin-bottom: 20px;">${responseText}</p>`;
-      });
+      
+        if (report.resolution_status !== 'resolved' && report.assigned_departments && report.assigned_departments.length > 0) {
+          const depts = report.assigned_departments.map(d => `${d.designation} - ${d.dept_name}`).join(', ');
+          html += `<p class="ql-align-right" style="font-size: 15px; font-weight: bold; margin-bottom: 4px;">(നടപടി: ${depts})</p>`;
+        }
+        });
 
       setMinuteHtml(html);
     }

@@ -222,6 +222,11 @@
     cursor: not-allowed;
 }
 
+.common-overdue-action-wrap {
+    position: relative;
+    display: inline-block;
+}
+
 .common-email-status-popup {
     position: absolute;
     right: 0;
