@@ -29,6 +29,12 @@
   letter-spacing: 0.03em;
 }
 
+.dpo-date-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
 .dpo-date-input-wrapper input[type="text"] {
   width: 100%;
   padding: 10px 40px 10px 12px;
