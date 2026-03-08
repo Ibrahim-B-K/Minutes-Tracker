@@ -4,6 +4,7 @@ import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import DescriptionIcon from "@mui/icons-material/Description";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import LogoutIcon from "@mui/icons-material/Logout";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import api from "../../api/axios";
 import { clearAuthValues, getAuthValue } from "../../utils/authStorage";
@@ -84,7 +85,7 @@ function Header() {
   return (
     <header className="department-header">
       <div className="department-logo">
-        <div className="department-logo-icon"></div>
+        <img src="/logo.png" className="department-logo-img" alt="Logo" />
         <span>Minutes Tracker System</span>
       </div>
 
@@ -129,11 +130,11 @@ function Header() {
           </span>
         </NavLink>
 
-        <div
-          className="department-icon department-profile"
-          onClick={() => setOpen((prev) => !prev)}
-        >
-          D
+        <div className="department-nav-link" onClick={() => setOpen((prev) => !prev)}>
+          <span className="department-nav-item">
+            <AccountCircleIcon className="department-icon department-profile" />
+            <span className="department-nav-text">Profile</span>
+          </span>
         </div>
 
         {open && (
