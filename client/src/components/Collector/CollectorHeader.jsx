@@ -4,6 +4,7 @@ import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import DescriptionIcon from "@mui/icons-material/Description";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import LogoutIcon from "@mui/icons-material/Logout";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import api from "../../api/axios";
 import { clearAuthValues, getAuthValue } from "../../utils/authStorage";
@@ -83,7 +84,7 @@ function Header() {
   return (
     <header className="collector-header">
       <div className="collector-logo">
-        <div className="collector-logo-icon"></div>
+        <img src="/logo.png" className="collector-logo-img" alt="Logo" />
         <span>Minutes Tracker System</span>
       </div>
 
@@ -128,11 +129,11 @@ function Header() {
           </span>
         </NavLink>
 
-        <div
-          className="collector-icon collector-profile"
-          onClick={() => setOpen((prev) => !prev)}
-        >
-          C
+        <div className="collector-nav-link" onClick={() => setOpen((prev) => !prev)}>
+          <span className="collector-nav-item">
+            <AccountCircleIcon className="collector-icon collector-profile" />
+            <span className="collector-nav-text">Profile</span>
+          </span>
         </div>
 
         {open && (
