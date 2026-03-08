@@ -5,13 +5,21 @@ import DriveFolderUploadSharpIcon from "@mui/icons-material/DriveFolderUploadSha
 // Components
 import DPOHeader from "../../components/DPO/DPOHeader";
 import DPOTabs from "../../components/DPO/IssuePage/DPOTabs";
-import DPOFilterBar from "../../components/DPO/IssuePage/DPOFilterBar";
-import DPOIssueCard from "../../components/DPO/IssuePage/DPOIssueCard";
+import IssueCard from "../../components/common/IssueCard";
 import DPOIssueLifecycleDrawer from "../../components/DPO/IssuePage/DPOIssueLifecycleDrawer";
 import DPOSingleIssueAssignCard from "../../components/DPO/IssuePage/DPOSingleIssueAssignCard";
 import EmptyStateCard from "../../components/common/EmptyStateCard";
 import LoadingState from "../../components/common/LoadingState";
 import { LIVE_EVENT_ISSUES_UPDATED, addLiveEventListener } from "../../utils/liveUpdates";
+import { 
+  getIssueDateKeys, 
+  getIssueDateKey, 
+  toDDMMYYYY, 
+  parseDDMMYYYYToKey, 
+  parseDeadline, 
+  priorityRank 
+} from "../../utils/issueDateUtils";
+import IssueFilterBar from "../../components/common/IssueFilterBar";
 
 // CSS
 import "./DPOIssuePage.css";
@@ -48,45 +56,6 @@ function DPOIssuePage() {
     }
   };
 
-  const dateKeyFromRaw = (raw) => {
-    if (!raw || typeof raw !== "string") return null;
-
-    const ymdMatch = raw.match(/^(\d{4})-(\d{2})-(\d{2})/);
-    if (ymdMatch) {
-      return Number(`${ymdMatch[1]}${ymdMatch[2]}${ymdMatch[3]}`);
-    }
-
-    const dt = new Date(raw);
-    if (Number.isNaN(dt.getTime())) return null;
-    const y = dt.getFullYear();
-    const m = String(dt.getMonth() + 1).padStart(2, "0");
-    const d = String(dt.getDate()).padStart(2, "0");
-    return Number(`${y}${m}${d}`);
-  };
-
-  const getIssueDateKeys = (issue) => {
-    const keys = [dateKeyFromRaw(issue?.meeting_date || "")].filter(Boolean);
-    return [...new Set(keys)];
-  };
-
-  const getIssueDateKey = (issue) => {
-    const keys = getIssueDateKeys(issue);
-    return keys.length > 0 ? Math.max(...keys) : null;
-  };
-
-  const toDDMMYYYY = (dt) => {
-    const day = String(dt.getDate()).padStart(2, "0");
-    const month = String(dt.getMonth() + 1).padStart(2, "0");
-    const year = dt.getFullYear();
-    return `${day}-${month}-${year}`;
-  };
-
-  const parseDDMMYYYYToKey = (value) => {
-    if (!value || typeof value !== "string") return null;
-    const [dd, mm, yyyy] = value.split("-");
-    if (!dd || !mm || !yyyy) return null;
-    return Number(`${yyyy}${mm.padStart(2, "0")}${dd.padStart(2, "0")}`);
-  };
 
   // ===== FETCH =====
   useEffect(() => {
@@ -172,20 +141,6 @@ function DPOIssuePage() {
       return true;
     });
 
-    const parseDeadline = (value) => {
-      if (!value || typeof value !== "string") return Number.MAX_SAFE_INTEGER;
-      const [dd, mm, yyyy] = value.split("-");
-      if (!dd || !mm || !yyyy) return Number.MAX_SAFE_INTEGER;
-      return Number(`${yyyy}${mm}${dd}`);
-    };
-
-    const priorityRank = (value) => {
-      const p = String(value || "").toLowerCase();
-      if (p === "high") return 0;
-      if (p === "medium") return 1;
-      if (p === "low") return 2;
-      return 3;
-    };
 
     const sortBy = String(filters.sortBy || "newest").toLowerCase();
     const sorted = [...filtered];
@@ -205,7 +160,7 @@ function DPOIssuePage() {
       return sorted;
     }
 
-    sorted.sort((a, b) => Number(b.id || 0) - Number(a.id || 0));
+    sorted.sort((a, b) => Number(a.id || 0) - Number(b.id || 0));
     return sorted;
   }, [allIssues, activeTab, filters]);
 
@@ -271,7 +226,7 @@ function DPOIssuePage() {
       
       <div className="dpo-content">
 
-        <DPOFilterBar
+        <IssueFilterBar
           activeTab={activeTab}
           onFilterChange={(nf) => setFilters((p) => ({ ...p, ...nf }))}
           issue_date={defaultDateRange}
@@ -280,6 +235,7 @@ function DPOIssuePage() {
           emailStatus={emailStatus}
           onAddIssue={() => setShowAssignModal(true)}
           displayedIssues={displayedIssues}
+          role="dpo"
         />
 
         {/* ✅ Tabs wrapper (DO NOT TOUCH DPOTabs) */}
@@ -302,12 +258,13 @@ function DPOIssuePage() {
             />
           ) : (
             displayedIssues.map((issue) => (
-              <DPOIssueCard
-                key={issue.id}
-                issue={issue}
-                onResolve={handleResolve}
-                onOpenLog={handleOpenLifecycle}
-              />
+                  <IssueCard
+                    key={issue.id}
+                    issue={issue}
+                    role="dpo"
+                    onResolve={handleResolve}
+                    onOpenLog={handleOpenLifecycle}
+                  />
             ))
           )}
         </div>

@@ -1,0 +1,273 @@
+/* ===== Unified Issue Toolbar ===== */
+
+.common-filter-toolbar {
+    background: var(--color-surface, #fff);
+    border: 1px solid var(--color-border, #e2e8f0);
+    border-radius: var(--radius-lg, 14px);
+    box-shadow: var(--shadow-sm, 0 2px 8px rgba(0, 0, 0, 0.06));
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.common-filter-toolbar-main {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.common-search-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 260px;
+}
+
+.common-search-wrapper input {
+    width: 100%;
+    height: 40px;
+    border: 1.5px solid var(--color-border, #e2e8f0);
+    border-radius: var(--radius-md, 10px);
+    padding: 0 14px 0 38px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    background: #f8fafc;
+    outline: none;
+    transition: border-color var(--transition-base, 0.25s ease), box-shadow var(--transition-base, 0.25s ease);
+}
+
+.common-search-wrapper input:focus {
+    border-color: var(--color-primary, #2563eb);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    background: #fff;
+}
+
+.common-search-icon {
+    position: absolute;
+    left: 12px;
+    color: var(--color-text-muted, #9ca3af);
+    user-select: none;
+}
+
+.common-toolbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.common-toolbar-btn {
+    height: 40px;
+    border: 1px solid #cbd5e1;
+    background: #f8fafc;
+    color: #334155;
+    padding: 0 14px;
+    border-radius: var(--radius-md, 10px);
+    font-size: 0.86rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast, 0.15s ease);
+}
+
+.common-toolbar-btn:hover,
+.common-toolbar-btn.active {
+    border-color: #93c5fd;
+    background: #eff6ff;
+    color: #1e40af;
+}
+
+.common-advanced-filters-panel {
+    border: 1px solid #e2e8f0;
+    border-radius: var(--radius-md, 10px);
+    background: #f8fafc;
+    padding: 12px;
+    overflow: visible;
+}
+
+.common-advanced-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 12px;
+}
+
+.common-filter-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: relative;
+}
+
+.common-filter-field label {
+    font-size: 0.78rem;
+    color: #64748b;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.common-date-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.common-date-input-wrapper input,
+.common-filter-select {
+    width: 100%;
+    height: 38px;
+    border: 1px solid #cbd5e1;
+    background: #fff;
+    border-radius: 9px;
+    padding: 0 32px 0 10px;
+    font-size: 0.85rem;
+    font-family: inherit;
+    outline: none;
+    color: #1e293b;
+}
+
+.common-filter-select {
+    padding-right: 10px;
+}
+
+.common-date-input-wrapper input:focus,
+.common-filter-select:focus {
+    border-color: var(--color-primary, #2563eb);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.common-calendar-icon {
+    position: absolute;
+    right: 8px;
+    font-size: 0.95rem;
+    color: #64748b;
+    cursor: pointer;
+}
+
+.common-advanced-actions {
+    margin-top: 10px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.common-clear-filters-btn {
+    height: 34px;
+    border: 1px solid #cbd5e1;
+    background: #fff;
+    color: #334155;
+    border-radius: 8px;
+    padding: 0 12px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.common-clear-filters-btn:hover {
+    background: #f1f5f9;
+}
+
+/* ── Generate Button ── */
+.common-generate-btn {
+    background: linear-gradient(135deg, var(--color-primary, #2563eb), var(--color-primary-dark, #1d4ed8));
+    color: white;
+    border: none;
+    height: 40px;
+    padding: 0 16px;
+    border-radius: var(--radius-md, 10px);
+    cursor: pointer;
+    font-weight: 600;
+    font-family: inherit;
+    font-size: 0.88rem;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
+    transition: transform var(--transition-fast, 0.15s ease),
+        box-shadow var(--transition-fast, 0.15s ease);
+}
+
+.common-generate-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+}
+
+/* ── Send Email Button ── */
+.common-send-email-btn {
+    background: linear-gradient(135deg, #b91c1c, #991b1b);
+    color: white;
+    border: none;
+    height: 40px;
+    padding: 0 16px;
+    border-radius: var(--radius-md, 10px);
+    cursor: pointer;
+    font-weight: 600;
+    font-family: inherit;
+    font-size: 0.88rem;
+    box-shadow: 0 2px 8px rgba(185, 28, 28, 0.2);
+    transition: transform var(--transition-fast, 0.15s ease),
+        box-shadow var(--transition-fast, 0.15s ease);
+}
+
+.common-send-email-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(185, 28, 28, 0.3);
+}
+
+.common-send-email-btn:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+    opacity: 0.7;
+    box-shadow: none;
+}
+
+.common-send-email-btn.common-loading {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.common-email-status-popup {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    margin-top: 8px;
+    background: #1f2937;
+    color: white;
+    padding: 10px 16px;
+    border-radius: var(--radius-md, 10px);
+    font-size: 0.82rem;
+    font-weight: 500;
+    animation: commonPopupSlide 0.25s ease;
+    z-index: 100;
+    box-shadow: var(--shadow-lg, 0 8px 30px rgba(0, 0, 0, 0.12));
+    white-space: nowrap;
+}
+
+@keyframes commonPopupSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 1100px) {
+    .common-filter-toolbar-main {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .common-toolbar-actions {
+        flex-wrap: wrap;
+    }
+
+    .common-advanced-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .common-advanced-grid {
+        grid-template-columns: 1fr;
+    }
+}

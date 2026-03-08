@@ -10,6 +10,7 @@ class IssueDepartmentSerializer(serializers.ModelSerializer):
     deadline = serializers.DateField(source='deadline_date', read_only=True, format="%d-%m-%Y")
     location = serializers.CharField(source='issue.location', read_only=True)
     priority = serializers.CharField(source='issue.priority', read_only=True)
+    minutes_title = serializers.SerializerMethodField()
     
     # Custom response field to return both text and the file link
     response = serializers.SerializerMethodField()
@@ -26,7 +27,8 @@ class IssueDepartmentSerializer(serializers.ModelSerializer):
             'priority', 
             'deadline', 
             'status', 
-            'response'
+            'response',
+            'minutes_title'
         ]
 
     def get_response(self, obj):
@@ -39,6 +41,11 @@ class IssueDepartmentSerializer(serializers.ModelSerializer):
             "text": last_response.response_text,
             "attachment": last_response.attachment_path.name if last_response.attachment_path else None
         }
+
+    def get_minutes_title(self, obj):
+        if obj.issue and obj.issue.minutes:
+            return obj.issue.minutes.title or 'Untitled'
+        return 'Unknown'
 
 class DPOIssueSerializer(serializers.ModelSerializer):
     issue_no = serializers.CharField(read_only=True)
