@@ -60,6 +60,7 @@ class DPOIssueSerializer(serializers.ModelSerializer):
     status = serializers.SerializerMethodField()
     deadline = serializers.SerializerMethodField()
     response = serializers.SerializerMethodField()
+    designation = serializers.SerializerMethodField()
     meeting_date = serializers.SerializerMethodField()
     minutes_uploaded_date = serializers.SerializerMethodField()
     minutes_title = serializers.SerializerMethodField()
@@ -79,6 +80,7 @@ class DPOIssueSerializer(serializers.ModelSerializer):
             'location', 
             'priority', 
             'department', 
+            'designation',
             'assigned_departments',
             'status', 
             'deadline', 
@@ -100,6 +102,10 @@ class DPOIssueSerializer(serializers.ModelSerializer):
     def get_department(self, obj):
         assignments = obj.issuedepartment_set.all()
         return ", ".join([a.department.dept_name for a in assignments])
+
+    def get_designation(self, obj):
+        assignments = obj.issuedepartment_set.all()
+        return ", ".join([a.department.designation for a in assignments if a.department.designation])
 
     def get_status(self, obj):
         statuses = [a.status.lower() for a in obj.issuedepartment_set.all()]

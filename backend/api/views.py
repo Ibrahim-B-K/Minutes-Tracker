@@ -97,17 +97,7 @@ def logout_view(request):
     return Response({"success": True})
 
 
-def _resolve_department_username(dept_name):
-    base = slugify(dept_name)[:40].replace('-', '_') or 'department'
-    candidate = base
-    suffix = 1
 
-    while User.objects.filter(username=candidate).exists():
-        suffix += 1
-        suffix_text = f'_{suffix}'
-        candidate = f'{base[:150 - len(suffix_text)]}{suffix_text}'
-
-    return candidate
 
 
 @api_view(['POST'])
@@ -118,6 +108,7 @@ def create_department_user(request):
 
     dept_name = (request.data.get('dept_name') or '').strip()
     designation = (request.data.get('designation') or '').strip()
+    username = (request.data.get('username') or '').strip()
     email = (request.data.get('email') or '').strip()
     password = request.data.get('password') or ''
     confirm_password = request.data.get('confirm_password') or ''
@@ -126,6 +117,8 @@ def create_department_user(request):
         return Response({"error": "Department name is required"}, status=400)
     if not designation:
         return Response({"error": "Designation is required"}, status=400)
+    if not username:
+        return Response({"error": "Username is required"}, status=400)
     if not email:
         return Response({"error": "Department email is required"}, status=400)
     if not password:
@@ -137,8 +130,9 @@ def create_department_user(request):
 
     if Department.objects.filter(dept_name__iexact=dept_name).exists():
         return Response({"error": "Department already exists"}, status=409)
-
-    username = _resolve_department_username(dept_name)
+    
+    if User.objects.filter(username=username).exists():
+        return Response({"error": "Username already taken"}, status=409)
 
     with transaction.atomic():
         department = Department.objects.create(
@@ -953,13 +947,13 @@ def generate_report(request):
                 except:
                     pass
 
-            subject_col_text = f"തീയതി: {row_meeting_date_str}\n\n{report.get('issue_no', '')}"
-
+            subject_col_text = f"തീയതി: {row_meeting_date_str}\n(മിനുട്സ് ക്രമ നമ്പർ.{report.get('issue_no', '')})\n\n{report.get('issue_title', '')}"
+            officer_name=f"{report.get('designation', '')}, {report.get('department', '')}".strip(', ')
             row_data = [
                 index,
                 subject_col_text,
-                report.get('department', ''),
-                report.get('issue', ''),
+                officer_name,
+                report.get('issue_description', ''),
                 report.get('response', '')
             ]
             ws.append(row_data)
