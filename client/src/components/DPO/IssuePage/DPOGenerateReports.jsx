@@ -10,7 +10,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
 export default function GenerateReports({ isOpen, onClose, issues }) {
-  const [format, setFormat] = useState("pdf"); // 'pdf', 'excel', 'minute'
+  const [format, setFormat] = useState("ppt"); // 'ppt', 'excel', 'minute'
   const [reports, setReports] = useState([]);
   const [loadingReports, setLoadingReports] = useState(false);
   const [minuteDate, setMinuteDate] = useState(() => new Date().toISOString().split("T")[0]);
@@ -30,22 +30,48 @@ export default function GenerateReports({ isOpen, onClose, issues }) {
 
   const handleDownload = async () => {
     // ==========================================
-    // FRONTEND PRESENTATION PDF GENERATION
+    // BACKEND PPT GENERATION (Presentation)
     // ==========================================
-    if (format === "pdf") {
-      const element = document.getElementById("pdf-presentation-content");
+    if (format === "ppt") {
+      try {
+        const payload = {
+          format: "ppt",
+          reports: reports,
+        };
 
-      const opt = {
-        margin: 0,
-        filename: "DDC_Presentation.pdf",
-        image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: "in", format: "a4", orientation: "landscape" },
-        pagebreak: { mode: 'legacy' }
-      };
+        const response = await fetch(`${api.defaults.baseURL}/generate-report`, {
+          method: "POST",
+          headers: {
+            Authorization: `Token ${getAuthValue("token")}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
 
-      html2pdf().set(opt).from(element).save();
-      onClose();
+        if (!response.ok) {
+          alert("Failed to generate PPT");
+          return;
+        }
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "DDC_Presentation.pptx";
+
+        document.body.appendChild(a);
+        a.click();
+
+        a.remove();
+        window.URL.revokeObjectURL(url);
+        onClose();
+
+      } catch (err) {
+        console.error("PPT generation error:", err);
+        alert("Error downloading PPT.");
+      }
+
       return;
     }
     // ==========================================
@@ -228,10 +254,10 @@ export default function GenerateReports({ isOpen, onClose, issues }) {
           <div className="dpo-generate-header">
             <div className="dpo-format-toggle">
               <button
-                className={`dpo-format-btn ${format === "pdf" ? "dpo-active" : ""}`}
-                onClick={() => setFormat("pdf")}
+                className={`dpo-format-btn ${format === "ppt" ? "dpo-active" : ""}`}
+                onClick={() => setFormat("ppt")}
               >
-                Presentation PDF
+                Presentation PPT
               </button>
               <button
                 className={`dpo-format-btn ${format === "minute" ? "dpo-active" : ""}`}
@@ -295,7 +321,7 @@ export default function GenerateReports({ isOpen, onClose, issues }) {
 
           <div className="dpo-download-section">
             <button className="dpo-generate-download-btn" onClick={handleDownload}>
-              Download {format === 'minute' || format === 'pdf' ? 'PDF' : 'Report'}
+              Download {format === 'minute' ? 'PDF' : format === 'ppt' ? 'PPT' : 'Report'}
             </button>
           </div>
         </div>

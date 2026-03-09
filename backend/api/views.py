@@ -9,6 +9,7 @@ from django.utils import timezone
 from django.utils.text import slugify
 from django.db.models import Q
 from django.db import transaction
+import io
 
 from datetime import datetime, date
 import os
@@ -785,95 +786,116 @@ def get_notifications(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def generate_report(request):
+    
     # 1. Parse request data sent from the frontend modal
     req_format = request.data.get('format', 'excel')
     reports_data = request.data.get('reports', [])
 
-    # Fallback just in case no data was sent (backward compatibility)
+    # Fallback just in case no data was sent
     if not reports_data:
         return Response({"error": "No report data provided."}, status=400)
 
+    #             PPT GENERATION
     # ==========================================
-    #             PDF GENERATION
-    # ==========================================
-    if req_format == 'pdf':
-        buffer = io.BytesIO()
-        # Set to Landscape A4 for TV Presentation
-        doc = SimpleDocTemplate(buffer, pagesize=landscape(A4), rightMargin=40, leftMargin=40, topMargin=40, bottomMargin=40)
-        elements = []
-        styles = getSampleStyleSheet()
-        
-        # --- REGISTER MALAYALAM FONT ---
-        import os
-        from django.conf import settings
-        
-        # Adjust path if you placed the font somewhere else
-        font_path = os.path.join(settings.BASE_DIR, 'font', 'NotoSansMalayalam-Regular.ttf') 
-        
-        try:
-            pdfmetrics.registerFont(TTFont('MalayalamFont', font_path))
-            font_name = 'MalayalamFont'
-        except Exception as e:
-            print(f"Font loading error: {e}")
-            font_name = 'Helvetica' # Fallback if font isn't found
+    if req_format == 'ppt':
+        from pptx import Presentation
+        from pptx.util import Inches, Pt
+        from pptx.dml.color import RGBColor
 
-        # Presentation Styles
-        issue_no_style = ParagraphStyle(
-            'IssueNo', parent=styles['Normal'], fontName=font_name, fontSize=18,
-            textColor=colors.white, backColor=colors.HexColor('#1E3A8A'),
-            borderPadding=8, spaceAfter=20
-        )
-        issue_text_style = ParagraphStyle(
-            'IssueText', parent=styles['Normal'], fontName=font_name, fontSize=24,
-            leading=34, spaceAfter=40
-        )
-        dept_style = ParagraphStyle(
-            'DeptText', parent=styles['Normal'], fontName=font_name, fontSize=18,
-            textColor=colors.red, alignment=2 # 2 = Right aligned
-        )
-        response_header_style = ParagraphStyle(
-            'ResponseHeader', parent=styles['Normal'], fontName=font_name, fontSize=22,
-            textColor=colors.white, backColor=colors.HexColor('#0284c7'), # Lighter blue
-            borderPadding=10, spaceAfter=20
-        )
-        response_text_style = ParagraphStyle(
-            'ResponseText', parent=styles['Normal'], fontName=font_name, fontSize=22,
-            leading=32, spaceAfter=20
-        )
+        prs = Presentation()
+
+        def add_header(slide, text, bg_color):
+            header_box = slide.shapes.add_textbox(Inches(0.5), Inches(0.5), Inches(9), Inches(0.8))
+            header_box.fill.solid()
+            header_box.fill.fore_color.rgb = bg_color
+            tf = header_box.text_frame
+            tf.word_wrap = True
+            p = tf.paragraphs[0]
+            r = p.add_run()
+            r.text = text
+            r.font.size = Pt(28)
+            r.font.bold = True
+            r.font.color.rgb = RGBColor(255, 255, 255)
+
+        def add_footer(slide, text):
+            footer_box = slide.shapes.add_textbox(Inches(0.5), Inches(6.5), Inches(9), Inches(0.5))
+            tf = footer_box.text_frame
+            p = tf.paragraphs[0]
+            r = p.add_run()
+            r.text = text
+            r.font.size = Pt(18)
+            r.font.bold = True
+            r.font.color.rgb = RGBColor(200, 0, 0)
+
+        def get_text_chunks(text, max_chars=800):
+            """Simple splitting by character count for pagination."""
+            if not text:
+                return [""]
+            paragraphs = text.split('\n')
+            chunks = []
+            current_chunk = ""
+            for p in paragraphs:
+                if len(current_chunk) + len(p) > max_chars and current_chunk:
+                    chunks.append(current_chunk.strip())
+                    current_chunk = p + "\n"
+                else:
+                    current_chunk += p + "\n"
+            if current_chunk:
+                chunks.append(current_chunk.strip())
+            return chunks
 
         for report in reports_data:
-            # --- SLIDE 1: THE ISSUE ---
-            issue_title = report.get('issue_no', 'Unknown Issue')
-            elements.append(Paragraph(f"Issue: {issue_title}", issue_no_style))
-            
-            issue_desc = report.get('issue', '')
-            elements.append(Paragraph(issue_desc, issue_text_style))
-            
+            issue_no = report.get('issue_no', '')
+            issue_text = report.get('issue', '')
             dept_name = report.get('department', '')
-            elements.append(Paragraph(f"{dept_name}", dept_style))
-            
-            # --- SLIDE 2: THE RESPONSE ---
-            elements.append(PageBreak()) 
-            
-            elements.append(Paragraph("നിലവിലെ അവസ്ഥ / Action Taken", response_header_style))
-            
             response_text = report.get('response', 'No response yet')
-            # Split response by newlines so it formats nicely
-            for para in response_text.split('\n'):
-                if para.strip():
-                    elements.append(Paragraph(para.strip(), response_text_style))
-                    elements.append(Spacer(1, 10))
 
-            # Move to next issue
-            elements.append(PageBreak())
+            # --- ISSUE SLIDES ---
+            issue_chunks = get_text_chunks(issue_text, max_chars=600)
+            for i, chunk in enumerate(issue_chunks):
+                slide = prs.slides.add_slide(prs.slide_layouts[5])
+                header_text = f"Issue: {issue_no}" + (f" (Contd. {i+1})" if i > 0 else "")
+                add_header(slide, header_text, RGBColor(30, 58, 138))
+                
+                content_box = slide.shapes.add_textbox(Inches(0.5), Inches(1.5), Inches(9), Inches(4.5))
+                tf = content_box.text_frame
+                tf.word_wrap = True
+                p = tf.paragraphs[0]
+                p.line_spacing=1.5
+                r = p.add_run()
+                r.text = chunk
+                r.font.bold = True  
+                r.font.size = Pt(14)
+                
+                add_footer(slide, dept_name)
 
-        doc.build(elements)
-        pdf = buffer.getvalue()
-        buffer.close()
-        
-        response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename="DDC_Presentation.pdf"'
-        response.write(pdf)
+            # --- RESPONSE SLIDES ---
+            resp_chunks = get_text_chunks(response_text, max_chars=700)
+            for i, chunk in enumerate(resp_chunks):
+                slide = prs.slides.add_slide(prs.slide_layouts[5])
+                header_text = "നിലവിലെ അവസ്ഥ / Action Taken" + (f" (Contd. {i+1})" if i > 0 else "")
+                add_header(slide, header_text, RGBColor(2, 132, 199))
+                
+                content_box = slide.shapes.add_textbox(Inches(0.5), Inches(1.5), Inches(9), Inches(4.5))
+                tf = content_box.text_frame
+                tf.word_wrap = True
+                p = tf.paragraphs[0]
+                p.line_spacing=1.5
+                r = p.add_run()
+                r.text = chunk
+                r.font.bold = True
+                
+                r.font.size = Pt(22) # Slightly larger for responses
+
+                
+
+        buffer = io.BytesIO()
+        prs.save(buffer)
+        response = HttpResponse(
+            buffer.getvalue(),
+            content_type="application/vnd.openxmlformats-officedocument.presentationml.presentation"
+        )
+        response['Content-Disposition'] = 'attachment; filename="DDC_Presentation.pptx"'
         return response
 
     # ==========================================
