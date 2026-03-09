@@ -28,6 +28,7 @@ function Header() {
     name: "",
     email: "",
     designation: "",
+    username: "",
     password: "",
     confirmPassword: "",
   });
@@ -103,7 +104,7 @@ function Header() {
   };
 
   const handleCreateDepartment = async () => {
-    if (!deptData.name.trim() || !deptData.email.trim() || !deptData.designation.trim() || !deptData.password || !deptData.confirmPassword) {
+    if (!deptData.name.trim() || !deptData.email.trim() || !deptData.designation.trim() || !deptData.username.trim() || !deptData.password || !deptData.confirmPassword) {
       alert("Please fill all fields");
       return;
     }
@@ -114,10 +115,11 @@ function Header() {
     }
 
     try {
-      const res = await api.post("/departments/create-user", {
+        const res = await api.post("/departments/create-user", {
         dept_name: deptData.name.trim(),
         email: deptData.email.trim(),
         designation: deptData.designation.trim(),
+        username: deptData.username.trim(),
         password: deptData.password,
         confirm_password: deptData.confirmPassword,
       });
@@ -130,6 +132,7 @@ function Header() {
         name: "",
         email: "",
         designation: "",
+        username: "",
         password: "",
         confirmPassword: "",
       });
@@ -246,6 +249,14 @@ function Header() {
               name="designation"
               placeholder="Designation"
               value={deptData.designation}
+              onChange={handleInputChange}
+            />
+
+            <input
+              type="text"
+              name="username"
+              placeholder="Username"
+              value={deptData.username}
               onChange={handleInputChange}
             />
 

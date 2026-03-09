@@ -139,11 +139,14 @@ export default function GenerateReports({ isOpen, onClose, issues }) {
       const normalized = receivedLike.map((issue) => ({
         id: issue.id,
         issue_no: issue.issue_no,
-        department: issue.department || "",
+        department: (issue.assigned_departments || []).map(d => `${d.designation || ""} - ${d.dept_name || d.department || ""}`).join(", "),
         assigned_departments: issue.assigned_departments || [],
         resolution_status: issue.resolution_status || 'unresolved',
         meeting_date: issue.meeting_date || "",
         issue: issue.issue || "",
+        issue_title: issue.issue || "",
+        
+        issue_description: issue.issue_description || "",
         location: issue.location || "",
         response: Array.isArray(issue.response)
           ? issue.response
