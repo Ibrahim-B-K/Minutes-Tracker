@@ -10,6 +10,7 @@ import DepartmentMinutesPage from "./pages/DepartmentPage/DepartmentMinutesPage.
 import DepartmentNotificationPage from "./pages/DepartmentPage/DepartmentNotificationPage.jsx";
 import CollectorNotificationPage from "./pages/CollectorPage/NotificationPage.jsx";
 import CollectorMinutesPage from "./pages/CollectorPage/CollectorMinutesPage.jsx"
+import CollectorAnalyticsPage from "./pages/CollectorPage/CollectorAnalyticsPage.jsx";
 import Login from "./pages/LoginPage.jsx";
 import "./App.css";
 
@@ -38,6 +39,7 @@ function App() {
         <Route path="/collector" element={<CollectorIssuePage />} />
         <Route path="/collector/notifications" element={<CollectorNotificationPage />} />
         <Route path="/collector/minutes" element={<CollectorMinutesPage />} />
+        <Route path="/collector/analytics" element={<CollectorAnalyticsPage />} />
       </Routes>
     </Router>
   );

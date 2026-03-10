@@ -101,7 +101,8 @@
 .collector-icon.collector-home,
 .collector-icon.collector-bell,
 .collector-icon.collector-profile,
-.collector-icon.collector-minutes {
+.collector-icon.collector-minutes,
+.collector-icon.collector-analytics {
   color: var(--color-primary, #2563eb);
   font-size: 24px;
   display: flex;

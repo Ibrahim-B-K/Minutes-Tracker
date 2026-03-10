@@ -22,5 +22,6 @@ urlpatterns = [
     path('generate-report', views.generate_report),
     path('generate-minutes-pdf', views.generate_minutes_pdf),
     path('send-overdue-alerts', views.send_overdue_alerts),
+    path('collector/analytics', views.get_collector_analytics),
 ]
 
