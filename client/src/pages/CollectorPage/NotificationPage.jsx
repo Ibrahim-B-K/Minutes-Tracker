@@ -1,25 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CollectorHeader from "../../components/Collector/CollectorHeader";
 import EmptyStateCard from "../../components/common/EmptyStateCard";
+import LoadingState from "../../components/common/LoadingState";
 import "./NotificationPage.css";
+import api from "../../api/axios";
+import { getAuthValue } from "../../utils/authStorage";
+import { LIVE_EVENT_NOTIFICATIONS_UPDATED, addLiveEventListener } from "../../utils/liveUpdates";
 
 function CollectorNotificationPage() {
-  const notifications = [
-    {
-      id: 1,
-      title: "Response Received",
-      message: "A response has been submitted for Issue #1023.",
-      time: "10 minutes ago",
-      type: "response",
-    },
-    {
-      id: 2,
-      title: "Deadline Exceeded",
-      message: "Issue #1009 has exceeded its deadline. Immediate attention required.",
-      time: "1 hour ago",
-      type: "deadline",
-    },
-  ];
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      const username = getAuthValue("username");
+      try {
+        const res = await api.get("/notifications", {
+          params: { username }
+        });
+        setNotifications(res.data);
+      } catch (err) {
+        console.error("Error fetching notifications:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNotifications();
+    const onNotificationsUpdated = () => fetchNotifications();
+    const unsubscribe = addLiveEventListener(
+      LIVE_EVENT_NOTIFICATIONS_UPDATED,
+      onNotificationsUpdated
+    );
+    return unsubscribe;
+  }, []);
 
   return (
     <div className="collector-container">
@@ -31,27 +45,34 @@ function CollectorNotificationPage() {
         </div>
 
         <div className="collector-notification-list">
-          {notifications.map((note) => (
-                <div key={note.id} className={`collector-notification-card collector-${note.type}`}>
-              <div className="collector-notification-icon">
-                {note.type === "response" && <span>📩</span>}
-                {note.type === "deadline" && <span>⏰</span>}
-              </div>
-
-              <div className="collector-notification-content">
-                <h3>{note.title}</h3>
-                <p>{note.message}</p>
-                <span className="collector-time">{note.time}</span>
-              </div>
-            </div>
-          ))}
-
-          {notifications.length === 0 && (
+          {loading ? (
+            <LoadingState text="Loading notifications..." />
+          ) : notifications.length === 0 ? (
             <EmptyStateCard
               compact
               title="No notifications"
               description="You are all caught up."
             />
+          ) : (
+            notifications.map((note) => {
+              const safeType = note.type || "general";
+              return (
+                <div key={note.id} className={`collector-notification-card collector-${safeType}`}>
+                  <div className="collector-notification-icon">
+                    {safeType === "response" && <span>📩</span>}
+                    {safeType === "assign" && <span>📝</span>}
+                    {safeType === "deadline" && <span>⏰</span>}
+                    {safeType === "general" && <span>🔔</span>}
+                  </div>
+
+                  <div className="collector-notification-content">
+                    <h3>{safeType.toUpperCase()}</h3>
+                    <p>{note.message}</p>
+                    <span className="collector-time">{note.time_ago}</span>
+                  </div>
+                </div>
+              );
+            })
           )}
         </div>
       </div>

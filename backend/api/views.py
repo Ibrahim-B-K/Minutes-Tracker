@@ -749,16 +749,21 @@ def submit_response(request):
         issue_link.status = 'submitted'
         issue_link.save()
         
-        # --- NOTIFY DPO ---
-        dpos = User.objects.filter(Q(role__iexact='DPO') | Q(username__iexact='dpo'))
-        issue_number = issue_link.issue.id 
+        # --- NOTIFY DPO & COLLECTOR ---
+        recipients = User.objects.filter(
+            Q(role__iexact='DPO') | 
+            Q(role__iexact='collector') | 
+            Q(username__iexact='dpo')
+        )
+        issue_no = issue_link.issue.issue_no
+        minutes_title = issue_link.issue.minutes.title if issue_link.issue.minutes else "Unknown Minutes"
         dept_name = issue_link.department.dept_name
 
-        for d in dpos:
+        for r in recipients:
             Notification.objects.create(
-                user=d, 
+                user=r, 
                 issue_department=issue_link,
-                message=f"Response Received: {dept_name} responded to Issue #{issue_number}"
+                message=f"Response Received: {dept_name} responded to Issue {issue_no} ({minutes_title})"
             )
             
         return Response({"success": True})
@@ -801,6 +806,7 @@ def generate_report(request):
         from pptx import Presentation
         from pptx.util import Inches, Pt
         from pptx.dml.color import RGBColor
+        from pptx.enum.text import PP_ALIGN
 
         prs = Presentation()
 
@@ -821,6 +827,7 @@ def generate_report(request):
             footer_box = slide.shapes.add_textbox(Inches(0.5), Inches(6.5), Inches(9), Inches(0.5))
             tf = footer_box.text_frame
             p = tf.paragraphs[0]
+            p.alignment = PP_ALIGN.RIGHT
             r = p.add_run()
             r.text = text
             r.font.size = Pt(18)
@@ -1354,3 +1361,59 @@ def generate_minutes_pdf(request):
     except Exception as e:
         print("WeasyPrint conversion error:", e)
         return Response({"error": str(e)}, status=500)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_collector_analytics(request):
+    if request.user.role.lower() not in ['collector', 'dpo']:
+        return Response({"error": "Unauthorized"}, status=403)
+
+    total_issues = Issue.objects.filter(parent_issue__isnull=True).count()
+    resolved_count = Issue.objects.filter(parent_issue__isnull=True, resolution_status__iexact='resolved').count()
+    unresolved_count = Issue.objects.filter(parent_issue__isnull=True, resolution_status__iexact='unresolved').count()
+
+    latest_minutes = Minutes.objects.order_by('-meeting_date', '-created_at').first()
+
+    # Department performance statistics
+    dept_performance = []
+    departments = Department.objects.all()
+    
+    for dept in departments:
+        assignments = IssueDepartment.objects.filter(department=dept)
+        
+        if assignments.exists():
+            root_assignments = assignments.filter(issue__parent_issue__isnull=True)
+            total = root_assignments.count()
+            resolved = root_assignments.filter(issue__resolution_status__iexact='resolved').count()
+            
+            if latest_minutes:
+                latest_assignments = assignments.filter(issue__minutes=latest_minutes)
+                latest_total = latest_assignments.count()
+                unresolved = latest_assignments.filter(issue__resolution_status__iexact='unresolved')
+                submitted = unresolved.filter(status__iexact='SUBMITTED').count()
+                pending = unresolved.filter(status__iexact='PENDING').count()
+                overdue = unresolved.filter(status__iexact='OVERDUE').count()
+            else:
+                latest_total = submitted = pending = overdue = 0
+            
+            dept_performance.append({
+                "department": dept.dept_name,
+                "designation": dept.designation,
+                "resolved": resolved,
+                "submitted": submitted,
+                "pending": pending,
+                "overdue": overdue,
+                "total": total,
+                "latest_total": latest_total
+            })
+
+    # Sort departments by total issues assigned (descending)
+    dept_performance.sort(key=lambda x: x['total'], reverse=True)
+
+    return Response({
+        "total_issues": total_issues,
+        "resolved_count": resolved_count,
+        "unresolved_count": unresolved_count,
+        "dept_performance": dept_performance
+    })

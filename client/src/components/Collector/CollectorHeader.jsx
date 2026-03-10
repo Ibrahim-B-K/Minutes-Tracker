@@ -3,6 +3,7 @@ import "./CollectorHeader.css";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import DescriptionIcon from "@mui/icons-material/Description";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import BarChartIcon from "@mui/icons-material/BarChart";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
@@ -111,6 +112,18 @@ function Header() {
           <span className="collector-nav-item">
             <DescriptionIcon className="collector-icon collector-minutes" />
             <span className="collector-nav-text">Minutes</span>
+          </span>
+        </NavLink>
+
+        <NavLink
+          to="/collector/analytics"
+          className={({ isActive }) =>
+            `collector-nav-link ${isActive ? "collector-active" : ""}`
+          }
+        >
+          <span className="collector-nav-item">
+            <BarChartIcon className="collector-icon collector-analytics" />
+            <span className="collector-nav-text">Analytics</span>
           </span>
         </NavLink>
 
