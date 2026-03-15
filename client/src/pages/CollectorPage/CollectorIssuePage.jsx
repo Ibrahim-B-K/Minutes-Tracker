@@ -152,7 +152,7 @@ function CollectorIssuePage() {
       return sorted;
     }
 
-    sorted.sort((a, b) => Number(b.id || 0) - Number(a.id || 0));
+    sorted.sort((a, b) => Number(a.id || 0) - Number(b.id || 0));
     return sorted;
   }, [allIssues, activeTab, filters]);
 
