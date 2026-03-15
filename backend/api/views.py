@@ -892,7 +892,7 @@ def generate_report(request):
                 r.text = chunk
                 r.font.bold = True
                 
-                r.font.size = Pt(22) # Slightly larger for responses
+                r.font.size = Pt(14) # Slightly larger for responses
 
                 
 
@@ -977,7 +977,7 @@ def generate_report(request):
                     pass
 
             subject_col_text = f"തീയതി: {row_meeting_date_str}\n(മിനുട്സ് ക്രമ നമ്പർ.{report.get('issue_no', '')})\n\n{report.get('issue_title', '')}"
-            officer_name=f"{report.get('designation', '')}, {report.get('department', '')}".strip(', ')
+            officer_name=f"{report.get('designation', '')},{report.get('department', '')}".strip(', ')
             row_data = [
                 index,
                 subject_col_text,
@@ -987,7 +987,7 @@ def generate_report(request):
             ]
             ws.append(row_data)
 
-            current_row = ws.max_row
+            current_row = ws.max_row            
             for cell in ws[current_row]:
                 cell.alignment = content_align
                 cell.border = thin_border
