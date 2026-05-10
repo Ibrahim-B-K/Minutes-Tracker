@@ -1,5 +1,5 @@
-import google.generativeai as genai
-from google.generativeai.types import HarmCategory, HarmBlockThreshold
+from google import genai
+from google.genai import types
 import os
 import json
 import time
@@ -9,31 +9,33 @@ load_dotenv()
 GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY', '')
 
 def get_best_model():
-    try:
-        for m in genai.list_models():
-            if 'generateContent' in m.supported_generation_methods and 'flash' in m.name:
+    client = genai.Client(api_key=GOOGLE_API_KEY)
+    '''try:
+        for m in client.models.list():
+            if m.supported_actions and 'generateContent' in m.supported_actions and 'flash' in m.name:
                 return m.name
-    except: pass
-    return 'models/gemini-1.5-flash'
+    except: pass'''
+    return 'gemini-3.1-flash-lite'
 
 def analyze_document_with_gemini(file_path, available_departments=None):
     print(f"--- 🧠 Starting AI Analysis for: {file_path} ---")
-    genai.configure(api_key=GOOGLE_API_KEY)
+    client = genai.Client(api_key=GOOGLE_API_KEY)
     
     try:
-        uploaded_file = genai.upload_file(path=file_path, display_name="Minutes")
+        uploaded_file = client.files.upload(file=file_path, config={'display_name': 'Minutes'})
         while uploaded_file.state.name == "PROCESSING":
             time.sleep(1)
-            uploaded_file = genai.get_file(uploaded_file.name)
+            uploaded_file = client.files.get(name=uploaded_file.name)
     except Exception as e:
         print(f"❌ Upload Error: {e}")
         return []
 
-    model = genai.GenerativeModel(get_best_model())
-    safety = {cat: HarmBlockThreshold.BLOCK_NONE for cat in [
-        HarmCategory.HARM_CATEGORY_HARASSMENT, HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-        HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT
-    ]}
+    safety = [
+        types.SafetySetting(category=types.HarmCategory.HARM_CATEGORY_HARASSMENT, threshold=types.HarmBlockThreshold.BLOCK_NONE),
+        types.SafetySetting(category=types.HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold=types.HarmBlockThreshold.BLOCK_NONE),
+        types.SafetySetting(category=types.HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, threshold=types.HarmBlockThreshold.BLOCK_NONE),
+        types.SafetySetting(category=types.HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold=types.HarmBlockThreshold.BLOCK_NONE),
+    ]
     
     available_departments = available_departments or []
     dept_list_text = '\n'.join(available_departments) if available_departments else '(No department list provided)'
@@ -84,7 +86,11 @@ def analyze_document_with_gemini(file_path, available_departments=None):
     """
 
     try:
-        response = model.generate_content([uploaded_file, prompt], safety_settings=safety)
+        response = client.models.generate_content(
+            model=get_best_model(),
+            contents=[uploaded_file, prompt],
+            config=types.GenerateContentConfig(safety_settings=safety)
+        )
         text = response.text.replace("```json", "").replace("```", "").strip()
         return json.loads(text)
     except Exception as e:
@@ -106,13 +112,14 @@ def match_issues_with_gemini(new_issues, existing_issues):
         return []
 
     print(f"--- 🔗 Starting Issue Matching: {len(new_issues)} new vs {len(existing_issues)} existing ---")
-    genai.configure(api_key=GOOGLE_API_KEY)
+    client = genai.Client(api_key=GOOGLE_API_KEY)
 
-    model = genai.GenerativeModel(get_best_model())
-    safety = {cat: HarmBlockThreshold.BLOCK_NONE for cat in [
-        HarmCategory.HARM_CATEGORY_HARASSMENT, HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-        HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT
-    ]}
+    safety = [
+        types.SafetySetting(category=types.HarmCategory.HARM_CATEGORY_HARASSMENT, threshold=types.HarmBlockThreshold.BLOCK_NONE),
+        types.SafetySetting(category=types.HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold=types.HarmBlockThreshold.BLOCK_NONE),
+        types.SafetySetting(category=types.HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, threshold=types.HarmBlockThreshold.BLOCK_NONE),
+        types.SafetySetting(category=types.HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold=types.HarmBlockThreshold.BLOCK_NONE),
+    ]
 
     prompt = f"""
 You are an expert at matching government meeting issues written in Malayalam.
@@ -143,7 +150,11 @@ Output ONLY PURE JSON.
 """
 
     try:
-        response = model.generate_content(prompt, safety_settings=safety)
+        response = client.models.generate_content(
+            model=get_best_model(),
+            contents=prompt,
+            config=types.GenerateContentConfig(safety_settings=safety)
+        )
         text = response.text.replace("```json", "").replace("```", "").strip()
         matches = json.loads(text)
         print(f"✅ Gemini returned {len(matches)} matches")
