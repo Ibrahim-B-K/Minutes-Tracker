@@ -10,12 +10,25 @@ export default function DepartmentSelector({ value = "", onChange }) {
   const [searchInput, setSearchInput] = useState("");
   const dropdownRef = useRef(null);
 
-  // Parse the value (could be string or array)
+  // Parse the value (could be JSON array, string array, or comma-separated)
   useEffect(() => {
     if (Array.isArray(value)) {
       setSelectedDepts(value);
     } else if (typeof value === "string" && value.trim()) {
-      // Split by comma and clean up
+      // Try to parse as JSON array first
+      try {
+        if (value.trim().startsWith("[")) {
+          const parsed = JSON.parse(value);
+          if (Array.isArray(parsed)) {
+            setSelectedDepts(parsed);
+            return;
+          }
+        }
+      } catch (e) {
+        // Not JSON, fall through to comma-separated parsing
+      }
+      
+      // Fall back to comma-separated parsing (for backward compatibility)
       const depts = value
         .split(",")
         .map((d) => d.trim())
@@ -52,7 +65,8 @@ export default function DepartmentSelector({ value = "", onChange }) {
   const handleAddDept = (deptName) => {
     const updated = [...selectedDepts, deptName];
     setSelectedDepts(updated);
-    onChange(updated.join(", "));
+    // Use JSON encoding to safely handle department names with commas
+    onChange(JSON.stringify(updated));
     setSearchInput("");
     setDropdownOpen(false);
   };
@@ -61,7 +75,8 @@ export default function DepartmentSelector({ value = "", onChange }) {
   const handleRemoveDept = (deptName) => {
     const updated = selectedDepts.filter((d) => d !== deptName);
     setSelectedDepts(updated);
-    onChange(updated.join(", "));
+    // Use JSON encoding to safely handle department names with commas
+    onChange(JSON.stringify(updated));
   };
 
   // Close dropdown when clicking outside

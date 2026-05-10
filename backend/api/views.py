@@ -13,6 +13,7 @@ import io
 
 from datetime import datetime, date
 import os
+import json
 import openpyxl
 from openpyxl.styles import Font, Alignment, Border, Side
 from django.http import HttpResponse
@@ -457,14 +458,25 @@ def _match_department(raw_input, dept_maps, cutoff=0.72):
 def _normalize_issue_departments(item, dept_maps):
     # PRIORITY: Manual edits from UI (department string) take precedence over extracted array
     dept_str = item.get('department', '').strip()
-    if dept_str and ',' in dept_str:
-        # Parse comma-separated string from UI edits
-        raw_depts = [d.strip() for d in dept_str.split(',') if d.strip()]
-    elif dept_str and not ',' in dept_str and dept_str != 'GENERAL':
-        # Single department string
-        raw_depts = [dept_str]
-    else:
-        # Fallback to extracted array (from Gemini extraction)
+    raw_depts = []
+    
+    if dept_str:
+        # Try to parse as JSON array first (from DepartmentSelector)
+        try:
+            if dept_str.startswith('['):
+                parsed = json.loads(dept_str)
+                if isinstance(parsed, list):
+                    raw_depts = parsed
+        except (json.JSONDecodeError, ValueError):
+            # Not JSON, fall through to comma-separated parsing
+            pass
+        
+        # Fall back to comma-separated parsing (for backward compatibility)
+        if not raw_depts:
+            raw_depts = [d.strip() for d in dept_str.split(',') if d.strip()]
+    
+    # If still no departments, try the extracted array
+    if not raw_depts:
         raw_depts = item.get('departments') or []
         if not raw_depts:
             raw_depts = [item.get('department', 'GENERAL')]
