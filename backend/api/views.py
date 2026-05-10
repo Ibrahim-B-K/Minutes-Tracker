@@ -507,10 +507,10 @@ def _normalize_issue_departments(item, dept_maps):
 
     if resolved:
         item['departments'] = resolved
-        item['department'] = ', '.join(resolved)
+        item['department'] = json.dumps(resolved)
     else:
         item['departments'] = unresolved
-        item['department'] = ', '.join(unresolved)
+        item['department'] = json.dumps(unresolved)
 
     return item
 
