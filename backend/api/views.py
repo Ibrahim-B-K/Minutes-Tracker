@@ -159,6 +159,28 @@ def create_department_user(request):
     }, status=201)
 
 
+# ================= DEPARTMENTS ================= #
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_departments(request):
+    """Return all departments for dropdown selectors."""
+    if request.user.role.lower() != 'dpo':
+        return Response({"error": "Unauthorized"}, status=403)
+
+    departments = Department.objects.all().order_by('dept_name')
+    result = [
+        {
+            'id': dept.id,
+            'dept_name': dept.dept_name,
+            'designation': dept.designation,
+            'category': dept.category,
+            'email': dept.email,
+        }
+        for dept in departments
+    ]
+    return Response(result)
+
 
 # ================= MINUTES UPLOAD ================= #
 
@@ -433,9 +455,19 @@ def _match_department(raw_input, dept_maps, cutoff=0.72):
 
 
 def _normalize_issue_departments(item, dept_maps):
-    raw_depts = item.get('departments') or []
-    if not raw_depts:
-        raw_depts = [item.get('department', '')]
+    # PRIORITY: Manual edits from UI (department string) take precedence over extracted array
+    dept_str = item.get('department', '').strip()
+    if dept_str and ',' in dept_str:
+        # Parse comma-separated string from UI edits
+        raw_depts = [d.strip() for d in dept_str.split(',') if d.strip()]
+    elif dept_str and not ',' in dept_str and dept_str != 'GENERAL':
+        # Single department string
+        raw_depts = [dept_str]
+    else:
+        # Fallback to extracted array (from Gemini extraction)
+        raw_depts = item.get('departments') or []
+        if not raw_depts:
+            raw_depts = [item.get('department', 'GENERAL')]
 
     resolved = []
     unresolved = []

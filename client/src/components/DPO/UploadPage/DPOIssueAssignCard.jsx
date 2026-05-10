@@ -3,6 +3,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import OutlinedFlagIcon from "@mui/icons-material/OutlinedFlag";
 import FlagIcon from "@mui/icons-material/Flag";
 import LinkIcon from "@mui/icons-material/Link";
+import DepartmentSelector from "./DepartmentSelector";
 
 export default function IssueAssignCard({
   issue,
@@ -158,10 +159,9 @@ export default function IssueAssignCard({
       <div className="dpo-issue-form">
         <div className="dpo-form-field">
           <label>Department:</label>
-          <input
-            type="text"
+          <DepartmentSelector
             value={issue.department}
-            onChange={(e) => handleChange("department", e.target.value)}
+            onChange={(value) => handleChange("department", value)}
           />
         </div>
 
